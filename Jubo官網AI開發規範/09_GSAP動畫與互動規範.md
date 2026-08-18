@@ -304,8 +304,7 @@ mm.add("(prefers-reduced-motion: reduce)", () => {
 
 ### 10-0. ⚠️ 先破除一個迷思：炫技的網站，多半不是靠手寫 GSAP
 
-2026-08-19 實測拆解 Lattice 首頁那段 **「Unblock work and unlock potential with your personal AI Agent」**，
-結果跟直覺相反：
+2026-08-19 實測拆解 Lattice 首頁那段 **「Unblock work and unlock potential with your personal AI Agent」**：
 
 | 觀察 | 實際情況 |
 |---|---|
@@ -314,22 +313,76 @@ mm.add("(prefers-reduced-motion: reduce)", () => {
 | 背景漸層流動 | **`<code-island>` 程式元件**（`data-hydrate="true"`，傳入 `{"color1":"#FBECFF","color2":"#BFF1F5"}`） |
 | 其餘動效 | CSS transition + Webflow 原生 IX2 |
 
-**結論：質感來自「設計師做的 Lottie ＋ 一支背景元件」，不是幾百行 GSAP。**
+**所以「捲動動畫堆很多 GSAP」不是質感的來源。** 這點仍然成立，做 scroll 動畫時不要過度投資。
 
-所以 Jubo AI 頁要改版時，投資順序應該是：
+> ⚠️ **但不要因此推論「Lottie 最適合做 AI Orb」——那是錯的，見下一節的實測。**
 
-1. **Lottie**（最高 CP 值，Webflow 原生支援，不需要碰 Slater）
-2. **CSS 動畫**（漸層、光暈、hover）
-3. **GSAP**（只用在「捲動要精準對位」的地方，例如 pin 住的產品演示）
-4. **canvas / WebGL**（只有真的需要粒子或 3D 才用，成本最高）
+### 10-0-1. 🔬 AI Orb 技術選型：四種做法實測（2026-08-19 定案）
+
+不要憑感覺選。四種做法我都實際做了一次同一顆球，可執行的比較檔在
+[`custom-code/poc/ai-orb-compare.html`](../custom-code/poc/ai-orb-compare.html)（雙擊即可開）。
+
+| | 能不能用程式直接產生 | 外觀 | 狀態切換 | Agent 可維護性 |
+|---|---|---|---|---|
+| **CSS** | ✅ | 柔和光暈，但**永遠是正圓** | CSS 變數，即時內插 | ★★★★★ 全文字可 diff |
+| **Three.js** | ✅ | **最好**：有機變形邊緣＋體積感＋粒子 | shader uniform，即時內插 | ★★★★ 可 diff，shader 較難讀 |
+| **Lottie** | ⚠️ 能吐 JSON，實務上要 After Effects | **平的**，無光暈、無景深 | **跳影格區段，不能內插** | ★★★ 看得懂但不該手改 |
+| **Rive** | ❌ **完全無法產生** | — | State Machine（功能最強） | ★ 二進位，看不到也 merge 不了 |
+
+**決議：AI Orb 用 Three.js。**
+
+實測踩到、文件必須記下來的三件事：
+
+1. **CSS 做不出有機變形的輪廓。** CSS 可以做到很漂亮的「發光體」，但它的邊緣永遠是完美圓形。
+   Three.js 用 noise 位移頂點，邊緣會像活的一樣起伏——這個差距在並排看非常明顯，CSS 補不上來。
+2. **Lottie 沒有可靠的 blur／glow。** 濾鏡效果在各家播放器支援度很差，所以 Lottie 的球是
+   一圈一圈的實心向量圓，邊緣很硬。它擅長**線條、圖示、插畫、loading**，不是需要體積光的視覺。
+   另外它的狀態切換是 `playSegments()` **硬跳影格**，不是內插，`thinking → generating` 不會平滑過渡。
+3. **Lottie 名義上是 JSON，實際上不是給人手寫的。** 手寫時踩到真的 bug：
+   scale 只給 `[x,y]` 會讓 transform 爆成 `matrix(-9999.99,…)`，整格變一片色塊（Lottie 需要 `[x,y,z]` 三個分量）。
+   → 對 Agent 而言它跟 Rive 一樣是**設計資產**，只是換了文字外皮；Agent 只能改「播哪一段」，改不動內容。
+
+**Rive 暫不導入**，理由是具體的而非理論的：**AI Agent 無法產生也無法修改 `.riv`**。
+未來若真的需要，把它當成「第三種算繪器」接進既有狀態機即可，不要讓它變成狀態的擁有者（見 §10-0-2）。
+
+**修正後的投資順序（取代舊版）：**
+
+1. **Three.js** — 只給 AI Orb 這類主視覺，**整頁最多一個 canvas**
+2. **CSS** — 環境光暈、背景氛圍、卡片 hover（陪襯，不是主角）
+3. **GSAP** — 捲動對位、進場、轉場
+4. **Lottie** — 圖示、loading、插畫
+5. **Rive** — 先不用
+
+### 10-0-2. 🔑 狀態機一定要留在程式碼裡
+
+這是整個架構最重要的一條，POC 檔案就是為了證明它。
+
+```js
+const STATES = { idle:{…}, listening:{…}, thinking:{…}, generating:{…}, success:{…}, error:{…} };
+let current='idle'; const subs=[];
+const onState = fn => (subs.push(fn), fn(STATES[current], current));
+function setState(n){ current=n; subs.forEach(fn => fn(STATES[n], n)); }
+```
+
+同一份 `STATES` **同時餵給 CSS、Three.js、Lottie 三種算繪器**，各自訂閱、各自畫。
+
+好處：
+
+- 換算繪器（CSS → Three.js → 未來的 Rive）**不用動狀態邏輯一行**
+- 狀態是 logic，可以 diff、可以 code review、可以寫測試
+- 不會出現「React 的 state 跟 Rive 的 state machine 各自為政然後對不起來」
+
+> ❌ **絕對不要**把 `idle → thinking → generating` 這套流程放進 `.riv` 或 Lottie 檔案裡。
+> 那等於把應用程式邏輯藏進設計檔，Agent 從此看不到也改不了。
 
 ---
 
-### 10-1. Lottie（優先選項）
+### 10-1. Lottie（圖示、loading、插畫用 — **不要拿來做主視覺**）
 
 Webflow 有原生 Lottie 元件，設計師用 After Effects + Bodymovin 匯出 JSON 即可。
 
-**Jubo 適用場景**：AI 思考中的動態、資料流動示意、圖示微動效、Agent 角色動畫。
+**Jubo 適用場景**：圖示微動效、loading、流程示意插畫。
+**不適用**：AI Orb 這種需要光暈與體積感的主視覺（見 §10-0-1 實測）。
 
 實務規則：
 
@@ -460,6 +513,52 @@ mm.add("(hover: hover) and (pointer: fine)", () => {          // 觸控裝置不
 ```
 
 這是 §4-6「JS 只寫 CSS 變數」的標準應用。
+
+### 10-6-1. Three.js AI Orb — 實作要點
+
+完整可跑的版本在 [`custom-code/poc/ai-orb-compare.html`](../custom-code/poc/ai-orb-compare.html) 的 B 格。
+
+**載入方式（Webflow 頁面層，不碰 Slater）：**
+
+```html
+<!-- 頁面 Settings → Before </body>。用 UMD 版，不要用 ES module -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+```
+
+> ⚠️ **不要用 `three.module.js` ＋ importmap。** r160 之後官方拿掉了 UMD build，
+> 但 ES module 從 `file://` 開啟會被 CORS 擋掉，本機測試會直接掛掉。
+> 固定用 **r155 的 `three.min.js`**（最後幾個還有 UMD 的版本之一）。
+
+**核心構成**（缺一個質感就掉一階）：
+
+| 元件 | 作用 |
+|---|---|
+| `IcosahedronGeometry(1, 40)` | 夠密的球面網格，位移才不會有稜角 |
+| 頂點著色器 simplex noise 位移 | **有機變形的邊緣**——這是 CSS 做不到的關鍵 |
+| 雙層 noise（低頻 ×0.7 ＋ 高頻 ×0.3） | 大起伏＋細節，只有一層會很假 |
+| Fresnel 邊緣光 `pow(1-dot(N,V), 2.4)` | 體積感，讓它像球不像貼紙 |
+| `Points` 粒子環（~1400 顆，additive） | 空間感 |
+
+**狀態接法**（照 §10-0-2，只改 uniform，不碰狀態邏輯）：
+
+```js
+onState(s => {
+  U.uDisp.value = s.disp;          // 變形幅度
+  U.uGlow.value = s.glow;          // 發光強度
+  U.uC1.value.set(s.c1);
+  U.uC2.value.set(s.c2);
+  mesh.userData.sp = s.speed;      // noise 演進速度
+});
+```
+
+**效能守則（必守）：**
+
+- **整頁最多一個 WebGL canvas**
+- `setPixelRatio(Math.min(devicePixelRatio, 2))` — 不設會在高 DPI 手機上算四倍像素
+- draw calls 控制在 **10 以內**（POC 實測為 2）
+- 手機（≤767px）若量到掉幀，**改用 CSS 版當 fallback**，不要硬撐
+- `prefers-reduced-motion` 時把 noise 演進速度降到 `.05`，不要完全靜止（會顯得壞掉）
+- 分頁切到背景時停掉 render loop
 
 ### 10-7. 這類頁面最常見的三個錯誤
 
