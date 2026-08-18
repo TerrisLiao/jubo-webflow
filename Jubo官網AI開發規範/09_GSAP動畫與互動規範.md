@@ -574,7 +574,59 @@ onState(s => {
 
 ---
 
-## 11. 相關文件
+## 11. 延伸參考：Three.js Awesome Graphics Agent Skills
+
+<https://github.com/scottstts/Threejs-Awesome-Graphics-Agent-Skills>
+
+2026-08-19 評估過的第三方 agent skills pack。**結論：不整包採用，但值得知道它存在。**
+
+### 它是什麼
+
+一個給 AI Agent 用的 Three.js 圖形技能包，含一個 router ＋ 24 個專門 skill：
+`threejs-volumetric-clouds`、`threejs-spectral-ocean`、`threejs-procedural-planets`、
+`threejs-procedural-vegetation`、`threejs-raymarched-space-effects`、
+`threejs-screen-space-ambient-occlusion`、`threejs-bloom`、`threejs-shadow-systems`…
+
+作者顯然是真的懂 Three.js，內容定位是「進階圖形實作的詞彙」而不是 API 說明書，
+架構也乾淨（先定 visual contract → camera → 主體 → 動態 → 打光 → 後製）。
+
+### 為什麼 Jubo 不整包採用
+
+1. **規格差太多。** 它解的是遊戲／demoscene 等級的場景生成（星球、海洋、植被、體積雲）。
+   Jubo 要的是**一顆會呼吸的球**放在行銷網站上。用它等於拿星球生成器來做一顆球。
+2. **完全沒有效能預算與行動裝置考量。** 實際查過：`threejs-bloom` 沒有討論效能成本，
+   router 也沒有任何 mobile constraint。而 §10-6-1 的核心就是效能預算。
+   它大量依賴 EffectComposer 的後製鏈（bloom、SSAO、HDR pipeline、選擇性 render pass），
+   那些在 Webflow 行銷頁上是效能殺手。
+3. **它的路由邏輯會誘導 Agent 一直加效果。** 「要什麼視覺 → 載哪個 skill」，
+   但沒有「這個效果值不值得」的判斷。這正好是 §10-7 第一條在講的錯誤。
+
+另外它的目錄結構（`dev/example-gallery/`、`bin/`、`scripts/`）假設有本機開發環境，
+跟 Jubo「頁面層 custom code、沒有 build system」的前提不合。
+
+### 唯一收下的一條原則
+
+router 裡有一句寫得很好，直接納入本規範：
+
+> **不要把「讓它變漂亮」直接路由到 post-processing，要去找缺少的那個系統。**
+
+意思是：畫面不好看的時候，先問「是不是主體本身沒做對」，
+而不是疊 bloom、加色調分級、上濾鏡去蓋。
+這跟 §10-0-1 的實測結論一致——Three.js 贏 CSS 不是因為它能後製，
+是因為它能**用 noise 位移頂點**做出有機的輪廓，那是主體本身的問題。
+
+### 什麼時候值得回頭看它
+
+- 真的要做**單頁沉浸式體驗**（不是一般行銷頁），且效能預算完全不同
+- 需要特定效果而站上沒有前例時，可以去看它某一個 skill 的**做法**當參考
+
+> ⚠️ 就算回頭看，也是**讀它的技法、不採用它的預設**。
+> 它沒有效能守則，Jubo 有——以 `09` §10-6-1 為準。
+> 這是外部第三方資料，屬參考性質，**不是本專案的規範**。
+
+---
+
+## 12. 相關文件
 
 - [`00_AI工作守則.md`](00_AI工作守則.md) — 五條鐵律、§6-7 斷點陷阱、§6-8 不可改設計
 - [`custom-code/slater-selectors.md`](../custom-code/slater-selectors.md) — Slater 鎖住的 class，**不可改名**
