@@ -604,8 +604,26 @@ Agent 寫 Three.js 最常錯的就是 constructor 參數順序、uniform 宣告�
 2. **README 有錯，不要照它的安裝說明做。** 它的 `git clone` 指到另一個完全不同的 repo
    （`pinkforest/threejs-playground`），而且說目錄是 `.claude/skills`，實際是 `skills/`。
    README 裡還有 `[Optimization guidance]` 這種沒寫完的佔位符。**內容看 `skills/*/SKILL.md` 本身就好。**
-3. **授權只有 README 一句「MIT License」，repo 內沒有 LICENSE 檔案。**
-   所以**不要整包複製進本 repo**，用連結參考即可。
+3. **授權只有 README 一句「MIT License — Feel free to use, modify, and distribute.」，
+   repo 內沒有 LICENSE 檔案。** 已依 Terris 指示採用，來源與授權標註於
+   [`.claude/skills/ATTRIBUTION.md`](../.claude/skills/ATTRIBUTION.md)。
+
+### ✅ 已安裝（2026-08-19）
+
+這 10 個 skill **已經放進本專案** `.claude/skills/`，Claude Code 在這個 repo 裡會自動載入，
+不需要再手動貼連結。
+
+同時新增一個**本專案自己寫的約束層** `.claude/skills/threejs-jubo-context/`，
+用來蓋掉上游 skill 的通用假設：
+
+| 上游 skill 的假設 | Jubo 的實際狀況 |
+|---|---|
+| ES module `import * as THREE from "three"` | **UMD 全域 `window.THREE`**（沒有 build system） |
+| 沒有效能上限 | **一個 canvas、draw calls ≤ 10、後製鏈預設不用** |
+| 沒有部署環境的概念 | **頁面層 custom code，Slater 不可動** |
+
+> **做任何 Three.js 工作時，先讀 `threejs-jubo-context`，再看 `threejs-*`。**
+> 上游那 10 個檔案**不要手改**，否則之後更新會衝突；更新指令寫在 ATTRIBUTION.md。
 
 > 它的 `threejs-postprocessing` 一樣要克制。後製鏈在行銷頁上很貴，
 > 一律以 §10-6-1 的效能守則為準，不要因為 skill 教了就加。
