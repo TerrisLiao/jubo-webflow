@@ -574,13 +574,49 @@ onState(s => {
 
 ---
 
-## 11. 延伸參考：Three.js Awesome Graphics Agent Skills
+## 11. 外部 Three.js 資源評估
 
-<https://github.com/scottstts/Threejs-Awesome-Graphics-Agent-Skills>
+動手前先看這裡，不要每次重新評估一次。
 
-2026-08-19 評估過的第三方 agent skills pack。**結論：不整包採用，但值得知道它存在。**
+### 11-1. ✅ CloudAI-X/threejs-skills — **建議參考**
 
-### 它是什麼
+<https://github.com/CloudAI-X/threejs-skills>　｜　2026-08-19 評估　｜　10 個 skill，約 136 KB
+
+給 Claude Code 用的 Three.js 技能包：`fundamentals`、`geometry`、`materials`、`lighting`、
+`textures`、`animation`、`loaders`、`shaders`、`postprocessing`、`interaction`。
+
+**為什麼建議用**（跟 11-2 對照著看差異很明顯）：
+
+| 檢查項 | 結果 |
+|---|---|
+| 定位 | **基礎 API 正確性**——constructor 簽名、built-in uniforms 清單、可執行範例 |
+| 效能內容 | **十個檔案全部都有**（`textures` / `fundamentals` 各 16 處提及 dispose、優化、pixelRatio） |
+| API 版本 | 用 `outputColorSpace` / `colorSpace`（r152+），**與我們釘的 r155 相容**；沒有殘留 `outputEncoding` 等舊 API |
+| 規格 | 剛好是我們需要的層級，不是星球生成器 |
+
+Agent 寫 Three.js 最常錯的就是 constructor 參數順序、uniform 宣告、以及忘記 `dispose()`，
+這包正好補在那裡。**寫 AI Orb 的 shader 時值得先看 `threejs-shaders` 與 `threejs-materials`。**
+
+**⚠️ 使用時必須注意的三件事：**
+
+1. **它的範例全是 ES module（`import * as THREE from "three"`），我們用 UMD 全域 `window.THREE`。**
+   照抄會直接壞。轉換方式：把 `import` 那行刪掉，其餘 `THREE.xxx` 照用即可。理由見 §10-6-1。
+2. **README 有錯，不要照它的安裝說明做。** 它的 `git clone` 指到另一個完全不同的 repo
+   （`pinkforest/threejs-playground`），而且說目錄是 `.claude/skills`，實際是 `skills/`。
+   README 裡還有 `[Optimization guidance]` 這種沒寫完的佔位符。**內容看 `skills/*/SKILL.md` 本身就好。**
+3. **授權只有 README 一句「MIT License」，repo 內沒有 LICENSE 檔案。**
+   所以**不要整包複製進本 repo**，用連結參考即可。
+
+> 它的 `threejs-postprocessing` 一樣要克制。後製鏈在行銷頁上很貴，
+> 一律以 §10-6-1 的效能守則為準，不要因為 skill 教了就加。
+
+### 11-2. ⚠️ scottstts/Threejs-Awesome-Graphics-Agent-Skills — **不採用**
+
+<https://github.com/scottstts/Threejs-Awesome-Graphics-Agent-Skills>　｜　2026-08-19 評估
+
+**結論：不整包採用，但值得知道它存在。**
+
+#### 它是什麼
 
 一個給 AI Agent 用的 Three.js 圖形技能包，含一個 router ＋ 24 個專門 skill：
 `threejs-volumetric-clouds`、`threejs-spectral-ocean`、`threejs-procedural-planets`、
@@ -590,7 +626,7 @@ onState(s => {
 作者顯然是真的懂 Three.js，內容定位是「進階圖形實作的詞彙」而不是 API 說明書，
 架構也乾淨（先定 visual contract → camera → 主體 → 動態 → 打光 → 後製）。
 
-### 為什麼 Jubo 不整包採用
+#### 為什麼 Jubo 不整包採用
 
 1. **規格差太多。** 它解的是遊戲／demoscene 等級的場景生成（星球、海洋、植被、體積雲）。
    Jubo 要的是**一顆會呼吸的球**放在行銷網站上。用它等於拿星球生成器來做一顆球。
@@ -604,7 +640,7 @@ onState(s => {
 另外它的目錄結構（`dev/example-gallery/`、`bin/`、`scripts/`）假設有本機開發環境，
 跟 Jubo「頁面層 custom code、沒有 build system」的前提不合。
 
-### 唯一收下的一條原則
+#### 唯一收下的一條原則
 
 router 裡有一句寫得很好，直接納入本規範：
 
@@ -615,7 +651,7 @@ router 裡有一句寫得很好，直接納入本規範：
 這跟 §10-0-1 的實測結論一致——Three.js 贏 CSS 不是因為它能後製，
 是因為它能**用 noise 位移頂點**做出有機的輪廓，那是主體本身的問題。
 
-### 什麼時候值得回頭看它
+#### 什麼時候值得回頭看它
 
 - 真的要做**單頁沉浸式體驗**（不是一般行銷頁），且效能預算完全不同
 - 需要特定效果而站上沒有前例時，可以去看它某一個 skill 的**做法**當參考
