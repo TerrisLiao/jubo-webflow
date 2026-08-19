@@ -138,9 +138,66 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 - BETA 的其他做法（anchor rail、eyebrow 標題系統、長 label/value 表、內嵌 Access、雙層 CTA）
   **仍然照上表採用** — 只有 hero 的明暗這一項不跟。
 
+## 5-2. 結構轉向：條列優先，不是卡片（2026-08-19 決議）
+
+Terris 檢視後的判斷：目前這頁「本身有點空」，而且「用卡片做很難讀」。
+診斷正確 —— 空的原因不是頁面不該存在，是它把**可查證的事實寫成了行銷散文再裝進卡片**。
+BETA 那頁之所以不空，是因為 15 列 label/value 表裡塞滿主要株主、取引銀行、認証、主な取引先。
+
+**決議：保留 /jp/about-us 這一頁，但把主要表達形式從卡片改為條列／表格。**
+
+不併進 /jp/overview 的理由：overview 已經很長且是產品導向，公司信用資料併進去會被埋掉 ——
+正是 §5 那 39 家研究點名的失敗模式（「Footer 的入口只是第二入口，不應取代明確的 Company 導線」）。
+日本 B2B 客戶查公司信用與看產品說明是兩種閱讀情境，不該擠在同一頁。
+
+### 可用的既有 CMS 資料（2026-08-19 查證）
+
+這頁不需要手刻資料，站上已經有兩個現成 collection 可直接綁 Collection List，
+之後在 CMS 改就好，不用再動頁面：
+
+**全球服務據點** `6a1d47c90db8f890f96dc723`（4 筆，欄位齊全：address／phone／email／google-map-link／cover-image）
+
+| 名稱 | 地址 | 電話 | Email |
+|---|---|---|---|
+| 台北研發總部 | 新北市新店區北新路三段213號6樓 | (02) 5568-6435 | info@jubo.health |
+| 台南辦公室 | 台南市歸仁區歸仁十三路一段6號625室 | (07) 9623-566 | — |
+| 北美分公司 | 4030 8 ST SE, Calgary, AB, T2G 3A7, Canada | — | sales@jubohealth.com |
+| 日本市場業務 | （尚未填，且該筆目前是 draft） | — | global@jubo.health |
+
+⚠️「日本市場業務」那筆是 draft 且沒有地址。日本頁要用它的話，需要 Terris 補資料並取消 draft。
+
+**專業認證** `69f9554e6698270dac268497`（4 筆，都有 logo 圖）
+
+第16屆國家新創・初創企業獎（2019）／新創事業金質獎（2019）／
+Neo Star 年度 30 最具潛力新創（2020）／第21屆國家新創・永續典範獎 + SNQ 國家品質標章（2024）
+
+### 各段改寫方向
+
+| 段落 | 現況 | 改成 | 形式 |
+|---|---|---|---|
+| Hero | 黑底低對比文字 | 明亮 split + 底部 anchor rail | — |
+| CEO | 三張灰卡 | 肖像 + 三段故事節點 | **保留敘事** |
+| Manifesto | 灰卡 | editorial panel + 原簽名 Embed | **保留敘事** |
+| 沿革 | 四張相同的卡 | 年份 + 一行事件 | 條列時間軸 |
+| 團隊 | 五個等重方塊 | 照片 + 職稱 + 一句價值 | 職種列表 |
+| 資本與夥伴 | 一句文字宣稱 | 五家股東 logo | logo grid |
+| 公司概要 | 行銷卡片 | 公司名／英文名／品牌／代表人／成立日／資本額／員工數／據點／事業內容／主要股東／認證與獲獎 | **label/value 表** |
+| Access | 無 | 四個據點各一列，含 Google Map 連結 | 綁「全球服務據點」CMS |
+| CTA | 兩個裸連結 | MDX 日本窗口 ／ 一般聯絡 | 雙層 CTA |
+
+原則：**該掃讀的資料就讓人掃讀，該讀故事的地方才用散文。** 只有 CEO 與 Manifesto 兩段維持敘事。
+
+### 待補欄位
+
+**資本額**與**員工數**站上查不到，Terris 決議**先留空不放這兩列**，之後補。
+不猜、不寫約數 —— 日本 B2B 頁面的信任來自可查證，寫錯一個數字比少一列傷害大。
+
 ## 6. 固定內容順序與設計線框
 
 內容順序不得改動，但每一區都要有明確視覺設計。
+
+> **以 §5-2 的形式決議為準。** 本節寫於結構轉向之前，凡提到「卡片」的地方，
+> 除 CEO 與 Manifesto 兩段外，一律改用 §5-2 表列的條列／表格形式。
 
 ### 1. 關於 Jubo／Hero
 
@@ -321,10 +378,12 @@ Global Style、Cookies、Page Gradient BG、CTA Button。
 - [ ] Hero 下方加入 sticky 頁內 anchor rail（照 BETA 做法，見 §5-1）。
 - [ ] CEO 區加入肖像與三段故事節點。
 - [ ] Manifesto 建立 editorial／glass／gradient panel，保留原 signature Embed。
-- [ ] Timeline 改成交錯圖文或有年份 anchor 的視覺時間軸。
-- [ ] Team 改為照片／角色矩陣，不用五張普通灰卡。
+- [ ] Timeline 改成年份 + 一行事件的條列時間軸（不是四張卡）。
+- [ ] Team 改為「照片 + 職稱 + 一句價值」的職種列表。
 - [ ] Partners 使用真實 Logo grid。
-- [ ] Company Profile 改為 label/value table。
+- [ ] Company Profile 改為 label/value table，資本額與員工數兩列先不放。
+- [ ] Access 綁「全球服務據點」CMS collection（4 筆，含 Google Map 連結）。
+- [ ] 認證與獲獎綁「專業認證」CMS collection（4 筆，含 logo）。
 - [ ] Access／日本合作窗口做成清楚的雙欄或上下層級。
 - [ ] CTA 複用既有元件並檢查連結。
 - [ ] /jp/overview 與 /jp/about-us 雙向導線正確。
