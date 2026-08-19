@@ -970,3 +970,25 @@ placeholder 文字**，這是目前 API 的限制，不是我操作錯誤。
 
 ⚠️ Designer MCP 連線這輪又斷線了幾次，header 按鈕跟表單欄位的最終視覺效果還沒用
 `element_snapshot_tool` 截圖確認，麻煩重新連線後我再截一次圖驗證。
+
+## 5-25 修正 header 按鈕完全沒出現的 bug、加上 Jubo 英文 logo（2026-08-19）
+
+Terris 回報 header 的「企業情報」按鈕完全沒有出現在畫面上。查證後找到兩個疊加的 bug，都是我自己的操作失誤：
+
+1. **`update_style` 同一次呼叫裡對同一個屬性同時做 `remove_properties` 和 `properties`（新增）時，
+   移除會蓋掉新增**——結果是 `position`、`top`、`right` 這三個屬性實際上完全沒有被寫入
+   （`query_styles` 讀回來確認完全沒有 `position` 這個 key），`.jp-overview_header-cta`
+   等於是普通的 `static` 定位，`left/top/right/z-index` 全部沒有作用。
+   修法：改成分開呼叫，同一個屬性名稱要「先移除、後新增」時絕不要放在同一次 `update_style` 裡。
+2. **DOM 順序問題**：這個 header 區塊被 `append` 加在 `main-wrapper` 最後面（在 `all-sections-wrapper`
+   之後），在 `position:static` 狀態下等於整個 header 被排到全頁最下方，難怪 Terris 往下滑到底才會看到，
+   但一般不會滑到那麼底。改成 `position:sticky`（原本用 `fixed`，但站上 `.page-wrapper` 是
+   `overflow:clip`，`fixed` 元素在這類「整頁包一層 overflow:clip」的結構下容易被裁切／定位失真，
+   `sticky` 更穩定不會被這樣裁切）之後，也把這個區塊 `move_element` 搬到 `all-sections-wrapper` 前面，
+   讓它在文件流中真的位於全頁最上方。
+
+修完後這個 header bar 現在是：`position:sticky; top:0; left:0; right:0; width:100%`，
+`justify-content:space-between`，左邊放 Terris 剛上傳的 Jubo 英文版 logo（asset
+`6a85c251713ce4018900a9a5`，`.jp-overview_header-logo` 高度 `1.5rem`），右邊是「企業情報」按鈕。
+
+⚠️ Designer MCP 連線這輪又斷了，還沒用 `element_snapshot_tool` 截圖最終確認，麻煩重新連線讓我截圖驗證。
