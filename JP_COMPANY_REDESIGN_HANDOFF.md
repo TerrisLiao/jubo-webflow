@@ -912,3 +912,33 @@ Terris 回饋表單的標籤文字換行變成三行（如「公司」/「名稱
 
 已用 `query_elements` 直接查詢確認：`contact-form-field_wrap` 底下每個欄位現在只剩輸入框本身，
 沒有殘留的標籤元素。
+
+## 5-23 表單標籤改回一行式標籤、辦公室照片縮小、overview 新增企業情報入口（2026-08-19）
+
+**表單文字消失的修正**：5-22 移除標籤後，原本假設 Webflow 會用 `name` 值自動生成 `placeholder`
+（因為 `/contact` 頁面的輸入框確實有 `placeholder` 屬性、但 API 查不到獨立的 `placeholder` 設定值）。
+Terris 回報「form 的文字不見了」後重新查證：`FormTextInput` 的 `query_settings` 只列出
+`domId`/`visibility`/`name`/`required`/`type` 五個鍵，沒有 `placeholder`；直接用 `set_attributes`
+嘗試加 `placeholder` 屬性也持續回報 internal error——**這個 MCP 工具介面沒有辦法設定表單欄位的
+placeholder 文字**，這是目前 API 的限制，不是我操作錯誤。
+
+修法：新增 `.jp-about_field-label`（`white-space: nowrap`、小字級、灰色）取代舊的
+`jp-about_profile-label`，在每個輸入框外包一層 wrapper，標籤放在輸入框正上方（不是原本並排的窄欄），
+5 個欄位都重建。已用 `element_snapshot_tool` 截圖確認：五個標籤（公司名稱/姓名/電子郵件/
+電話（選填）/詢問內容）都是一行文字，沒有再換行堆疊。
+
+**辦公室照片縮小**：`.jp-about_office-photo` 的 `width` 從 `100% → 50%`。
+
+**overview 新增「企業情報」入口（Terris 採用「放在最後一個 section」的建議，並要求同時加在 header 右上角）**：
+- 新增固定在畫面右上角的 `.jp-overview_header-cta`（`position: fixed; top/right: 1.5rem; z-index: 999`），
+  裡面放一個 `CTA Button` component instance，文字「企業情報」，連到 `/jp/about-us`。
+  這不是完整的全站導覽列（站上已有的 `Navbar` component 有產品/資源/客戶/公司等下拉選單，
+  對 JP 這種聚焦型 landing page 不合適），只是一個輕量的右上角按鈕。
+- 在 overview 實際的最後一個 section（`解決方案` 產品輪播區，不是原本猜測的差異化/CTA 區塊——
+  這輪順便糾正了先前對這個 section 內容的誤判）的最下方，加了一行文字連結
+  「了解智齡的企業情報 →」，同樣連到 `/jp/about-us`。
+  這裡刻意做成低調的文字連結而非大按鈕，因為這個 section 主題是產品線介紹，不是公司資訊，
+  硬塞一個顯眼按鈕會跟內容主題不搭。
+
+兩個連結都用 `linkType:"url"` + 路徑字串（不是 `linkType:"page"`），並各自用
+`get_component_instance_props`／`query_elements` 讀回驗證 href 確實是 `/jp/about-us`。
