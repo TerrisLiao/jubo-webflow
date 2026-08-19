@@ -1025,3 +1025,46 @@ jubo 的藍色 logo 要放在 about us，你放錯了」，並要求動手前多
 **教訓**：要在既有頁面加「導覽／logo」這類全站級元素前，一定要先把該頁 hero／header 的既有結構讀完，
 確認站上原本是怎麼處理的，再決定要沿用還是新建——這次如果先查了 hero，就會直接看到 logo 已經存在，
 不會白做兩輪。
+
+## 5-27 about-us 藍色 logo 放大 5 倍並移到左上角（與 overview 同位置）（2026-08-19）
+
+Terris：「about us 藍色 logo 放到 5 倍，然後要放到左上角跟 overview 的位置一樣」。
+
+**先查證才發現的關鍵事實：Terris 上傳的 logo 檔有大量透明留白。**
+下載原檔用 PIL 量測：畫布 `2196 x 1049`，但實際有顏色的內容只有 `1559 x 407`
+（bbox `(320, 321, 1879, 728)`），**內容只佔畫布高度的 38.8%**，垂直方向剛好置中
+（上下各留 321px）。這解釋了兩件事：
+1. 為什麼 5-26 設 `height: 2.25rem`（36px）看起來那麼小 —— 可見字標其實只有 36 x 0.388 = **約 14px**。
+2. 為什麼不能直接把原檔絕對定位到左上角 —— 要讓「可見字標」對齊 `top: 2rem`，
+   外框得設成負的 top（約 `-1.44rem`），但 `.all-sections-wrapper` 是 `overflow: clip`，負偏移會被裁掉。
+
+**最終做法：改用與 overview 同一份 inline SVG，不使用圖片檔。**
+查 overview hero logo 才發現它根本不是圖片，而是 inline SVG（`viewBox="0 0 110 29"`，
+緊貼字標、零留白，靠 `currentColor` 上色成白色）。about-us 直接沿用同一組 path，
+改成品牌藍 `#00B2C0`（與站上 navbar logo 的實際渲染色一致），因此：
+- 尺寸完全可預測（`height` 就等於可見高度），不必處理透明留白。
+- 與 overview 是同一份向量、同一種定位方式，達成 Terris 要的「位置一樣」。
+- 不依賴圖片上傳處理流程（見下方踩坑紀錄）。
+
+**尺寸換算（確認真的是 5 倍）**：原本可見高度約 0.873rem（14px），5 倍 = 4.365rem，
+故設 `height: 4.375rem`（70px）。SVG 比例 110:29，對應 `width: 16.6rem`。
+
+**定位（與 overview 完全一致）**：
+`.jp-about_logo` 設 `position:absolute; top:2rem; left:max(2rem, calc((100vw - 82rem) / 2)); z-index:4`,
+與 overview hero logo 的 `.is-top-left` combo 同一組數值。
+查證過關鍵一點：**about-us 的 `container-large` max-width 正好也是 `82rem`**，
+與那條 `calc((100vw - 82rem)/2)` 公式用的值相同，所以兩頁 logo 對齊到完全相同的左邊界。
+另補上 medium / small / tiny 三個斷點的偏移與尺寸（比照 overview logo 小螢幕會縮小的作法）。
+
+logo 從原本置中的 `section-header_wrapper` 內搬出來，改成第一個 section 的直接子元素。
+該 section 需要 `position: relative` 當定位基準，但 `section_about` 是全站共用 class，
+直接改會影響其他 section 與其他頁面，因此改用 combo `section_about.is-has-logo` 只套在這一個 section。
+
+**踩到的坑（值得記）**：中途曾把去除留白後的 PNG 上傳成新 asset，但 Designer canvas 一直把它 render 成
+空白方框（尺寸正確、圖是空的）。查證後確認不是檔案或樣式問題 —— 該檔案本身有正常的品牌藍像素、
+CDN 也回 200；真正原因是 `get_asset` 顯示新 asset 的 `variants: []` 且 `lastUpdated == createdOn`，
+而同一 session 稍早上傳、已正常顯示的辦公室照片則是 `lastUpdated` 比 `createdOn` 晚約 2.5 分鐘、
+`variants` 已生成。**Webflow 透過 API 上傳後是非同步處理的，變體尚未生成前 Designer 會顯示空白。**
+以後遇到「剛上傳的圖在 canvas 是空白」，先查 `variants` 是否為空，不要急著改樣式或重做版面。
+（那個裁切版 PNG asset `6a85c693fce2417e34124e78` 目前未被任何元素使用，留著不刪，
+Terris 若之後想改用圖片版可直接沿用。）
