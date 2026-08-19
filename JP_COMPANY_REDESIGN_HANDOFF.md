@@ -674,3 +674,40 @@ Global Style、Cookies、Page Gradient BG、CTA Button。
 4. 所有實作符合 repo 規範，未污染全站共用樣式。
 5. 四個斷點有證據可驗收。
 6. 所有頁面仍是 Draft，等待老師日文校對。
+
+## 5-11 經營團隊卡片改版：2×2 玻璃疊層卡（2026-08-19）
+
+Terris 對經營團隊卡片提出兩項變更：版面改成 2 欄 × 2 列（原本桌面 4 欄一排），
+且視覺要參考站上既有的玻璃質感設計，卡片文字改用「照片鋪滿卡片 + 底部玻璃面板疊字」的作法，
+玻璃面板要提高透明度、帶一點漸層底色，而不是純白實色卡。
+
+**參考的既有玻璃樣式**：`/internship` 頁的 `.intern-voice_card` 系列
+（`intern-voice_card` 卡片外框、`intern-voice_bg` 漸層底、`intern-voice_content-wrap` 絕對定位貼齊底部、
+`intern-voice_content` 玻璃面板：`rgba(255,255,255,.55)` + `backdrop-filter: blur(8px)`）。
+站上另有一組更複雜的 `glass-effect__*` 多層堆疊系統（用於 glass-button），
+但那是按鈕專用的高光/陰影堆疊，不適合套在人像卡片上，故未採用。
+
+**改動內容**：
+- `.jp-about_leaders-grid` 桌面斷點 `grid-template-columns` 從 `repeat(4, 1fr)` 改為 `repeat(2, 1fr)`
+  （medium/tiny 原本就是 2 欄／1 欄，未變動），並把 gap 放大到 `2.5rem` / `3rem` 以配合變大的卡片。
+- `.jp-about_leader-card`：從 `display:flex; flex-direction:column`（照片在上、文字在下的堆疊排版）
+  改成 `position:relative; overflow:hidden; aspect-ratio:3/4`，讓照片可以鋪滿整張卡。
+- `.jp-about_leader-photo`：從限高的方形小圖（`aspect-ratio:1` + 自己的圓角）
+  改成 `position:absolute; inset:0; width/height:100%`，鋪滿整張卡片、由卡片的 `overflow:hidden` 負責裁切。
+  每人各自的 `object-position`（含 `is-cro`/`is-cto` combo）維持不變，不受影響。
+- 新增兩個 class：
+  - `.jp-about_leader-overlay`（`position:absolute; inset:0; display:flex; align-items:flex-end; padding:0.75rem`）
+    負責把玻璃面板貼齊卡片底部。
+  - `.jp-about_leader-glass`（玻璃面板本體）：
+    `background-image: linear-gradient(135deg, rgba(255,255,255,.5), rgba(210,225,245,.28))`
+    （帶一點藍色調的漸層，且比 intern-voice 的純白面板更透）+ `backdrop-filter: blur(16px) saturate(160%)`，
+    圓角綁同一顆 radius 變數（`variable-d797394d-...`，跟卡片圓角一致），
+    加了 `1px` 的半透明白色上邊框模擬玻璃反光。
+- 把每張卡原本平鋪在卡片下的 `jp-about_leader-name` / `-title` / `-bio` 三段文字，
+  搬進新建的 `.jp-about_leader-glass` div 內（保留原本順序：姓名 → 職稱 → 簡介）。
+
+四張卡（CEO/CRO/CTO/CDO）都用 `data_element_tool > query_elements` 以 element_id 直接查詢驗證過，
+確認 Image → overlay → glass → [name, title, bio] 的巢狀結構與順序正確。
+
+⚠️ 待辦／待確認：玻璃面板的透明度是我抓的預估值（.5 / .28 + blur 16px），
+Draft 頁面上實際看起來的可讀性請 Terris 用 Designer 預覽確認，字看不清楚的話可以再調高面板不透明度。
