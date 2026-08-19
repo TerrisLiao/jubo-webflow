@@ -127,17 +127,16 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 | Access | **緊接在会社概要同一段內**，每個據點一行地址 + GoogleMap 連結 | 照做：地址 + 地圖連結，不另做獨立區塊 |
 | 結尾 CTA | **兩個分層 CTA**：SERVICE CONTACT（導到服務網站）／COMPANY CONTACT（取材・業務提携・採用） | 正好對應本文件「MDX 合作導線與一般公司聯絡資訊要分層」：CTA 1 → MDX／JuboLink for Dental，CTA 2 → 一般聯絡 |
 
-### ⚠️ 待決：Hero 明暗方向衝突
+### Hero 明暗方向 — 已定案（2026-08-19）
 
-- 本文件 §1 與 §6.1 寫的是「不可使用低對比黑色 Hero」「採白／淺灰基底、明亮節制」。
-- 指定參考站 BETA 的 Hero 是**深色滿版照片 + overlay**。
+參考站 BETA 的 Hero 是深色滿版照 + overlay，與本文件 §1／§6.1 的「明亮節制」不相容。
+**Terris 決議：採本文件原方向的明亮 split。**
 
-兩者不相容。實作前需 Terris 擇一：
-
-1. **明亮版**（本文件原方向）：白／淺灰基底 + Page Gradient BG + 右側真實照片的 split layout。與 Jubo 站上其他頁一致。
-2. **BETA 版**：滿版照片 + 深色 overlay + 左下大標 + 底部 anchor rail。氣勢較強，但要注意原本被點名的「黑底黑字、對比不足」問題必須靠 overlay 濃度確實解決，且 Page Gradient BG 在深色 hero 上會看不見，得改放到下一段。
-
-無論選哪一個，「Page Gradient BG 必須在頁面上真的看得見」這條驗收不變。
+- 白／淺灰基底，Page Gradient BG 在第一屏就要看得見。
+- 左側標題（`ABOUT US` 英文大字 + 中文一句話）、簡介與 CTA；右側真實照片。
+- 不使用深色滿版 hero，也不使用目前那個低對比黑底。
+- BETA 的其他做法（anchor rail、eyebrow 標題系統、長 label/value 表、內嵌 Access、雙層 CTA）
+  **仍然照上表採用** — 只有 hero 的明暗這一項不跟。
 
 ## 6. 固定內容順序與設計線框
 
@@ -304,12 +303,12 @@ Global Style、Cookies、Page Gradient BG、CTA Button。
 
 ### P0：結構與可讀性
 
-- [ ] 補足 11 家不重複日本官網研究並留下精簡紀錄。（**待 Terris 決定是否跳過** — 現有 39 家已收斂出明確共識，且已指定 BETA 為主要參考）
+- [x] ~~補足 11 家不重複日本官網研究~~ — **2026-08-19 Terris 決議跳過**。現有 39 家已收斂出明確共識，且已指定 BETA 為具體參考範例，邊際效益不足以再花時間。
 - [ ] 頁面 slug 從 `company` 改為 `about-us`，SEO title／描述一併更新。
 - [ ] 備份／記錄現有 /jp/about-us 的結構，避免誤刪簽名 Embed。
 - [ ] 加入 Global Style、Cookies、Page Gradient BG 三個 component 實例（目前頁面 component 數為 0）。
 - [ ] `main-wrapper` 的 tag 從 `div` 改為 `main`；各 section 的 tag 從 `div` 改為 `section`。
-- [ ] Hero 明暗方向定案後再施作（見 §5-1 待決事項）。
+- [ ] Hero 依已定案的「明亮 split」施作（見 §5-1）。
 - [ ] 重新命名重複的 section：`section_about` ×4、`section_company-hero` ×2。
 - [ ] 補上沒有設 href 的連結 `9543cf4a-02fb-a170-f1ee-06774720a70e`。
 - [ ] 移除新頁對 jp3-*、jp-partner-* legacy class 的依賴（29 + 4 個元素）。
