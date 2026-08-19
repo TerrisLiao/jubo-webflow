@@ -779,3 +779,27 @@ Terris 想試試看「留白邊會不會增加設計感」，同時覺得人物�
 2. 因為 padding 是四邊等值縮減，相框的寬高比會比原本的 `2:3`（跟照片原始比例一致）略窄一點，
    `object-fit: cover` 會因此在左右裁掉一點點（幅度很小，肉眼差異應該不明顯），這是留白邊必然的副作用，
    之後如果邊框寬度調整，可以再檢查裁切幅度是否需要微調照片比例。
+
+## 5-16 邊框改玻璃質感、放大玻璃面板與字級、加強清晰度（2026-08-19，實驗性）
+
+Terris 問「除了白邊還有什麼選項，會不會也是玻璃邊」，並回饋玻璃面板還可以再更大、字要更大、
+內文（簡介）現在有點看不清楚，需要提高清晰度。
+
+**邊框改成玻璃質感**：`.jp-about_leader-card` 把純白 `background-color:#ffffff` 換成
+`background-image: linear-gradient(135deg, rgba(255,255,255,.55), rgba(255,255,255,.3))` +
+`backdrop-filter: blur(20px) saturate(160%)`，讓白色 mat 變成一層會透出卡片後方頁面漸層底色、
+帶模糊感的玻璃邊框，另外加了 `box-shadow: 0 10px 30px rgba(15,23,42,.12)` 讓卡片有一點浮起的層次感。
+（其他還沒做的選項：細灰髮絲邊框、純陰影無邊框、帶品牌色的漸層邊——這次先試玻璃邊，其餘之後要再試再說。）
+
+**玻璃面板放大**：`.jp-about_leader-overlay` 的 `min-height` 從 `40%` 提高到 `55%`。
+
+**字級放大**：
+- `.jp-about_leader-name` `font-size` `1.125rem → 1.25rem`
+- `.jp-about_leader-title` `font-size` `0.875rem → 0.9375rem`
+- `.jp-about_leader-bio` `font-size` `0.9375rem → 1.0625rem`，`line-height` 調到 `1.6`
+
+**提高清晰度**：`.jp-about_leader-glass` 的漸層不透明度從 `.68/.48` 提高到 `.82/.62`，
+`backdrop-filter` 模糊從 `blur(32px)` 加到 `blur(40px)`，讓面板更接近實色、跟照片的對比更明顯，
+文字可讀性應該會比上一版好很多。
+
+⚠️ 都是估值，且都是 Terris 明確要求「試試看」的實驗性調整，麻煩到 Designer 看效果如何。
