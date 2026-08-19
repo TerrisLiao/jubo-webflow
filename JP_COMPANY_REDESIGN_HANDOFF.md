@@ -1,22 +1,39 @@
-# /jp/company 重新設計與 Claude Code 交接
+# /jp/about-us（原 /jp/company）重新設計與 Claude Code 交接
 
 > 狀態：待實作。現有 Webflow Company 頁只有內容骨架與初步排版，**不可視為設計完成**。
 >
-> 工作範圍：Webflow Draft 頁面 /jp/company，以及 /jp/overview 與公司頁的導線。不得發布。
+> 2026-08-19 決議：頁面改名為 **About Us**，slug `company` → `about-us`，publishedPath `/jp/about-us`。
+> 頁面從未發布過，沒有 SEO 或外部連結風險。
+>
+> 工作範圍：Webflow Draft 頁面 /jp/about-us，以及 /jp/overview 與公司頁的導線。不得發布。
 
 ## 1. 任務目標
 
-把現有 /jp/company 從文字骨架重做成符合 Jubo 設計系統、也符合日本 B2B／醫療科技公司信任邏輯的正式公司介紹頁。
+把現有 /jp/about-us 從文字骨架重做成符合 Jubo 設計系統、也符合日本 B2B／醫療科技公司信任邏輯的正式公司介紹頁。
 
-必須解決目前問題：
+必須解決目前問題（以下為 2026-08-19 透過 Webflow MCP 逐項查證後的實況，
+比本文件初稿描述的更空 — 初稿把它寫成「排版不佳」，實際上是「尚未套用設計系統」）：
 
-- Hero 是黑底配低對比深色文字，閱讀性不合格。
-- 頁面缺少 Page Gradient BG，沒有承接 Jubo 既有視覺語言。
-- 幾乎沒有圖片、人物、團隊、投資人 Logo、據點等視覺證據。
+| 項目 | 實際查到 |
+|---|---|
+| Component 實例 | **0 個**。Global Style、Cookies、Page Gradient BG、CTA Button 全都沒放。不是漸層看不到，是根本沒有。 |
+| Image 元素 | **0 個**。全頁純文字，沒有人物、團隊、投資人 Logo、據點等任何視覺證據。 |
+| `main-wrapper` tag | `div`，不是 `main`。24 個 section 也全部是 `<div>`。 |
+| Legacy class | 29 個元素掛 `jp3-h2` / `jp3-body`，4 個掛 `jp-partner_*`。 |
+| Section 命名 | `section_about` 重複用 4 次、`section_company-hero` 重複 2 次，語意不成立。 |
+| 連結 | 全頁只有 3 個 Link，其中 `9543cf4a-02fb-a170-f1ee-06774720a70e` **沒有設 href**。 |
+| Heading 層級 | h1×1、h2×7、h3×15（`stats-h3`），層級本身沒有跳級。 |
+| 簽名 Embed | `7fc435ad-224b-e755-6fbb-5980aa3b1042` 存在，且是全頁唯一 HtmlEmbed。 |
+| 頁面狀態 | `draft: true` ✅ |
+
+由此衍生的工作：
+
+- 補上獨立 Landing Page 必備的 Global Style、Cookies、Page Gradient BG。
+- 修正 Hero 的對比與可讀性，並讓 Page Gradient BG 在第一屏真的看得見。
+- 補上真實圖像證據（素材對照見第 8 節）。
 - 多數區塊只是重複灰色文字卡，沒有日式企業網站常見的清楚層級與節奏。
 - 公司概要做成行銷卡片；應改為容易掃讀的 label/value 資料表或 definition list。
-- 目前使用部分舊 class（例如 jp3-*、jp-partner_*），新頁不得繼續擴充這些命名。
-- Company 頁缺少獨立 Landing Page 必備的 Global Style、Cookies、Page Gradient BG。
+- 把 `jp3-*`、`jp-partner_*` 換成 `folder_element` 命名，新頁不得繼續擴充舊命名。
 
 完成後仍維持 Webflow Draft，待日文老師校稿後再換入日文與發布。
 
@@ -40,8 +57,8 @@
 
 - Webflow Site ID：69ec2b02daa2e79f1da8772a
 - /jp/overview Page ID：6a848bfa57437623d952f944
-- /jp/company Page ID：6a8537247cf50018fca7c68d
-- /jp/company root element：f1e5920f-a6c9-5244-9116-755da162b421
+- /jp/about-us Page ID：6a8537247cf50018fca7c68d（slug 待從 `company` 改為 `about-us`）
+- /jp/about-us root element：f1e5920f-a6c9-5244-9116-755da162b421
 - 現有 signature Embed element：7fc435ad-224b-e755-6fbb-5980aa3b1042
 - 中文公司頁的原始 signature Embed：
   - Page ID：69f3f3b4a6b6d4165031a4e7
@@ -90,6 +107,37 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 - 公司概要通常使用 label/value 表格，不是多張行銷卡。
 - Access 常獨立呈現地圖、交通或聯絡方式。
 - Footer 的入口只是第二入口，不應取代頁面中的明確 Company 導線。
+
+## 5-1. 指定參考站：BETA株式会社 About Us
+
+2026-08-19 由 Terris 指定：<https://b-inc.co.jp/about-us#outline>「整體會是這樣」。
+這是本次設計方向的主要視覺與版式基準，優先於本文件原本較泛的描述。
+
+**從參考站抽出的做法：**
+
+| 元素 | BETA 的做法 | 對應到 Jubo |
+|---|---|---|
+| 頁名 | `ABOUT US` 英文大字襯線體 + 日文一句 slogan（終わりなきアップデート。） | 英文大標 `ABOUT US` + 中文／日文一句話，slug 改 `about-us` |
+| Hero | **滿版真實空間照 + 深色 overlay**，標題壓在左下 | ⚠️ 與本文件 §6.1「白／淺灰基底、明亮節制」衝突，需 Terris 定案（見下方註記） |
+| 頁內導覽 | Hero 底部一條 sticky anchor rail：ミッション・ビジョン／代表メッセージ／経営陣／社外役員・監査役／会社概要，各帶 ↓ | **值得照做**。不改內容順序，只是加上跳段導覽，正好解決本文件「Company 導線不能只藏 footer」的要求 |
+| 標題系統 | 每段 `{ - MISSION }` 英文 eyebrow + 日文大標的雙層結構 | 用既有 `section_tag` component 當 eyebrow，維持同一套雙層節奏 |
+| VALUE | `01 / 02 / 03` 編號 + 短句 | 可用在 Manifesto 或 Timeline 的年份 anchor |
+| CEO | 長文訊息 + 署名「代表取締役 長沼 健一」+ 獨立的「経営陣」人物卡（職稱／姓名／學經歷段落） | CEO 段照本文件三段故事節點；人物卡格式可沿用 |
+| 会社概要 | **一張很長的 label/value 表**：会社名／設立／資本金／本社所在地／各オフィス／従業員数／代表者／事業内容／取引銀行／主要株主／許可・認定／顧問弁護士／監査法人／顧問税理士／主な取引先 | 證實本文件 §6.7 的判斷正確。Jubo 只填**已確認可查證**的欄位，不硬湊 |
+| Access | **緊接在会社概要同一段內**，每個據點一行地址 + GoogleMap 連結 | 照做：地址 + 地圖連結，不另做獨立區塊 |
+| 結尾 CTA | **兩個分層 CTA**：SERVICE CONTACT（導到服務網站）／COMPANY CONTACT（取材・業務提携・採用） | 正好對應本文件「MDX 合作導線與一般公司聯絡資訊要分層」：CTA 1 → MDX／JuboLink for Dental，CTA 2 → 一般聯絡 |
+
+### ⚠️ 待決：Hero 明暗方向衝突
+
+- 本文件 §1 與 §6.1 寫的是「不可使用低對比黑色 Hero」「採白／淺灰基底、明亮節制」。
+- 指定參考站 BETA 的 Hero 是**深色滿版照片 + overlay**。
+
+兩者不相容。實作前需 Terris 擇一：
+
+1. **明亮版**（本文件原方向）：白／淺灰基底 + Page Gradient BG + 右側真實照片的 split layout。與 Jubo 站上其他頁一致。
+2. **BETA 版**：滿版照片 + 深色 overlay + 左下大標 + 底部 anchor rail。氣勢較強，但要注意原本被點名的「黑底黑字、對比不足」問題必須靠 overlay 濃度確實解決，且 Page Gradient BG 在深色 hero 上會看不見，得改放到下一段。
+
+無論選哪一個，「Page Gradient BG 必須在頁面上真的看得見」這條驗收不變。
 
 ## 6. 固定內容順序與設計線框
 
@@ -175,14 +223,66 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 - 保留並確認公司導線：
   - 標題：從台灣照護現場出發，走向日本
   - 內文：Jubo 長期與醫療、照護及高齡服務現場合作，將 AI、資料與工作流程轉化為能被團隊日常使用的工具。
-  - 按鈕：認識 Jubo → /jp/company
+  - 按鈕：認識 Jubo → /jp/about-us
 - 檢查兩頁導線為雙向且正確。
 - 不把中文提前換成未校對日文。
 
 ## 8. 圖像與視覺語言
 
-- 優先使用 Webflow Assets 中既有 CEO 肖像、團隊／辦公室、照護現場、產品與投資人 Logo。
+- 優先使用站上既有的 CEO 肖像、團隊／辦公室、照護現場、產品與投資人 Logo。
 - 有真實資產時，不使用生成式人物或泛用庫存照。
+
+### 8-1. 素材對照表（2026-08-19 查證）
+
+⚠️ 這些素材**不是**翻 Webflow Assets 清單就找得到的。CEO 肖像綁在 class 的
+`background-image` 上、投資人 Logo 在首頁的 marquee 結構裡 —
+只查 asset 清單或只查頁面的 Image 元素，兩種都會漏掉。
+
+**CEO 肖像**（class 背景圖，非 Image 元素）
+
+| Class | Asset | 備註 |
+|---|---|---|
+| `.jp-ceo_portrait` | `@img_6a34bc79e22db33d6ea1c733` | JP 版。`background-position: 50% 20%`、24px 圓角（硬寫值，改用時要改綁 radius 變數） |
+| `.founder-info_img-wrap` | `@img_69f96030f9fd9a020433e339` | 中文 `/company`（`69f3f3b4a6b6d4165031a4e7`）版本，1:1 aspect ratio，圓角已綁變數 |
+| `.internship-ceo_portrait` | `@img_6a420a5cfbb5d60e2baf0274` | `/internship` 版本，命名與變數綁定最符合規範，可作為新 class 的範本 |
+
+`.jp-ceo_grid` 已經是 `minmax(280px,.85fr) minmax(0,1.15fr)` 的 portrait + editorial 雙欄，
+構圖可直接沿用，只需改名成 `folder_element` 命名。
+
+**投資人／策略夥伴 Logo**（首頁 `69ec2b03daa2e79f1da8772e`，
+結構為 `section_client-logo` → `client-logo_component` → `logo-marquee`）
+
+| 夥伴 | Asset ID |
+|---|---|
+| Wistron 緯創 | `69f6bc9584a10822d05a6d00` |
+| 聯合報系 | `69f6bc951976e2f7598b0ac1` |
+| ITIC 工業技術投資 | `69f6bc95348244fb7e900eba` |
+| Darwin 達盈管顧 | `69f6bc952b175af5c71bc0c8` |
+| 嘉新企業集團 CHC | `69f6bc955adb69631fcda9c2` |
+
+五個 Image 都已有中文／英文 alt，沿用即可。**只列這五家已公開的名稱，不自行增補投資人。**
+
+⚠️ `.logo-marquee`、`.logo-marquee-line`、`.client-logo` 在
+[`custom-code/slater-selectors.md`](custom-code/slater-selectors.md) 的鎖定名單上，
+由 Slater 託管的 `60292.js` 用 class 選擇器驅動跑馬燈。**這三個 class 必須原名沿用、不可改名**。
+好處是 script 全站載入，把結構複製到 /jp/about-us 後動畫會自動生效；
+要新命名只能加在外層容器（例如 `jp-about_partners-wrap`）。
+
+**團隊角色照**（`/jp/overview` `6a848bfa57437623d952f944` 上的 Image 元素，帶職種 alt）
+
+| 角色 | Asset ID |
+|---|---|
+| AI・データサイエンティスト | `6a43c5d4dd160f38c4cdcc89` |
+| ソフトウェアエンジニア | `6a43c58bba6bdd450838c700` |
+| 看護師 | `6a43c58bfb0d489ab98367d3` |
+| ソーシャルワーカー | `6a43c58ce42f82c0da515488` |
+| 公衆衛生の専門家 | `6a43c58c263a2780ef8bf53e` |
+
+**其他可用照片**：辦公室／團隊 `6a4214570f8b718ed79b20b7`、
+照護現場 `6a421457d04cc2155fc9d382`、明亮醫療空間 `6a42861624ec5ffc1da72820`。
+
+**已確認可直接複製的 Component 實例**（都在 `/jp/overview` 上）：
+Global Style、Cookies、Page Gradient BG、CTA Button。
 - 版面基調：大量留白、明確網格、可信的企業資訊、少量柔和漸層做品牌識別。
 - 避免整頁深色、黑底黑字、背景效果不可見、卡片海與所有區塊同一節奏。
 - 漸層不是裝飾補丁：Hero、Manifesto、CTA 三處建立一致的視覺節奏，其餘區塊保持克制。
@@ -193,7 +293,7 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 
 - /jp/overview：
   https://app.notion.com/p/3b1d4f1889c5819e85cfdf512368a57e?pvs=204
-- /jp/company：
+- /jp/about-us：
   https://app.notion.com/p/3c1d4f1889c5817497dbec682c6884ad?pvs=204
 
 兩頁只保留三欄：區塊／中文／日文。日文留白給老師。
@@ -204,17 +304,22 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 
 ### P0：結構與可讀性
 
-- [ ] 先補足 11 家不重複日本官網研究並留下精簡紀錄。
-- [ ] 備份／記錄現有 /jp/company 的結構，避免誤刪簽名 Embed。
-- [ ] 加入 Global Style、Cookies、Page Gradient BG。
-- [ ] 修正 Hero 低對比與黑底問題。
-- [ ] 確認 main tag、Client-First nesting 與 container。
-- [ ] 移除新頁對 jp3-*、jp-partner-* legacy class 的依賴。
+- [ ] 補足 11 家不重複日本官網研究並留下精簡紀錄。（**待 Terris 決定是否跳過** — 現有 39 家已收斂出明確共識，且已指定 BETA 為主要參考）
+- [ ] 頁面 slug 從 `company` 改為 `about-us`，SEO title／描述一併更新。
+- [ ] 備份／記錄現有 /jp/about-us 的結構，避免誤刪簽名 Embed。
+- [ ] 加入 Global Style、Cookies、Page Gradient BG 三個 component 實例（目前頁面 component 數為 0）。
+- [ ] `main-wrapper` 的 tag 從 `div` 改為 `main`；各 section 的 tag 從 `div` 改為 `section`。
+- [ ] Hero 明暗方向定案後再施作（見 §5-1 待決事項）。
+- [ ] 重新命名重複的 section：`section_about` ×4、`section_company-hero` ×2。
+- [ ] 補上沒有設 href 的連結 `9543cf4a-02fb-a170-f1ee-06774720a70e`。
+- [ ] 移除新頁對 jp3-*、jp-partner-* legacy class 的依賴（29 + 4 個元素）。
+  用「複製屬性到新 class 再改掛」的方式，**不可 rename** — class 是站台全域的，會動到已發布的 /jptest。
 - [ ] 不修改全站 Component、utility、variables。
 
 ### P1：完整視覺重做
 
 - [ ] Hero 加入可見漸層、真實照片、CTA 與 trust hierarchy。
+- [ ] Hero 下方加入 sticky 頁內 anchor rail（照 BETA 做法，見 §5-1）。
 - [ ] CEO 區加入肖像與三段故事節點。
 - [ ] Manifesto 建立 editorial／glass／gradient panel，保留原 signature Embed。
 - [ ] Timeline 改成交錯圖文或有年份 anchor 的視覺時間軸。
@@ -223,7 +328,7 @@ SmartHR、freee、Money Forward、kubell、LegalOn Technologies、LayerX、Makua
 - [ ] Company Profile 改為 label/value table。
 - [ ] Access／日本合作窗口做成清楚的雙欄或上下層級。
 - [ ] CTA 複用既有元件並檢查連結。
-- [ ] /jp/overview 與 /jp/company 雙向導線正確。
+- [ ] /jp/overview 與 /jp/about-us 雙向導線正確。
 
 ### P2：驗收
 
