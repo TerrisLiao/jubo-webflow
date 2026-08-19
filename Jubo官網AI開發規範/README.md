@@ -31,6 +31,8 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | `06_自訂Class完整清單.md` | 538 個 custom class，依 165 個 folder 分組 | 找可沿用的 class 時 |
 | `07_合規稽核報告.md` | 廠商原始 vs 後來加的、不合規清單、清理建議 | 決定要不要沿用某個舊 class 時 |
 | `08_頁面與資訊架構.md` | 53 個頁面、資料夾結構、參考頁面 | 規劃新頁面時 |
+| **`09_GSAP動畫與互動規範.md`** | 動畫架構、GSAP 寫法、SaaS/AI Agent 頁動效做法、無障礙 | **做任何動畫前** |
+| `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---
 
