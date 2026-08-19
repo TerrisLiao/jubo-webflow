@@ -308,6 +308,51 @@ main／medium／small／tiny 四個斷點，**沒有任何 `position: sticky`**�
    靠捲動自然堆疊。不需要 custom code、不需要 IX2，MCP 就能完成，四斷點也好控制。
 2. **沿用原版 IX2** — 我把結構與 class 原樣建好，Interaction 由 Terris 在 Designer 內手動套用或複製。
 
+## 5-6. 頁面定案：会社概要（2026-08-19）
+
+Terris：「about us 實際名稱就只是 **会社概要**」、「公司基本資訊以上的東西都可以移除了」、
+「這個設計方式是主要給**代理商**，如果想跟我們接洽或是其他配合可以〔用表單〕，
+想要購買產品就叫他導過去 MDX」。
+
+**受眾定位**：代理商與合作夥伴，不是終端買家。購買意圖一律導向 MDX。
+
+**已移除**：創辦人短介紹、多職能團隊（兩段 /jp/overview 都有更完整的版本）。
+
+**目前段落（五段）**
+
+1. 会社概要 標題色帶（`78beda0d`）
+2. 公司概要 label/value 表（`0358a1b5`）
+3. 服務據點＋Google 地圖（`cdd74f9d`）
+4. 日本市場詢問表單（`3b015b9a`）
+5. CTA：了解方案 → `/jp/overview`／購買洽詢 → MDX（`ea5c0c61`）
+
+### 標題色帶的做法（參考 nature.global/about）
+
+實際量測參考站：`min-height: 430px` 的窄帶、flex 置中、白字，
+英文大字（42px）在上、日文小字（20px）在下 —— **不是滿版 hero**。
+
+Jubo 版：`section_jp-about-hero` = `min-height: 24rem`（small 斷點降為 16rem）、flex 置中、
+底色綁 `--primary--ocean`；`jp-about_hero-title`（h1「会社概要」，3rem，白字，
+small 2.25rem／tiny 1.875rem）＋ `jp-about_hero-lead`（副標，白字）。
+白字對 `#175e5e` 的對比約 7.5:1，遠高於 AA 門檻。這也把先前移除 hero 造成的 **h1 缺失補回來了**。
+
+> 註：Terris 原話是「壓一個新底色」，目前用的是深色 ocean 底＋白字。
+> 若要改成淺底深字，只需改 `section_jp-about-hero` 的 background 與兩個文字 class 的顏色。
+
+### ⚠️ Webflow API 陷阱：page 模式的連結不會寫入
+
+`set_link` 帶 `linkType: "page"` 會回報 `status: success`，但讀回來仍是 `linkType: "none"`。
+2026-08-19 因此有兩顆跨頁 CTA 被靜默留成死連結。
+
+**改用 `linkType: "url"` ＋ 路徑字串，並且設完一定要讀回來驗證。**
+目前兩頁導線都已改為 URL 模式並驗證通過：
+`/jp/about-us` 的「了解日本市場解決方案」→ `/jp/overview`；
+`/jp/overview` 的「認識 Jubo」→ `/jp/about-us`。三個 Google 地圖連結也已驗證。
+
+### 待確認
+
+Terris 指出「表格的設計有誤」，但未說明是版式還是欄位內容。待釐清後再改。
+
 ## 6. 固定內容順序與設計線框
 
 內容順序不得改動，但每一區都要有明確視覺設計。
