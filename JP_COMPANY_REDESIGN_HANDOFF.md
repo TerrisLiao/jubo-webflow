@@ -232,7 +232,21 @@ Terris 指的是 `/internship` 頁 `section_home-solutions`（`id="tracks"`）�
 `.cascading-slider__item` 上那個數字第二 class（`1`/`2`/`3`/`4`）雖然違反命名規範，也必須照留。
 `.category-tag` 另外被站台 head 的 GA4 用來推斷業務區域。
 
-⚠️ 原版四張卡都連到 `/careers`（中文招募頁）。日文頁沿用時需改連結目標或移除 —— 待確認。
+⚠️ 原版四張卡都連到 `/careers`（中文招募頁）。日文頁不適合把讀者導到全中文的台灣職缺，
+**overview 版本的四張卡目前刻意不設 href**（仍是 Link Block，保留 Slater 需要的 `<a>` 結構）。
+連結目標待 Terris 決定；在那之前，卡片是純展示。
+
+### 施作狀態（2026-08-19）
+
+已在 `/jp/overview` 建立新區塊，位置在 JuboLink 產品段之後、頁尾 CTA 之前，錨點 `#team`：
+
+- `section_home-solutions` > `padding-global padding-section-large` > `container-large`
+- 標題區用既有 `section_tag text-size-tiny is-eyebrow` ＋ `jp3-h2` ＋ `jp3-body`
+  （overview 依先前決議刻意保留 jp3-* 骨架命名，故此處沿用而非新建）
+- 四張卡的文案已改寫為「團隊組成」語境，不再是實習生視角
+- 沒有新增任何 class，也沒有新增 HtmlEmbed（overview 的 Embed 數維持 8 個，都是原有的）
+
+**兩頁維持分開**：Terris 決議 about-us 與 overview 各自獨立，about-us 現有段落本次不刪。
 
 > 註：先前誤認為是 `intern-journey_*` 四格，已更正。`/internship` 頁確認沒有任何 HtmlEmbed 或 CodeBlock，
 > 所謂「custom code 四格」其實是一般 Webflow class ＋ Slater 互動，搬用不違反鐵律 4。
