@@ -826,3 +826,19 @@ Terris 這輪決定：白邊實驗不要了，改回滿版照片；玻璃面板�
 
 ⚠️ 固定高度 55% 是否會讓最長的簡介（目前是 CEO 那段）被裁掉，需要 Terris 在 Designer 實際看過確認；
 如果裁到了，選項是：縮短簡介文字，或把 55% 再調高一點。
+
+## 5-18 卡片間距修正：縮小責任從卡片改到整個網格區塊（2026-08-19）
+
+Terris 回饋兩張卡片之間（尤其左右）間距太遠。根因：5-17 是讓 `jp-about_leader-card` 自己
+`width:60%` 並用 `margin:auto` 置中在整個 100% 寬的格子裡，等於格子兩側各留 20% 空白，
+這段空白疊加上 `grid-column-gap`，造成左右間距特別誇張（比單純調小 gap 值能修的範圍大得多）。
+中途也試過把 `grid-column-gap`/`grid-row-gap` 從 `2.5rem/3rem` 一路調到 `0.5rem/1rem`，
+但只調 gap 治不好根本問題。
+
+**修法**：把「整體縮小 40%」的責任從卡片本身，搬到整個網格區塊：
+- `.jp-about_leader-card` 移除 `width`、`margin-left`、`margin-right`，改回填滿自己的格子（原本 5-17 加的）。
+- `.jp-about_leaders-grid` 新增 `width:60%; margin-left:auto; margin-right:auto`，讓整塊四卡網格
+  （不是個別卡片）縮小到 60% 寬、置中在版面裡。
+
+這樣一來，卡片之間的間距完全由 `grid-column-gap`（`0.5rem`）/`grid-row-gap`（`1rem`）決定，
+不會再被「卡片自己置中留白」疊加放大；卡片整體視覺大小維持縮小 40% 的效果不變。
