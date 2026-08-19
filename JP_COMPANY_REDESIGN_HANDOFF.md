@@ -251,6 +251,63 @@ Terris 指的是 `/internship` 頁 `section_home-solutions`（`id="tracks"`）�
 > 註：先前誤認為是 `intern-journey_*` 四格，已更正。`/internship` 頁確認沒有任何 HtmlEmbed 或 CodeBlock，
 > 所謂「custom code 四格」其實是一般 Webflow class ＋ Slater 互動，搬用不違反鐵律 4。
 
+## 5-4. 頁面瘦身與 Manifesto 移轉（2026-08-19 決議）
+
+Terris：「about-us 比較像是公司 info 揭露，不是需要很重設計感。」
+
+**已從 about-us 移除：** Hero、Jubo 歷程、資本與策略夥伴、Manifesto（Manifesto 移到 overview）。
+
+**about-us 現在的段落順序：**
+
+1. 創辦人短介紹（`8d7eb4c0`）
+2. 多職能團隊（`30c2bcc3`）
+3. 公司概要 label/value 表（`0358a1b5`）
+4. 服務據點＋Google 地圖（`cdd74f9d`）
+5. 日本市場詢問表單（`3b015b9a`）
+6. CTA（`ea5c0c61`）
+
+⚠️ **移除 Hero 後全頁 h1 數量為 0。** 這是可存取性與 SEO 的實質缺陷，需要指定一個段落標題升為 h1。
+段落陣容還在調整，所以先標記不動手 —— 確定留哪些段落後，把第一段的 h2 改成 h1 即可。
+
+### Manifesto 已移到 /jp/overview
+
+位置：創辦人段（`708363d9…cb8`）正下方，結構與樣式完全沿用（`section_manifesto` >
+`container-small` > `manifesto_component` > `manifesto_content-wrap` > `manifesto_content`）。
+
+手寫簽名 Embed **原樣重建**（跨頁無法 move，只能重建）：
+新 element `a775eb92-1eb9-fa9c-398b-821c05074272`。程式碼一字未改，
+已將兩頁的 embed 內容讀出實際比對，9 條 pen path、animation delay 與 ink path 全部一致。
+about-us 的 HtmlEmbed 數已歸零，`#kangSig` 在站上維持唯一。
+
+### 創辦人段的內容檢查
+
+交接文件 §6.2 要求的三個故事節點，overview 的創辦人段**內容其實已經符合**：
+醫療家庭／醫院／長照場域成長 → 史丹佛土木與環境工程博士＋2008 年起與安養機構合作、
+看見紙本與資訊斷裂 → 2018 年創立 Jubo。
+缺的是**視覺上沒有拆成三個節點**，目前仍是兩段散文。這部分待施作。
+
+## 5-5. 歷程改為捲動卡片堆疊（待決）
+
+Terris 指定：overview 的歷程要改成 `/products/care-assistant-app` 頁面下方那種
+「捲動會停住、卡片一張張翻過去」的效果，脈絡改為
+**智齡聯盟 → 智齡科技 → 北美市場 → 日本市場**。
+
+已查到來源版型：該頁的 `section_product-scroll-card`
+（`padding-global padding-section-large` > `container-large` >
+`product-scroll-card_component` > `product-scroll-card_list` > `product-scroll-card_item` ×3，
+每張卡為 `product-scroll-card_content-left` ＋ `image-wrapper`）。
+
+⚠️ **但那個「停住翻頁」的行為不在 CSS 裡。** 已查完 `product-scroll-card_item` 的
+main／medium／small／tiny 四個斷點，**沒有任何 `position: sticky`**；
+這些 class 也不在 `custom-code/slater-selectors.md` 的 Slater 鎖定清單上。
+結論：效果幾乎確定來自 **Webflow Interactions（IX2）**，而 Webflow MCP 讀不到、也寫不了 IX2。
+
+可行的兩條路：
+
+1. **純 CSS sticky** — 新建 `jp-journey_*` 系列，卡片用 `position: sticky` ＋ `top`，
+   靠捲動自然堆疊。不需要 custom code、不需要 IX2，MCP 就能完成，四斷點也好控制。
+2. **沿用原版 IX2** — 我把結構與 class 原樣建好，Interaction 由 Terris 在 Designer 內手動套用或複製。
+
 ## 6. 固定內容順序與設計線框
 
 內容順序不得改動，但每一區都要有明確視覺設計。
