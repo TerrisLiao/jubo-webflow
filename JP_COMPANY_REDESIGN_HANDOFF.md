@@ -192,6 +192,51 @@ Neo Star 年度 30 最具潛力新創（2020）／第21屆國家新創・永續�
 **資本額**與**員工數**站上查不到，Terris 決議**先留空不放這兩列**，之後補。
 不猜、不寫約數 —— 日本 B2B 頁面的信任來自可查證，寫錯一個數字比少一列傷害大。
 
+## 5-3. 兩頁分工重切（2026-08-19 決議）
+
+查證後發現：about-us 顯得空，主因是**它有四段與 /jp/overview 重複，而 overview 的版本做得更好**。
+
+| about-us 段落 | overview 是否已有 | 誰的版本較完整 |
+|---|---|---|
+| CEO | ✅ 有肖像＋「康仕仲博士｜Jubo 創辦人暨執行長」 | overview |
+| 沿革 | ✅ 3 段含圖（研究→北美→日本） | overview |
+| 團隊 | ✅ 5 張職種照＋3 個數字 | overview |
+| 價值主張 | ✅「不從技術出發」3 段 | overview |
+| Manifesto＋手寫簽名 | ❌ | **about-us 獨有** |
+| 公司概要表 | ❌ | **about-us 獨有** |
+| 投資人與策略夥伴 | ❌ | **about-us 獨有** |
+| 據點／認證 | ❌ | **about-us 獨有** |
+
+**Terris 決議的新分工：**
+
+- **about-us**：不放 hero。直接進公司資料 → 各據點（含 Google Map 連結）→ 聯絡資訊 → 日本市場專用表單。
+- **overview**：在產品架構下方加上「我們的團隊組成」。
+
+### 團隊組成要用的版型（2026-08-19 更正）
+
+Terris 指的是 `/internship` 頁 `section_home-solutions`（`id="tracks"`）裡的
+**cascading slider 四格玻璃卡**，四個部門為：
+
+| 部門 | 職種標籤 | 背景圖 asset |
+|---|---|---|
+| 科技研發 | 軟體工程師／資料工程師／AI 工程師 | `6a421457a350acb9e3caa32c` |
+| 體驗設計 | 視覺設計／UI 設計師／產品設計師 | `6a70340e231103663a398305` |
+| 商業策略 | 行銷企劃／營運企劃／產品行銷 | `6a41d65aaec03e8e4d9ec33b` |
+| 國際拓展 | 業務拓展／海外業務／國際行銷 | `6a83f320c194e073fb45f902` |
+
+結構：
+`.cascading-slider[data-cascading-slider-wrap] > .cascading-slider__collection > .cascading-slider__list[data-cascading-viewport] > .cascading-slider__item.<n>[data-cascading-slide] > .cascading-slider__item-inner > (.cascading-slider__item-bg > Image.cascading-slider__img) + .cascading-slider__item-content + (.cascading-slider_content-wrapper > Link.cascading-slider_content-wrap.is-readable + .cascading-slider_content-wrap.is-inactive)`
+
+⚠️ **整組是 Slater `60292.js` 驅動的**。`.cascading-slider__*`、`.cascading-slider_content-wrap`、
+`.category-tag` 都在鎖定名單上，class 名與 `data-cascading-*` 屬性必須原樣複製，否則不會動。
+`.cascading-slider__item` 上那個數字第二 class（`1`/`2`/`3`/`4`）雖然違反命名規範，也必須照留。
+`.category-tag` 另外被站台 head 的 GA4 用來推斷業務區域。
+
+⚠️ 原版四張卡都連到 `/careers`（中文招募頁）。日文頁沿用時需改連結目標或移除 —— 待確認。
+
+> 註：先前誤認為是 `intern-journey_*` 四格，已更正。`/internship` 頁確認沒有任何 HtmlEmbed 或 CodeBlock，
+> 所謂「custom code 四格」其實是一般 Webflow class ＋ Slater 互動，搬用不違反鐵律 4。
+
 ## 6. 固定內容順序與設計線框
 
 內容順序不得改動，但每一區都要有明確視覺設計。
