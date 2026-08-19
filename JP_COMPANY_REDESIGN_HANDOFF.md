@@ -992,3 +992,36 @@ Terris 回報 header 的「企業情報」按鈕完全沒有出現在畫面上�
 `6a85c251713ce4018900a9a5`，`.jp-overview_header-logo` 高度 `1.5rem`），右邊是「企業情報」按鈕。
 
 ⚠️ Designer MCP 連線這輪又斷了，還沒用 `element_snapshot_tool` 截圖最終確認，麻煩重新連線讓我截圖驗證。
+
+## 5-26 撤掉自建 header、企業情報按鈕移到 hero 右上角、藍色 logo 改放 about-us（2026-08-19）
+
+Terris 指正了 5-24／5-25 兩個方向性錯誤：「企業情報不應該新開一個 header，刪除；按鈕應該在 hero 圖片上面；
+jubo 的藍色 logo 要放在 about us，你放錯了」，並要求動手前多花時間釐清結構。
+
+**我原本錯在哪（先查清楚再動手就能避免）**：動手前沒有先讀 overview hero 的既有結構。
+實際查 `jp-partner_hero-full` 之後才發現——**hero 裡本來就已經有一個 Jubo logo**
+（`.jp-hero-jubo-logo.is-top-left`，白色 inline SVG，絕對定位在 hero 左上角，
+就是 Terris 截圖裡看到的那個）。所以我 5-24／5-25 做的事情是雙重錯誤：
+(1) 另外做一條 header bar，跟站上「logo 直接疊在 hero 圖上」的既有設計語彙衝突；
+(2) 又在那條 header 裡塞了第二個 logo，等於同一頁出現兩個 logo。
+
+**修正後的作法**（對齊既有設計語彙，不自創結構）：
+- 刪除自建的 header 區塊，連帶刪除只服務它的 `jp-overview_header-cta`、`jp-overview_header-logo` 兩個 class，
+  不留孤兒樣式。
+- 「企業情報」按鈕改成 hero section 的絕對定位子元素，放在**右上角，與既有左上角 logo 對稱**，
+  視覺上形成導覽列的感覺，但不需要真的多一條 bar、也不會把內容往下推。
+  定位完全鏡像既有 logo 的 `is-top-left` combo：新增 combo `jp-overview_nav-btn.is-hero-top-right`，
+  `position:absolute; top:2rem; right:max(2rem, calc((100vw - 82rem) / 2)); z-index:4`
+  （`max()` 那段是站上用來讓元素貼齊內容容器邊緣的既有寫法，直接沿用才會跟 logo 對齊），
+  並照 logo 同樣補上 medium `1.5rem`／small `1.25rem`／tiny `1rem` 三個斷點的偏移值。
+  另加 `box-shadow: 0 2px 10px rgba(0,0,0,.18)`，呼應 logo 本身的 drop-shadow，確保疊在照片上仍清楚。
+- Terris 上傳的藍色英文版 logo（asset `6a85c251713ce4018900a9a5`）改放到 **about-us**：
+  放在第一個 section（公司概要）的 `section-header_wrapper` 最上方。該 wrapper 是
+  `flex-direction:column; align-items:center`，所以 logo 自然置中在「公司概要」標籤與 h1 之上，
+  像信頭一樣，符合公司資訊頁的調性。新增 `.jp-about_logo`（`height:2.25rem; width:auto`）。
+
+兩處都用 `element_snapshot_tool` 直接截圖確認：hero 按鈕與左上角 logo 高度對齊、about-us 藍色 logo 正確顯示。
+
+**教訓**：要在既有頁面加「導覽／logo」這類全站級元素前，一定要先把該頁 hero／header 的既有結構讀完，
+確認站上原本是怎麼處理的，再決定要沿用還是新建——這次如果先查了 hero，就會直接看到 logo 已經存在，
+不會白做兩輪。
