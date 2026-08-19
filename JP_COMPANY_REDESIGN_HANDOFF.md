@@ -942,3 +942,31 @@ placeholder 文字**，這是目前 API 的限制，不是我操作錯誤。
 
 兩個連結都用 `linkType:"url"` + 路徑字串（不是 `linkType:"page"`），並各自用
 `get_component_instance_props`／`query_elements` 讀回驗證 href 確實是 `/jp/about-us`。
+
+## 5-24 header 改成真正的導覽列樣式、詢問內容欄位滿版修正、about-us 章節順序調整（2026-08-19）
+
+**Header CTA 改版**：Terris 給了站上真實 nav bar 的「預約諮詢」按鈕截圖（淡灰底藥丸形 + 白底圓形箭頭 icon），
+指出目前企業情報按鈕：(1) 樣式應該對齐那個參考截圖，不是套用預設的實心藍綠色 `CTA Button`；
+(2) 不應該只是釘死在畫面右上角的孤立按鈕，應該做成正常的、橫跨整個版面寬度的導覽列。
+- `.jp-overview_header-cta` 從「固定在右上角的小方塊」改成「固定在頂部、左右撐滿（`left/right:0%`）、
+  `justify-content:flex-end` 的橫向列」，背景加了 `rgba(255,255,255,.7)` + `backdrop-filter:blur(8px)`，
+  讓它讀起來像一條真正的 header bar，不是浮動按鈕。
+- 移除原本的 `CTA Button` component instance（實心色），改用手刻的淡灰藥丸連結
+  `.jp-overview_nav-btn`（`background:#f1f2f4`、`border-radius:999px`）+ 白底圓形箭頭
+  `.jp-overview_nav-btn-icon`（`↗`），視覺上對齊 Terris 提供的參考截圖。
+  ⚠️ 中途 `TextBlock` 類型建立後居然被判定成純 `Block`（不支援 `set_text`，報錯「This element
+  doesn't support text」），跟之前記錄過的 `DivBlock` 不能 `set_text` 是同一類陷阱——`TextBlock`
+  這次也踩到了。修法一樣：刪掉重建成 `Paragraph`，已驗證文字正確（「企業情報」與「↗」）。
+
+**詢問內容欄位沒有滿版的修正**：Terris 指出「詢問內容」欄位下方的底線長度沒有對齊上面兩欄的合計寬度。
+根因：`form-text-field_wrap` 是 `display:flex`，兩個欄位並排時剛好各佔一半，但當一整列只有一個欄位
+（詢問內容）時，flex 預設不會把它撐開填滿整列，於是底線只延伸到跟左欄同寬的位置，右半邊留白。
+新增 `.jp-about_field-full`（`width:100%; flex-grow:1`）套在詢問內容欄位的 wrapper 上，讓它撐滿整列。
+
+**about-us 章節順序調整**：Terris 要求「公司概要要擺在最上面，接著才是團隊，然後公司地址」。
+原順序是［經營團隊 → 公司概要表格 → 服務據點(含辦公室照片) → 詢問表單］，
+用 `move_element` 把「公司概要表格」section 移到「經營團隊」section 前面，
+新順序變成［公司概要 → 經營團隊 → 服務據點 → 詢問表單］，已用 `query_elements` 直接確認順序正確。
+
+⚠️ Designer MCP 連線這輪又斷線了幾次，header 按鈕跟表單欄位的最終視覺效果還沒用
+`element_snapshot_tool` 截圖確認，麻煩重新連線後我再截一次圖驗證。
