@@ -1,20 +1,30 @@
 # Jubo 官網（Webflow）專案說明
 
-這個 repo 是 Jubo Webflow 官網（`jubo-health.com`）的**輔助資料中心**：規範文件、客製程式碼、CMS 結構等。
-網站本體（頁面、CMS 資料、樣式）住在 Webflow 雲端，透過 Webflow MCP 讀寫；本 repo 放的是 MCP 讀不到、且需要跨裝置/跨 AI 工具共用的東西。
+這個 repo 是 Jubo Webflow 官網（`jubo-health.com`）的輔助資料中心。網站本體、CMS、樣式與元件位於 Webflow 雲端；本 repo 保存規範、客製程式 selector、頁面交接與決策紀錄。
 
 ## 每次動工前必讀
 
-先讀 [`Jubo官網AI開發規範/00_AI工作守則.md`](Jubo官網AI開發規範/00_AI工作守則.md)，並嚴格遵守其中的五條鐵律。
-其餘規範文件索引見 [`Jubo官網AI開發規範/README.md`](Jubo官網AI開發規範/README.md)。
+1. `Jubo官網AI開發規範/00_AI工作守則.md`
+2. `Jubo官網AI開發規範/01_Client-First規範摘要.md`
+3. 若動 class：`custom-code/slater-selectors.md`
+4. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
+
+## 核心原則
+
+- Webflow 即時讀回優先於 repository 快照。
+- 未取得明確授權不得 Publish。
+- 不直接 rename 或修改共用 Component、utility、variable。
+- 不因某一頁沒有實例就刪除全站 class；先查全站使用、Slater、IX2 與 Component。
+- snapshot 過期或無法取得 computed style 時，必須標示驗證限制，不得宣稱完成。
 
 ## 資料夾用途
 
-- `Jubo官網AI開發規範/` — Client-First 規範、class 清單、變數、元件、頁面架構、稽核報告
-- （之後視需要新增）`custom-code/` — Webflow 頁面內嵌的 script/style、Embed 元件程式碼
-- （之後視需要新增）`cms-schema/` — CMS Collection 欄位結構文件化
+- `Jubo官網AI開發規範/`：全站設計系統與稽核基準。
+- `JP日本市場頁面改版/`：日本市場頁面現況、決策、文案與待辦。
+- `custom-code/`：外部 script selector、Embed 依賴與 POC。
+- `.claude/skills/`：Three.js 專用 skills；不代表目前 Webflow 頁面一定使用 Three.js。
 
-## 注意事項
+## 安全
 
-- 不要把 Webflow API token 或任何密鑰放進這個 repo（用 `.env`，已在 `.gitignore`）。
-- 大型二進位檔（圖片、影片、設計檔匯出）不要放進 repo，另外用雲端硬碟或 Webflow Assets 管理。
+- 不提交 Webflow token、密鑰或 `.env`。
+- 大型圖片、影片與設計檔放 Webflow Assets 或核准的雲端儲存，不進 git。

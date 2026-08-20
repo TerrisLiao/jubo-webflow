@@ -90,3 +90,8 @@
 
 ✅ **正確作法**：人名、學位、公司名這類不可用近似字替代的內容，
 **逐字核對來源文字**，修正後用 `element_id` 精確查詢重新讀回，不要只看 `status: success`。
+
+
+## 8. 不可用 mutation 反查 style／刪除前需 Designer 確認
+
+2026-08-20 稽核時，連接器可讀元素樹與 class 掛載，但無法可靠取得所有 class 的全站使用次數及四斷點全部 computed properties。不要為了「看屬性」先修改 style 再改回；這會製造真實網站變更。疑似孤兒 class 只能列為候選，最後需在 Designer Style Manager、Slater selector、IX2 與 Component 使用情況交叉確認。
