@@ -34,6 +34,8 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | `07_合規稽核報告.md` | 廠商原始 vs 後來加的、不合規清單、清理建議 | 決定要不要沿用某個舊 class 時 |
 | `08_頁面與資訊架構.md` | 53 個頁面、資料夾結構、參考頁面 | 規劃新頁面時 |
 | **`09_GSAP動畫與互動規範.md`** | 動畫架構、GSAP 寫法、SaaS/AI Agent 頁動效做法、無障礙 | **做任何動畫前** |
+| **`11_AEO稽核與優化計畫.md`** | AI 答案引擎（AEO）稽核：JSON-LD 現況與錯誤、語意結構、FAQ、站外敘事一致性、量測 | **動 SEO / schema / metadata / 內容結構前** |
+| **`12_AEO文章寫作指南.md`** | 給每週產出 `/news` 文章的人：Playbook 內容寫法規則、現有選題缺口、結構與發文節奏檢查清單 | **寫 AEO 文章前**（不需要先讀 `11`） |
 | `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---

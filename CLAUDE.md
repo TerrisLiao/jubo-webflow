@@ -8,6 +8,7 @@
 2. `Jubo官網AI開發規範/01_Client-First規範摘要.md`
 3. 若動 class：`custom-code/slater-selectors.md`
 4. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
+5. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
 
 ## 核心原則
 
