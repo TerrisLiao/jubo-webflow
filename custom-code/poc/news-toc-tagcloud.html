@@ -1,23 +1,27 @@
 <!--
-  貼在文章最開頭（H1 標題之後、導言文字之前），用 Code Embed 貼這一整塊。
+  通用版：AEO /news 文章「文字雲標籤」目錄 Code Embed，不綁定特定文章。
+  貼在文章最開頭（H1 標題之後、導言文字之前），用 Code Embed 貼這一整塊，
+  再把下面 <ul> 裡的 <li><a> 換成該篇文章自己的標題清單（href 的 #id 可以自己取，
+  只要跟文字沒有衝突即可，不需要跟標題本身的 id 一致——腳本會自動比對文字並補上 id）。
+
   借用官網既有 Section Tag 元件的配色語言（--primary--tag-text），
   膠囊狀橫向排列，不是我發明的新配色。
-  獨立自帶 <style>，跟卡片、FAQ 那兩個 Embed 互不相依。
+  獨立自帶 <style>，跟表格、卡片、FAQ 之類其他 Embed 互不相依。
 
   ⚠ 標籤點了跳不到對應標題的原因：Rich Text 打字生成的 H2 不會自動帶 id，
   下面補了一段 <script>，頁面載入後用「文字比對」自動幫對應標題補上 id，
   並攔截點擊做平滑捲動，不需要在標題上另外設定任何東西。
   .w-richtext 是 Webflow Rich Text 欄位固定會輸出的官方 class，不是自創的。
 -->
-<ul class="icare01-toc">
+<ul class="aeo-toc">
 <style>
-  .icare01-toc, .icare01-toc *, .icare01-toc *::before, .icare01-toc *::after { box-sizing: border-box; }
-  .icare01-toc {
+  .aeo-toc, .aeo-toc *, .aeo-toc *::before, .aeo-toc *::after { box-sizing: border-box; }
+  .aeo-toc {
     list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem;
     margin: 0 0 1.8rem; padding: 0;
   }
-  .icare01-toc li { margin: 0; }
-  .icare01-toc a {
+  .aeo-toc li { margin: 0; }
+  .aeo-toc a {
     display: inline-flex; align-items: center;
     font-size: 0.92rem; font-weight: 500;
     color: var(--primary--tag-text);
@@ -27,9 +31,10 @@
     border-radius: 999px;
     text-decoration: none;
   }
-  .icare01-toc a:hover { border-color: var(--primary--accent); color: var(--primary--ocean); }
+  .aeo-toc a:hover { border-color: var(--primary--accent); color: var(--primary--ocean); }
 </style>
 
+  <!-- 以下 7 筆是範例（來自 i照護_01 這篇文章），換文章時整段替換成該篇的標題清單 -->
   <li><a href="#section-1">居服與日照，處理同一件事的兩種樣子</a></li>
   <li><a href="#section-2">居服端：班表與核銷是主軸</a></li>
   <li><a href="#section-3">日照端：照顧計畫、日常流程與家屬溝通</a></li>
@@ -47,7 +52,7 @@
   }
 
   function run() {
-    var toc = document.querySelector(".icare01-toc");
+    var toc = document.querySelector(".aeo-toc");
     if (!toc) return;
     var scope = scriptEl.closest(".w-richtext") || document;
     var links = toc.querySelectorAll('a[href^="#"]');
@@ -68,8 +73,8 @@
     });
 
     links.forEach(function (a) {
-      if (a.dataset.icare01Bound) return;
-      a.dataset.icare01Bound = "1";
+      if (a.dataset.aeoTocBound) return;
+      a.dataset.aeoTocBound = "1";
       a.addEventListener("click", function (e) {
         var id = a.getAttribute("href").slice(1);
         var target = scope.querySelector("#" + CSS.escape(id));
