@@ -1,0 +1,92 @@
+<!--
+  貼在文章最開頭（H1 標題之後、導言文字之前），用 Code Embed 貼這一整塊。
+  借用官網既有 Section Tag 元件的配色語言（--primary--tag-text），
+  膠囊狀橫向排列，不是我發明的新配色。
+  獨立自帶 <style>，跟卡片、FAQ 那兩個 Embed 互不相依。
+
+  ⚠ 標籤點了跳不到對應標題的原因：Rich Text 打字生成的 H2 不會自動帶 id，
+  下面補了一段 <script>，頁面載入後用「文字比對」自動幫對應標題補上 id，
+  並攔截點擊做平滑捲動，不需要在標題上另外設定任何東西。
+  .w-richtext 是 Webflow Rich Text 欄位固定會輸出的官方 class，不是自創的。
+-->
+<ul class="icare01-toc">
+<style>
+  .icare01-toc, .icare01-toc *, .icare01-toc *::before, .icare01-toc *::after { box-sizing: border-box; }
+  .icare01-toc {
+    list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem;
+    margin: 0 0 1.8rem; padding: 0;
+  }
+  .icare01-toc li { margin: 0; }
+  .icare01-toc a {
+    display: inline-flex; align-items: center;
+    font-size: 0.92rem; font-weight: 500;
+    color: var(--primary--tag-text);
+    background: var(--neutral--bg-grey);
+    border: 1px solid rgba(111,127,156,0.35);
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+  .icare01-toc a:hover { border-color: var(--primary--accent); color: var(--primary--ocean); }
+</style>
+
+  <li><a href="#section-1">居服與日照，處理同一件事的兩種樣子</a></li>
+  <li><a href="#section-2">居服端：班表與核銷是主軸</a></li>
+  <li><a href="#section-3">日照端：照顧計畫、日常流程與家屬溝通</a></li>
+  <li><a href="#section-4">第一線的入口是手機，不是電腦</a></li>
+  <li><a href="#section-5">系統之外的那一半</a></li>
+  <li><a href="#section-6">併入智齡之後，這套系統的位置在哪裡</a></li>
+  <li><a href="#section-faq">常見問題</a></li>
+</ul>
+<script>
+(function () {
+  var scriptEl = document.currentScript;
+
+  function normalize(text) {
+    return (text || "").replace(/\s+/g, "").trim();
+  }
+
+  function run() {
+    var toc = document.querySelector(".icare01-toc");
+    if (!toc) return;
+    var scope = scriptEl.closest(".w-richtext") || document;
+    var links = toc.querySelectorAll('a[href^="#"]');
+    var headings = scope.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+    links.forEach(function (a) {
+      var id = a.getAttribute("href").slice(1);
+      var label = normalize(a.textContent);
+      for (var i = 0; i < headings.length; i++) {
+        var h = headings[i];
+        if (h.id) continue;
+        var headingText = normalize(h.textContent);
+        if (headingText === label || headingText.indexOf(label) !== -1 || label.indexOf(headingText) !== -1) {
+          h.id = id;
+          break;
+        }
+      }
+    });
+
+    links.forEach(function (a) {
+      if (a.dataset.icare01Bound) return;
+      a.dataset.icare01Bound = "1";
+      a.addEventListener("click", function (e) {
+        var id = a.getAttribute("href").slice(1);
+        var target = scope.querySelector("#" + CSS.escape(id));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          history.replaceState(null, "", "#" + id);
+        }
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", run);
+  } else {
+    run();
+  }
+  window.addEventListener("load", run);
+})();
+</script>
