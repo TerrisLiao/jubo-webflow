@@ -1,0 +1,249 @@
+<!--
+  通用版：AEO /news 文章 FAQ Code Embed。
+  卡片外觀對齊首頁底部 FAQ：白底、2rem 圓角、無外框、無陰影。
+  JavaScript 會同時處理展開與收合動畫；prefers-reduced-motion 使用者會直接切換。
+  注意：Webflow Designer 的靜態快照不會執行 Code Embed JavaScript，正式發布後仍需實際點擊驗證。
+-->
+<div class="aeo-faq">
+  <style>
+    .aeo-faq,
+    .aeo-faq *,
+    .aeo-faq *::before,
+    .aeo-faq *::after {
+      box-sizing: border-box;
+    }
+
+    .aeo-faq {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .aeo-faq details {
+      overflow: hidden;
+      margin: 0;
+      border: 0;
+      border-radius: 2rem;
+      background: var(--neutral--white);
+      box-shadow: none;
+    }
+
+    .aeo-faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 2rem;
+      color: var(--neutral--black);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.5;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .aeo-faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .aeo-faq__icon {
+      position: relative;
+      flex: 0 0 2rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 999px;
+      background: var(--gradient--announce-bar-purple);
+    }
+
+    .aeo-faq__icon::before,
+    .aeo-faq__icon::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.75rem;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--neutral--black);
+      content: "";
+      transform: translate(-50%, -50%);
+      transition: transform 240ms ease;
+    }
+
+    .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .aeo-faq details[open] .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .aeo-faq__answer {
+      overflow: hidden;
+      height: 0;
+    }
+
+    .aeo-faq__answer-inner {
+      padding: 0 2rem 2rem;
+      color: var(--neutral--black);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .aeo-faq__answer-inner > :first-child {
+      margin-top: 0;
+    }
+
+    .aeo-faq__answer-inner > :last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 767px) {
+      .aeo-faq summary {
+        gap: 1rem;
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .aeo-faq__answer-inner {
+        padding: 0 1.5rem 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aeo-faq__icon::before,
+      .aeo-faq__icon::after {
+        transition: none;
+      }
+    }
+  </style>
+
+  <!-- 複製 details 即可增加題目；請保留 summary、icon、answer、answer-inner 結構 -->
+  <details>
+    <summary>
+      <span>居服系統最重要的功能是什麼？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>請在這裡填入直接回答問題的內容，再補充排班、核銷或行動操作等細節。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>日照系統和居服系統有什麼差別？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>請先說明兩者服務場域與流程差異，再補充適合比較的管理功能。</p>
+      </div>
+    </div>
+  </details>
+
+  <script>
+    (function () {
+      var scriptEl = document.currentScript;
+      var root = scriptEl.closest(".aeo-faq");
+      if (!root) return;
+
+      var reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      root.querySelectorAll("details").forEach(function (item) {
+        var summary = item.querySelector("summary");
+        var answer = item.querySelector(".aeo-faq__answer");
+        if (!summary || !answer) return;
+
+        var animation = null;
+        var isClosing = false;
+        var isExpanding = false;
+
+        summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+        answer.style.height = item.open ? "auto" : "0px";
+
+        summary.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (reduceMotion) {
+            item.open = !item.open;
+            answer.style.height = item.open ? "auto" : "0px";
+            summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+            return;
+          }
+
+          if (isClosing || !item.open) {
+            openItem();
+          } else if (isExpanding || item.open) {
+            closeItem();
+          }
+        });
+
+        function closeItem() {
+          isClosing = true;
+          isExpanding = false;
+          summary.setAttribute("aria-expanded", "false");
+
+          if (animation) animation.cancel();
+
+          var startHeight = item.offsetHeight + "px";
+          var endHeight = summary.offsetHeight + "px";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 320, easing: "cubic-bezier(0.4, 0, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.open = false;
+            answer.style.height = "0px";
+            item.style.height = "";
+            item.style.overflow = "";
+            isClosing = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isClosing = false;
+          };
+
+          item.style.overflow = "hidden";
+        }
+
+        function openItem() {
+          isExpanding = true;
+          isClosing = false;
+          item.open = true;
+          summary.setAttribute("aria-expanded", "true");
+          answer.style.height = "auto";
+
+          if (animation) animation.cancel();
+
+          var startHeight = summary.offsetHeight + "px";
+          var endHeight = item.offsetHeight + "px";
+          item.style.height = startHeight;
+          item.style.overflow = "hidden";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 360, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.style.height = "";
+            item.style.overflow = "";
+            answer.style.height = "auto";
+            isExpanding = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isExpanding = false;
+          };
+        }
+      });
+    })();
+  </script>
+</div>

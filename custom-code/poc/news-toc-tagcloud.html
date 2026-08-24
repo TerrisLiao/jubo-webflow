@@ -1,102 +1,206 @@
 <!--
-  通用版：AEO /news 文章「文字雲標籤」目錄 Code Embed，不綁定特定文章。
-  貼在文章最開頭（H1 標題之後、導言文字之前），用 Code Embed 貼這一整塊，
-  再把下面 <ul> 裡的 <li><a> 換成該篇文章自己的標題清單（href 的 #id 可以自己取，
-  只要跟文字沒有衝突即可，不需要跟標題本身的 id 一致——腳本會自動比對文字並補上 id）。
+  通用版：AEO /news 文章文字雲目錄 Code Embed。
+  貼在文章 H1 後、導言前；換文章時，請替換下方連結的短標籤與 data-heading。
 
-  標籤上顯示的文字刻意用「短詞」而不是整句標題（長短差太多的整句標題排成一排會參差不齊），
-  真正拿去跟標題比對用的完整句子放在 data-heading 屬性裡，兩者互相獨立：
-  <a href="#id" data-heading="標題的完整句子">短詞</a>
-  換文章時，短詞可以自己重下，但 data-heading 要跟該段標題的文字完全一致（或至少完全被包含）。
+  視覺規則：
+  - 沿用官網 glass button 的視覺語言，但不直接掛 .glass-button（該 class 被 Slater 外部程式綁定）。
+  - 不使用黑色或灰色外框；玻璃感由半透明漸層、inset highlight、陰影與 backdrop-filter 組成。
+  - 文字使用 --neutral--black，字重 400。
 
-  借用官網既有 Section Tag 元件的配色語言（--primary--tag-text），
-  膠囊狀橫向排列，不是我發明的新配色。
-  獨立自帶 <style>，跟表格、卡片、FAQ 之類其他 Embed 互不相依。
-
-  ⚠ 標籤點了跳不到對應標題的原因：Rich Text 打字生成的 H2 不會自動帶 id，
-  下面補了一段 <script>，頁面載入後用「文字比對」自動幫對應標題補上 id，
-  並攔截點擊做平滑捲動，不需要在標題上另外設定任何東西。
-  .w-richtext 是 Webflow Rich Text 欄位固定會輸出的官方 class，不是自創的。
+  連結規則：
+  - data-heading 必須填文章中完整的 H2/H3 文字；畫面上的短標籤可以另寫。
+  - 最穩定的做法是先透過 CMS API 給標題永久 id；若沒有 id，腳本才會依文字比對補上。
+  - 腳本只在目前這個 Embed 與所屬 .w-richtext 範圍內工作，不會影響其他文章元件。
 -->
-<ul class="aeo-toc">
-<style>
-  .aeo-toc, .aeo-toc *, .aeo-toc *::before, .aeo-toc *::after { box-sizing: border-box; }
-  .aeo-toc {
-    list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem;
-    margin: 0 0 1.8rem; padding: 0;
-  }
-  .aeo-toc li { margin: 0; }
-  .aeo-toc a {
-    display: inline-flex; align-items: center;
-    font-size: 0.92rem; font-weight: 500;
-    color: var(--primary--tag-text);
-    background: var(--neutral--bg-grey);
-    border: 1px solid rgba(111,127,156,0.35);
-    padding: 0.45rem 1rem;
-    border-radius: 999px;
-    text-decoration: none;
-  }
-  .aeo-toc a:hover { border-color: var(--primary--accent); color: var(--primary--ocean); }
-</style>
+<div class="aeo-toc-embed">
+  <style>
+    .aeo-toc,
+    .aeo-toc *,
+    .aeo-toc *::before,
+    .aeo-toc *::after {
+      box-sizing: border-box;
+    }
 
-  <!-- 以下 7 筆是範例（來自 i照護_01 這篇文章），換文章時整段替換成該篇的標題清單 -->
-  <li><a href="#section-1" data-heading="居服與日照，處理同一件事的兩種樣子">居服 vs 日照</a></li>
-  <li><a href="#section-2" data-heading="居服端：班表與核銷是主軸">居服端：排班核銷</a></li>
-  <li><a href="#section-3" data-heading="日照端：照顧計畫、日常流程與家屬溝通">日照端：日常照顧</a></li>
-  <li><a href="#section-4" data-heading="第一線的入口是手機，不是電腦">手機優先</a></li>
-  <li><a href="#section-5" data-heading="系統之外的那一半">系統外的事</a></li>
-  <li><a href="#section-6" data-heading="併入智齡之後，這套系統的位置在哪裡">併入智齡科技</a></li>
-  <li><a href="#section-faq" data-heading="常見問題">常見問題</a></li>
-</ul>
-<script>
-(function () {
-  var scriptEl = document.currentScript;
+    .aeo-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 0 0 2rem;
+      padding: 0;
+      list-style: none;
+    }
 
-  function normalize(text) {
-    return (text || "").replace(/\s+/g, "").trim();
-  }
+    .aeo-toc li {
+      margin: 0;
+      padding: 0;
+    }
 
-  function run() {
-    var toc = document.querySelector(".aeo-toc");
-    if (!toc) return;
-    var scope = scriptEl.closest(".w-richtext") || document;
-    var links = toc.querySelectorAll('a[href^="#"]');
-    var headings = scope.querySelectorAll("h1, h2, h3, h4, h5, h6");
+    .aeo-toc a {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      min-height: 3.25rem;
+      padding: 0.7rem 1.5rem 0.75rem;
+      border: 0;
+      border-radius: 900px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.72),
+        rgba(255, 255, 255, 0.28)
+      );
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.9),
+        inset 0 -1px 1px rgba(21, 23, 23, 0.08),
+        0 8px 24px rgba(21, 23, 23, 0.08);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      backdrop-filter: blur(14px) saturate(150%);
+      color: var(--neutral--black);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.5;
+      text-decoration: none;
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
+    }
 
-    links.forEach(function (a) {
-      var id = a.getAttribute("href").slice(1);
-      var label = normalize(a.dataset.heading || a.textContent);
-      for (var i = 0; i < headings.length; i++) {
-        var h = headings[i];
-        if (h.id) continue;
-        var headingText = normalize(h.textContent);
-        if (headingText === label || headingText.indexOf(label) !== -1 || label.indexOf(headingText) !== -1) {
-          h.id = id;
-          break;
-        }
+    .aeo-toc a::before {
+      position: absolute;
+      z-index: -1;
+      inset: 1px;
+      border-radius: inherit;
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.45),
+        rgba(255, 255, 255, 0) 58%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .aeo-toc a:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.82),
+        rgba(255, 255, 255, 0.38)
+      );
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 1px rgba(21, 23, 23, 0.06),
+        0 12px 28px rgba(21, 23, 23, 0.12);
+    }
+
+    .aeo-toc a:focus-visible {
+      outline: 3px solid var(--primary--accent);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 767px) {
+      .aeo-toc {
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
       }
-    });
 
-    links.forEach(function (a) {
-      if (a.dataset.aeoTocBound) return;
-      a.dataset.aeoTocBound = "1";
-      a.addEventListener("click", function (e) {
-        var id = a.getAttribute("href").slice(1);
-        var target = scope.querySelector("#" + CSS.escape(id));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-          history.replaceState(null, "", "#" + id);
-        }
-      });
-    });
-  }
+      .aeo-toc a {
+        min-height: 3rem;
+        padding: 0.625rem 1.25rem;
+        font-size: 1rem;
+      }
+    }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run);
-  } else {
-    run();
-  }
-  window.addEventListener("load", run);
-})();
-</script>
+    @media (prefers-reduced-motion: reduce) {
+      .aeo-toc a {
+        transition: none;
+      }
+    }
+  </style>
+
+  <nav aria-label="文章目錄">
+    <ul class="aeo-toc">
+      <!-- 以下為範例；換文章時請整段替換 -->
+      <li><a href="#section-1" data-heading="居服與日照，處理同一件事的兩種樣子">居服 vs 日照</a></li>
+      <li><a href="#section-2" data-heading="居服端：班表與核銷是主軸">居服端重點</a></li>
+      <li><a href="#section-3" data-heading="日照端：照顧計畫、日常流程與家屬溝通">日照端重點</a></li>
+      <li><a href="#section-4" data-heading="第一線的入口是手機，不是電腦">行動裝置優先</a></li>
+      <li><a href="#section-5" data-heading="系統之外的那一半">系統外的事</a></li>
+      <li><a href="#section-6" data-heading="併入智齡之後，這套系統的位置在哪裡">併購後現況</a></li>
+      <li><a href="#section-faq" data-heading="常見問題">常見問題</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    (function () {
+      var scriptEl = document.currentScript;
+
+      function normalize(text) {
+        return (text || "").replace(/\s+/g, "").trim();
+      }
+
+      function run() {
+        var embed = scriptEl.closest(".aeo-toc-embed");
+        var toc = embed && embed.querySelector(".aeo-toc");
+        var scope = scriptEl.closest(".w-richtext") || document;
+        if (!toc) return;
+
+        var links = toc.querySelectorAll('a[href^="#"]');
+        var headings = scope.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        links.forEach(function (link) {
+          var requestedId = link.getAttribute("href").slice(1);
+          var target = requestedId
+            ? scope.querySelector("#" + CSS.escape(requestedId))
+            : null;
+
+          if (!target) {
+            var label = normalize(link.dataset.heading || link.textContent);
+
+            for (var index = 0; index < headings.length; index += 1) {
+              var heading = headings[index];
+              var headingText = normalize(heading.textContent);
+
+              if (
+                headingText === label ||
+                headingText.indexOf(label) !== -1 ||
+                label.indexOf(headingText) !== -1
+              ) {
+                target = heading;
+                break;
+              }
+            }
+          }
+
+          if (!target) return;
+          if (!target.id) target.id = requestedId;
+          link.setAttribute("href", "#" + target.id);
+        });
+
+        links.forEach(function (link) {
+          if (link.dataset.aeoTocBound) return;
+          link.dataset.aeoTocBound = "1";
+
+          link.addEventListener("click", function (event) {
+            var id = link.getAttribute("href").slice(1);
+            var target = scope.querySelector("#" + CSS.escape(id));
+            if (!target) return;
+
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            history.replaceState(null, "", "#" + id);
+          });
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+      } else {
+        run();
+      }
+
+      window.addEventListener("load", run);
+    })();
+  </script>
+</div>

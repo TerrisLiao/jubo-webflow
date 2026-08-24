@@ -70,31 +70,36 @@
 ### 已驗證的表格樣板
 
 ```html
-<div style="overflow-x:auto;margin:1.5rem 0;">
-  <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
     <thead>
       <tr>
-        <th style="text-align:left;padding:0.75rem 1rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">欄位標題</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">欄位標題</th>
         <!-- 其餘欄位標題比照辦理 -->
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td style="padding:0.75rem 1rem;border-bottom:1px solid var(--neutral--black-60);color:var(--neutral--black);">內容</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">內容</td>
         <!-- 其餘儲存格比照辦理 -->
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">最後一列內容</td>
       </tr>
     </tbody>
   </table>
 </div>
 ```
 
-- 外層 `overflow-x:auto` 的 div 是手機版防爆版面用的，表格太寬時會變成左右滑動，不要拿掉。
-- 顏色只用這三個既有 Variables：`--neutral--bg-grey`（表頭底色）、`--neutral--black`（文字）、
-  `--neutral--black-60`（分隔線）。**站上目前沒有專門給表格邊框用的淺色變數**，`--neutral--black-60`
-  是暫時借用；如果之後想要更淺、更精緻的邊框色，要先跟 Terris 確認，不要自己加一個新色碼。
-- 如果同一篇文章裡有標題想跟這個表格風格搭、但預設黑色不夠深，可以在**那個標題自己的 `<h2>`／`<h3>`
-  標籤上**加 `style="font-weight:700;"` 這類 inline style；**不要去改全站 H2/H3 的 tag selector 或
-  `heading-style-h#` utility class**，那是共用資產。
+- 外層是白底、`2rem` 圓角、`border:0`；**不可加黑色或灰色外框**。只保留表頭與資料列之間的內部分隔線。
+- 所有表頭與儲存格文字都使用 `var(--neutral--black)`，不可用灰字或 `--primary--tag-text`。
+- 外層 `overflow-x:auto` 與表格 `min-width` 是手機版防爆版面用的；表格太寬時左右滑動，不要拿掉。
+- 顏色只用既有 Variables：`--neutral--white`（卡片底色）、`--neutral--bg-grey`（表頭底色）、
+  `--neutral--black`（文字）、`--neutral--black-60`（內部分隔線）。不要手打新色碼。
+- 圓角以本次視覺確認的 `2rem` 為準。最後一列不能有底線，避免看起來像另一圈外框。
+- 如果同一篇文章裡有標題想跟表格風格搭，可以只在那個 `<h2>`／`<h3>` 上加
+  `style="font-weight:700;"`；**不要改全站 tag selector 或 `heading-style-h#` utility class**。
+
 
 ### 已知的取捨
 
@@ -117,29 +122,47 @@
 
 ---
 
-## 目錄（文字雲標籤）怎麼放進 CMS（實驗性，非上面表格樣板的驗證等級）
+## CMS 內容型 Code Embed：限定例外與使用範圍
 
-任何 `/news` 文章需要目錄時，可以用「文字雲標籤」風格的目錄（膠囊狀橫向標籤，點了平滑捲動
-到對應標題），是通用元件、不綁定特定文章。POC 放在 `custom-code/poc/news-toc-tagcloud.html`
-（第一版是為 `i照護_01` 這篇文章做的，後來拉出來變成任何文章都能套用的通用版）。做法：
+本章是 `00_AI工作守則.md`「不要用 HTML Embed 做版面」的**限定例外**：只限 `/news` CMS Rich Text
+內的內容型元件（文字雲目錄、FAQ），而且必須使用本章已確認的範本。不可把這些範本挪去一般頁面
+排版，也不可修改全站 Component、Variables、utility class 或 Slater 綁定的 class。
 
-- 用 Code Embed（Rich Text 工具列的 `</>` 圖示）整段貼進 `Content` 欄位對應位置，不是走上面
-  表格樣板的「CMS API 寫 HTML」路徑；再把檔案裡 `<ul class="aeo-toc">` 底下的 `<li><a>` 換成
-  該篇文章自己的標題清單（`href="#任意id"` 自己取，不用跟標題的 `id` 一致，腳本會自動比對）。
-- 因為 `/news` 文章標題是用 Rich Text 正常打字產生的 H2，**不會自動帶 `id`**，所以標籤點了會
-  跳不到對應段落。POC 檔案裡用一段 `<script>`，頁面載入後用「標題文字」比對，自動幫對應 H2 補
-  上 `id` 再攔截點擊做平滑捲動，不需要另外在標題上手動設定。
-- 顏色用 `var(--primary--tag-text)`、`var(--neutral--bg-grey)` 這些既有 Variables，抓的是站上
-  既有 Section Tag 元件的配色語言，不是新配色。
+### 文字雲目錄
 
-**跟上面表格樣板不同、還沒有驗證過的部分：**
+通用範本放在 `custom-code/poc/news-toc-tagcloud.html`。視覺已依 2026-08-24 的 Draft 文章與
+Webflow MCP snapshot 確認：
 
-- 上面「已知的取捨」提過表格樣板刻意只用 inline style，因為沒測過 `<style>` 區塊在正式頁面
-  「顯示」時會不會被過濾掉。這個 POC 為了可讀性用了一段 `<style>` 區塊，**目前只在本機瀏覽器
-  測試過捲動邏輯是否正確，沒有實際發布到 `jubo-health.com` 驗證過 `<style>` 區塊會不會被濾掉、
-  或跟站上其他 CSS 衝突**。正式採用前要先在一篇 Draft 文章上 Publish 一次，實際檢查樣式有沒有
-  跑出來。
-- 圓角、陰影這類數值是合理預設值，沒有比對過站上 `jbc-v3-card` 之類既有卡片元件的實際數值。
+- 使用官網 glass button 的視覺語言：半透明漸層、玻璃高光、模糊與柔和陰影。
+- **沒有黑色或灰色外框**；`border` 必須是 `0`。
+- 文字使用 `var(--neutral--black)`、`1.125rem`、`font-weight:400`。
+- 不直接掛 `.glass-button`。這個 class 被 Slater 外部程式綁定，範本改用 scoped selector
+  `.aeo-toc a` 重現已確認的視覺，避免影響全站互動。
+- 每個連結都要保留 `href`（不能只做成沒有連結的標籤）。`data-heading` 放文章中的完整標題，
+  畫面文字則使用短詞。
+- 最穩定的方式是透過 CMS API 先給 H2/H3 永久 `id`。若標題沒有 `id`，範本腳本才會用文字比對補上，
+  並把連結改指向實際標題。
+- Code Embed 的 `<style>` 已在 Draft CMS 內容中確認可保存並顯示；正式網站互動仍要在發布後點擊確認。
+
+### FAQ
+
+通用範本放在 `custom-code/poc/news-faq-accordion.html`，外觀對齊首頁最下方 FAQ：
+
+- 白底、`2rem` 圓角、無外框、無陰影。
+- 問題文字使用 `var(--neutral--black)`、`1.125rem`、`font-weight:400`。
+- 展開與收合都使用高度動畫：展開 `360ms`，收合 `320ms`；收合完成後才移除 `open`。
+- 必須更新 `aria-expanded`，並支援 `prefers-reduced-motion`。
+- 每題保留 `details > summary + .aeo-faq__answer > .aeo-faq__answer-inner` 結構；不要只改一半 class。
+- Webflow Designer / MCP 靜態 snapshot 不會執行 Code Embed JavaScript，所以 snapshot 只能確認外觀。
+  正式發布後必須實際點擊每一題，確認「展開、有動畫、可以收回」三件事。
+
+### 每次製作前的檢查
+
+1. 先讀 `00_AI工作守則.md`、本文件，以及要使用的 POC 原始碼。
+2. 只替換文章內容、標籤文字、`data-heading` 與永久標題 `id`；不要重新發明另一套外觀。
+3. 先寫入 Draft，用 Webflow MCP snapshot 檢查桌面版與行動版外觀。
+4. snapshot 無法驗證 JavaScript；發布後再做一次真實互動測試。
+5. AI 不得自行 Publish，除非 Terris 在當次工作明確授權。
 
 ---
 
