@@ -4,6 +4,11 @@
   再把下面 <ul> 裡的 <li><a> 換成該篇文章自己的標題清單（href 的 #id 可以自己取，
   只要跟文字沒有衝突即可，不需要跟標題本身的 id 一致——腳本會自動比對文字並補上 id）。
 
+  標籤上顯示的文字刻意用「短詞」而不是整句標題（長短差太多的整句標題排成一排會參差不齊），
+  真正拿去跟標題比對用的完整句子放在 data-heading 屬性裡，兩者互相獨立：
+  <a href="#id" data-heading="標題的完整句子">短詞</a>
+  換文章時，短詞可以自己重下，但 data-heading 要跟該段標題的文字完全一致（或至少完全被包含）。
+
   借用官網既有 Section Tag 元件的配色語言（--primary--tag-text），
   膠囊狀橫向排列，不是我發明的新配色。
   獨立自帶 <style>，跟表格、卡片、FAQ 之類其他 Embed 互不相依。
@@ -35,13 +40,13 @@
 </style>
 
   <!-- 以下 7 筆是範例（來自 i照護_01 這篇文章），換文章時整段替換成該篇的標題清單 -->
-  <li><a href="#section-1">居服與日照，處理同一件事的兩種樣子</a></li>
-  <li><a href="#section-2">居服端：班表與核銷是主軸</a></li>
-  <li><a href="#section-3">日照端：照顧計畫、日常流程與家屬溝通</a></li>
-  <li><a href="#section-4">第一線的入口是手機，不是電腦</a></li>
-  <li><a href="#section-5">系統之外的那一半</a></li>
-  <li><a href="#section-6">併入智齡之後，這套系統的位置在哪裡</a></li>
-  <li><a href="#section-faq">常見問題</a></li>
+  <li><a href="#section-1" data-heading="居服與日照，處理同一件事的兩種樣子">居服 vs 日照</a></li>
+  <li><a href="#section-2" data-heading="居服端：班表與核銷是主軸">居服端：排班核銷</a></li>
+  <li><a href="#section-3" data-heading="日照端：照顧計畫、日常流程與家屬溝通">日照端：日常照顧</a></li>
+  <li><a href="#section-4" data-heading="第一線的入口是手機，不是電腦">手機優先</a></li>
+  <li><a href="#section-5" data-heading="系統之外的那一半">系統外的事</a></li>
+  <li><a href="#section-6" data-heading="併入智齡之後，這套系統的位置在哪裡">併入智齡科技</a></li>
+  <li><a href="#section-faq" data-heading="常見問題">常見問題</a></li>
 </ul>
 <script>
 (function () {
@@ -60,7 +65,7 @@
 
     links.forEach(function (a) {
       var id = a.getAttribute("href").slice(1);
-      var label = normalize(a.textContent);
+      var label = normalize(a.dataset.heading || a.textContent);
       for (var i = 0; i < headings.length; i++) {
         var h = headings[i];
         if (h.id) continue;
