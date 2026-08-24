@@ -14,7 +14,7 @@
 
 1. **開頭直接給答案**，不要鋪陳。讀者（跟 AI）都沒耐心看到第三段才知道重點。
 2. **用問句當標題**（H2/H3 寫成使用者會問的問題），不要用形容詞式標題。
-3. 買家要比較選項時，**給表格**，不要寫成一整段散文。
+3. 買家要比較選項時，**給表格**，不要寫成一整段散文。（表格實際怎麼放進 CMS，見下方「表格怎麼放進 CMS」章節，Rich Text 欄位對表格的支援不穩定，不能直接手動貼表格進 Webflow Editor）
 4. FAQ 放在自然的位置（文章結尾、或段落之間），不要硬湊。
 5. 有具體數據、客戶案例就引用，並**標明出處**（哪個機構、哪個時間點）。
 6. **文章加目錄**：Webflow 自己測試，部落格文章加目錄後四週內 AI 來源流量 +59%、SEO 流量 +23%。文章超過 3 個 H2 就加。
@@ -48,6 +48,72 @@
 - 段落開頭先給答案，細節往下鋪陳
 - 圖片一定要寫 `alt`：如果圖片本身帶資訊（活動時間、主講人、圖表數字），
   alt 要把那個資訊寫進去，不是隨便寫「示意圖」
+
+---
+
+## 表格怎麼放進 CMS（2026-08-24 實測結論）
+
+`/news` 文章內文欄位（`Content`）是 **Rich Text** 型別。理論上 Rich Text 支援表格標籤，
+但實測發現：
+
+- **不要在 Webflow Editor 裡手動貼表格。** Editor 的 Rich Text 是所見即所得工具列，
+  沒有「貼原始 HTML」的功能，貼進去的表格語法只會變成一串黏在一起的純文字。
+- **不要指望在 Designer 幫表格單獨設計樣式。** Rich Text 欄位在 Designer 的元件樹裡是一個
+  空殼（沒有可以個別選取的巢狀 `table`／`td` 元件），只有人在 Designer 裡即時預覽「內文真的
+  含表格」的項目時，才能用它內建的 Table 格式化面板去調——這是純手動、不能透過工具批次處理的
+  步驟，而且效果還沒有正式驗證過。
+- **能用、且已經視覺驗證過的做法：透過 CMS API 直接把整段 HTML（含 inline style）寫進
+  `Content` 欄位。** `style=""`、`class=""`、`div`、`data-*` 屬性都能完整存活，且 Webflow
+  頁面上的 Variables 會編譯成 CSS 變數，inline style 裡可以直接用 `var(--neutral--black)`
+  這種寫法引用，不用手打色碼。
+
+### 已驗證的表格樣板
+
+```html
+<div style="overflow-x:auto;margin:1.5rem 0;">
+  <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:0.75rem 1rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">欄位標題</th>
+        <!-- 其餘欄位標題比照辦理 -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:0.75rem 1rem;border-bottom:1px solid var(--neutral--black-60);color:var(--neutral--black);">內容</td>
+        <!-- 其餘儲存格比照辦理 -->
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+- 外層 `overflow-x:auto` 的 div 是手機版防爆版面用的，表格太寬時會變成左右滑動，不要拿掉。
+- 顏色只用這三個既有 Variables：`--neutral--bg-grey`（表頭底色）、`--neutral--black`（文字）、
+  `--neutral--black-60`（分隔線）。**站上目前沒有專門給表格邊框用的淺色變數**，`--neutral--black-60`
+  是暫時借用；如果之後想要更淺、更精緻的邊框色，要先跟 Terris 確認，不要自己加一個新色碼。
+- 如果同一篇文章裡有標題想跟這個表格風格搭、但預設黑色不夠深，可以在**那個標題自己的 `<h2>`／`<h3>`
+  標籤上**加 `style="font-weight:700;"` 這類 inline style；**不要去改全站 H2/H3 的 tag selector 或
+  `heading-style-h#` utility class**，那是共用資產。
+
+### 已知的取捨
+
+這個做法是把樣式寫死在每篇文章的 HTML 裡，不是集中在 Designer 的共用 class 上：
+
+- ✅ 顏色用 `var(--...)`，站上主色改了會自動跟著變
+- ❌ 間距、border 這類數值寫死在每篇文章裡，之後想整批調整要一篇一篇改，不能像改一個 class 一次生效
+- ❌ 沒有測過 `<style>` 區塊在正式頁面「顯示」時會不會被過濾掉，所以樣板刻意只用 inline style，
+  不要換成寫一段共用 `<style>` 再套 class 的做法，除非重新做過實際渲染驗證
+
+### 建議流程
+
+1. 工讀生／內容負責人交出文章的純文字草稿
+2. 交給 Claude，照本文件的結構規則（H1→H2→H3 連續、問句標題、FAQ、目錄）＋上面的表格樣板，
+   排成一段完整 HTML，直接寫進一個新的 Draft CMS 項目（`Content`、`Short Summary`、`Name`、
+   `Slug` 一次填好）
+3. 負責 Webflow 的人在 Editor／Designer 預覽這個 Draft，確認排版、圖片 `alt`、行動版表格捲動
+   沒問題
+4. 確認沒問題後由人工自己按 Publish——AI 不會自己發布，見 `00_AI工作守則.md`
 
 ---
 
