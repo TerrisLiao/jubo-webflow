@@ -100,6 +100,81 @@
 - 如果同一篇文章裡有標題想跟表格風格搭，可以只在那個 `<h2>`／`<h3>` 上加
   `style="font-weight:700;"`；**不要改全站 tag selector 或 `heading-style-h#` utility class**。
 
+### 變化樣板：分組列＋斑馬紋（方案／規格比較表用）
+
+> ⚠️ 這個變化樣板**還沒有像上面的基本樣板一樣做過 Webflow 視覺驗證**，只是照同一套規則（顏色只用
+> 四個既有 Variables、`border:0`、最後一列無底線）延伸出來的寫法。第一次用在正式文章前，
+> 一定要先進 Draft 用 Webflow MCP snapshot 或 Editor 預覽，桌面版／手機版都看過再交人工 Publish。
+
+適用情境：像方案比較、規格比較這種「同一組欄位（例如 Free／Pro／Business）要對照好幾類功能」的表格，
+基本樣板的單一群組已經不夠用，需要：
+
+1. **分組列**：用整列 `colspan` 當作分組標題（例如「核心方案」「進階功能」），
+   跟表頭一樣套 `background:var(--neutral--bg-grey)`、`font-weight:700`，不要另外發明新樣式。
+2. **斑馬紋**：因為樣板刻意不寫共用 `<style>`（見下方「已知的取捨」），沒辦法用 `:nth-child`，
+   要斑馬紋就在每個 `<tr>` 內的每個儲存格手動疊 `background:var(--neutral--bg-grey)`（單數列留白，
+   雙數列疊灰），顏色一樣只能用這四個既有 Variables，不要手打新色碼。
+3. **左右對齊**：第一欄（功能名稱）維持 `text-align:left`；其餘方案欄一律 `text-align:center`，
+   對齊方式直接寫在每個 `<th>`／`<td>` 的 `style` 裡，不是靠外層 class。
+4. 打勾／未支援一律用純文字符號（`✓`／`–`），顏色跟其他儲存格一樣用 `var(--neutral--black)`，
+   **不要把「未支援」的符號調成灰字**——這點跟基本樣板規則一致，只是很容易漏掉。
+5. 最後一列規則不變：整列都不能有 `border-bottom`。
+
+```html
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:44rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">功能</th>
+        <th style="text-align:center;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">Free<span style="display:block;font-size:0.8125rem;font-weight:400;">$0 / 月</span></th>
+        <th style="text-align:center;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">Pro<span style="display:block;font-size:0.8125rem;font-weight:400;">$24 / 月</span></th>
+        <th style="text-align:center;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">Business<span style="display:block;font-size:0.8125rem;font-weight:400;">$79 / 月</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="4" style="padding:0.75rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);font-weight:700;">核心方案</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">專案數量</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">1</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">不限</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">不限</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);">團隊成員</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);">1</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);">10</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);">不限</td>
+      </tr>
+      <tr>
+        <td colspan="4" style="padding:0.75rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:1px solid var(--neutral--black-60);font-weight:700;">進階功能</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">數據分析</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">–</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">✓</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">✓</td>
+      </tr>
+      <tr>
+        <td style="text-align:left;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:0;">單一登入（SSO）</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:0;">–</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:0;">–</td>
+        <td style="text-align:center;padding:1rem 1.5rem;color:var(--neutral--black);background:var(--neutral--bg-grey);border-bottom:0;">✓</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+**這個變化樣板刻意不做的事**（跟原始 Tailwind 版需求的差異，避免下次改版又加回去）：
+
+- 沒有做 `position: sticky` 表頭：這段表格是嵌在文章 Rich Text 內、外層只做橫向捲動、沒有固定高度容器，
+  sticky 在這個情境下的實際效果沒有驗證過，貿然加只是製造新的未驗證項目。
+- 沒有加 CTA 按鈕：`.cta-button`／`.glass-button` 這類站上既有按鈕樣式被 Slater 綁定
+  （見 `custom-code/slater-selectors.md`），不能挪來 Rich Text 內容裡手刻一份「看起來像」的版本，
+  這違反 `00_AI工作守則.md` 鐵律 4「不要用 HTML Embed 畫假 UI」。方案頁如果真的需要 CTA 按鈕，
+  屬於 Designer 頁面層級的需求，不是 `/news` 文章表格的範圍。
 
 ### 已知的取捨
 
