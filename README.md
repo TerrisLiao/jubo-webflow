@@ -6,9 +6,11 @@ Jubo Webflow 官網的輔助資料庫。網站本體、CMS、樣式與元件位�
 
 1. 讀 `CLAUDE.md`。
 2. 讀 `Jubo官網AI開發規範/00_AI工作守則.md`。
-3. 若處理日本頁，讀 `JP日本市場頁面改版/README.md`、`02`、`05`、`11`。
-4. 若會動 class，先讀 `custom-code/slater-selectors.md`。
-5. 用 Webflow 讀回即時結構；repository 文件可能落後，不可直接拿快照覆蓋 Designer。
+3. 讀 `Jubo官網AI開發規範/14_Webflow_Agent_Instructions同步規範.md`。站上另有一份會被 MCP 自動載入的規則，與本 repo 有差異；**兩邊不一致時以 repo 為準**。
+4. 若處理日本頁，讀 `JP日本市場頁面改版/README.md`、`02`、`05`、`11`。
+5. 若會動 class，先讀 `custom-code/slater-selectors.md`。
+6. 用 Webflow 讀回即時結構；repository 文件可能落後，不可直接拿快照覆蓋 Designer。
+7. 要引入任何外部 skill／框架前，先讀 `Jubo官網AI開發規範/13_外部AI資源評估與採用紀錄.md`。
 
 ## 目錄
 

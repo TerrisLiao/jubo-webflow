@@ -6,9 +6,10 @@
 
 1. `Jubo官網AI開發規範/00_AI工作守則.md`
 2. `Jubo官網AI開發規範/01_Client-First規範摘要.md`
-3. 若動 class：`custom-code/slater-selectors.md`
-4. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
-5. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
+3. `Jubo官網AI開發規範/14_Webflow_Agent_Instructions同步規範.md`（站上另有一份會被 MCP 自動載入的規則，與本 repo 有差異）
+4. 若動 class：`custom-code/slater-selectors.md`
+5. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
+6. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
 
 ## 核心原則
 
@@ -17,6 +18,8 @@
 - 不直接 rename 或修改共用 Component、utility、variable。
 - 不因某一頁沒有實例就刪除全站 class；先查全站使用、Slater、IX2 與 Component。
 - snapshot 過期或無法取得 computed style 時，必須標示驗證限制，不得宣稱完成。
+- Webflow 站上的 Agent Instruction 是 repo 的衍生部署品；兩邊不一致時以 repo 為準，並登記差異。
+- 外部 skill、框架或起手包未經 `Jubo官網AI開發規範/13_外部AI資源評估與採用紀錄.md` 評估，不得引入本專案。
 
 ## 資料夾用途
 
