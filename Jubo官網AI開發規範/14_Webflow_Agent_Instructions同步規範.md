@@ -56,19 +56,33 @@ $ grep -ri "agent.instruction" . --include=*.md
 | `updatedAt` | `2026-08-13T15:25:18Z` |
 | 內文自稱版本 | 「版本：1.0（2026-07-22）」← 與上面的 `version: 2` 不同步 |
 | 篇幅 | 17 節，約 4,000 字 |
-| 站上 instruction 總數 | **1 筆**（沒有其他 rule 或 skill） |
+| 站上 instruction 總數 | 讀回當下 **1 筆**；同日新增第 2 筆，見下 |
 
 內容涵蓋：Landing Page 優先原則、標準工作流程、Tier A/B/C 權威分層、官方 Variables、
 Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glass、Buttons、
 影像、共用 Components、Motion 與 Scripts、Landing Page 選擇矩陣、命名規則、品牌與 Accessibility、最終 QA。
 
+### 2026-08-27 新增的第 2 筆
+
+| 欄位 | 值 |
+|---|---|
+| Path | `rules/jubo-repo-source-of-truth.md` |
+| id | `6a8fd47800096588f1fdb98d` |
+| Kind | `rule`｜`isDraft: false`（已生效）｜`version 1` |
+| 內容 | 真相來源宣告、**Slater 不可改名**、四斷點查詢規則、重構不可改設計、其他 5 條硬規則，以及對舊那份 §4 的一則更正 |
+
+**為什麼是新增一份，而不是改既有那份**：既有那份約 4,000 字，`update_instruction` 必須送出**完整的新 body**，
+等於要手動謄打整份中文，任何一個字的漂移都會靜默改壞線上規則、而且沒有 diff 可以檢查。
+新增獨立檔案風險為零、可單獨刪除回退，而且它本來就是「repo 衍生品」這個定位最乾淨的載體。
+代價是舊那份的內文版本號與 §4 過時清單仍留在原地（見 §6 待辦 4）。
+
 ---
 
 ## 4. 差異對照（2026-08-27 實測）
 
-> **本次只做登記，不動任何一邊的內容。** 回流與數字核對各開一筆待辦，見 §6。
+> 標 ✅ 的是本次已處理；標 ❓ 的仍待驗證，**在驗證之前不要動任何一邊的數字**。
 
-### 4-1. ⚠️ repo 有、站上沒有 —— 風險最高的一條
+### 4-1. ✅ 已補上 —— 原本風險最高的一條
 
 **Slater 鎖定的 class 不可改名。**
 
@@ -82,7 +96,12 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 
 站上規則本身沒錯 —— `jp3-*` 那批確實不該模仿。錯的是它缺了「**已經存在的那批不能動**」這個但書。
 
-### 4-2. repo 有、站上沒有
+> **2026-08-27 已補**：新增的 `rules/jubo-repo-source-of-truth.md` §2 寫進完整禁令與最常踩到的清單，
+> 並明確拆開「**新建**不要用那種寫法」與「**已存在**的不要正名」兩件事，避免下一個 agent 再誤讀 §15。
+
+### 4-2. ✅ 已補上 —— repo 有、站上沒有
+
+以下八條原本站上完全沒有，已寫進 `rules/jubo-repo-source-of-truth.md` §3–§5。
 
 | 條目 | repo 出處 |
 |---|---|
@@ -95,22 +114,45 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 | 錯字 class `css-tootlip__tip` 不要沿用 | `00` §6-4 |
 | 用線上已發布的 CSS 當「改動前」的還原基準 | `00` §6-7 驗證撇步 |
 
-### 4-3. 站上有、repo 沒有 —— **應回流進 repo**
+### 4-3. ✅ 已回流 —— 站上有、repo 沒有
 
-| 條目 | 站上出處 |
-|---|---|
-| **Tier A / B / C 權威分層**（哪些 class 優先用、哪些是 prototype 不得當標準） | §3 |
-| **Landing Page 選擇矩陣**（品牌／產品／解決方案／合作夥伴／活動／日本市場頁各自的 Section Flow） | §14 |
-| **Glass Button 的 9 個內部 class 不可自行仿製**（`glass-element`、`glass-effect`，以及 7 個 `glass-effect__*`；不得用單層 rgba 背景假造） | §10 |
-| Component ID 快照（Navbar、CTA Button、Glass Button、Section Tag、CTA Section #1、Footer、Page Gradient BG） | §12 |
-| 影像來源優先序，以及「Figma wireframe／佔位文字（如「內容內容內容」）不得直接當最終視覺」 | §11 |
-| **Variables 污染清單**：`teal`（= `primary/accent` 重複品）、`ink`／`muted`、`jbc-teal`／`jbc-ink`／`jbc-muted` 不得沿用 | §4 |
-| Cards 與 Glass 的實際數值（`single-stats_wrapper` 高度／padding／radius、Glass Card 的 border／shadow／blur） | §9 |
-| CTA Button 的 pill radius `1000px` 與 padding 實際值 | §10 |
-| 「不要讓整頁每一段都變成卡片或玻璃」 | §9 |
+| 條目 | 站上出處 | 回流到 |
+|---|---|---|
+| **Tier A / B / C 權威分層** | §3 | `15` §2 |
+| **Landing Page 選擇矩陣**（含日本市場頁骨架） | §14 | `15` §4 |
+| 先設計頁面再選元件的七項前置條件 | §1 | `15` §1 |
+| Hero 三種選擇與各自適用情境 | §8 | `15` §3 |
+| 影像來源優先序、`cover`／`contain`、比例與 radius | §11 | `15` §5 |
+| 「Figma wireframe／佔位文字（如「內容內容內容」）不得直接當最終視覺」 | §11 | `15` §5 |
+| **Glass Button 的 9 個內部 class 不可自行仿製**（`glass-element`、`glass-effect`，以及 7 個 `glass-effect__*`） | §10 | `05`「Glass Button 的內部結構不可自行仿製」 |
+| Cards 與 Glass 的實際數值（`single-stats_wrapper`、大型 Glass Card 的 border／shadow／blur） | §9 | `05`「卡片與按鈕的實際數值」 |
+| CTA Button 的 pill radius `1000px` 與 padding 實際值 | §10 | 同上 |
+| 「不要讓整頁每一段都變成卡片或玻璃」 | §9 | 同上 |
+| Component ID | §12 | `05` **全部表格**（見下） |
 
-> `05_元件清單.md` 目前記的是 component **名稱與實例數**，沒有 component ID。
-> 站上 §12 那份 ID 快照（2026-07-22）值得回流，但要重新讀回驗證後再寫。
+#### Component ID：沒有照抄，是重新讀回的
+
+站上 §12 那份 ID 快照日期是 2026-07-22，只有 7 個 component。
+**沒有直接回流** —— 2026-08-27 用 `data_component_tool > get_all_components`（含 `includeInstanceCount`）
+重新讀回全站，把 **35 個 component 的 ID 與最新實例數**全部寫進 `05`。
+
+順帶修正兩件事：
+
+- `05` 標題原本寫「36 個」，**實測是 35 個**
+- 實例數有 14 處已經跟不上（例如 `Glass Button` 95 → **102**、`Icon-check` 39 → **44**、
+  `Mega Menu Gradient BG` 256 → **264**）
+
+#### ⚠️ 一則反向更正：Variables 污染清單是**站上過時**，不是 repo 缺漏
+
+原本以為這是「站上有、repo 沒有」。實際查證後相反：
+
+站上 §4 列的 `teal`／`ink`／`muted`／`jbc-teal`／`jbc-ink`／`jbc-muted` 六個，
+**repo 的 [`04_設計變數與色彩.md`](04_設計變數與色彩.md) §5 已記載它們在 2026-08-18 就從 Webflow 刪除了**，
+現存變數為 33 個，仍不該用的只剩 `jbc-sky`／`jbc-violet`／`jbc-line` 三個。
+
+**repo 這一項比站上新。** 已在新增的 `rules/jubo-repo-source-of-truth.md` §6 對站上那份做出更正。
+
+> 這正好示範 §2 的定調為什麼是對的：站上那份沒有版本歷史，過時了也看不出來。
 
 ### 4-4. 兩邊都有，但**記的是不同的東西**——最容易被誤讀的一區
 
@@ -209,19 +251,25 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 
 ## 6. 待辦
 
-| # | 事項 | 依賴 |
+| # | 事項 | 狀態 |
 |---|---|---|
-| 1 | 把 §4-3 的條目回流進 repo 對應文件（Tier 分層與 Landing Page 矩陣 → 新的一節或併入 `08`；Glass/Cards 數值 → `02`／`05`；Variables 污染清單 → `04`） | 需 Terris 決定放哪 |
-| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值（四個斷點），確認 §4-4(a) 站上與 repo 的差異是 combo 覆寫還是真的記錯 | 需 `include_breakpoints: ["main","medium","small","tiny"]` |
-| 2b | §4-4(b) 的 tag selector 值（站上）目前 repo 完全沒記；確認後補進 `02` §7，並標明是 tag 不是 utility | |
-| 3 | 補上 §4-1 的缺口：把 Slater 不可改名的但書寫進站上那份 | **需明確授權才能寫回** |
-| 4 | 站上內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步，下次寫回時一併修正 | 同上 |
-| 5 | 重新讀回驗證 §4-3 的 Component ID 快照後，再決定要不要回流進 `05` | |
+| 1 | 把 §4-3 的條目回流進 repo | ✅ **2026-08-27 完成** → 新增 `15_設計權威分層與頁面選擇矩陣.md`，Glass/Cards/CTA 數值進 `05` |
+| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值，確認 §4-4(a) 的差異是 combo 覆寫還是真的記錯 | ⏳ **未做**。需帶 `include_breakpoints: ["main","medium","small","tiny"]` |
+| 2b | §4-4(b) 的 tag selector 字級 repo 完全沒記；確認後補進 `02` §7，並標明是 tag 不是 utility | ⏳ **未做** |
+| 3 | 補上 §4-1 的 Slater 缺口 | ✅ **2026-08-27 完成** → 新增 `rules/jubo-repo-source-of-truth.md` §2 |
+| 4 | 舊那份內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步 | ⏳ **未做**。修它要重送完整 body（見 §3 的說明），風險大於收益，等下次有實質內容要改時一併處理 |
+| 5 | 驗證 Component ID 後回流進 `05` | ✅ **2026-08-27 完成** → 全站 35 個 component 的 ID 與實例數重新讀回並寫入 `05` |
+| 6 | `15` §2 的 Tier 分層 class 名稱尚未逐項比對站上實際 class；`15` §3／§5 的數值是 2026-07-22 快照 | ⏳ **未做**。`15` 文末已標示驗證狀態 |
 
 ---
 
 ## 7. 寫回紀錄
 
-| 日期 | 寫回內容 | 回傳 `version` | 授權者 |
-|---|---|---|---|
-| — | （尚未寫回。2026-08-27 只做讀回與登記） | — | — |
+站上的每一次寫入都記在這裡。**寫回是需要明確授權的動作，不隨 PR 自動發生。**
+
+| 日期 | 動作 | 對象 | 回傳 `version` | 授權 |
+|---|---|---|---|---|
+| 2026-08-27 | 讀回與登記，未寫入 | `rules/jubo-web-visual-system.md` | 2（未變動） | — |
+| 2026-08-27 | `create_instruction`，新增 rule | `rules/jubo-repo-source-of-truth.md`（id `6a8fd47800096588f1fdb98d`） | 1 | Terris（本次對話明確同意） |
+
+**尚未對 `rules/jubo-web-visual-system.md` 做過任何寫入。** 它目前仍是 `version 2`、`updatedAt 2026-08-13`。
