@@ -13,7 +13,7 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 
 可以把這句話貼在對話開頭：
 
-> 請先讀「Jubo官網AI開發規範」資料夾裡的 `00_AI工作守則.md`，並嚴格遵守。
+> 請先讀「Jubo官網AI開發規範」資料夾裡的 `00_AI工作守則.md` 與 `14_Webflow_Agent_Instructions同步規範.md`，並嚴格遵守。
 > 需要查 class 就看 `03`（工具類）與 `06`（自訂 class 完整清單），
 > 需要查顏色與間距就看 `04`，需要查現成元件就看 `05`。
 > 遇到不確定的命名，回頭比對 `01_Client-First規範摘要.md`。
@@ -36,6 +36,9 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | **`09_GSAP動畫與互動規範.md`** | 動畫架構、GSAP 寫法、SaaS/AI Agent 頁動效做法、無障礙 | **做任何動畫前** |
 | **`11_AEO稽核與優化計畫.md`** | AI 答案引擎（AEO）稽核：JSON-LD 現況與錯誤、語意結構、FAQ、站外敘事一致性、量測 | **動 SEO / schema / metadata / 內容結構前** |
 | **`12_AEO文章寫作指南.md`** | 給每週產出 `/news` 文章的人：Playbook 內容寫法規則、現有選題缺口、結構與發文節奏檢查清單 | **寫 AEO 文章前**（不需要先讀 `11`） |
+| **`13_外部AI資源評估與採用紀錄.md`** | 外部 skill／框架的評估結論（SML 不採用、Webflow 官方 skill 的採用邊界） | **要引入任何外部 AI 工具前** |
+| **`14_Webflow_Agent_Instructions同步規範.md`** ⭐ | 站上那兩份會被 MCP 自動載入的規則、逐條差異對照、同步程序、寫回紀錄 | **每次動工前**（尤其是只連 MCP、沒有 clone repo 的 session） |
+| **`15_設計權威分層與頁面選擇矩陣.md`** | Tier A/B/C 用哪個、Hero 怎麼選、各類頁面的 Section Flow、影像來源優先序 | **規劃新頁面／Landing Page 時** |
 | `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---
