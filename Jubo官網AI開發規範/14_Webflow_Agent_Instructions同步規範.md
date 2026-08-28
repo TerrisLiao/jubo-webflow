@@ -154,24 +154,41 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 
 > 這正好示範 §2 的定調為什麼是對的：站上那份沒有版本歷史，過時了也看不出來。
 
-### 4-4. 兩邊都有，但**記的是不同的東西**——最容易被誤讀的一區
+### 4-4. ✅ 已讀回釐清 —— 兩邊記的是**不同層級的選擇器**
 
-這一區不是「誰記錯了」，是兩份文件在記**不同層級的選擇器**。誤把其中一邊當成另一邊，就會改錯地方。
+**2026-08-27 讀回四個斷點 ＋ 解析全部變數值後的結論：這一區不是「誰記錯了」，
+是兩份文件在記不同層級。而且兩邊都不完整。**
 
-#### (a) Section padding：站上記的是 combo 疊加後的值，repo 記的是單一 class
+#### (a) Section padding：站上對、repo 誤導
 
-| Class | repo `02_核心結構與版面.md` §3（單一 class） | 站上 §7 |
+| Class | repo `02` 舊版（單一 class） | 站上 §7（combo） | **實際生效** |
+|---|---|---|---|
+| `padding-section-large` Tablet | 6rem | 5rem | **5rem（站上對）** |
+| `padding-section-large` Mobile L | 4rem | 3rem | **3rem（站上對）** |
+| `padding-section-small` Tablet | 1.25rem | 3rem | **3rem（站上對，repo 那個值查無根據）** |
+
+原因：`.padding-global.padding-section-large` combo 在 medium／small **覆寫掉**單一 class 的值。
+而鐵律 3 規定這兩個 class 必須疊同一個 div —— 所以站上**永遠**走 combo 值。
+**repo 舊版記的 6rem／4rem 在實務中不會生效。**
+
+另外查到兩件舊版沒寫的事：
+
+- `padding-section-xlarge` 與 `padding-section-full` **只有 combo 形式**，沒有單一 global class
+- repo 舊版的 `padding-section-small` Tablet「1.25rem」查無根據（那是 `tablet-spacer/regular` 的值，疑似誤植）
+
+→ 已重寫 [`02_核心結構與版面.md`](02_核心結構與版面.md) §3，改成「實際生效值」為主表，並附單一 vs combo 對照與變數綁定。
+
+#### (b) Typography：兩邊各記一層，而且**還有第三層沒人記**
+
+| 層 | 誰記過 | 驗證結果 |
 |---|---|---|
-| `padding-section-large` | Desktop 8rem／Tablet 6rem／Mobile 4rem | 同樣列了 8/6/4rem，**另外**列 `.padding-global.padding-section-large`：Tablet 5rem／Mobile L 3rem |
-| `padding-section-small` | Desktop 4rem／Tablet 1.25rem／Mobile 2rem | `.padding-global.padding-section-small`：Tablet 3rem／Mobile L 2rem |
-| `padding-section-xlarge` | Desktop 11rem／Tablet 8rem | `.padding-global.padding-section-xlarge`：Desktop 11rem／Tablet 8rem |
+| Tag selector `h1`/`h2`/`h3` | 只有站上 §6 | ✅ **站上數值完全正確**（h1 5rem/120%/300 → 3.75 → 3.5 → 10vw 等） |
+| Utility `heading-style-h*` | 只有 repo `02` §7 | 🟡 main 的值對，但**漏掉全部響應式覆寫**（h1 small 2.5rem、h2 small 2rem、h3 medium 1.75rem / small 1.5rem） |
+| **`.richtext h1`/`h2`/`h3`** | **兩邊都沒記** | ⚠️ 第三套值（h1 3rem/100%/400 → 2.75 → 2.5），**寫 `/news` 文章套到的是這層** |
 
-站上那組帶 `.padding-global.` 前綴的是 **combo class 的覆寫值**，跟單一 class 的值本來就可以不同。
-`00` §6-7 講的正是這件事：**只查單一 class 的 base 會漏掉覆寫**。
+第三層特別重要：`.richtext` 同時在 [`../custom-code/slater-selectors.md`](../custom-code/slater-selectors.md) 的**不可改名**清單裡。
 
-> **待辦 2 要驗的是**：`.padding-global.padding-section-large` 在 Tablet 到底是 5rem（站上）還是 6rem（repo 的單一 class 值），
-> 必須帶 `include_breakpoints: ["main","medium","small","tiny"]` 讀回四個斷點才能斷定。
-> **在讀回之前，不要拿任何一邊的數字去改另一邊。**
+→ 已重寫 `02` §7，拆成 7-1 tag／7-2 utility／7-3 richtext 三層。
 
 #### (b) Typography：站上記 tag selector，repo 記 utility class
 
@@ -254,12 +271,14 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 | # | 事項 | 狀態 |
 |---|---|---|
 | 1 | 把 §4-3 的條目回流進 repo | ✅ **2026-08-27 完成** → 新增 `15_設計權威分層與頁面選擇矩陣.md`，Glass/Cards/CTA 數值進 `05` |
-| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值，確認 §4-4(a) 的差異是 combo 覆寫還是真的記錯 | ⏳ **未做**。需帶 `include_breakpoints: ["main","medium","small","tiny"]` |
-| 2b | §4-4(b) 的 tag selector 字級 repo 完全沒記；確認後補進 `02` §7，並標明是 tag 不是 utility | ⏳ **未做** |
+| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值 | ✅ **2026-08-27 完成** → 站上值正確、repo 舊值誤導；`02` §3 已重寫 |
+| 2b | §4-4(b) 的 tag selector 字級補進 `02` §7 並標明層級 | ✅ **2026-08-27 完成** → `02` §7 拆成 tag／utility／richtext 三層 |
 | 3 | 補上 §4-1 的 Slater 缺口 | ✅ **2026-08-27 完成** → 新增 `rules/jubo-repo-source-of-truth.md` §2 |
 | 4 | 舊那份內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步 | ⏳ **未做**。修它要重送完整 body（見 §3 的說明），風險大於收益，等下次有實質內容要改時一併處理 |
 | 5 | 驗證 Component ID 後回流進 `05` | ✅ **2026-08-27 完成** → 全站 35 個 component 的 ID 與實例數重新讀回並寫入 `05` |
-| 6 | `15` §2 的 Tier 分層 class 名稱尚未逐項比對站上實際 class；`15` §3／§5 的數值是 2026-07-22 快照 | ⏳ **未做**。`15` 文末已標示驗證狀態 |
+| 6 | `15` §2 的 Tier 分層 class 名稱逐項比對站上實際 class | ✅ **2026-08-27 完成** → Tier A／B 全部存在；`15` 文末記錄驗證結果 |
+| 7 | `15` §3 Hero 的 grid 比例（`.85fr 1fr`）、§5 影像比例與 radius 仍是 2026-07-22 站上快照的**數值**，未讀回 | ⏳ **未做**（class 名稱已驗證存在，只差數值） |
+| 8 | `02` §7-2 的 `heading-style-h4`／`h5`／`h6` 斷點覆寫未逐一讀回 | ⏳ **未做**。表中標「—」代表未確認，不是確認沒有 |
 
 ---
 
