@@ -218,6 +218,24 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 - `page-wrap` / `main-wrap` 是重複品，一律用 `-wrapper` 版本
 - class 名稱含 `#` 者不得沿用
 - 未取得明確授權不得 Publish
+- `single-stats_wrapper` 的高度／padding／radius 階梯（站上 §9）—— 2026-08-27 讀回**完全正確**
+- CTA Button 的 padding 與 `1000px` pill radius（站上 §10）—— 讀回正確
+- `product-hero_component` 的 `0.85fr 1fr`、Tablet 改單欄（站上 §8）—— 讀回正確
+
+### 4-6. ⚠️ 讀回過程中發現的兩個站上狀態問題（不是文件差異）
+
+這兩個是**站上實際 CSS 的狀態**，兩份規範都沒記過。依 `00` §6-8「重構不可以改到設計」，**只登記、不修**。
+
+| # | 問題 | 說明 |
+|---|---|---|
+| 1 | `.cta-button` 的 `background-color` 是**硬寫 `#00b2c0`**，沒綁 `--primary--accent` | 值與變數相同，外觀無異。但這違反鐵律 4「顏色一律用變數」，而且發生在 Tier A 元件上。`.cta-button` 在 Slater 鎖定清單裡，動它要格外小心 |
+| 2 | `.cta-button` radius `1000px` vs 子層 `.cta-button_bg` radius `100px` | 兩者都遠大於元件高度，視覺上都是 pill，**不影響外觀** |
+
+第 1 點若要修，是「把硬寫值改綁**數值完全相同**的變數」，屬於 `00` §6-8 允許的重構範圍 ——
+但仍需 Terris 明確指示才動，且動之前要確認 Slater 的 CSS 沒有依賴這個宣告。
+
+`img-mask` 的 radius 站上記錯（見 §4-3 與 [`15`](15_設計權威分層與頁面選擇矩陣.md) §5），
+那是**文件錯誤**、不是站上狀態問題，已在 repo 更正。
 
 ---
 
@@ -277,8 +295,11 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 | 4 | 舊那份內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步 | ⏳ **未做**。修它要重送完整 body（見 §3 的說明），風險大於收益，等下次有實質內容要改時一併處理 |
 | 5 | 驗證 Component ID 後回流進 `05` | ✅ **2026-08-27 完成** → 全站 35 個 component 的 ID 與實例數重新讀回並寫入 `05` |
 | 6 | `15` §2 的 Tier 分層 class 名稱逐項比對站上實際 class | ✅ **2026-08-27 完成** → Tier A／B 全部存在；`15` 文末記錄驗證結果 |
-| 7 | `15` §3 Hero 的 grid 比例（`.85fr 1fr`）、§5 影像比例與 radius 仍是 2026-07-22 站上快照的**數值**，未讀回 | ⏳ **未做**（class 名稱已驗證存在，只差數值） |
-| 8 | `02` §7-2 的 `heading-style-h4`／`h5`／`h6` 斷點覆寫未逐一讀回 | ⏳ **未做**。表中標「—」代表未確認，不是確認沒有 |
+| 7 | `15` §3 Hero 數值、§5 影像 radius 讀回 | ✅ **2026-08-27 完成**。`0.85fr 1fr` 正確；`img-mask` radius 站上記錯，已更正 |
+| 8 | `02` §7-2 的 `heading-style-h4`／`h5`／`h6` 斷點覆寫 | ✅ **2026-08-27 完成**。六個全部都有 `small` 覆寫，前一版一條都沒記 |
+| 9 | `05` 卡片與按鈕數值（原為站上 2026-07-22 快照、標示未驗證） | ✅ **2026-08-27 完成**。`single-stats_wrapper` 站上記的完全正確；CTA Button 正確 |
+| 10 | **新發現**：`.cta-button` 的 `background-color` 是硬寫 `#00b2c0`，沒綁 `--primary--accent` | ⏳ **待 Terris 決定**。見下方 §4-6 |
+| 11 | `15` §5 的 `object-fit`／常見比例仍是慣例描述，非站上讀回值 | ⏳ **未做**（性質上是使用規範，不是 class 值，未必需要讀回） |
 
 ---
 
