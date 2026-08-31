@@ -3,7 +3,7 @@
 - 日期：2026-08-31
 - 站台：`jubo-health.com`（site id `69ec2b02daa2e79f1da8772a`）
 - 回報：手機版漸層標題明顯大於一般標題
-- 狀態：**Designer 已修改，尚未 Publish**
+- 狀態：**已修改、已 Publish（Terris 於 2026-08-31 自行發布）、已複驗通過**
 
 ---
 
@@ -86,11 +86,35 @@ background-clip: text
   只掛在 `/` 與 `/company` 的 `h1` 上（用 `em` 才會跟著母層縮放）。**不要**改回固定 `rem`。
   `/careers` 因為是句中行內用法，不適用這個 combo。
 
-## 6. 待辦
+## 6. Publish 後複驗（2026-08-31）
 
-- [ ] Publish（需 Terris 明確授權）
-- [ ] Publish 後在實機 390px 寬複驗 `/`、`/company`、`/careers` 三頁 hero
-- [ ] `/style-guide`（Draft）因 API 429 未能掃到；該頁未發布，不影響線上，補掃即可
+線上 CSS 由 `...cea744cd4.min.css` 換為 `...328eedf86.min.css`，`.gradient-headline` 全檔仍只出現 1 次，字級屬性已消失：
+
+```
+.gradient-headline{background-image:linear-gradient(90deg,var(--primary--accent),var(--gradient--announce-bar-purple));
+-webkit-text-fill-color:transparent;-webkit-background-clip:text;background-clip:text}
+```
+
+以 Chromium 實測 3 個含 `h1` 的頁面 × 4 個視窗寬度，共 42 組 span／母層比對，**全部 ratio = 1.00**：
+
+| 視窗 | `h1` 內漸層字 | `h2` 內漸層字 | 母層 line-height | 溢出 |
+|---|---|---|---|---|
+| 390px | 39.0 / 39.0px | 32.0 / 32.0px | 46.8 / 38.4px | 無 |
+| 480px | 56.0 / 56.0px | 44.0 / 44.0px | 67.2 / 52.8px | 無 |
+| 768px | 60.0 / 60.0px | 48.0 / 48.0px | 72.0 / 57.6px | 無 |
+| 1440px | 80.0 / 80.0px | 60.8 / 60.8px | 96.0 / 73.0px | 無 |
+
+漸層本體正常：`background-image` 仍含 gradient、`-webkit-text-fill-color: rgba(0,0,0,0)`、`background-clip: text`。
+字重 span／母層皆為 300，與修改前一致。行距擠壓問題連帶解決（字級不再超過母層算出的 line-height）。
+
+`/careers` 的句中行內用法（`Let's Build [Intelligence] that Cares`）改善最明顯，漸層字終於與前後文同大小。
+
+### 複驗方法與限制
+
+Playwright 走不出本 session 的 agent proxy（relay 持續 `ws_closed_mid_exchange`），
+因此改用 curl 抓下已發布的 HTML 與 CSS 建本地鏡像、外部請求全部 abort，再用 Chromium 量 computed style。
+CSS cascade 與字級量測與線上一致；未載入的只有背景圖與外部 script，不影響字級判定。
+`/style-guide`（Draft）仍因 API 429 未掃到，該頁未發布，不影響線上。
 
 ## 7. 相關規範
 
