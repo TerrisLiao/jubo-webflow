@@ -1,19 +1,19 @@
 # JP 日本市場頁面改版
 
-Jubo 日本市場兩個 Draft 頁面（`/jp/overview`、`/jp/about-us`）的規範與交接資料。
+Jubo 日本市場兩個頁面（`/jp/overview`、`/jp/about-us`）的規範與交接資料。兩頁內容仍是繁中草稿，Terris 已自行發布至 staging 供內部檢視。
 
-## 現況一覽（2026-08-20）
+## 現況一覽（2026-08-28）
 
 | 頁面 | Page ID | 即時結構 | 狀態 |
 |---|---|---|---|
-| `/jp/overview` | `6a848bfa57437623d952f944` | 8 個主要段落；舊部門 cascading slider 已刪除 | Draft、繁中草稿 |
-| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 6 個主要段落；包含 Hero 與「為什麼是日本／MDX」 | Draft、繁中草稿 |
+| `/jp/overview` | `6a848bfa57437623d952f944` | 8 個主要段落；舊部門 cascading slider 已刪除 | 繁中草稿；`draft: false`，已在 staging |
+| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 5 個主要段落；服務據點已併入公司概要表的「據點」列 | 繁中草稿；`draft: false`，已在 staging |
 
 內容已大致完成，但 **尚未達發布條件**。Overview 仍有文字對比、失效 CTA、heading 順序、雙重 spacing 與 legacy class 遷移工作；About Us 結構較乾淨，主要剩圖片替代文字與四斷點 QA。
 
 任何工作都必須遵守：
 
-- 不發布；兩頁保持 Draft。
+- **AI 不得自行 Publish**（含 staging）；發布時機與範圍由 Terris 決定。兩頁 `draft: false` 是 Terris 刻意設定，不是待修的異常。
 - 不直接 rename 或修改全站共用 component、utility、variable。
 - 不以「看起來沒用」為理由刪 class；先查全站使用與 Slater selector。
 - Webflow 即時結構優先於 repository 快照；文件若與 Designer 衝突，先讀回確認再更新文件。
@@ -23,7 +23,7 @@ Jubo 日本市場兩個 Draft 頁面（`/jp/overview`、`/jp/about-us`）的規�
 | 文件 | 用途 | 狀態 |
 |---|---|---|
 | `01_專案目標與範圍.md` | 目標、範圍、不可違反規則 | 現行 |
-| `02_頁面現況規格.md` | 2026-08-20 即時段落結構 | 現行 |
+| `02_頁面現況規格.md` | 即時段落結構（about-us 2026-08-28、overview 2026-08-20） | 現行 |
 | `03_設計決策紀錄.md` | 已確認決策與待執行方向 | 現行 |
 | `04_素材與識別碼.md` | 素材與 ID 對照 | 參考；使用前需讀回驗證 |
 | `05_待辦與待確認.md` | P0／P1／P2 與發布前檢查 | 現行 |
