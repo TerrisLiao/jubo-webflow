@@ -231,6 +231,26 @@ Webflow MCP snapshot 確認：
 - Webflow Designer / MCP 靜態 snapshot 不會執行 Code Embed JavaScript，所以 snapshot 只能確認外觀。
   正式發布後必須實際點擊每一題，確認「展開、有動畫、可以收回」三件事。
 
+#### FAQ 答案裡提到其他 `/news` 文章時，一律加超連結
+
+如果某一題的答案裡提到「可以參考〈某篇文章標題〉」這種寫法，且那篇文章已經發布、有網址，**把文章標題包成超連結**，直接連到 `https://www.jubo-health.com/news/xxx`：
+
+```html
+<p class="aeo-faq__answer-inner">可以參考〈<a href="https://www.jubo-health.com/news/icare02">居服督導的一個月：班表與核銷，系統能接手到哪裡？</a>〉，那篇針對居服情境詳細說明。</p>
+```
+
+- 連結只包住文章標題本身（〈〉裡面那段），不要整句話都包進去。
+- 每個 FAQ 元件的答案容器都要補一條 scoped 的連結樣式，避免吃到瀏覽器預設的藍色底線：
+  ```css
+  .aeo-faq__answer-inner a {
+    color: var(--primary--accent);
+    text-decoration: underline;
+  }
+  ```
+  如果該文章用的是別的 class 前綴（例如某篇專屬的 `.icare01-faq-answer`），比照套用在對應的答案 class 上，不要新建全站共用的連結樣式。
+- 同一頁／同一站內的文章互連，不開新分頁（不用 `target="_blank"`）。
+- 只連結**已經發布**的文章；還在草稿階段就先用純文字寫標題，等對方發布後再回來補連結。
+
 ### 每次製作前的檢查
 
 1. 先讀 `00_AI工作守則.md`、本文件，以及要使用的 POC 原始碼。
