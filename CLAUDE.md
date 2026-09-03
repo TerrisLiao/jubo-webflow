@@ -8,7 +8,8 @@
 2. `Jubo官網AI開發規範/01_Client-First規範摘要.md`
 3. 若動 class：`custom-code/slater-selectors.md`
 4. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
-5. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
+5. 若撰寫 `/news` 文章：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
+6. 若處理 `/news` 舊文章庫（授權清理、下架、pillar 整併）：`News文章庫盤點與改版/README.md`、`05_待辦與待確認.md`
 
 ## 核心原則
 
@@ -22,6 +23,7 @@
 
 - `Jubo官網AI開發規範/`：全站設計系統與稽核基準。
 - `JP日本市場頁面改版/`：日本市場頁面現況、決策、文案與待辦。
+- `News文章庫盤點與改版/`：WordPress 遷移舊文的盤點、授權處理、301 對照與 pillar 整併。
 - `custom-code/`：外部 script selector、Embed 依賴與 POC。
 - `.claude/skills/`：Three.js 專用 skills；不代表目前 Webflow 頁面一定使用 Three.js。
 

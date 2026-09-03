@@ -4,3 +4,5 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+News文章庫盤點與改版/data/*
+!News文章庫盤點與改版/data/.gitkeep
