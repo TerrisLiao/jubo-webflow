@@ -169,9 +169,17 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 站上那組帶 `.padding-global.` 前綴的是 **combo class 的覆寫值**，跟單一 class 的值本來就可以不同。
 `00` §6-7 講的正是這件事：**只查單一 class 的 base 會漏掉覆寫**。
 
-> **待辦 2 要驗的是**：`.padding-global.padding-section-large` 在 Tablet 到底是 5rem（站上）還是 6rem（repo 的單一 class 值），
-> 必須帶 `include_breakpoints: ["main","medium","small","tiny"]` 讀回四個斷點才能斷定。
-> **在讀回之前，不要拿任何一邊的數字去改另一邊。**
+> **待辦 2 已於 2026-09-07 驗證**：帶 `include_breakpoints: ["main","medium","small","tiny"]` 讀回確認，
+> `.padding-global.padding-section-large` combo 在 `medium`／`small` **確實各自有獨立覆寫**（5rem／3rem），
+> 跟單一 class `.padding-section-large` 的 6rem／4rem 不同，兩者並存、都不是錯誤，只是不同層級的 class——
+> 站上 §7 記的是對的，不是記錯。
+>
+> 同一輪順便發現並修掉一個**真正的 bug**：這個 combo 的 `base`（main）當時還帶著 `margin-top: 0`、
+> `margin-bottom: -124px`、`display: block` 三個屬性，其中 `-124px` 讓每個用到這個 combo 的 section
+> 自己算出來的高度比實際內容矮 124px，內容尾端因此溢出到 section 底色範圍外，露出白邊
+> （在 About-Us 頁面發現，全站用到這個 combo 的 section 理論上都有同樣問題）。
+> 這三個屬性已直接從共用 combo 移除，`base` 現在完全淨空，只留 `medium`／`small` 的 padding 覆寫，
+> 符合 Client-First 規範「`padding-section-*` 只能管上下 padding」。詳見 `JP日本市場頁面改版/07_變更歷程.md` 2026-09-07。
 
 #### (b) Typography：站上記 tag selector，repo 記 utility class
 
@@ -254,7 +262,7 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 | # | 事項 | 狀態 |
 |---|---|---|
 | 1 | 把 §4-3 的條目回流進 repo | ✅ **2026-08-27 完成** → 新增 `15_設計權威分層與頁面選擇矩陣.md`，Glass/Cards/CTA 數值進 `05` |
-| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值，確認 §4-4(a) 的差異是 combo 覆寫還是真的記錯 | ⏳ **未做**。需帶 `include_breakpoints: ["main","medium","small","tiny"]` |
+| 2 | 讀回 `.padding-global.padding-section-*` 的 combo 覆寫值，確認 §4-4(a) 的差異是 combo 覆寫還是真的記錯 | ✅ **2026-09-07 完成** → 確認是合法的 combo 覆寫（medium 5rem／small 3rem），並順手修掉 `padding-section-large` combo 上一條違規的 `margin-bottom: -124px`（造成全站白邊），見 §4-4(a) |
 | 2b | §4-4(b) 的 tag selector 字級 repo 完全沒記；確認後補進 `02` §7，並標明是 tag 不是 utility | ⏳ **未做** |
 | 3 | 補上 §4-1 的 Slater 缺口 | ✅ **2026-08-27 完成** → 新增 `rules/jubo-repo-source-of-truth.md` §2 |
 | 4 | 舊那份內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步 | ⏳ **未做**。修它要重送完整 body（見 §3 的說明），風險大於收益，等下次有實質內容要改時一併處理 |
