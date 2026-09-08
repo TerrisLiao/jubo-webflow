@@ -1040,3 +1040,22 @@ Client-First 規則：一個底線 `_` = 一層 folder。命名為 `folder_eleme
 ### `why-us-list_` （1 個）
 
 - `why-us-list_wrapper`
+
+---
+
+## 附錄：本快照（2026-08-20）之後新增的 class
+
+本清單主體是 2026-08-20 的快照。之後新增的 class 補記在這裡，避免下一個 agent 以為某個 class 不存在而重複建立。
+
+| 日期 | Class | Selector | 用途 |
+|---|---|---|---|
+| 2026-08-28 | `is-offices` | `.jp-about_profile-lines.is-offices` | about-us 公司概要「據點」列，三個辦公室之間 `row-gap: 2rem` |
+| 2026-09-08 | `jp-about_to-top-wrap` | `.jp-about_to-top-wrap` | about-us 頁尾回到頁首按鈕的水平置中 wrapper |
+| 2026-09-08 | `is-to-top` | `.glass-element.is-to-top` | glass button 的圓形圖示型變體（`3.25rem` 正方、padding 歸零、`rotate(-90deg)` 讓箭頭朝上） |
+| 2026-09-08 | `is-to-top` | `.gradient-icon.is-2.is-to-top` | 把第二顆箭頭在較大的圓形裡拉回中央（`left: calc(50% - 0.5625rem)`） |
+
+> `jp-about_` folder 在主體清單裡沒有列出（快照時間差），實際站上已有
+> `jp-about_h2`／`jp-about_body`／`jp-about_profile-table`／`jp-about_profile-row`／`jp-about_profile-label`／
+> `jp-about_profile-value`／`jp-about_profile-lines`／`jp-about_office-photo`／`jp-about_office-link`／
+> `jp-about_leader-glass`／`jp-about_form-wrap`／`jp-about_field-label`／`jp-about_field-full`／`jp-about_to-top-wrap` 等。
+> 動 JP 頁的 class 之前，以 `query_styles` 讀回 `jp-about` 為準。

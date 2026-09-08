@@ -7,7 +7,7 @@ Jubo 日本市場兩個頁面（`/jp/overview`、`/jp/about-us`）的規範與�
 | 頁面 | Page ID | 即時結構 | 狀態 |
 |---|---|---|---|
 | `/jp/overview` | `6a848bfa57437623d952f944` | 8 個主要段落；舊部門 cascading slider 已刪除 | 繁中草稿；`draft: false`，已在 staging |
-| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 5 個主要段落；服務據點已併入公司概要表的「據點」列 | 繁中草稿；`draft: false`，已在 staging |
+| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 6 個主要段落；服務據點已併入公司概要表的「據點」列，2026-09-08 新增頁尾回到頁首按鈕 | 繁中草稿；`draft: false`，已在 staging |
 
 內容已大致完成，但 **尚未達發布條件**。Overview 仍有文字對比、失效 CTA、heading 順序、雙重 spacing 與 legacy class 遷移工作；About Us 結構較乾淨，主要剩圖片替代文字與四斷點 QA。
 

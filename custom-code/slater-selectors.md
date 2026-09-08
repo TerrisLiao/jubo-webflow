@@ -39,6 +39,18 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 `.gradient-icon.is-1`　`.gradient-icon.is-2`　`.gradient-icon.is-news-1`　`.gradient-icon.is-news-2`
 `.icon-embed-medium`
 
+> **箭頭滑入滑出是 Slater CSS，不是 IX2。** `60294.css` 用 `!important` 鎖住兩顆箭頭的 transform：
+> `.gradient-icon.is-1` 常態 `translateX(0%) scale(1)`、`.glass-button:hover` 時 `translateX(150%) scale(0.5)`；
+> `.is-2` 反向（`-150%` → `0%`）。因此：
+>
+> 1. **箭頭自己的 `transform` 不能在 Webflow 裡改**，會被 `!important` 蓋掉。要改方向就旋轉外層膠囊
+>    （站上 `.glass-element.is-icon` 是 `rotate(-45deg)`；`/jp/about-us` 的回到頁首鈕是新 combo
+>    `.glass-element.is-to-top` 的 `rotate(-90deg)`）。
+> 2. 只要沿用 `.glass-button` ＋ `.gradient-icon.is-1` / `.is-2` 這組 class，手刻的按鈕**也會有**這個動畫
+>    （選擇器是 class，不需要 `data-w-id`）。文字逐字動畫才需要 Slater JS 讀 `data-button-animate-chars`。
+> 3. `.glass-button`／`.gradient-icon.is-1`／`.is-2` 一律不可改名，`.gradient-icon.is-2` 的 `left: 5px`
+>    也不要改值（那是為 `1.75rem` 膠囊算的）；放進較大的容器時新增 combo 覆寫 `left`。
+
 ### 導覽
 `.nav-link`　`.nav-icon`　`.nav-icon.is-mobile`
 `.mega-menu_wrapper`　`.mega-menu_inner-wrapper`　`.mega-menu_close`　`.mm-is-open`　`.mm-single-text_wrapper`
