@@ -1051,11 +1051,14 @@ Client-First 規則：一個底線 `_` = 一層 folder。命名為 `folder_eleme
 |---|---|---|---|
 | 2026-08-28 | `is-offices` | `.jp-about_profile-lines.is-offices` | about-us 公司概要「據點」列，三個辦公室之間 `row-gap: 2rem` |
 | 2026-09-08 | `jp-about_to-top-wrap` | `.jp-about_to-top-wrap` | about-us 頁尾回到頁首按鈕的水平置中 wrapper |
-| 2026-09-08 | `is-to-top` | `.glass-element.is-to-top` | glass button 的圓形圖示型變體（`3.25rem` 正方、padding 歸零、`rotate(-90deg)` 讓箭頭朝上） |
-| 2026-09-08 | `is-to-top` | `.gradient-icon.is-2.is-to-top` | 把第二顆箭頭在較大的圓形裡拉回中央（`left: calc(50% - 0.5625rem)`） |
+| 2026-09-08 | `is-to-top` | `.glass-element.is-to-top` | glass button 的圓形圖示型變體（`4.5rem` 正方、padding 歸零、玻璃配方沿用 `jp-about_leader-glass`） |
+| 2026-09-08 | `jp-about_to-top-icons` | `.jp-about_to-top-icons` | 只包兩顆箭頭的旋轉層（`rotate(-90deg)` 讓箭頭朝上，玻璃本體維持正常方位） |
+| 2026-09-08 | `is-to-top` | `.gradient-icon.is-1.is-to-top` | 放大第一顆箭頭到 `1.75rem` |
+| 2026-09-08 | `is-to-top` | `.gradient-icon.is-2.is-to-top` | 放大第二顆箭頭並在較大的圓形裡拉回中央（`left: calc(50% - 0.875rem)`） |
 
 > `jp-about_` folder 在主體清單裡沒有列出（快照時間差），實際站上已有
 > `jp-about_h2`／`jp-about_body`／`jp-about_profile-table`／`jp-about_profile-row`／`jp-about_profile-label`／
 > `jp-about_profile-value`／`jp-about_profile-lines`／`jp-about_office-photo`／`jp-about_office-link`／
-> `jp-about_leader-glass`／`jp-about_form-wrap`／`jp-about_field-label`／`jp-about_field-full`／`jp-about_to-top-wrap` 等。
+> `jp-about_leader-glass`／`jp-about_form-wrap`／`jp-about_field-label`／`jp-about_field-full`／
+> `jp-about_to-top-wrap`／`jp-about_to-top-icons` 等。
 > 動 JP 頁的 class 之前，以 `query_styles` 讀回 `jp-about` 為準。
