@@ -1,15 +1,17 @@
 # JP 日本市場頁面改版
 
-Jubo 日本市場兩個頁面（`/jp/overview`、`/jp/about-us`）的規範與交接資料。兩頁內容仍是繁中草稿，Terris 已自行發布至 staging 供內部檢視。
+Jubo 日本市場兩個頁面（`/jp/overview`、`/jp/about-us`）的規範與交接資料。**兩頁文案已由日文專業譯者處理完成，並於 2026-09-08 由 Terris 正式發布到 production**（`jubo-health.com/jp/*`）。
 
-## 現況一覽（2026-08-28）
+## 現況一覽（2026-09-08）
 
 | 頁面 | Page ID | 即時結構 | 狀態 |
 |---|---|---|---|
-| `/jp/overview` | `6a848bfa57437623d952f944` | 8 個主要段落；舊部門 cascading slider 已刪除 | 繁中草稿；`draft: false`，已在 staging |
-| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 5 個主要段落；服務據點已併入公司概要表的「據點」列 | 繁中草稿；`draft: false`，已在 staging |
+| `/jp/overview` | `6a848bfa57437623d952f944` | 9 個區塊（含 JuboLink for Dental slider 與 CTA Section component）；詳見 `02` | 日文已上線 |
+| `/jp/about-us` | `6a8537247cf50018fca7c68d` | 6 個主要段落；服務據點已併入公司概要表的「據點」列，頁尾有回到頁首按鈕 | 日文已上線 |
 
-內容已大致完成，但 **尚未達發布條件**。Overview 仍有文字對比、失效 CTA、heading 順序、雙重 spacing 與 legacy class 遷移工作；About Us 結構較乾淨，主要剩圖片替代文字與四斷點 QA。
+兩頁已上線，但**仍有收尾項目**：Cookie 同意條與部分 CTA 文案還是中文（需譯者處理）、`jp3-*` legacy class 未遷移、Manifesto 區的雙重 section padding 未拆、overview body 內有兩個無效的 `<link rel="noopener">`。完整清單見 `05`。
+
+**文案紅線：可見的日文文案已由專業譯者定稿，AI 不得自行改寫。** 需要補日文時，只能沿用頁面上既有的譯詞（例如 alt／aria-label），新的譯文一律交回譯者。
 
 任何工作都必須遵守：
 

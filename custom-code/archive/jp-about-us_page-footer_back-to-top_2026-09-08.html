@@ -1,0 +1,71 @@
+<!--
+  /jp/about-us — Page Settings → Custom Code → Footer 的原始內容
+  2026-09-08 由 Terris 指示移除（改用頁尾常駐的 glass 按鈕，見 JP日本市場頁面改版/03 §6）。
+  這份存檔只是為了可還原，不代表現行做法；它違反 00_AI工作守則 鐵律 4（自訂 CSS／手打色碼／px）
+  與 04 的「按鈕不要手刻」原則，要復用前請先討論。
+-->
+<style>
+  .jp-back-to-top {
+    position: fixed;
+    right: max(24px, env(safe-area-inset-right));
+    bottom: max(24px, env(safe-area-inset-bottom));
+    z-index: 999;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.42);
+    border-radius: 999px;
+    background: linear-gradient(145deg, #0b8793, #006f82);
+    color: #fff;
+    box-shadow: 0 10px 28px rgba(0,73,87,.24);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity .22s ease, transform .22s ease, visibility .22s ease, box-shadow .22s ease;
+  }
+  .jp-back-to-top.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .jp-back-to-top:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 34px rgba(0,73,87,.3);
+  }
+  .jp-back-to-top:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px rgba(0,135,147,.48);
+  }
+  .jp-back-to-top svg { width: 22px; height: 22px; }
+  @media (max-width: 767px) {
+    .jp-back-to-top {
+      right: max(16px, env(safe-area-inset-right));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      width: 48px;
+      height: 48px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .jp-back-to-top { transition: none; }
+  }
+</style>
+<button class="jp-back-to-top" type="button" aria-label="ページ上部へ戻る" title="ページ上部へ戻る">
+  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M5 15.5 12 8.5l7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+<script>
+  (() => {
+    const button = document.querySelector('.jp-back-to-top');
+    if (!button) return;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => button.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.75);
+    window.addEventListener('scroll', update, { passive: true });
+    button.addEventListener('click', () => window.scrollTo({ top: 0, behavior: reducedMotion.matches ? 'auto' : 'smooth' }));
+    update();
+  })();
+</script>

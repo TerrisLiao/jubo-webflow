@@ -95,3 +95,29 @@
 ## 8. 不可用 mutation 反查 style／刪除前需 Designer 確認
 
 2026-08-20 稽核時，連接器可讀元素樹與 class 掛載，但無法可靠取得所有 class 的全站使用次數及四斷點全部 computed properties。不要為了「看屬性」先修改 style 再改回；這會製造真實網站變更。疑似孤兒 class 只能列為候選，最後需在 Designer Style Manager、Slater selector、IX2 與 Component 使用情況交叉確認。
+
+
+## 11. 元素樹讀不到 Page 自訂程式碼 —— 別急著說「找不到」
+
+2026-09-08 踩到：Terris 說 about-us 已經有一顆回到頁首按鈕，但
+`get_all_elements`（261 個節點全展開）、`query_elements` 逐類查 Link／DOM／HtmlEmbed、
+線上與 staging 的已發布 HTML、Slater 的 CSS 與 JS **全都找不到**，一度回報「這顆按鈕不存在」。
+
+實際上它在 **Page Settings → Custom Code → Before `</body>` tag**（API 上的 `footer` freeform code）：一段 `<style>` ＋ `<button class="jp-back-to-top">` ＋ `<script>`。
+page custom code 不是元素，所以：
+
+- 不會出現在元素樹、`query_elements`、`element_snapshot_tool` 裡；
+- Designer canvas 與 Preview **不執行**它，所以 Designer 裡也看不到；
+- 只有發布後的頁面才會跑（所以 Terris 看得到、agent 讀不到）。
+
+✅ **正確作法**：找不到某個「看得到但查不到」的東西時，改用
+
+```
+data_scripts_tool > get_page_freeform_code   { page_id }        # 頁面 head／footer 自訂程式碼
+data_scripts_tool > get_site_freeform_code   { site_id }        # 站台 head／footer 自訂程式碼
+data_scripts_tool > get_page_scripts / get_site_scripts         # 已註冊並套用的 script
+```
+
+寫回是 `set_page_freeform_code`，它會**整塊覆寫**（傳空字串＝清空整個區塊）。
+所以動它之前先 `get` 一次、把原文存進 repo（本次存到 `custom-code/archive/`），再寫回。
+`get_page_scripts` 在沒有任何 registered script 的頁面會回 404 `Custom code block not found`，那是正常的，不是錯誤。
