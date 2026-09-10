@@ -22,19 +22,21 @@ node test_router.mjs
 容器內已有 Chromium（`/opt/pw-browsers/chromium`），版本與 npm 上的 playwright 不一定相符，
 所以測試裡直接指定 `executablePath`，不要改成預設路徑。
 
-## 涵蓋的檢查（14 項）
+## 涵蓋的檢查（16 項）
 
 1. 初始兩個面板都隱藏（`height 0` / `visibility hidden`）
 2. 點居服 → 展開、按鈕加 `.is-active`、GA 送 `home_care`
 3. 捲動把選擇器帶到 navbar 下方（實測 top=96px）
-4. 切換 → 舊面板瞬間收掉、新面板展開
-5. **新面板起點與舊面板同一位置**（證明是由上往下長，不是被回流往上拉）
-6. 切換 → GA 送 `residential_day_care`
-7. document bubble 的捲動被 `stopPropagation()` 擋掉（`__bubbleScrolls === 0`）
-8. 面板內容的 `transform` 歸零
-9. 點同一顆 → 收合、`.is-active` 移除
+4. **切換時序**：點下去 150ms 時，舊卡片還在（高度未變）但 `opacity` 已在下降且帶 `.is-fading`，
+   而新卡片**還沒**開始展開 —— 證明是「先淡出、再換」而不是同時進行
+5. 切換 → 舊面板歸零、新面板展開
+6. **新面板起點與舊面板同一位置**（證明是由上往下長，不是被回流往上拉）
+7. 切換 → GA 送 `residential_day_care`
+8. document bubble 的捲動被 `stopPropagation()` 擋掉（`__bubbleScrolls === 0`）
+9. 面板內容的 `transform` 歸零
+10. 點同一顆 → 收合、`.is-active` 移除
 
-第 5 項當初是 fail：`contact-router_component` 的 `row-gap: 2rem` 讓收合的面板
+第 6 項當初是 fail：`contact-router_component` 的 `row-gap: 2rem` 讓收合的面板
 （高度 0 但仍佔一個 flex row）多產生一次 gap，兩個面板起點差 32px。
 改成 `row-gap: 0` 後通過——面板內的 section 本來就帶 `padding-section-large`，那 2rem 是多的。
 

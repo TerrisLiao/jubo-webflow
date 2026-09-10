@@ -5,13 +5,13 @@
   .contact-router_panel{
     width:100%; height:0px; overflow:hidden; opacity:0; visibility:hidden;
     transition-property:height, opacity, visibility;
-    transition-duration:600ms, 600ms, 0s;
+    transition-duration:800ms, 900ms, 0s;
     transition-timing-function:cubic-bezier(.22,.61,.36,1), ease, linear;
-    transition-delay:0s, 120ms, 600ms;
+    transition-delay:0s, 150ms, 800ms;
   }
   .contact-router_panel.is-open{
     height:auto; opacity:1; visibility:visible;
-    transition-delay:0s, 120ms, 0s;
+    transition-delay:0s, 150ms, 0s;
   }
   .section_contact-router{ scroll-margin-top:6rem; }
   .top-switcher_item{padding:.5rem 1.5rem;cursor:pointer;border-radius:50px;text-decoration:none;color:#08484E}
@@ -23,7 +23,7 @@
   body{margin:0;font-family:system-ui}
 </style>
 <!-- ============================================================
-     /contact 分流面板：展開動畫
+     /contact 分流面板：展開／切換動畫
      放置位置：Page Settings → Custom Code → Inside <head> tag（僅這一頁）
      鐵律 4 的例外，2026-09-10 經 Terris 明確要求後採用。
 
@@ -32,22 +32,29 @@
         .contact-router_panel.is-open  → height auto / opacity 1 / visibility visible
      原因：Webflow 的 Designer 與 Preview 都不執行 page custom code。
      狀態放在 class 才能保證「沒按按鈕時是隱藏的」在 canvas、Preview、
-     發布後三個地方都一致；這支 code 只負責量高度、切 .is-open、控制捲動。
+     發布後三個地方都一致；這支 code 只負責時序、量高度、切 class、控制捲動。
 
-     動畫方向：一律「由上往下」。切換時舊面板是瞬間收掉（is-instant），
-     不做收合動畫 —— 否則兩個面板同時變高變矮會造成頁面回流，
-     下面那個面板看起來就變成「由下往上」冒出來。
+     切換的時序（Terris 2026-09-10 指定）：
+       舊卡片「直接淡出」（只動 opacity，高度先鎖住 → 不會回流）
+       → 高度瞬間歸零（此時已看不見，不會有跳動）
+       → 新卡片高度往下展開 ＋ 淡入 ＋ 由上往下滑入
+     方向一律由上往下。
      ============================================================ -->
 <style>
-  /* 內容從上方 1rem 處往下就位，與 height 展開同向 */
+  /* 新卡片進場：從上方滑下來就位 */
   [data-router-panel] > * {
-    transform: translateY(-1.25rem);
-    transition: transform .7s cubic-bezier(.22,.61,.36,1) .12s;
+    transform: translateY(-1.5rem);
+    transition: transform .9s cubic-bezier(.22,.61,.36,1) .15s;
   }
   [data-router-panel].is-open > * {
     transform: none;
   }
-  /* 切換時給舊面板：一切過場關掉，直接消失 */
+  /* 舊卡片淡出：高度鎖住、只淡 opacity */
+  [data-router-panel].is-fading {
+    opacity: 0 !important;
+    transition: opacity .3s ease !important;
+  }
+  /* 淡完之後把高度歸零：所有過場關掉，不要有收合動畫 */
   [data-router-panel].is-instant,
   [data-router-panel].is-instant > * {
     transition: none !important;
@@ -70,7 +77,9 @@
 </noscript>
 <script>
   (function () {
-    var DURATION = 600;   // 必須等於 .contact-router_panel 的 height transition-duration
+    var EXPAND = 800;    // 必須等於 .contact-router_panel 的 height transition-duration
+    var FADE_OUT = 300;  // 必須等於上面 .is-fading 的 opacity transition-duration
+    var SCROLL = 1.4;    // 秒，交給 Lenis
 
     function ready(fn) {
       if (document.readyState !== 'loading') fn();
@@ -91,7 +100,24 @@
         return null;
       }
 
-      // 動畫收合：只用在「點同一顆關掉」的情況
+      function openPanel() {
+        for (var i = 0; i < panels.length; i++) {
+          if (panels[i].classList.contains('is-open')) return panels[i];
+        }
+        return null;
+      }
+
+      // 高度歸零，不做任何過場
+      function zeroInstant(panel) {
+        panel.classList.add('is-instant');
+        panel.classList.remove('is-open');
+        panel.style.height = '0px';
+        void panel.offsetHeight;   // 讀一次 layout 讓瀏覽器立刻套用
+        panel.classList.remove('is-instant');
+        panel.classList.remove('is-fading');
+      }
+
+      // 點同一顆關閉 → 高度收合動畫
       function collapse(panel) {
         if (!panel || !panel.classList.contains('is-open')) return;
         panel.style.height = panel.scrollHeight + 'px';
@@ -99,15 +125,16 @@
         requestAnimationFrame(function () { panel.style.height = '0px'; });
       }
 
-      // 瞬間收合：用在切換，避免兩個面板同時動造成回流
-      function collapseInstant(panel) {
-        if (!panel || !panel.classList.contains('is-open')) return;
-        panel.classList.add('is-instant');
-        panel.classList.remove('is-open');
-        panel.style.height = '0px';
-        // 讀一次 layout 讓瀏覽器立刻套用，再把過場還原
+      // 切換 → 舊卡片先淡出，淡完才歸零
+      function fadeOut(panel, done) {
+        if (!panel || !panel.classList.contains('is-open')) { done(); return; }
+        panel.style.height = panel.scrollHeight + 'px';   // 鎖住高度，淡出期間不回流
         void panel.offsetHeight;
-        panel.classList.remove('is-instant');
+        panel.classList.add('is-fading');
+        window.setTimeout(function () {
+          zeroInstant(panel);
+          done();
+        }, FADE_OUT);
       }
 
       function expand(panel) {
@@ -116,22 +143,19 @@
         panel.style.height = panel.scrollHeight + 'px';
         window.setTimeout(function () {
           if (panel.classList.contains('is-open')) panel.style.height = 'auto';
-        }, DURATION);
+        }, EXPAND);
       }
 
-      // 選了之後把選擇器帶到 navbar 下方，讓剛展開的內容正好在視窗裡。
-      // 站台的 Slater JS 有 window.lenis（平滑捲動），優先交給它，
-      // 直接用原生 scrollIntoView 會跟 Lenis 的 RAF 迴圈互相干擾。
+      // 捲到按鈕本身（按鈕在 Hero 裡），按鈕會停在 navbar 下方，
+      // 剛展開的面板正好在它底下。站上的 Slater JS 有 window.lenis，
+      // 優先交給它，直接用原生 scrollIntoView 會跟 Lenis 的 RAF 迴圈互相干擾。
       function bringIntoView() {
-        // 捲到按鈕本身（按鈕在 Hero 裡），這樣按鈕留在 navbar 下方，
-        // 剛展開的面板正好在它下面。
-        var anchor = wrapper;
         var nav = document.querySelector('[class*="navbar"], nav, header');
         var clearance = (nav ? nav.getBoundingClientRect().height : 0) + 24;
         if (window.lenis && typeof window.lenis.scrollTo === 'function') {
-          window.lenis.scrollTo(anchor, { offset: -clearance, duration: 0.8 });
-        } else if (anchor.scrollIntoView) {
-          anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          window.lenis.scrollTo(wrapper, { offset: -clearance, duration: SCROLL });
+        } else if (wrapper.scrollIntoView) {
+          wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
 
@@ -146,20 +170,24 @@
 
           var wasActive = item.classList.contains('is-active');
           var target = panelFor(item.getAttribute('data-router-target'));
-
           items.forEach(function (el) { el.classList.remove('is-active'); });
 
-          if (wasActive) {           // 點同一顆 → 收合（這時才做收合動畫）
+          if (wasActive) {          // 點同一顆 → 收合
             collapse(target);
             return;
           }
 
-          panels.forEach(function (p) {   // 切換 → 舊的瞬間消失
-            if (p !== target) collapseInstant(p);
-          });
           item.classList.add('is-active');
-          expand(target);
-          bringIntoView();
+          var current = openPanel();
+          if (current && current !== target) {
+            fadeOut(current, function () {   // 舊的淡出 → 新的滑入
+              expand(target);
+              bringIntoView();
+            });
+          } else {
+            expand(target);
+            bringIntoView();
+          }
         });
       });
 

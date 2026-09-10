@@ -206,16 +206,34 @@ section#choose.section_contact-router
 - **原始檔**：[`custom-code/contact-router.html`](../custom-code/contact-router.html)（repo 為準，改動請兩邊同步）
 - **選擇器範圍**：只有 `[data-router="wrapper"]`、`[data-router-target]`、`[data-router-panel]`。
   刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。
-- **動畫**（2026-09-10 依 Terris 回饋放慢，並讓淡入更明顯）：
-  `height 0 → scrollHeight → auto` **600ms** `cubic-bezier(.22,.61,.36,1)`（transition 在 class 上）；
-  面板 `opacity 0 → 1` **600ms、延遲 120ms**；面板內容 `translateY(-1.25rem) → 0` 700ms、延遲 120ms（在 code 裡）。
-  ⚠️ **code 裡的 `DURATION` 必須等於 class 上 height 的 transition-duration**，
-  否則高度會在過場途中被改成 `auto` 而跳一下。
-- **方向一律由上往下**：切換時舊面板用 `is-instant` 瞬間收掉（關掉 transition），
-  只有「點同一顆關閉」才做收合動畫。否則兩個面板同時變高變矮會造成回流，
-  下面那個面板看起來會變成由下往上冒出來。
-- **捲動**：`bringIntoView()` 把按鈕帶到 navbar 下方（navbar 高度執行期量測 ＋24px），
+- **切換時序**（2026-09-10 由 Terris 指定，共改過三輪）：
+
+  1. 舊卡片**直接淡出** —— 先把 `height` 鎖成當下的 `scrollHeight`，再加 `.is-fading`
+     （`opacity: 0`，300ms），所以淡出期間版面完全不動、不會回流
+  2. 淡完 → `.is-instant` 關掉所有過場，高度瞬間歸零（此時已看不見，不會有跳動）
+  3. 新卡片高度往下展開 ＋ 淡入 ＋ 由上往下滑入
+
+  「點同一顆關閉」走另一條路：直接做高度收合動畫。
+
+- **時間參數**
+
+  | 項目 | 值 | 定義在哪 |
+  |---|---|---|
+  | 舊卡片淡出 | 300ms ease | code 的 `.is-fading` ＋ `FADE_OUT` |
+  | 新卡片高度 | 800ms `cubic-bezier(.22,.61,.36,1)` | class `.contact-router_panel` ＋ code 的 `EXPAND` |
+  | 新卡片淡入 | 900ms、延遲 150ms | class `.contact-router_panel` |
+  | 新卡片滑入 | `translateY(-1.5rem) → 0`、900ms、延遲 150ms | code |
+  | 捲動 | 1.4s（Lenis） | code 的 `SCROLL` |
+
+  ⚠️ **三組必須成對維護**：`EXPAND` = class 上 height 的 duration；
+  `FADE_OUT` = `.is-fading` 的 opacity duration。不一致的話高度會在過場途中被改成
+  `auto` 而跳一下，或舊卡片還沒淡完就被歸零。
+
+- **方向一律由上往下**。之前讓兩個面板同時變高變矮，下面那個會被回流往上拉，
+  看起來像由下往上冒出來 —— 所以才改成「先淡出、再換」。
+- **捲動**：`bringIntoView()` 把**按鈕**帶到 navbar 下方（navbar 高度執行期量測 ＋24px），
   優先用站上的 `window.lenis.scrollTo`，沒有才退回 `scrollIntoView`。
+  捲動是在舊卡片淡出結束、新卡片開始展開時才觸發。
 - **行為**：點另一顆 → 舊的收合、新的展開；點同一顆 → 收合（真 toggle）。
 - **保護**：`prefers-reduced-motion: reduce` 時不做過場；`<noscript>` 會把面板還原成展開，
   JS 掛掉時內容不會消失。
@@ -257,7 +275,7 @@ section#choose.section_contact-router
 | 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
 | 4 | 動畫參數要調（.45s、`translateY(-1rem)`、延遲 .08s）就直接說，改 `custom-code/contact-router.html` 再同步到頁面 head | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
-| 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，14 項檢查全過）。改 code 或改那幾個 class 的值之後要重跑 | Claude |
+| 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，**16 項**檢查全過，含切換時序）。改 code 或改那幾個 class 的值之後要重跑 | Claude |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |

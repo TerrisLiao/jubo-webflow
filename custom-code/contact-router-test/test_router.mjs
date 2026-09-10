@@ -24,7 +24,7 @@ check('初始：住宿面板隱藏', rs.height === 0 && rs.vis === 'hidden', `h=
 
 // 2. 點居服
 await p.click('[data-router-target="homecare"]');
-await p.waitForTimeout(950);
+await p.waitForTimeout(1500);
 hc = await state('homecare');
 const chooserTopAfterHc = await p.evaluate(() => Math.round(document.getElementById('choose').getBoundingClientRect().top));
 check('點居服：展開', hc.open && hc.height > 500 && hc.vis === 'visible', `h=${hc.height}`);
@@ -35,9 +35,21 @@ check('點居服：捲動有把選擇器帶到 navbar 下方（0–200px）', ch
 // 3. 記錄居服面板此刻的頁面座標（= 面板起點，應該就在按鈕下方）
 const panelStartY = hc.top;
 
-// 4. 切到住宿：檢查新面板的起點是否與舊面板相同（沒有被往上拉）
+// 4. 切到住宿：先檢查時序（舊的淡出中、新的還沒展開），再檢查落點
 await p.click('[data-router-target="residential"]');
-await p.waitForTimeout(950);
+await p.waitForTimeout(150);   // 淡出進行中（FADE_OUT=300）
+const mid = await p.evaluate(() => {
+  const oldP = document.querySelector('[data-router-panel="homecare"]');
+  const newP = document.querySelector('[data-router-panel="residential"]');
+  return { oldH: Math.round(oldP.getBoundingClientRect().height),
+           oldOp: parseFloat(getComputedStyle(oldP).opacity),
+           oldFading: oldP.classList.contains('is-fading'),
+           newOpen: newP.classList.contains('is-open') };
+});
+check('時序：舊卡片在淡出（高度還在、opacity 正在降）',
+      mid.oldFading && mid.oldH > 500 && mid.oldOp < 0.9, `h=${mid.oldH} op=${mid.oldOp.toFixed(2)}`);
+check('時序：淡出期間新卡片還沒開始展開', mid.newOpen === false);
+await p.waitForTimeout(1500);
 hc = await state('homecare'); rs = await state('residential');
 check('切換：居服瞬間收掉', !hc.open && hc.height === 0, `h=${hc.height}`);
 check('切換：住宿展開', rs.open && rs.height > 700, `h=${rs.height}`);
@@ -55,7 +67,7 @@ check('切換：面板內容 transform 歸零', await p.evaluate(() => {
 
 // 6. 點同一顆 → 收合
 await p.click('[data-router-target="residential"]');
-await p.waitForTimeout(950);
+await p.waitForTimeout(1500);
 rs = await state('residential');
 check('點同一顆：收合', !rs.open && rs.height === 0, `h=${rs.height}`);
 check('點同一顆：按鈕的 is-active 移除', await p.evaluate(() => !document.querySelector('[data-router-target="residential"]').classList.contains('is-active')));
