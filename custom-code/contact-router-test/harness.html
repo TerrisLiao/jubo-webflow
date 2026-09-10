@@ -23,12 +23,13 @@
   .contact-router_component{display:flex;flex-direction:column;align-items:center;width:100%;row-gap:0;column-gap:0}
   .section_contact-router{ scroll-margin-top:6rem; }
   /* 分流入口：2026-09-10 由 pill 改成兩張獨立選擇卡 */
-  .padding-global{padding-left:4rem;padding-right:4rem}
+  /* contact-choice_layout：抄 padding-global 的左右值 ＋ 自己的上下留白 */
+  .contact-choice_layout{padding:4rem}
   .container-large{width:100%;max-width:82rem;margin:0 auto;display:block}
   .contact-choice_wrap{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;
-    flex-wrap:nowrap;width:100%;grid-column-gap:1rem;grid-row-gap:1rem;
+    flex-wrap:nowrap;width:100%;grid-column-gap:1.5rem;grid-row-gap:1.5rem;
     max-width:36rem;margin-left:auto;margin-right:auto}
-  .contact-choice_hint{margin-top:.75rem;margin-bottom:0}
+  .contact-choice_hint{margin-top:1.5rem;margin-bottom:0}
   .contact-choice_item{display:flex;flex-direction:row;align-items:center;justify-content:space-between;
     grid-column-gap:1rem;flex-grow:0;flex-shrink:1;flex-basis:auto;max-width:none;width:100%;
     padding:1.5rem;border-radius:1.25rem;border:1px solid rgba(105,131,146,.15);
@@ -51,14 +52,13 @@
   <div>hero 佔位（H1／說明／已隱藏的舊 pill）</div>
 </div>
 <section id="choose" class="section_contact-router">
-  <div class="padding-global"><div class="container-large">
+  <div class="contact-choice_layout"><div class="container-large">
   <div class="contact-choice_wrap" data-router="wrapper">
     <a class="contact-choice_item" href="#choose" data-router-target="homecare"
        data-ga-event="contact_route_select" data-solution-interest="home_care"
        data-ga-cta-location="contact_router_choice">
       <div class="contact-choice_text-wrap">
         <div class="contact-choice_title">我是居服單位</div>
-        <div class="contact-choice_desc">由客戶成功顧問為你安排</div>
       </div>
       <div class="contact-choice_arrow">&#8594;</div>
     </a>
@@ -67,7 +67,6 @@
        data-ga-cta-location="contact_router_choice">
       <div class="contact-choice_text-wrap">
         <div class="contact-choice_title">我是住宿・日照機構</div>
-        <div class="contact-choice_desc">找你所在區域的客戶經理</div>
       </div>
       <div class="contact-choice_arrow">&#8594;</div>
     </a>

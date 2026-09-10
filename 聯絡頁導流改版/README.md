@@ -236,6 +236,59 @@ Terris 回報「完全是錯誤的沒辦法點，直接把按鈕做到下一個 
 > 容器內的瀏覽器沒有外網，所以是「抓到本機再攔截請求供應」，
 > 圖片與 Google Fonts 直接 abort —— **行為驗得準，視覺不代表站上**。
 
+#### 副標題移除 ＋ 留白加大（2026-09-10 Terris 指示）
+
+Terris：「整體的 space 我希望多一點，然後卡片的副標題不需要保留。」
+
+- 兩張卡的 `.contact-choice_desc`（「由客戶成功顧問為你安排」／「找你所在區域的客戶經理」）
+  **已移除元素**。卡片高度 102px → **77px**。
+  `.contact-choice_desc` 這個 class 現在沒有元素在用（未刪，見待辦）。
+- 新增 `.contact-choice_layout` 掛在入口的外層 div，取代原本的 `padding-global`。
+  **為什麼不並用兩個 class**：MCP 的 `set_style` 一次給兩個 class 會回
+  `One or more styles not found`（`TabsMenu` 那次也一樣）。
+  所以把 `padding-global` 的左右值逐一抄進 `contact-choice_layout`
+  （desktop `--desktop-spacer--medium`、tablet `--tablet-spacer--small`、
+  mobile `--mobile-spacer--small`），再加上自己的上下留白
+  （desktop 4rem／tablet 3rem／mobile 2rem）。
+  ⚠️ 之後如果 `padding-global` 的值有變，這裡要一起改。
+- 卡片間距 1rem → **1.5rem**；提示行 `margin-top` .75rem → **1.5rem**。
+
+republish 到 staging 後實測（桌機 1440）：
+
+| | 改之前 | 現在 |
+|---|---|---|
+| hero 底 → 第一張卡 | 0px（直接貼著） | **64px** |
+| 兩張卡之間 | 16px | **24px** |
+| 提示行底 → 下一段的線 | 33px | **64px** |
+| 卡片高度 | 102px | 77px |
+| router section 總高 | 253px | 351px |
+
+行為未受影響（stage 0 → 1214 → 1832 → 0，active 正確換手）。
+
+#### 那條「線」是什麼（2026-09-10 查清）
+
+Terris 回報入口卡下面有一條線。在已發布輸出上把 hero 到 footer 之間
+每個 section 的背景都量過，結論很乾淨：
+
+| Section | 位置 | 背景 |
+|---|---|---|
+| `section_about-hero` | 116 → 621 | 透明 |
+| `section_contact-router` | 621 → 972 | 透明 |
+| **`section_contact-form`** | **972 → 2313** | **`rgba(255,255,255,0.3)`** |
+| `section_location` | 2313 → 3400 | 透明 |
+| `section_cta` | 3400 → 4111 | 透明 |
+| `section_footer` | 4111 → 4828 | `#175e5e` |
+
+`body` 是 `#f8f8f8`。所以**整段路上只有 `section_contact-form` 有背景**，
+它的白 30% 疊在 #f8f8f8 上，上緣就是那條線。頁面層沒有任何漸層覆蓋這一段
+（`.gradient-bg` 只出現在各張卡片內部與 `section_cta`）。
+
+這條線在改版前就存在，只是以前入口不在它正上方所以沒人注意。
+目前的處理是**把它推遠**（提示行底到線 33px → 64px）。
+要真正讓它消失，唯一的一刀是把 `.section_contact-form` 的
+`background-color` 拿掉 —— 但那是我沒被要求動的區塊，且若有其他頁面用到同一個
+class 也會一起變，所以**待 Terris 決定**（見待辦 11）。
+
 > ⚠️ **副作用（待 Terris 決定）**：hero 的 h1 還是「選擇您的機構類型」，
 > 但 hero 裡已經沒有可選的東西了。入口移到下一段之後，
 > 桌機上可能剛好落在折線附近 —— 這跟「同事不知道下面有內容」是同一個風險。
@@ -258,18 +311,14 @@ section.section_about-hero
    └ div.top-switcher_wrapper.is-product（舊的 pill，已隱藏、已移除 data-router）
 
 section#choose.section_contact-router
-├ div.padding-global                                    ← 分流入口在這裡（2026-09-10 從 hero 搬來）
+├ div.contact-choice_layout                             ← 分流入口在這裡（2026-09-10 從 hero 搬來）
 │   └ div.container-large
 │       ├ div.contact-choice_wrap[data-router="wrapper"]   （max-width 36rem 置中，實測 576px）
 │       │   ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
-│       │   │   ├ .contact-choice_text-wrap
-│       │   │   │   ├ .contact-choice_title「我是居服單位」
-│       │   │   │   └ .contact-choice_desc「由客戶成功顧問為你安排」
+│       │   │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」
 │       │   │   └ .contact-choice_arrow「→」
 │       │   └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
-│       │       ├ .contact-choice_text-wrap
-│       │       │   ├ .contact-choice_title「我是住宿・日照機構」
-│       │       │   └ .contact-choice_desc「找你所在區域的客戶經理」
+│       │       ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
 │       │       └ .contact-choice_arrow「→」
 │       └ p.contact-choice_hint「選擇後，下方會顯示對應的聯絡窗口」
 └ div.contact-router_component
@@ -457,6 +506,8 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
 | 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |
+| 11 | **要不要拿掉 `.section_contact-form` 的 `background-color: rgba(255,255,255,0.3)`？** 那是入口卡下面那條線的唯一來源。拿掉之後 hero 到 footer 之間會是一整片 `#f8f8f8`、完全沒有分界；代價是聯絡表單那一段失去現在那層淡淡的白 | Terris |
+| 10b | `.contact-choice_desc` 現在沒有元素在用（副標題已移除）。要刪嗎？ | Terris |
 | 10a | `.category-tag.is-audience` combo class 現在沒有元素在用（標籤已移除、尚未 publish、正式站樣式表裡沒有它）。要刪嗎？ | Terris |
 | 10 | **居服訪客該不該看到 `section_home-care-banner`？** 它的 base 層是 `display: none`（改版前就沒顯示過）。要讓它現身得先解掉那條規則，而那是共用 class，需先查全站有無其他頁面依賴 | Terris |
 
