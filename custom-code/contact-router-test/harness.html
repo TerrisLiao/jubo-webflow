@@ -1,3 +1,27 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<title>contact-router harness</title>
+<style>
+  /* === 站上 Webflow class 的實際值 === */
+  .contact-router_panel{
+    width:100%; height:0px; overflow:hidden; opacity:0; visibility:hidden;
+    transition-property:height, opacity, visibility;
+    transition-duration:450ms, 350ms, 0s;
+    transition-timing-function:cubic-bezier(.22,.61,.36,1), ease, linear;
+    transition-delay:0s, 80ms, 450ms;
+  }
+  .contact-router_panel.is-open{
+    height:auto; opacity:1; visibility:visible;
+    transition-delay:0s, 80ms, 0s;
+  }
+  .section_contact-router{ scroll-margin-top:6rem; }
+  .top-switcher_item{padding:.5rem 1.5rem;cursor:pointer;border-radius:50px;text-decoration:none;color:#08484E}
+  .top-switcher_item.is-active{background:#00b2c0;color:#fff}
+  .top-switcher_wrapper{display:flex;gap:.25rem;padding:.25rem;border-radius:50px;background:rgba(255,255,255,.3)}
+  .contact-router_component{display:flex;flex-direction:column;align-items:center;width:100%;row-gap:0}
+  .navbar_component{position:fixed;top:0;left:0;right:0;height:72px;background:#fff;z-index:9}
+  .spacer{height:1200px}
+  body{margin:0;font-family:system-ui}
+</style>
 <!-- ============================================================
      /contact 分流面板：展開動畫
      放置位置：Page Settings → Custom Code → Inside <head> tag（僅這一頁）
@@ -145,3 +169,40 @@
     });
   })();
 </script>
+
+</head><body>
+<div class="navbar_component">navbar</div>
+<div class="spacer" style="padding-top:72px">hero 佔位</div>
+<section id="choose" class="section_contact-router">
+  <div class="contact-router_component">
+    <div class="top-switcher_wrapper is-product" data-router="wrapper">
+      <a class="top-switcher_item" href="#choose" data-router-target="homecare"
+         data-ga-event="contact_route_select" data-solution-interest="home_care">我是居服單位</a>
+      <a class="top-switcher_item" href="#choose" data-router-target="residential"
+         data-ga-event="contact_route_select" data-solution-interest="residential_day_care">我是住宿／日照機構</a>
+    </div>
+    <div class="contact-router_panel" data-router-panel="homecare">
+      <section id="homecare" style="padding:4rem 0"><div style="height:700px;background:#e6f7f8">居服窗口卡</div></section>
+      <div style="height:500px;background:#f0fbfc">居服系統 banner</div>
+    </div>
+    <div class="contact-router_panel" data-router-panel="residential">
+      <div id="sales" style="padding:4rem 0"><div style="height:900px;background:#eef">5 位客戶經理</div></div>
+    </div>
+  </div>
+</section>
+<div class="spacer">後面的區塊</div>
+<script>
+  window.__ga = [];
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href]');
+    if(a && a.dataset.gaEvent) window.__ga.push({event:a.dataset.gaEvent, si:a.dataset.solutionInterest});
+  }, true);
+  window.__bubbleScrolls = 0;
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a) return;
+    var t = document.querySelector(a.getAttribute('href'));
+    if(t){ window.__bubbleScrolls++; t.scrollIntoView(); }
+  });
+</script>
+</body></html>
