@@ -84,10 +84,24 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 
 Site Settings → Custom Code → Head 有一段 Jubo 自家的 GA4 事件程式碼，它會讀：
 
-`.single-sales_wrap`　`.category-tag`　`.sales-contact_wrap p`　`.w-form`　`.w-form-done`
+`.single-sales_wrap`　`.sales-contact_wrap p`　`.w-form`　`.w-form-done`
 
-> `.category-tag` 被用來**推斷業務負責區域**（比對文字判斷「基隆新北桃園」等）。
-> 改掉這個 class 名 → 業務來源分析會靜默失效，且**不會有任何錯誤訊息**。
+> **業務卡的區域判斷靠的是 LINE 網址，不是 `.category-tag` 的文字**（實測日：2026-09-10）。
+> 現行 head 程式的 `annotateSalesCards()` 是拿卡片內 `a[href*="line.me/"]` 比對一張硬寫的
+> `salesByLineUrl` 對照表（5 組），取得 `rep_00x` 與 region；對不到就直接 return。
+> 也就是說：**換掉某位業務的 LINE 連結，或新增一張業務卡而沒更新那張對照表，區域分析會靜默失效**。
+>
+> `.category-tag` 依然不可改名 —— 它是全站共用的樣式 class（見 `03_全域工具類清單.md`），
+> 而且 Slater 的外部 CSS 讀不到，無法確認它有沒有被引用。
+>
+> （本段原本寫「`.category-tag` 被用來推斷業務負責區域（比對文字判斷基隆新北桃園等）」，
+> 與 2026-09-10 讀回的 head 程式不符，已更正。）
+
+`.single-sales_wrap` 還有一個容易踩到的副作用：
+那段程式會把卡片內 `.sales-contact_wrap p` 裡看起來像電話的段落**自動包成 `tel:` 連結**，
+並對卡片內 line.me／tel 的點擊送 `sales_contact_click`（`solution_interest` 預設 `residential_day_care`）。
+**所以非業務的聯絡卡不要沿用這兩個 class**，否則會污染業務來源分析。
+居服窗口卡因此另開 `homecare-contact_*` 系列（見 `聯絡頁導流改版/README.md`）。
 
 ---
 
