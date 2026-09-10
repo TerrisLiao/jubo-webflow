@@ -146,19 +146,40 @@ section.section_contact-router
 - 兩顆按鈕保留 `href`（`#homecare` / `#sales`），因為站台 head 的 GA4 只監聽 `a[href]`；
   JS 會 `preventDefault()` 擋掉 anchor 跳轉，但 GA4 是 **capture 階段**監聽，會在那之前就送出事件。
 
+#### 收合狀態放在 class，不放在 custom code（2026-09-10 修正）
+
+第一次裝自訂 code 時，把「預設收合」也寫在 code 的 CSS 裡，結果 Terris 在 Preview 看到的是
+**卡片沒有隱藏、按鈕只會 scroll**。原因：**Webflow 的 Designer 與 Preview 都不執行 page custom code**，
+只有發布出去（staging 或正式站）才會跑。所以在 Preview 等於「沒有 code」的狀態——
+面板沒被隱藏（`display:none` 已被移除），按鈕的 `href="#homecare"` 就只剩下 anchor 捲動。
+
+修正方式：把狀態搬進 Webflow 的 class，code 只留 JS。
+
+| 選擇器 | 內容 |
+|---|---|
+| `.contact-router_panel` | `height:0`、`overflow:hidden`、`opacity:0`、`visibility:hidden`，＋ `transition-property/duration/timing-function/delay`（height 450ms、opacity 350ms delay 80ms、visibility 0s delay 450ms） |
+| `.contact-router_panel.is-open` | `height:auto`、`opacity:1`、`visibility:visible`、visibility 不延遲 |
+
+這樣「沒按按鈕時是隱藏的」在 **canvas、Preview、發布後三個地方都一致**，JS 掛掉也還是隱藏。
+`.is-open` 給 `height:auto` 還有一個好處：**在 Designer 要編輯面板內容時，
+暫時把 `is-open` 這個 combo class 加到面板上就會展開**，編完再移除。
+（執行期 JS 寫的 inline `height` 優先於 class，不會互相干擾。）
+
 #### 自訂 code
 
 - **位置**：`/contact` 的 Page Settings → Custom Code → Inside `<head>`（**只有這一頁**，不是站台層）
+- **只負責**：量 `scrollHeight`、切 `.is-open`、`preventDefault()`，加上內容 `translateY(-1rem) → 0` 的位移
 - **原始檔**：[`custom-code/contact-router.html`](../custom-code/contact-router.html)（repo 為準，改動請兩邊同步）
 - **選擇器範圍**：只有 `[data-router="wrapper"]`、`[data-router-target]`、`[data-router-panel]`。
   刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。
-- **動畫**：`height 0 → scrollHeight → auto`，`.45s cubic-bezier(.22,.61,.36,1)`；
-  面板內容同時 `opacity 0 → 1` ＋ `translateY(-1rem) → 0`，延遲 .08s。
+- **動畫**：`height 0 → scrollHeight → auto`，450ms `cubic-bezier(.22,.61,.36,1)`（transition 在 class 上）；
+  面板 `opacity 0 → 1`（350ms，延遲 80ms），面板內容 `translateY(-1rem) → 0`（500ms，延遲 80ms，在 code 裡）。
 - **行為**：點另一顆 → 舊的收合、新的展開；點同一顆 → 收合（真 toggle）。
 - **保護**：`prefers-reduced-motion: reduce` 時不做過場；`<noscript>` 會把面板還原成展開，
   JS 掛掉時內容不會消失。
-- **副作用（好的）**：Designer canvas 不跑 page custom code，所以在 canvas 裡兩個面板都是展開的，
-  方便直接編輯內容。**要驗收動畫一定要用 Preview 或發布。**
+- **驗收限制（重要）**：page custom code **在 Preview 也不會跑**。
+  Preview 只能確認「預設是隱藏的」；**要看展開動畫必須發布到 staging（webflow.io）或正式站**。
+  想要在 Preview 就能看到動畫，唯一的路是改用 Webflow Interactions（IX2），而 MCP 碰不到 IX2。
 
 > **鐵律 4 的例外登記**：`00_AI工作守則.md` 鐵律 4 寫「不要寫自訂 CSS」。
 > 本次是 2026-09-10 Terris 明確指示「動畫就用自訂寫 code」後採用，範圍限定 `/contact` 一頁、
@@ -191,7 +212,7 @@ section.section_contact-router
 |---|---|---|
 | 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
-| 3 | **在 Preview 確認展開動畫**：Designer canvas 不跑 page custom code，canvas 裡兩個面板都是展開的（方便編輯），一定要用 Preview 或發布到 staging 才看得到 toggle 與淡入 | Terris |
+| 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
 | 4 | 動畫參數要調（.45s、`translateY(-1rem)`、延遲 .08s）就直接說，改 `custom-code/contact-router.html` 再同步到頁面 head | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |

@@ -1,40 +1,38 @@
 <!-- ============================================================
-     /contact 分流面板：展開＋淡入動畫
-     作用範圍：只有 [data-router="wrapper"] / [data-router-target] /
-     [data-router-panel]，不碰站上其他頁面，也不碰 Slater 的
-     data-platform-switcher。
+     /contact 分流面板：展開動畫（JS）
      放置位置：Page Settings → Custom Code → Inside <head> tag（僅這一頁）
      鐵律 4 的例外，2026-09-10 經 Terris 明確要求後採用。
+
+     ⚠️ 收合／展開的「狀態」不在這裡，而是在 Webflow 的 class 上：
+        .contact-router_panel          → height 0 / overflow hidden / opacity 0 / visibility hidden
+        .contact-router_panel.is-open  → opacity 1 / visibility visible
+     原因：Webflow 的 Designer 與 Preview 都不執行 page custom code。
+     狀態放在 class 才能保證「沒按按鈕時是隱藏的」在 canvas、Preview、
+     發布後三個地方都一致；這支 code 只負責量高度、切 .is-open。
      ============================================================ -->
 <style>
-  [data-router-panel] {
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-    transition: height .45s cubic-bezier(.22,.61,.36,1), visibility 0s linear .45s;
-  }
-  [data-router-panel].is-open {
-    visibility: visible;
-    transition: height .45s cubic-bezier(.22,.61,.36,1), visibility 0s;
-  }
+  /* 只有錦上添花的位移：內容展開時從上方「吐」出來。沒跑到也不影響隱藏行為。 */
   [data-router-panel] > * {
-    opacity: 0;
     transform: translateY(-1rem);
-    transition: opacity .4s ease .08s, transform .5s cubic-bezier(.22,.61,.36,1) .08s;
+    transition: transform .5s cubic-bezier(.22,.61,.36,1) .08s;
   }
   [data-router-panel].is-open > * {
-    opacity: 1;
     transform: none;
   }
   [data-router-target] { cursor: pointer; }
   @media (prefers-reduced-motion: reduce) {
-    [data-router-panel], [data-router-panel] > * { transition: none; }
+    [data-router-panel], [data-router-panel] > * { transition: none !important; }
   }
 </style>
 <noscript>
   <style>
-    [data-router-panel] { height: auto; overflow: visible; visibility: visible; }
-    [data-router-panel] > * { opacity: 1; transform: none; }
+    [data-router-panel] {
+      height: auto !important;
+      overflow: visible !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+    [data-router-panel] > * { transform: none !important; }
   </style>
 </noscript>
 <script>
@@ -94,7 +92,6 @@
         });
       });
 
-      // 展開中的面板遇到視窗改變尺寸就交還給 auto，避免高度被鎖住
       window.addEventListener('resize', function () {
         panels.forEach(function (p) {
           if (p.classList.contains('is-open')) p.style.height = 'auto';
