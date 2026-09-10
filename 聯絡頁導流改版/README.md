@@ -127,18 +127,33 @@ CTA「申請 Demo」→ 居服 Microsoft Forms）原本在 switcher **外面**�
 
 #### 現行結構
 
+> **2026-09-10 追加調整**：選擇按鈕原本放在 `section_contact-router` 最上方，
+> 結果剛好壓在 Hero 與下一段的背景交界上，看起來像被切一刀（Terris 回報）。
+> 已把整組 `top-switcher_wrapper` **搬進 Hero 的 `product-hero_center-wrap`**
+> （原本那兩顆 CTA 的位置，它們仍是隱藏狀態），面板留在下方的 router section。
+> `bringIntoView()` 的捲動目標也跟著改成按鈕本身，這樣按鈕會停在 navbar 下方、
+> 剛展開的面板正好在它底下。
+
 ```
-section.section_contact-router
+section.section_about-hero
+└ … product-hero_center-wrap
+   ├ Section Tag「聯絡我們」／h1／說明段
+   ├ div.contact-routing_buttons.is-center（舊的兩顆 CTA，已隱藏）
+   └ div.top-switcher_wrapper.is-product[data-router="wrapper"]   ← 選擇按鈕在這裡
+       ├ a.top-switcher_item[data-router-target="homecare"]   href="#choose" 「我是居服單位」
+       └ a.top-switcher_item[data-router-target="residential"] href="#choose" 「我是住宿／日照機構」
+
+section#choose.section_contact-router
 └ div.contact-router_component
-   ├ div.top-switcher_wrapper.is-product[data-router="wrapper"]
-   │   ├ a.top-switcher_item[data-router-target="homecare"]   href="#homecare"   「我是居服單位」
-   │   └ a.top-switcher_item[data-router-target="residential"] href="#sales"     「我是住宿／日照機構」
    ├ div.contact-router_panel[data-router-panel="homecare"]
    │   ├ section#homecare.section_homecare-contact   （居服窗口卡）
    │   └ div.section_home-care-banner                （居服系統 ＋ 申請 Demo）
    └ div.contact-router_panel[data-router-panel="residential"]
        └ div#sales.section_sales                      （5 位區域客戶經理）
 ```
+
+`contact-router_component` 的 `row-gap` 必須是 **0**：收合的面板高度是 0 但仍佔一個 flex row，
+留 gap 會讓兩個面板的起點差一個 gap 的距離（原本 2rem），切換時看起來就會錯位。
 
 - 面板的 `display` **不可以是 none**（會讓 height 動畫失效）。收合狀態由自訂 CSS 的
   `height: 0; overflow: hidden; visibility: hidden` 負責。
@@ -191,8 +206,16 @@ section.section_contact-router
 - **原始檔**：[`custom-code/contact-router.html`](../custom-code/contact-router.html)（repo 為準，改動請兩邊同步）
 - **選擇器範圍**：只有 `[data-router="wrapper"]`、`[data-router-target]`、`[data-router-panel]`。
   刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。
-- **動畫**：`height 0 → scrollHeight → auto`，450ms `cubic-bezier(.22,.61,.36,1)`（transition 在 class 上）；
-  面板 `opacity 0 → 1`（350ms，延遲 80ms），面板內容 `translateY(-1rem) → 0`（500ms，延遲 80ms，在 code 裡）。
+- **動畫**（2026-09-10 依 Terris 回饋放慢，並讓淡入更明顯）：
+  `height 0 → scrollHeight → auto` **600ms** `cubic-bezier(.22,.61,.36,1)`（transition 在 class 上）；
+  面板 `opacity 0 → 1` **600ms、延遲 120ms**；面板內容 `translateY(-1.25rem) → 0` 700ms、延遲 120ms（在 code 裡）。
+  ⚠️ **code 裡的 `DURATION` 必須等於 class 上 height 的 transition-duration**，
+  否則高度會在過場途中被改成 `auto` 而跳一下。
+- **方向一律由上往下**：切換時舊面板用 `is-instant` 瞬間收掉（關掉 transition），
+  只有「點同一顆關閉」才做收合動畫。否則兩個面板同時變高變矮會造成回流，
+  下面那個面板看起來會變成由下往上冒出來。
+- **捲動**：`bringIntoView()` 把按鈕帶到 navbar 下方（navbar 高度執行期量測 ＋24px），
+  優先用站上的 `window.lenis.scrollTo`，沒有才退回 `scrollIntoView`。
 - **行為**：點另一顆 → 舊的收合、新的展開；點同一顆 → 收合（真 toggle）。
 - **保護**：`prefers-reduced-motion: reduce` 時不做過場；`<noscript>` 會把面板還原成展開，
   JS 掛掉時內容不會消失。
@@ -234,6 +257,7 @@ section.section_contact-router
 | 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
 | 4 | 動畫參數要調（.45s、`translateY(-1rem)`、延遲 .08s）就直接說，改 `custom-code/contact-router.html` 再同步到頁面 head | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
+| 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，14 項檢查全過）。改 code 或改那幾個 class 的值之後要重跑 | Claude |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |

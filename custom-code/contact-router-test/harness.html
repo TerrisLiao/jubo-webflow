@@ -5,13 +5,13 @@
   .contact-router_panel{
     width:100%; height:0px; overflow:hidden; opacity:0; visibility:hidden;
     transition-property:height, opacity, visibility;
-    transition-duration:450ms, 350ms, 0s;
+    transition-duration:600ms, 600ms, 0s;
     transition-timing-function:cubic-bezier(.22,.61,.36,1), ease, linear;
-    transition-delay:0s, 80ms, 450ms;
+    transition-delay:0s, 120ms, 600ms;
   }
   .contact-router_panel.is-open{
     height:auto; opacity:1; visibility:visible;
-    transition-delay:0s, 80ms, 0s;
+    transition-delay:0s, 120ms, 0s;
   }
   .section_contact-router{ scroll-margin-top:6rem; }
   .top-switcher_item{padding:.5rem 1.5rem;cursor:pointer;border-radius:50px;text-decoration:none;color:#08484E}
@@ -41,8 +41,8 @@
 <style>
   /* 內容從上方 1rem 處往下就位，與 height 展開同向 */
   [data-router-panel] > * {
-    transform: translateY(-1rem);
-    transition: transform .5s cubic-bezier(.22,.61,.36,1) .08s;
+    transform: translateY(-1.25rem);
+    transition: transform .7s cubic-bezier(.22,.61,.36,1) .12s;
   }
   [data-router-panel].is-open > * {
     transform: none;
@@ -70,7 +70,7 @@
 </noscript>
 <script>
   (function () {
-    var DURATION = 450;
+    var DURATION = 600;   // 必須等於 .contact-router_panel 的 height transition-duration
 
     function ready(fn) {
       if (document.readyState !== 'loading') fn();
@@ -123,7 +123,9 @@
       // 站台的 Slater JS 有 window.lenis（平滑捲動），優先交給它，
       // 直接用原生 scrollIntoView 會跟 Lenis 的 RAF 迴圈互相干擾。
       function bringIntoView() {
-        var anchor = document.getElementById('choose') || wrapper;
+        // 捲到按鈕本身（按鈕在 Hero 裡），這樣按鈕留在 navbar 下方，
+        // 剛展開的面板正好在它下面。
+        var anchor = wrapper;
         var nav = document.querySelector('[class*="navbar"], nav, header');
         var clearance = (nav ? nav.getBoundingClientRect().height : 0) + 24;
         if (window.lenis && typeof window.lenis.scrollTo === 'function') {
@@ -172,15 +174,17 @@
 
 </head><body>
 <div class="navbar_component">navbar</div>
-<div class="spacer" style="padding-top:72px">hero 佔位</div>
+<div class="spacer" style="padding-top:72px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:4rem">
+  <div>hero 佔位（H1／說明）</div>
+  <div class="top-switcher_wrapper is-product" data-router="wrapper" style="margin-top:2rem">
+    <a class="top-switcher_item" href="#choose" data-router-target="homecare"
+       data-ga-event="contact_route_select" data-solution-interest="home_care">我是居服單位</a>
+    <a class="top-switcher_item" href="#choose" data-router-target="residential"
+       data-ga-event="contact_route_select" data-solution-interest="residential_day_care">我是住宿／日照機構</a>
+  </div>
+</div>
 <section id="choose" class="section_contact-router">
   <div class="contact-router_component">
-    <div class="top-switcher_wrapper is-product" data-router="wrapper">
-      <a class="top-switcher_item" href="#choose" data-router-target="homecare"
-         data-ga-event="contact_route_select" data-solution-interest="home_care">我是居服單位</a>
-      <a class="top-switcher_item" href="#choose" data-router-target="residential"
-         data-ga-event="contact_route_select" data-solution-interest="residential_day_care">我是住宿／日照機構</a>
-    </div>
     <div class="contact-router_panel" data-router-panel="homecare">
       <section id="homecare" style="padding:4rem 0"><div style="height:700px;background:#e6f7f8">居服窗口卡</div></section>
       <div style="height:500px;background:#f0fbfc">居服系統 banner</div>

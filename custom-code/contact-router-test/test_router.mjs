@@ -24,7 +24,7 @@ check('初始：住宿面板隱藏', rs.height === 0 && rs.vis === 'hidden', `h=
 
 // 2. 點居服
 await p.click('[data-router-target="homecare"]');
-await p.waitForTimeout(700);
+await p.waitForTimeout(950);
 hc = await state('homecare');
 const chooserTopAfterHc = await p.evaluate(() => Math.round(document.getElementById('choose').getBoundingClientRect().top));
 check('點居服：展開', hc.open && hc.height > 500 && hc.vis === 'visible', `h=${hc.height}`);
@@ -37,7 +37,7 @@ const panelStartY = hc.top;
 
 // 4. 切到住宿：檢查新面板的起點是否與舊面板相同（沒有被往上拉）
 await p.click('[data-router-target="residential"]');
-await p.waitForTimeout(700);
+await p.waitForTimeout(950);
 hc = await state('homecare'); rs = await state('residential');
 check('切換：居服瞬間收掉', !hc.open && hc.height === 0, `h=${hc.height}`);
 check('切換：住宿展開', rs.open && rs.height > 700, `h=${rs.height}`);
@@ -55,7 +55,7 @@ check('切換：面板內容 transform 歸零', await p.evaluate(() => {
 
 // 6. 點同一顆 → 收合
 await p.click('[data-router-target="residential"]');
-await p.waitForTimeout(700);
+await p.waitForTimeout(950);
 rs = await state('residential');
 check('點同一顆：收合', !rs.open && rs.height === 0, `h=${rs.height}`);
 check('點同一顆：按鈕的 is-active 移除', await p.evaluate(() => !document.querySelector('[data-router-target="residential"]').classList.contains('is-active')));
