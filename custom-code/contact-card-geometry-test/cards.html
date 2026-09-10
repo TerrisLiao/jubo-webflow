@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8">
+<!--
+  比對「業務卡」與「居服卡」的頭像幾何。
+  - 業務卡：正式站 /contact 的實際 markup（.sales-portrait 是 background-image 的空 div）
+  - 居服卡：目前站上的結構，class 值 2026-09-10 從 Webflow MCP 逐項讀回
+  wf.css 由 ./fetch-site-css.sh 從正式站抓，所以兩邊吃的是同一份樣式表。
+  照片用 800x1200（2:3）的測試圖 —— 比例才是重點，見 README。
+-->
+<link rel="stylesheet" href="wf.css">
+<style>
+  body{margin:0;font-family:Poppins,"Noto Sans TC",sans-serif}
+  .rig{display:flex;gap:4rem;align-items:flex-start;padding:2rem}
+  /* === 居服卡的 class 值：2026-09-10 從 Webflow MCP 逐項讀回 === */
+  .homecare-contact_component{display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
+    grid-column-gap:var(--desktop-spacer--regular);grid-row-gap:var(--desktop-spacer--regular)}
+  .homecare-contact_card{display:flex;overflow:clip;width:24rem;flex-direction:column;justify-content:flex-start;
+    align-items:flex-start;aspect-ratio:2/3;border-radius:1.25rem}
+  .homecare-contact_portrait{overflow:clip;width:100%;flex-shrink:0;aspect-ratio:1/1.15;min-height:0}
+  .homecare-contact_photo{width:100%;height:100%;object-fit:cover;object-position:50% 22%}
+  .homecare-contact_info-wrap{display:flex;width:100%;padding:var(--desktop-spacer--small);flex-direction:column;
+    justify-content:space-between;align-items:flex-start;flex-grow:1;grid-row-gap:var(--desktop-spacer--small);
+    background-color:var(--neutral--white-50);backdrop-filter:blur(5px)}
+  .homecare-contact_inner-wrap{display:flex;width:100%;flex-direction:column;justify-content:flex-start;
+    align-items:flex-start;grid-column-gap:var(--desktop-spacer--small);grid-row-gap:var(--desktop-spacer--small)}
+  .homecare-contact_name-wrap{display:flex;width:100%;flex-direction:column;justify-content:flex-start;
+    align-items:flex-start;row-gap:.5rem}
+  .ph{background:#00b2c0}
+</style></head><body>
+<div class="rig">
+  <!-- 業務卡：production /contact 的實際 markup -->
+  <div class="sales_cms-list">
+    <div role="listitem" class="sales_cms-list-item w-dyn-item">
+      <div class="single-sales_wrap">
+        <div class="sales-portrait ph"></div>
+        <div class="sales-info_wrap"><div class="sales-info_inner-wrap">
+          <div class="sales-name_wrap"><h2 class="card_h2">李松陽</h2>
+            <div class="category-tag"><div>基隆、新北、桃園客戶經理</div></div></div>
+          <div class="category-tag is-audience"><div>服務對象：住宿型機構・日照中心</div></div>
+          <div class="sales-contact-btn_wrap">
+            <div class="sales-contact_wrap"><p>litaslee@jubo.health</p><p>0917615949</p></div>
+            <a href="#" class="sales-link_wrap w-inline-block"><div class="line-svg w-embed"
+              ><svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="17" fill="#00B2C0"/></svg></div></a>
+          </div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+  <!-- 居服卡：目前站上的結構 -->
+  <div class="homecare-contact_component">
+    <div class="homecare-contact_card">
+      <div class="homecare-contact_portrait"><img src="portrait_2x3.png" class="homecare-contact_photo" alt=""></div>
+      <div class="homecare-contact_info-wrap"><div class="homecare-contact_inner-wrap">
+        <div class="homecare-contact_name-wrap"><h3 class="card_h2">客戶成功顧問</h3></div>
+      </div><a href="#" class="cta-button w-button">立即預約居服展示</a></div>
+    </div>
+  </div>
+</div>
+</body></html>

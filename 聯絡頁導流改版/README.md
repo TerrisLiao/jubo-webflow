@@ -293,7 +293,7 @@ section#choose.section_contact-router
 | `section_homecare-contact` | 區塊容器 | 無樣式（照鐵律 3） |
 | `homecare-contact_component` | 內容容器 | flex column, center, gap `--desktop-spacer--regular` |
 | `homecare-contact_card` | 卡片 | `aspect-ratio 2/3`、`width 24rem`、`radius 1.25rem`、`overflow clip`；medium → ratio auto；small → 100% / max 24rem |
-| `homecare-contact_portrait` | 頭像框 | `aspect-ratio 1/1.15`、`overflow clip` |
+| `homecare-contact_portrait` | 頭像框 | `aspect-ratio 1/1.15`、`overflow clip`、**`min-height 0`** |
 | `homecare-contact_photo` | 頭像圖 | `100% / 100% / object-fit cover` |
 | `homecare-contact_info-wrap` | 資訊層 | padding `--desktop-spacer--small`、bg `--neutral--white-50`、`backdrop-filter blur(5px)` |
 | `homecare-contact_inner-wrap` | 內層 | flex column, gap `--desktop-spacer--small`（small → mobile 版） |
@@ -302,6 +302,31 @@ section#choose.section_contact-router
 
 幾何值刻意抄自 `.single-sales_wrap` / `.sales-portrait` / `.sales-info_wrap`，
 讓居服卡與業務卡並排時完全對齊。**沒有修改任何既有共用 class 的值，也沒有新增自訂 CSS 或 HTML Embed。**
+
+#### `homecare-contact_portrait` 的 `min-height: 0` 是必要的（2026-09-10 修）
+
+Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測後發現**兩個頭像框宣告的
+`aspect-ratio` 本來就都是 `1/1.15`，但居服卡實際算出來是 1:1.5**（384×576，
+而不是 384×441.6）—— 那正是照片自己的 2:3 比例。
+
+原因：`.homecare-contact_portrait` 是欄向 flex item，`min-height` 預設 `auto`，
+對欄向 flex item 來說**自動最小高度＝內容高度**。框裡的
+`<img class="homecare-contact_photo">` 是 `height: 100%`，遇到不確定的父高度會退回
+圖片原生高度（照 384px 寬換算 = 576px），把外框的 `aspect-ratio` 頂開。
+
+**業務卡沒事是因為 `.sales-portrait` 是 `background-image` 的空 div**，
+沒有 in-flow 內容就沒有內容最小高度。
+
+> 教訓：抄幾何值不等於抄到一樣的結果。`background-image` 的空 div 與包 `<img>` 的框，
+> 在 flex 裡的行為不一樣。
+
+修法是 `min-height: 0`（base 層，所有斷點都吃到）。已有自動測試守著：
+`custom-code/contact-card-geometry-test/`（4 項，含反向對照）。
+
+修好之後兩張卡的**頭像尺寸完全一致**（384×441.6）；卡片總高仍差 76px，
+因為業務卡資訊區有 218px（姓名＋區域標籤＋服務對象標籤＋Email／電話／LINE），
+居服卡只有 142px（職稱＋一顆 CTA）。那是資訊量差異，不是幾何設定差異，
+而且兩張卡分屬 switcher 的兩個面板、永遠不會同時出現，所以沒有強制對齊。
 
 ---
 
@@ -314,6 +339,7 @@ section#choose.section_contact-router
 | 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
 | 4 | 動畫參數要調（stage 高度 800ms、淡出 300ms、淡入 900ms delay 150ms、滑入 `translateY(-1.5rem)`、捲動 1.4s）就直接說。改 `custom-code/contact-router.html` → 重跑測試 → 再同步到頁面 head（2026-09-10 已確認 repo 與站上 head 逐字一致） | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
+| 5c | 頭像幾何已有自動測試：`custom-code/contact-card-geometry-test/`（4 項全過，用正式站樣式表 ＋ 正式站業務卡 markup 實測）。改 `homecare-contact_portrait` / `homecare-contact_photo` / `sales-portrait` 之後要重跑 | Claude |
 | 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，**24 項**檢查全過，含切換時序、以及「切換全程 stage／整頁高度不歸零」）。測試會把 `contact-router.html` 原封不動塞進 harness 模板再跑，所以驗過的就是裝上去的那份。改 code 或改那幾個 class 的值之後要重跑 | Claude |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
 | 7 | Publish | Terris 授權後 |
