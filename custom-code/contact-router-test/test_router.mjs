@@ -73,7 +73,7 @@ st = await stage();
 const placement = await p.evaluate(() => ({
   wrapTop: Math.round(document.querySelector('[data-router="wrapper"]').getBoundingClientRect().top),
   navH: Math.round(document.querySelector('.navbar_component').getBoundingClientRect().height),
-  chooseTop: Math.round(document.getElementById('choose').getBoundingClientRect().top),
+  panelTop: Math.round(document.querySelector('[data-router-panel].is-open').getBoundingClientRect().top),
   viewportH: window.innerHeight }));
 check('點居服：面板展開且不透明', hc.open && hc.disp === 'block' && hc.op === 1 && hc.height > 500, `h=${hc.height} op=${hc.op}`);
 check('點居服：stage 收尾交還 height:auto（內容變高不會被切）', st.inline === 'auto', `inline=${st.inline}`);
@@ -86,9 +86,9 @@ check('點居服：GA 事件送出 home_care', await p.evaluate(() => window.__g
 check('點居服：入口卡停在 navbar 正下方',
       placement.wrapTop >= placement.navH && placement.wrapTop <= placement.navH + 40,
       `wrapTop=${placement.wrapTop}px navbar=${placement.navH}px`);
-check('點居服：剛展開的面板起點在視窗內',
-      placement.chooseTop > placement.wrapTop && placement.chooseTop < placement.viewportH,
-      `chooseTop=${placement.chooseTop}px viewport=${placement.viewportH}px`);
+check('點居服：剛展開的面板就在入口卡下方、起點在視窗內',
+      placement.panelTop > placement.wrapTop && placement.panelTop < placement.viewportH,
+      `panelTop=${placement.panelTop}px wrapTop=${placement.wrapTop}px viewport=${placement.viewportH}px`);
 
 const panelStartY = hc.top;
 const openHeightHc = hc.height;

@@ -182,14 +182,38 @@ Terris 回報：**同事一開始沒選擇時，不知道下面還有內容**。
 - 下方加一行 `.contact-choice_hint`「選擇後，下方會顯示對應的聯絡窗口」——
   直接講出「下面有東西」，這是同事漏看的那件事。
 
-**為什麼是上下堆疊而不是並排**：`.product-hero_center-wrap` 是 `max-width: 45rem`，
-又位在 `.product-hero_component` 的 `.85fr` 欄裡，桌機實測只有 **573px**。
+**為什麼是上下堆疊而不是並排**：入口一度放在 `.product-hero_center-wrap`
+（`max-width: 45rem` 又位在 `.product-hero_component` 的 `.85fr` 欄裡，桌機實測只有 573px）。
 兩張 22rem（352px）的卡片要並排需要 728px，塞不進去。實測比較過兩案：
 
 | | 卡片實際寬度 | 觀感 |
 |---|---|---|
 | 並排（縮到 15rem） | 240px | 塞得下，但卡片變小 —— 跟「要更明顯」的目標相反 |
-| **上下堆疊、填滿欄寬（採用）** | **573px × 102px** | 兩顆大按鈕，很難漏看 |
+| **上下堆疊（採用）** | **576px × 102px** | 兩顆大按鈕，很難漏看 |
+
+#### 入口最後放在 `section#choose`，不在 hero（2026-09-10 Terris 指示）
+
+Terris 回報「完全是錯誤的沒辦法點，直接把按鈕做到下一個 section，不要放到 hero」。
+已把 `contact-choice_wrap` ＋ `contact-choice_hint` 整組移到 `section#choose` 最上方的
+`padding-global > container-large` 裡，面板留在下方的
+`contact-router_component > contact-router_stage`。
+因為 `container-large` 是 82rem，入口卡另加 `max-width: 36rem` ＋ 左右 `auto` 置中
+（實測 576px，與先前在 hero 欄裡驗過的 573px 幾乎一致）。
+
+> **關於「沒辦法點」的原因**：我在 hero 的 CSS 裡**找不到**會擋住點擊的覆蓋層 ——
+> `.product-hero_twoside-wrap` 雖然是 `position: absolute; inset: 0` 蓋住整個 hero，
+> 但 `.product-hero_center-wrap` 有 `z-index: 4`（`.hero-top-img` 只有 2／3），
+> 入口卡在它上面、應該收得到點擊。
+> 最可能的原因仍是**Preview 不執行 page custom code**：點下去 JS 沒跑、
+> 面板由 class 保持 `display: none`，而 `href="#choose"` 就在附近，
+> anchor 跳轉幾乎看不出移動 —— 看起來就完全沒反應。
+> 這是推論不是定論，只有發布到 staging 才驗得掉（見待辦 3）。
+
+> ⚠️ **副作用（待 Terris 決定）**：hero 的 h1 還是「選擇您的機構類型」，
+> 但 hero 裡已經沒有可選的東西了。入口移到下一段之後，
+> 桌機上可能剛好落在折線附近 —— 這跟「同事不知道下面有內容」是同一個風險。
+> 建議在 `section#choose` 補一組 section header（Section Tag ＋ 短標題），
+> 讓那一段自己有標題；或把 hero 的 h1 改成會往下指的說法。我沒有自行改。
 
 `.contact-choice_item` 的 `.is-active` 是實心 teal ＋ 白字；
 說明與箭頭都用 `color: currentColor`（說明另加 `opacity: .65`），
@@ -201,24 +225,26 @@ harness 換成新 markup 後 25 項全過。
 
 ```
 section.section_about-hero
-└ … product-hero_center-wrap                                  ← 桌機實測寬 573px
+└ … product-hero_center-wrap
    ├ Section Tag「聯絡我們」／h1「選擇您的機構類型」／說明段
    ├ div.contact-routing_buttons.is-center（舊的兩顆 CTA，已隱藏）
-   ├ div.contact-choice_wrap[data-router="wrapper"]            ← 分流入口在這裡
-   │   ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
-   │   │   ├ .contact-choice_text-wrap
-   │   │   │   ├ .contact-choice_title「我是居服單位」
-   │   │   │   └ .contact-choice_desc「由客戶成功顧問為你安排」
-   │   │   └ .contact-choice_arrow「→」
-   │   └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
-   │       ├ .contact-choice_text-wrap
-   │       │   ├ .contact-choice_title「我是住宿・日照機構」
-   │       │   └ .contact-choice_desc「找你所在區域的客戶經理」
-   │       └ .contact-choice_arrow「→」
-   ├ p.contact-choice_hint「選擇後，下方會顯示對應的聯絡窗口」
    └ div.top-switcher_wrapper.is-product（舊的 pill，已隱藏、已移除 data-router）
 
 section#choose.section_contact-router
+├ div.padding-global                                    ← 分流入口在這裡（2026-09-10 從 hero 搬來）
+│   └ div.container-large
+│       ├ div.contact-choice_wrap[data-router="wrapper"]   （max-width 36rem 置中，實測 576px）
+│       │   ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
+│       │   │   ├ .contact-choice_text-wrap
+│       │   │   │   ├ .contact-choice_title「我是居服單位」
+│       │   │   │   └ .contact-choice_desc「由客戶成功顧問為你安排」
+│       │   │   └ .contact-choice_arrow「→」
+│       │   └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
+│       │       ├ .contact-choice_text-wrap
+│       │       │   ├ .contact-choice_title「我是住宿・日照機構」
+│       │       │   └ .contact-choice_desc「找你所在區域的客戶經理」
+│       │       └ .contact-choice_arrow「→」
+│       └ p.contact-choice_hint「選擇後，下方會顯示對應的聯絡窗口」
 └ div.contact-router_component
    └ div.contact-router_stage[data-router="stage"]        ← 高度過場在這一層
       ├ div.contact-router_panel[data-router-panel="homecare"]
