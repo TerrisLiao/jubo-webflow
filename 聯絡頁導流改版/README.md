@@ -168,7 +168,26 @@ section.section_contact-router
 #### 自訂 code
 
 - **位置**：`/contact` 的 Page Settings → Custom Code → Inside `<head>`（**只有這一頁**，不是站台層）
-- **只負責**：量 `scrollHeight`、切 `.is-open`、`preventDefault()`，加上內容 `translateY(-1rem) → 0` 的位移
+- **只負責**：量 `scrollHeight`、切 `.is-open`、`preventDefault()` ＋ `stopPropagation()`，
+  加上內容 `translateY(-1rem) → 0` 的位移
+
+#### 按鈕的 href 為什麼指向 `#choose`（2026-09-10 修正）
+
+原本兩顆按鈕的 href 是 `#homecare` / `#sales`（指向自己面板裡的區塊），
+用意是保留 `a[href]` 讓 head 的 GA4 抓得到。但 Terris 回報「選住宿型時畫面捲太下面」——
+`#sales` 在展開的居服面板下面，一跳就跳很深。兩種情況都會這樣：
+
+1. 在 Preview（custom code 不跑）→ 純瀏覽器 anchor 跳轉
+2. 已發布，但 **Webflow 自己的平滑捲動或站上載入的 Lenis** 不理 `preventDefault()`
+
+修法兩層保險：
+
+- `section_contact-router` 加上 DOM id `choose`，兩顆按鈕的 href 改成 `#choose`（指向選擇器自己），
+  所以就算真的被捲，也只是原地。
+- code 裡多一行 `event.stopPropagation()`，擋掉 Webflow 與 Lenis 掛在 **document bubble 階段**的
+  捲動處理。GA4 那段是 `capture: true`，在 bubble 之前就跑完，事件照樣送。
+
+`#homecare` / `#sales` 這兩個 DOM id 保留（可能有站外連結指過來），只是不再被按鈕使用。
 - **原始檔**：[`custom-code/contact-router.html`](../custom-code/contact-router.html)（repo 為準，改動請兩邊同步）
 - **選擇器範圍**：只有 `[data-router="wrapper"]`、`[data-router-target]`、`[data-router-panel]`。
   刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。

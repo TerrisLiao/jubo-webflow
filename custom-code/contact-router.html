@@ -77,8 +77,12 @@
       items.forEach(function (item) {
         item.addEventListener('click', function (event) {
           // 保留 href 讓站台 head 的 GA4 事件抓得到（它以 capture 監聽 a[href]，
-          // 會在這裡之前就送出），但不要讓瀏覽器真的跳 anchor。
+          // 會在這裡之前就送出），但不要讓瀏覽器跳 anchor。
+          // stopPropagation 是為了擋掉 Webflow 自己與 Lenis 掛在 document 上的
+          // 平滑捲動（那些是 bubble 階段，GA4 的 capture 已經先跑完了）。
+          // href 另外也改指向 #choose（選擇器自己），萬一還是有人捲，也只是原地。
           event.preventDefault();
+          event.stopPropagation();
 
           var wasActive = item.classList.contains('is-active');
           var target = panelFor(item.getAttribute('data-router-target'));
