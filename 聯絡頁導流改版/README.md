@@ -98,13 +98,22 @@ section#homecare.section_homecare-contact
   > 指到一個已不存在的名稱，而且「上方」在改成 switcher 之後也不成立（兩個面板是切換、不是上下堆疊）。
   > 已一併改掉 —— 這是改名的連帶修正，不是額外的文案改動。
 
-### 3-3 業務卡加服務對象標籤
+### 3-3 業務卡的服務對象標籤 —— 已移除（2026-09-10）
 
-`.sales-info_inner-wrap` 內、`.sales-name_wrap` 之後新增
-`.category-tag.is-audience` > div「服務對象：住宿型機構・日照中心」。
+原本在 `.sales-info_inner-wrap` 內、`.sales-name_wrap` 之後新增了
+`.category-tag.is-audience` > div「服務對象：住宿型機構・日照中心」，
+`is-audience` 是 combo class（透明底＋1px teal 外框 `--primary--accent`）。
 
-`is-audience` 是 combo class：透明底＋1px teal 外框（`--primary--accent`），
-與填色的區域標籤形成主次差異。
+**Terris 於 2026-09-10 指示移除**，與居服卡那顆標籤一起收掉。
+該元素在 CMS list item 的模板裡，移除一次即對五張卡片同時生效（已讀回確認 0 個殘留）。
+
+改成 switcher 之後，受眾其實已經由「我是住宿／日照機構」這顆按鈕與區塊標題交代完，
+每張卡片再重複一次同樣的字是多的。
+
+> ⚠️ **`.category-tag.is-audience` 這個 combo class 現在沒有任何元素在用**。
+> 它是本次專案新建的，尚未 publish（已確認不在正式站的樣式表裡），
+> 所以沒有其他頁面依賴。要不要刪掉這個 combo class 待 Terris 決定 —— 我沒有自行刪。
+> `.category-tag` 本體仍被業務卡的區域標籤使用，**絕對不要刪**。
 
 ### 3-4 入口統一與標籤層級
 
@@ -298,7 +307,7 @@ section#choose.section_contact-router
 | `homecare-contact_info-wrap` | 資訊層 | padding `--desktop-spacer--small`、bg `--neutral--white-50`、`backdrop-filter blur(5px)` |
 | `homecare-contact_inner-wrap` | 內層 | flex column, gap `--desktop-spacer--small`（small → mobile 版） |
 | `homecare-contact_name-wrap` | 名稱列 | flex column, gap .5rem |
-| `.category-tag.is-audience` | 服務對象標籤（combo） | 透明底＋1px `--primary--accent` 外框 |
+| `.category-tag.is-audience` | ~~服務對象標籤（combo）~~ **2026-09-10 標籤已移除，此 combo class 現為未使用** | 透明底＋1px `--primary--accent` 外框 |
 
 幾何值刻意抄自 `.single-sales_wrap` / `.sales-portrait` / `.sales-info_wrap`，
 讓居服卡與業務卡並排時完全對齊。**沒有修改任何既有共用 class 的值，也沒有新增自訂 CSS 或 HTML Embed。**
@@ -323,10 +332,10 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 修法是 `min-height: 0`（base 層，所有斷點都吃到）。已有自動測試守著：
 `custom-code/contact-card-geometry-test/`（4 項，含反向對照）。
 
-修好之後兩張卡的**頭像尺寸完全一致**（384×441.6）；卡片總高仍差 76px，
-因為業務卡資訊區有 218px（姓名＋區域標籤＋服務對象標籤＋Email／電話／LINE），
-居服卡只有 142px（職稱＋一顆 CTA）。那是資訊量差異，不是幾何設定差異，
-而且兩張卡分屬 switcher 的兩個面板、永遠不會同時出現，所以沒有強制對齊。
+修好之後兩張卡的**頭像尺寸完全一致**（384×441.6）。移除服務對象標籤後，
+卡片總高只差 22px（業務卡資訊區 165.6px、居服卡 142px），頭像佔比 72.9% 對 75.7%。
+那是資訊量差異，不是幾何設定差異，而且兩張卡分屬 switcher 的兩個面板、
+永遠不會同時出現，所以沒有強制對齊。
 
 ---
 
@@ -345,6 +354,7 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
 | 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |
+| 10a | `.category-tag.is-audience` combo class 現在沒有元素在用（標籤已移除、尚未 publish、正式站樣式表裡沒有它）。要刪嗎？ | Terris |
 | 10 | **居服訪客該不該看到 `section_home-care-banner`？** 它的 base 層是 `display: none`（改版前就沒顯示過）。要讓它現身得先解掉那條規則，而那是共用 class，需先查全站有無其他頁面依賴 | Terris |
 
 ---
