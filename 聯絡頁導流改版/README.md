@@ -117,7 +117,7 @@ section#homecare.section_homecare-contact
 
 | # | 事項 | 負責 |
 |---|---|---|
-| 1 | 把居服窗口照片上傳 Webflow Assets，掛到 `img.homecare-contact_photo`，alt 寫「Jubo 居服顧問窗口示意形象」（**不要寫人名**） | Terris 上傳，Claude 可代掛 |
+| 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
 | 3 | 桌機／平板／手機三個斷點目視驗收 | Terris |
 | 4 | Publish | Terris 授權後 |
