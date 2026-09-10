@@ -1,0 +1,105 @@
+<!-- ============================================================
+     /contact 分流面板：展開＋淡入動畫
+     作用範圍：只有 [data-router="wrapper"] / [data-router-target] /
+     [data-router-panel]，不碰站上其他頁面，也不碰 Slater 的
+     data-platform-switcher。
+     放置位置：Page Settings → Custom Code → Inside <head> tag（僅這一頁）
+     鐵律 4 的例外，2026-09-10 經 Terris 明確要求後採用。
+     ============================================================ -->
+<style>
+  [data-router-panel] {
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    transition: height .45s cubic-bezier(.22,.61,.36,1), visibility 0s linear .45s;
+  }
+  [data-router-panel].is-open {
+    visibility: visible;
+    transition: height .45s cubic-bezier(.22,.61,.36,1), visibility 0s;
+  }
+  [data-router-panel] > * {
+    opacity: 0;
+    transform: translateY(-1rem);
+    transition: opacity .4s ease .08s, transform .5s cubic-bezier(.22,.61,.36,1) .08s;
+  }
+  [data-router-panel].is-open > * {
+    opacity: 1;
+    transform: none;
+  }
+  [data-router-target] { cursor: pointer; }
+  @media (prefers-reduced-motion: reduce) {
+    [data-router-panel], [data-router-panel] > * { transition: none; }
+  }
+</style>
+<noscript>
+  <style>
+    [data-router-panel] { height: auto; overflow: visible; visibility: visible; }
+    [data-router-panel] > * { opacity: 1; transform: none; }
+  </style>
+</noscript>
+<script>
+  (function () {
+    var DURATION = 450;
+
+    function ready(fn) {
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+
+    ready(function () {
+      var wrapper = document.querySelector('[data-router="wrapper"]');
+      if (!wrapper) return;
+      var items = [].slice.call(wrapper.querySelectorAll('[data-router-target]'));
+      var panels = [].slice.call(document.querySelectorAll('[data-router-panel]'));
+      if (!items.length || !panels.length) return;
+
+      function panelFor(key) {
+        for (var i = 0; i < panels.length; i++) {
+          if (panels[i].getAttribute('data-router-panel') === key) return panels[i];
+        }
+        return null;
+      }
+
+      function collapse(panel) {
+        if (!panel || !panel.classList.contains('is-open')) return;
+        panel.style.height = panel.scrollHeight + 'px';
+        panel.classList.remove('is-open');
+        requestAnimationFrame(function () { panel.style.height = '0px'; });
+      }
+
+      function expand(panel) {
+        if (!panel) return;
+        panel.classList.add('is-open');
+        panel.style.height = panel.scrollHeight + 'px';
+        window.setTimeout(function () {
+          if (panel.classList.contains('is-open')) panel.style.height = 'auto';
+        }, DURATION);
+      }
+
+      items.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+          // 保留 href 讓站台 head 的 GA4 事件抓得到（它以 capture 監聽 a[href]，
+          // 會在這裡之前就送出），但不要讓瀏覽器真的跳 anchor。
+          event.preventDefault();
+
+          var wasActive = item.classList.contains('is-active');
+          var target = panelFor(item.getAttribute('data-router-target'));
+
+          items.forEach(function (el) { el.classList.remove('is-active'); });
+          panels.forEach(function (p) { if (p !== target) collapse(p); });
+
+          if (wasActive) { collapse(target); return; }
+          item.classList.add('is-active');
+          expand(target);
+        });
+      });
+
+      // 展開中的面板遇到視窗改變尺寸就交還給 auto，避免高度被鎖住
+      window.addEventListener('resize', function () {
+        panels.forEach(function (p) {
+          if (p.classList.contains('is-open')) p.style.height = 'auto';
+        });
+      });
+    });
+  })();
+</script>

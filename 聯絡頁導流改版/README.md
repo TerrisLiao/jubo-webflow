@@ -19,8 +19,9 @@
 5. 服務據點 CMS → `CTA Section #1` → Footer
 
 改版後（2026-09-10 收工時）的順序：
-Hero（置中，原按鈕列已隱藏）→ **`section_contact-router` 兩顆選擇按鈕（Slater switcher）** →
-（選了才淡入：居服窗口卡 / 業務名單）→ 站內表單 `#form` → 居服 banner → 服務據點 → CTA → Footer
+Hero（置中，原按鈕列已隱藏）→ **`section_contact-router` 兩顆選擇按鈕** →
+（選了才展開：**居服** = 居服窗口卡＋居服系統 banner｜**住宿／日照** = 5 位客戶經理）→
+站內表單 `#form` → 服務據點 → CTA → Footer
 
 問題（按影響排序）：
 
@@ -98,82 +99,72 @@ section#homecare.section_homecare-contact
 - 居服 banner「申請 Demo」的 Link 由 `pageSection → #form` 改為 Microsoft Forms（與 Hero 同一份）
 - 業務卡姓名 `.card_h2` 由 `h2` 改為 `h3`（**只改 tag，class 名不動**）
 
-### 3-6 改成「選了才顯示」＋淡入動畫（2026-09-10 追加）
+### 3-6 「選了才展開」＋自訂展開動畫（2026-09-10 最終版）
 
-Terris 追加要求：**不要一進來就把兩邊內容都攤出來**，Hero 置中，選了之後才吐出對應內容，
-而且要有淡入之類的動畫；按鈕不要那麼長。
+Terris 的要求演進：不要一進來就攤開兩邊內容 → 要有 toggle down ＋ fade in → 按鈕太長 →
+**改用自訂 code**。過程中做過兩個版本，最後定案在第三版。
 
-先確認的三件事：
+| 版本 | 做法 | 為什麼換掉 |
+|---|---|---|
+| v1 | Webflow 原生 Tabs | 沒有淡入；`w--current` 選中樣式不在 MCP 可寫範圍；預設開啟的 tab 也讀不到 |
+| v2 | 沿用 Slater 的 `initPlatformSwitcher()` | 只有 `opacity` 淡入，**沒有 height 0 → auto 的向下展開** |
+| **v3（現行）** | **頁面層自訂 CSS ＋ JS** | Terris 明確要求用自訂 code，取得完整控制 |
 
-1. Hero 本來就是置中的（`product-hero_center-wrap` 是 `max-width: 45rem; margin: auto;
-   align-items: center`，四張圖是 `position: absolute; inset: 0` 的背景層）。真正靠左的是按鈕列
-   —— `.contact-routing_buttons` 在 base 是 `justify-content: flex-start`。站上早就有
-   `.contact-routing_buttons.is-center`，這頁沒掛，已補上。
-2. **Webflow MCP 沒有 Interactions（IX2）的 API**，agent 無法建互動。
-3. **但站上的 Slater JS 已經有一套現成的切換器**（`initPlatformSwitcher()`），直接沿用即可，
-   不需要 IX2、不需要自訂 CSS，動畫也是現成的。
+> v2 那次讀 Slater JS 的收穫仍然有效，而且留下兩個沿用資產：
+> `.top-switcher_wrapper.is-product`（白框、白 30% 底、blur、圓角 50px、`padding .25rem`、`position: static`）
+> 與 `.top-switcher_item`（圓角 50px；`.is-active` 是實心 teal ＋ 白字；Slater CSS 另給 hover 淡青底 ＋ 0.15s transition）。
+> **v3 的 JS 一樣是加 `.is-active`，所以選中樣式照舊由站上的 CSS 負責，沒有新造樣式。**
 
-第一版先做成 Webflow 原生 Tabs，但原生 Tabs 沒有淡入、選中狀態（`w--current`）也不在 MCP
-可寫的範圍，因此**改用 Slater 既有的 switcher**，原生 Tabs 已移除、相關 class 已清掉。
+#### 修掉的居服／住宿混在一起
 
-#### Slater switcher 的合約（讀 `https://slater.app/20018/60292.js` 得到）
+`section_home-care-banner`（Section Tag「居服系統」、H2「派班更順手，核銷更省力」、
+CTA「申請 Demo」→ 居服 Microsoft Forms）原本在 switcher **外面**，
+所以選了「住宿／日照」的人滑過客戶經理名單後，會直接撞到一整段居服系統的推銷與居服表單。
+**已移進居服面板**，只有居服單位看得到。
 
-```js
-[data-platform-switcher="wrapper"]              // 按鈕容器
-  └ :scope > [data-platform-switcher="item"]    // 按鈕，必須是直接子層
-       [data-switcher-default]                  // 指定預設選中的那顆
-closest('[class*="component"]')                 // 往上找的容器，面板要在它裡面
-  └ [data-platform-panel] × N                   // 面板，index 與 item 一一對應
-```
+判斷留在面板外的內容：站內表單 `#form`（異業合作／其他洽詢）、服務據點、`CTA Section #1`
+都是共通資訊，維持在面板外。
 
-- 切換動畫：`gsap.to(panel, { opacity: 0→1, duration: 0.25, ease: 'power2.out' })`，
-  並把 `display` 設成 `block`（或依 `is-platform` / `is-aa` 等 class 給 grid/flex）。
-- 選中的 item 會被加上 `.is-active`；站上 `.top-switcher_item.is-active` 已經定義成
-  實心 teal ＋ 白字，Slater CSS 另外給了 hover 淡青底與 0.15s transition。
-- init 時機：wrapper 進入 viewport（IntersectionObserver，threshold 0.15）。
-- 它會 snapshot 每個 panel 的 `display`，**在 JS 跑之前就是 `display:none` 的 panel，
-  之後被隱藏時會還原成 CSS 的 none**（不會被塞 inline style）。這一點決定了下面的做法。
-
-#### 實際結構
+#### 現行結構
 
 ```
 section.section_contact-router
-└ div.contact-router_component                                  ← [class*="component"] ✓
-   ├ div.top-switcher_wrapper.is-product[data-platform-switcher="wrapper"]
-   │   ├ a.top-switcher_item[data-platform-switcher="item"][data-switcher-default]
-   │   │      「尚未選擇」← visibility: false
-   │   ├ a.top-switcher_item[data-platform-switcher="item"] href="#homecare" 「我是居服單位」
-   │   └ a.top-switcher_item[data-platform-switcher="item"] href="#sales" 「我是住宿／日照機構」
-   ├ div[data-platform-panel="empty"]                            ← 空面板，自然可見
-   ├ div.contact-router_panel[data-platform-panel="home-care"]   ← display:none → 居服 section
-   └ div.contact-router_panel[data-platform-panel="residential-day-care"]  ← display:none → 業務 section
+└ div.contact-router_component
+   ├ div.top-switcher_wrapper.is-product[data-router="wrapper"]
+   │   ├ a.top-switcher_item[data-router-target="homecare"]   href="#homecare"   「我是居服單位」
+   │   └ a.top-switcher_item[data-router-target="residential"] href="#sales"     「我是住宿／日照機構」
+   ├ div.contact-router_panel[data-router-panel="homecare"]
+   │   ├ section#homecare.section_homecare-contact   （居服窗口卡）
+   │   └ div.section_home-care-banner                （居服系統 ＋ 申請 Demo）
+   └ div.contact-router_panel[data-router-panel="residential"]
+       └ div#sales.section_sales                      （5 位區域客戶經理）
 ```
 
-為什麼這樣排：
+- 面板的 `display` **不可以是 none**（會讓 height 動畫失效）。收合狀態由自訂 CSS 的
+  `height: 0; overflow: hidden; visibility: hidden` 負責。
+- v2 的「隱藏 placeholder item ＋ 空面板」那套 hack 已移除，自訂 code 的預設狀態本來就是全收合。
+- 兩顆按鈕保留 `href`（`#homecare` / `#sales`），因為站台 head 的 GA4 只監聽 `a[href]`；
+  JS 會 `preventDefault()` 擋掉 anchor 跳轉，但 GA4 是 **capture 階段**監聽，會在那之前就送出事件。
 
-- 一進來 switcher 還沒 init，可見的只有那個**空面板**，另兩個面板本來就是 `display:none`，
-  所以**不會有內容閃一下**（FOUC）。
-- switcher init 後 `switchPanel(0)` 選中隱藏的「尚未選擇」，畫面仍然是空的。
-- 點任一顆 → 對應面板 `display:block` ＋ GSAP 淡入；另一個面板回到 CSS 的 `display:none`。
-- 按鈕沿用 `.top-switcher_wrapper.is-product` ＋ `.top-switcher_item`：整組是站上既有的
-  segmented control（白框、白 30% 底、blur、圓角 50px、padding .25rem），按鈕寬度依文字而定，
-  解決「按鈕太長」（原本掛 `.cta-button`，它帶 `flex-grow: 1` 會被撐開）。
-- 兩顆按鈕是 `<a>` 且 href 指向自己面板內的 anchor（`#homecare` / `#sales`），因此
-  **點了會順便捲到剛出現的內容**，同時 head 的 GA4 才抓得到（它只監聽 `a[href]`）。
+#### 自訂 code
 
-**量測**：兩顆都掛 `data-ga-event="contact_route_select"`、`data-solution-interest`
-（`home_care` / `residential_day_care`）、`data-ga-cta-location="contact_router_switcher"`。
-`#sales` 那顆同時也會命中 head 程式原有的 `rawHref === '#sales'` 分支，兩條路徑都會回報同一個事件
-（程式內有 800ms 去重，不會重複送）。
+- **位置**：`/contact` 的 Page Settings → Custom Code → Inside `<head>`（**只有這一頁**，不是站台層）
+- **原始檔**：[`custom-code/contact-router.html`](../custom-code/contact-router.html)（repo 為準，改動請兩邊同步）
+- **選擇器範圍**：只有 `[data-router="wrapper"]`、`[data-router-target]`、`[data-router-panel]`。
+  刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。
+- **動畫**：`height 0 → scrollHeight → auto`，`.45s cubic-bezier(.22,.61,.36,1)`；
+  面板內容同時 `opacity 0 → 1` ＋ `translateY(-1rem) → 0`，延遲 .08s。
+- **行為**：點另一顆 → 舊的收合、新的展開；點同一顆 → 收合（真 toggle）。
+- **保護**：`prefers-reduced-motion: reduce` 時不做過場；`<noscript>` 會把面板還原成展開，
+  JS 掛掉時內容不會消失。
+- **副作用（好的）**：Designer canvas 不跑 page custom code，所以在 canvas 裡兩個面板都是展開的，
+  方便直接編輯內容。**要驗收動畫一定要用 Preview 或發布。**
+
+> **鐵律 4 的例外登記**：`00_AI工作守則.md` 鐵律 4 寫「不要寫自訂 CSS」。
+> 本次是 2026-09-10 Terris 明確指示「動畫就用自訂寫 code」後採用，範圍限定 `/contact` 一頁、
+> 只作用在 `data-router-*`，不影響任何共用 class 與其他頁面。
 
 **新增 class**：`section_contact-router`、`contact-router_component`、`contact-router_panel`。
-沿用站上既有：`top-switcher_wrapper`、`is-product`、`top-switcher_item`、`padding-global`、
-`container-large`、`section-header_wrapper`、`category-tag`、`card_h2`、`text-align-center`。
-
-**目前還缺的動畫**：Slater 的 switcher 只有 `opacity` 淡入，**沒有 height 0 → auto 的向下展開**。
-`initTabSystem()` 裡面有那段 height 動畫，但它綁的是 `data-tabs` 的
-`content-item` / `visual-item` / `item-details` 結構，跟這裡的版面不相容。
-真的要「往下展開」得走 IX2（Designer 手動）或加頁面層自訂 code（違反鐵律 4，需 Terris 同意）。
 
 ### 3-5 新增的 class（全部照 Client-First `folder_element` 命名）
 
@@ -200,8 +191,8 @@ section.section_contact-router
 |---|---|---|
 | 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
-| 3 | **在 Preview 確認 switcher 真的動**：Designer 的 canvas 不會跑 Slater JS，兩個面板在 canvas 裡是 `display:none`，一定要用 Preview 或發布到 staging 才看得到切換與淡入 | Terris |
-| 4 | 決定要不要「往下展開」的 height 動畫（現在只有淡入）：走 IX2 或加自訂 code，兩條路都要你點頭 | Terris |
+| 3 | **在 Preview 確認展開動畫**：Designer canvas 不跑 page custom code，canvas 裡兩個面板都是展開的（方便編輯），一定要用 Preview 或發布到 staging 才看得到 toggle 與淡入 | Terris |
+| 4 | 動畫參數要調（.45s、`translateY(-1rem)`、延遲 .08s）就直接說，改 `custom-code/contact-router.html` 再同步到頁面 head | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
 | 7 | Publish | Terris 授權後 |
@@ -225,7 +216,8 @@ section.section_contact-router
 - Slater 的 `60294.css` / `60292.js` 是外部檔案，MCP 讀不到，只能確認 head 內嵌程式的行為。
 - **Webflow MCP 不支援 Interactions（IX2）**：沒有任何 interactions 工具，所以「點擊 → 淡入展開 → 自動捲動」
   這種體驗必須在 Designer 手動建。本次改用原生 Tabs 就是為了避開這個限制。
-- **agent 看不到渲染結果**：切換行為、淡入、頭像裁切位置都需要人在 Preview 確認。
+- **agent 看不到渲染結果**：展開動畫、收合行為、頭像裁切位置都需要人在 Preview 確認。
+  自訂 code 是寫完直接裝上去的，**沒有經過任何實機驗證**。
 - **Slater 外部檔案是可以讀的**：`https://slater.app/20018/60294.css` 與 `60292.js` 都是公開 URL，
   用 curl 抓下來就能看。`00_AI工作守則.md` §6-6 寫「MCP 也讀不到」是指 MCP，不代表讀不到內容。
   這次就是靠讀 JS 才發現站上已經有 switcher 可以沿用。**但仍然不可以改 Slater 上的程式碼。**
