@@ -51,7 +51,11 @@ Hero（置中，原按鈕列已隱藏）→ **`section_contact-router` 兩顆選
 
 > Claude 對「虛擬人物」的保留意見已提出並被 Terris 確認採用：
 > 官網掛查不到的員工，機構指名找人時會破功。因此實作採**角色優先**——
-> 卡片標題目前是「居服顧問窗口」而非人名，未給虛構全名。若之後要改成人名，改 h3 一處即可。
+> 卡片標題是職稱而非人名，未給虛構全名。若之後要改成人名，改 h3 一處即可。
+>
+> **2026-09-10 Terris 定案文案**：職稱用「**客戶成功顧問**」（原「居服顧問窗口」），
+> 名稱下方那顆標籤（`.category-tag`「居家服務單位專屬窗口」）**移除**，
+> CTA 改成「**立即預約居服展示**」，區塊標題改成「**居服單位請洽客戶成功顧問**」。
 
 ---
 
@@ -66,17 +70,21 @@ section#homecare.section_homecare-contact
     └ .homecare-contact_component
       ├ .section-header_wrapper
       │   ├ [Section Tag] 「居家服務單位」
-      │   ├ h2.text-align-center 「居服單位，由專屬窗口為你安排」
-      │   └ p.text-align-center 「留下你的服務需求與所在區域，我們會安排對應的居服顧問與你聯繫。」
+      │   ├ h2.text-align-center 「居服單位請洽客戶成功顧問」
+      │   └ p.text-align-center 「留下你的服務需求與所在區域，我們會安排對應的客戶成功顧問與你聯繫。」
       └ .homecare-contact_card
-        ├ .homecare-contact_portrait > img.homecare-contact_photo   ← 待放照片
+        ├ .homecare-contact_portrait > img.homecare-contact_photo
         └ .homecare-contact_info-wrap
           ├ .homecare-contact_inner-wrap
           │   └ .homecare-contact_name-wrap
-          │       ├ h3.card_h2 「居服顧問窗口」
-          │       └ .category-tag > div 「居家服務單位專屬窗口」
-          └ [CTA Button] 「填寫居服需求表單」→ Microsoft Forms（新分頁）
+          │       └ h3.card_h2 「客戶成功顧問」
+          └ [CTA Button] 「立即預約居服展示」→ Microsoft Forms（新分頁）
 ```
+
+> **2026-09-10 文案定版**：名稱下方原本有一顆 `.category-tag` >
+> div「居家服務單位專屬窗口」，已依 Terris 指示**移除**（區塊標題與 Section Tag
+> 已經說明受眾，那顆標籤是重複資訊）。`.homecare-contact_name-wrap` 現在只剩 h3。
+> 注意 `.category-tag` 本身仍被住宿卡的 `.category-tag.is-audience` 使用，**不要刪 class**。
 
 ### 3-2 `#sales` 加上區塊標題
 
@@ -84,7 +92,11 @@ section#homecare.section_homecare-contact
 
 - [Section Tag]「住宿・日照機構」
 - h2「找到你所在區域的客戶經理」
-- p「以下客戶經理服務住宿型機構與日照中心；居服單位請由上方的居服顧問窗口填寫需求表單。」
+- p「以下客戶經理服務住宿型機構與日照中心；居服單位請切回上方的「我是居服單位」，由客戶成功顧問為你安排。」
+
+  > 這句原本寫「請由**上方的居服顧問窗口填寫需求表單**」。改名之後它同時壞了兩件事：
+  > 指到一個已不存在的名稱，而且「上方」在改成 switcher 之後也不成立（兩個面板是切換、不是上下堆疊）。
+  > 已一併改掉 —— 這是改名的連帶修正，不是額外的文案改動。
 
 ### 3-3 業務卡加服務對象標籤
 
@@ -297,8 +309,8 @@ section#choose.section_contact-router
 
 | # | 事項 | 負責 |
 |---|---|---|
-| 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
-| 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
+| 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 客戶成功顧問示意形象」（隨改名同步更新）；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
+| 2 | ~~決定卡片標題~~ **已定案 2026-09-10**：用職稱「客戶成功顧問」，不用人名 | 已完成 |
 | 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
 | 4 | 動畫參數要調（stage 高度 800ms、淡出 300ms、淡入 900ms delay 150ms、滑入 `translateY(-1.5rem)`、捲動 1.4s）就直接說。改 `custom-code/contact-router.html` → 重跑測試 → 再同步到頁面 head（2026-09-10 已確認 repo 與站上 head 逐字一致） | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
