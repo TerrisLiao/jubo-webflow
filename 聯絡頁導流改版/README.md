@@ -279,15 +279,31 @@ Terris 回報入口卡下面有一條線。在已發布輸出上把 hero 到 foo
 | `section_cta` | 3400 → 4111 | 透明 |
 | `section_footer` | 4111 → 4828 | `#175e5e` |
 
-`body` 是 `#f8f8f8`。所以**整段路上只有 `section_contact-form` 有背景**，
-它的白 30% 疊在 #f8f8f8 上，上緣就是那條線。頁面層沒有任何漸層覆蓋這一段
-（`.gradient-bg` 只出現在各張卡片內部與 `section_cta`）。
+`body` 是 `#f8f8f8`。所以**section 層裡只有 `section_contact-form` 有背景**，
+它的白 30%（`--neutral--white-30`）疊在 #f8f8f8 上，上緣就是那條線。
+
+section 之外還有兩個背景層（都是站上原有的，與這條線無關）：
+
+- `.home-gradient-bg` × 2 —— `radial-gradient` ＋ `filter: blur(50px)`，
+  y 0→900（hero 的動態光暈，就是畫面上那片藍青色）
+- `.section_nav` —— `linear-gradient(rgba(255,255,255,.7) …)`，y 0→116
 
 這條線在改版前就存在，只是以前入口不在它正上方所以沒人注意。
-目前的處理是**把它推遠**（提示行底到線 33px → 64px）。
-要真正讓它消失，唯一的一刀是把 `.section_contact-form` 的
-`background-color` 拿掉 —— 但那是我沒被要求動的區塊，且若有其他頁面用到同一個
-class 也會一起變，所以**待 Terris 決定**（見待辦 11）。
+
+**已處理（2026-09-10，Terris 選定「拿掉表單段的背景」）**：
+
+1. 先把線推遠：入口的上下留白讓提示行底到線的距離 33px → 64px。
+2. 動手前**掃過全站**確認 `section_contact-form` 的使用範圍 ——
+   從 sitemap 取 162 個 URL、按路徑前綴收斂成 26 個代表頁（同模板的只取一個）逐頁抓，
+   結果**只有 `/contact` 用到，且只有一個實例**，其他頁面都是 0。
+3. 讀回該 class 的完整樣式：**它只有一個屬性** `background-color: --neutral--white-30`，
+   沒有任何斷點變體。移除該屬性後這個 class 變成空的（元素仍掛著，只是沒樣式）。
+
+republish 後實測，hero 到 CTA 之間**每一個 section 都是透明**，
+只有 footer 有背景（`#175e5e`，本來就該有）。線消失。
+
+> 這是唯一能真正讓線消失的一刀。把入口段改成同樣的白 30% 只會把邊界搬到
+> hero 底部（也就是搬到卡片上方），不會更好。
 
 > ⚠️ **副作用（待 Terris 決定）**：hero 的 h1 還是「選擇您的機構類型」，
 > 但 hero 裡已經沒有可選的東西了。入口移到下一段之後，
@@ -506,7 +522,7 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
 | 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |
-| 11 | **要不要拿掉 `.section_contact-form` 的 `background-color: rgba(255,255,255,0.3)`？** 那是入口卡下面那條線的唯一來源。拿掉之後 hero 到 footer 之間會是一整片 `#f8f8f8`、完全沒有分界；代價是聯絡表單那一段失去現在那層淡淡的白 | Terris |
+| 11 | ~~拿掉 `.section_contact-form` 的背景~~ **已完成 2026-09-10**：Terris 選定移除。全站掃過只有 `/contact` 用到、只有一個實例；該 class 也只有這一個屬性。移除後 hero 到 CTA 全透明，線消失。**副作用**：聯絡表單那一段失去原本那層白 30%，現在與其他段同為 `#f8f8f8` | 已完成 |
 | 10b | `.contact-choice_desc` 現在沒有元素在用（副標題已移除）。要刪嗎？ | Terris |
 | 10a | `.category-tag.is-audience` combo class 現在沒有元素在用（標籤已移除、尚未 publish、正式站樣式表裡沒有它）。要刪嗎？ | Terris |
 | 10 | **居服訪客該不該看到 `section_home-care-banner`？** 它的 base 層是 `display: none`（改版前就沒顯示過）。要讓它現身得先解掉那條規則，而那是共用 class，需先查全站有無其他頁面依賴 | Terris |
