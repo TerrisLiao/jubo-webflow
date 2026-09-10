@@ -1,61 +1,58 @@
 <!-- ============================================================
      /contact 分流面板：展開／切換動畫
-     放置位置：Page Settings → Custom Code → Inside <head> tag（僅這一頁）
+     來源：custom-code/contact-router.html（repo 為準，改這裡前先改 repo）
      鐵律 4 的例外，2026-09-10 經 Terris 明確要求後採用。
 
-     ⚠️ 收合／展開的「狀態」不在這裡，而是在 Webflow 的 class 上：
-        .contact-router_panel          → height 0 / overflow hidden / opacity 0 / visibility hidden
-        .contact-router_panel.is-open  → height auto / opacity 1 / visibility visible
+     ⚠️ 狀態與過場都定義在 Webflow 的 class 上，這支 code 只負責時序：
+        .contact-router_stage          → overflow hidden、height 0、height 過場 800ms
+        .contact-router_panel          → display none、opacity 0、opacity 過場 900ms delay 150ms
+        .contact-router_panel.is-open  → display block、opacity 1
      原因：Webflow 的 Designer 與 Preview 都不執行 page custom code。
-     狀態放在 class 才能保證「沒按按鈕時是隱藏的」在 canvas、Preview、
-     發布後三個地方都一致；這支 code 只負責時序、量高度、切 class、控制捲動。
+     狀態放在 class 才能保證「沒按按鈕時是隱藏的」在 canvas、Preview、發布後三處一致。
 
-     切換的時序（Terris 2026-09-10 指定）：
-       舊卡片「直接淡出」（只動 opacity，高度先鎖住 → 不會回流）
-       → 高度瞬間歸零（此時已看不見，不會有跳動）
-       → 新卡片高度往下展開 ＋ 淡入 ＋ 由上往下滑入
-     方向一律由上往下。
+     為什麼要有 stage 這一層（2026-09-10 修）：
+     切換時如果把舊面板的高度直接歸零、再讓新面板從 0 長起來，
+     頁面總高度會先瞬間掉一千多 px 再長回來。整頁漸層（.gradient-bg 是
+     position:absolute; inset:0）會跟著猛地重算，畫面上就看到一道
+     區塊邊界閃過。改成由 stage 擁有高度：高度從「舊面板的高度」連續動到
+     「新面板的高度」，中間不歸零，頁面高度全程連續。
+
+     切換時序：
+       舊卡片淡出（stage 高度鎖住，版面不動）
+       → 舊卡片 display:none、新卡片 display:block（仍透明）
+       → stage 高度從舊高度動到新高度 ＋ 新卡片淡入 ＋ 由上往下滑入
      ============================================================ -->
 <style>
-  /* 新卡片進場：從上方滑下來就位 */
+  /* 新卡片進場：從上方滑下來就位。起始值由 JS 寫成 inline，
+     否則元素剛從 display:none 變出來的那一格，transition 不會跑。 */
   [data-router-panel] > * {
-    transform: translateY(-1.5rem);
     transition: transform .9s cubic-bezier(.22,.61,.36,1) .15s;
   }
-  [data-router-panel].is-open > * {
-    transform: none;
-  }
-  /* 舊卡片淡出：高度鎖住、只淡 opacity */
+  /* 舊卡片淡出：比進場快，讓交接俐落 */
   [data-router-panel].is-fading {
     opacity: 0 !important;
     transition: opacity .3s ease !important;
   }
-  /* 淡完之後把高度歸零：所有過場關掉，不要有收合動畫 */
-  [data-router-panel].is-instant,
-  [data-router-panel].is-instant > * {
-    transition: none !important;
-  }
   [data-router-target] { cursor: pointer; }
   @media (prefers-reduced-motion: reduce) {
-    [data-router-panel], [data-router-panel] > * { transition: none !important; }
+    [data-router-panel], [data-router-panel] > *, [data-router="stage"] {
+      transition: none !important;
+    }
   }
 </style>
 <noscript>
   <style>
-    [data-router-panel] {
-      height: auto !important;
-      overflow: visible !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
+    [data-router="stage"] { height: auto !important; overflow: visible !important; }
+    [data-router-panel] { display: block !important; opacity: 1 !important; }
     [data-router-panel] > * { transform: none !important; }
   </style>
 </noscript>
 <script>
   (function () {
-    var EXPAND = 800;    // 必須等於 .contact-router_panel 的 height transition-duration
-    var FADE_OUT = 300;  // 必須等於上面 .is-fading 的 opacity transition-duration
-    var SCROLL = 1.4;    // 秒，交給 Lenis
+    var EXPAND = 800;      // 必須等於 .contact-router_stage 的 height transition-duration
+    var FADE_OUT = 300;    // 必須等於上面 .is-fading 的 opacity transition-duration
+    var SLIDE = '-1.5rem'; // 新卡片內容的進場位移
+    var SCROLL = 1.4;      // 秒，交給 Lenis
 
     function ready(fn) {
       if (document.readyState !== 'loading') fn();
@@ -64,10 +61,12 @@
 
     ready(function () {
       var wrapper = document.querySelector('[data-router="wrapper"]');
-      if (!wrapper) return;
+      var stage = document.querySelector('[data-router="stage"]');
+      if (!wrapper || !stage) return;
       var items = [].slice.call(wrapper.querySelectorAll('[data-router-target]'));
-      var panels = [].slice.call(document.querySelectorAll('[data-router-panel]'));
+      var panels = [].slice.call(stage.querySelectorAll('[data-router-panel]'));
       if (!items.length || !panels.length) return;
+      var settle = null;
 
       function panelFor(key) {
         for (var i = 0; i < panels.length; i++) {
@@ -83,43 +82,47 @@
         return null;
       }
 
-      // 高度歸零，不做任何過場
-      function zeroInstant(panel) {
-        panel.classList.add('is-instant');
-        panel.classList.remove('is-open');
-        panel.style.height = '0px';
-        void panel.offsetHeight;   // 讀一次 layout 讓瀏覽器立刻套用
-        panel.classList.remove('is-instant');
-        panel.classList.remove('is-fading');
+      function kids(panel) {
+        return [].slice.call(panel.children);
       }
 
-      // 點同一顆關閉 → 高度收合動畫
-      function collapse(panel) {
-        if (!panel || !panel.classList.contains('is-open')) return;
-        panel.style.height = panel.scrollHeight + 'px';
-        panel.classList.remove('is-open');
-        requestAnimationFrame(function () { panel.style.height = '0px'; });
+      // 把 stage 目前的高度寫成 inline，之後才能從這個值過場
+      function lockStage() {
+        stage.style.height = stage.offsetHeight + 'px';
+        void stage.offsetHeight;
       }
 
-      // 切換 → 舊卡片先淡出，淡完才歸零
-      function fadeOut(panel, done) {
-        if (!panel || !panel.classList.contains('is-open')) { done(); return; }
-        panel.style.height = panel.scrollHeight + 'px';   // 鎖住高度，淡出期間不回流
-        void panel.offsetHeight;
-        panel.classList.add('is-fading');
-        window.setTimeout(function () {
-          zeroInstant(panel);
-          done();
-        }, FADE_OUT);
+      function animateStageTo(px) {
+        if (settle) { window.clearTimeout(settle); settle = null; }
+        requestAnimationFrame(function () {
+          stage.style.height = px + 'px';
+        });
+        settle = window.setTimeout(function () {
+          settle = null;
+          // 開著的時候交還給 auto，內容日後變高（CMS、換行）也不會被切
+          if (openPanel()) stage.style.height = 'auto';
+        }, EXPAND + 40);
       }
 
-      function expand(panel) {
-        if (!panel) return;
+      // 讓面板出現：先 display 出來但保持透明與位移，下一格才放行，
+      // 這樣 opacity / transform 的 transition 才會真的跑。
+      function reveal(panel) {
         panel.classList.add('is-open');
-        panel.style.height = panel.scrollHeight + 'px';
-        window.setTimeout(function () {
-          if (panel.classList.contains('is-open')) panel.style.height = 'auto';
-        }, EXPAND);
+        panel.style.opacity = '0';
+        kids(panel).forEach(function (k) { k.style.transform = 'translateY(' + SLIDE + ')'; });
+        var target = panel.offsetHeight;   // 量高度，同時觸發 reflow
+        requestAnimationFrame(function () {
+          panel.style.opacity = '';        // 交還給 class 的 opacity:1 → 淡入
+          kids(panel).forEach(function (k) { k.style.transform = ''; });
+        });
+        return target;
+      }
+
+      function hide(panel) {
+        panel.classList.remove('is-open');
+        panel.classList.remove('is-fading');
+        panel.style.opacity = '';
+        kids(panel).forEach(function (k) { k.style.transform = ''; });
       }
 
       // 捲到按鈕本身（按鈕在 Hero 裡），按鈕會停在 navbar 下方，
@@ -146,31 +149,38 @@
 
           var wasActive = item.classList.contains('is-active');
           var target = panelFor(item.getAttribute('data-router-target'));
+          if (!target) return;
           items.forEach(function (el) { el.classList.remove('is-active'); });
 
-          if (wasActive) {          // 點同一顆 → 收合
-            collapse(target);
+          lockStage();
+
+          if (wasActive) {                    // 點同一顆 → 收起來
+            var closing = target;
+            closing.classList.add('is-fading');
+            animateStageTo(0);
+            window.setTimeout(function () { hide(closing); }, EXPAND);
             return;
           }
 
           item.classList.add('is-active');
           var current = openPanel();
-          if (current && current !== target) {
-            fadeOut(current, function () {   // 舊的淡出 → 新的滑入
-              expand(target);
+
+          if (current && current !== target) { // 切換 → 舊的淡出，再換新的
+            current.classList.add('is-fading');
+            window.setTimeout(function () {
+              hide(current);
+              animateStageTo(reveal(target));
               bringIntoView();
-            });
-          } else {
-            expand(target);
+            }, FADE_OUT);
+          } else {                             // 第一次打開
+            animateStageTo(reveal(target));
             bringIntoView();
           }
         });
       });
 
       window.addEventListener('resize', function () {
-        panels.forEach(function (p) {
-          if (p.classList.contains('is-open')) p.style.height = 'auto';
-        });
+        if (openPanel()) stage.style.height = 'auto';
       });
     });
   })();

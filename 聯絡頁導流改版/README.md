@@ -118,9 +118,15 @@ Terris 的要求演進：不要一進來就攤開兩邊內容 → 要有 toggle 
 #### 修掉的居服／住宿混在一起
 
 `section_home-care-banner`（Section Tag「居服系統」、H2「派班更順手，核銷更省力」、
-CTA「申請 Demo」→ 居服 Microsoft Forms）原本在 switcher **外面**，
-所以選了「住宿／日照」的人滑過客戶經理名單後，會直接撞到一整段居服系統的推銷與居服表單。
-**已移進居服面板**，只有居服單位看得到。
+CTA「申請 Demo」→ 居服 Microsoft Forms）原本在 switcher **外面**，現已移進居服面板。
+
+> ⚠️ **2026-09-10 更正**：我起初寫的理由是「選住宿／日照的人會撞到一整段居服推銷」，
+> 這是**錯的**。回頭讀站上 CSS，`.section_home-care-banner` 的 **base 層就是 `display: none`**，
+> 也就是這段 banner 在改版前**根本沒有顯示**，沒有任何受眾混淆發生。
+> 搬進居服面板本身沒有壞處（它仍然是 `display:none`，不會出現），
+> 但它現在的位置代表「日後若要讓這段 banner 現身，該由居服單位看到」。
+> **待 Terris 決定**：居服訪客到底該不該看到這段 banner？要的話得先解掉 base 層的 `display:none`
+> （那是共用 class，改動要先確認沒有別的頁面依賴）。
 
 判斷留在面板外的內容：站內表單 `#form`（異業合作／其他洽詢）、服務據點、`CTA Section #1`
 都是共通資訊，維持在面板外。
@@ -145,18 +151,20 @@ section.section_about-hero
 
 section#choose.section_contact-router
 └ div.contact-router_component
-   ├ div.contact-router_panel[data-router-panel="homecare"]
-   │   ├ section#homecare.section_homecare-contact   （居服窗口卡）
-   │   └ div.section_home-care-banner                （居服系統 ＋ 申請 Demo）
-   └ div.contact-router_panel[data-router-panel="residential"]
-       └ div#sales.section_sales                      （5 位區域客戶經理）
+   └ div.contact-router_stage[data-router="stage"]        ← 高度過場在這一層
+      ├ div.contact-router_panel[data-router-panel="homecare"]
+      │   ├ section#homecare.section_homecare-contact   （居服窗口卡）
+      │   └ div.section_home-care-banner                （居服系統 ＋ 申請 Demo，base 層 display:none）
+      └ div.contact-router_panel[data-router-panel="residential"]
+          └ div#sales.section_sales                      （5 位區域客戶經理）
 ```
 
 `contact-router_component` 的 `row-gap` 必須是 **0**：收合的面板高度是 0 但仍佔一個 flex row，
 留 gap 會讓兩個面板的起點差一個 gap 的距離（原本 2rem），切換時看起來就會錯位。
 
-- 面板的 `display` **不可以是 none**（會讓 height 動畫失效）。收合狀態由自訂 CSS 的
-  `height: 0; overflow: hidden; visibility: hidden` 負責。
+- **高度動畫由 `stage` 那一層負責，面板自己只管 `display` 與 `opacity`**。
+  所以面板可以（也應該）用 `display: none` 收合 —— 高度動畫不在面板上，不會失效。
+  收合狀態的正本在 Webflow class（見下一節），不在 custom code。
 - v2 的「隱藏 placeholder item ＋ 空面板」那套 hack 已移除，自訂 code 的預設狀態本來就是全收合。
 - 兩顆按鈕保留 `href`（`#homecare` / `#sales`），因為站台 head 的 GA4 只監聽 `a[href]`；
   JS 會 `preventDefault()` 擋掉 anchor 跳轉，但 GA4 是 **capture 階段**監聽，會在那之前就送出事件。
@@ -172,19 +180,35 @@ section#choose.section_contact-router
 
 | 選擇器 | 內容 |
 |---|---|
-| `.contact-router_panel` | `height:0`、`overflow:hidden`、`opacity:0`、`visibility:hidden`，＋ `transition-property/duration/timing-function/delay`（height 450ms、opacity 350ms delay 80ms、visibility 0s delay 450ms） |
-| `.contact-router_panel.is-open` | `height:auto`、`opacity:1`、`visibility:visible`、visibility 不延遲 |
+| `.contact-router_stage` | `width:100%`、`height:0`、`overflow:hidden`、`transition: height 800ms cubic-bezier(.22,.61,.36,1)` |
+| `.contact-router_panel` | `width:100%`、`display:none`、`opacity:0`、`transition: opacity 900ms ease 150ms` |
+| `.contact-router_panel.is-open` | `display:block`、`opacity:1` |
 
 這樣「沒按按鈕時是隱藏的」在 **canvas、Preview、發布後三個地方都一致**，JS 掛掉也還是隱藏。
-`.is-open` 給 `height:auto` 還有一個好處：**在 Designer 要編輯面板內容時，
-暫時把 `is-open` 這個 combo class 加到面板上就會展開**，編完再移除。
-（執行期 JS 寫的 inline `height` 優先於 class，不會互相干擾。）
+`.is-open` 還有一個好處：**在 Designer 要編輯面板內容時，暫時把 `is-open` 這個 combo class
+加到面板上就會顯示**（同時要把 stage 的 `height` 臨時改成 `auto`），編完再移除。
+（執行期 JS 寫的 inline `height` / `opacity` 優先於 class，不會互相干擾。）
+
+#### 為什麼要多一層 `stage`（2026-09-10 修，Terris 回報「切換時 section 一條線跳出」）
+
+前一版是**每個面板自己動高度**：切換時舊面板高度先歸零，新面板再從 0 長起來。
+中間那一瞬間兩個面板都是 0，**頁面總高度會瞬間掉 1300 多 px 再長回來**。
+整頁漸層 `.gradient-bg`（`position: absolute; inset: 0`）跟著猛地重算，
+畫面上就看到一道區塊邊界閃過 —— Terris 形容「像是一整個 section 開又關」。
+
+改成由 `.contact-router_stage` 這一層擁有高度之後，高度是從**舊面板的高度**
+連續動到**新面板的高度**（實測 1328px → 1028px），中間不歸零，頁面高度全程連續。
+自動測試裡有兩項專測這件事（見 5b），並做過反向對照：把切換那一段改回「瞬間歸零」會 fail。
+
+收尾時 JS 把 stage 的 inline height 交還給 `auto`，
+這樣面板內容日後變高（CMS、換行、RWD）也不會被 `overflow: hidden` 切掉。
 
 #### 自訂 code
 
 - **位置**：`/contact` 的 Page Settings → Custom Code → Inside `<head>`（**只有這一頁**，不是站台層）
-- **只負責**：量 `scrollHeight`、切 `.is-open`、`preventDefault()` ＋ `stopPropagation()`，
-  加上內容 `translateY(-1rem) → 0` 的位移
+- **只負責時序**：鎖 stage 當下高度、量新面板高度、把 stage 高度動到那個值、切 `.is-open`、
+  `preventDefault()` ＋ `stopPropagation()`，加上內容 `translateY(-1.5rem) → 0` 的位移。
+  所有「狀態」與「過場曲線」都在 Webflow class 上。
 
 #### 按鈕的 href 為什麼指向 `#choose`（2026-09-10 修正）
 
@@ -208,29 +232,32 @@ section#choose.section_contact-router
   刻意不用 Slater 的 `data-platform-switcher`／`data-platform-panel`，避免兩套程式同時控制同一個面板。
 - **切換時序**（2026-09-10 由 Terris 指定，共改過三輪）：
 
-  1. 舊卡片**直接淡出** —— 先把 `height` 鎖成當下的 `scrollHeight`，再加 `.is-fading`
-     （`opacity: 0`，300ms），所以淡出期間版面完全不動、不會回流
-  2. 淡完 → `.is-instant` 關掉所有過場，高度瞬間歸零（此時已看不見，不會有跳動）
-  3. 新卡片高度往下展開 ＋ 淡入 ＋ 由上往下滑入
+  1. 舊卡片**直接淡出** —— 先把 **stage** 的 `height` 鎖成當下的實際高度，再給舊卡片
+     `.is-fading`（`opacity: 0`，300ms）。淡出期間版面完全不動、不會回流
+  2. 淡完 → 舊卡片 `display:none`、新卡片 `display:block`（此時仍透明、且內容位移在上方）
+  3. **stage 高度從舊高度連續動到新高度** ＋ 新卡片淡入 ＋ 內容由上往下滑入就位
 
-  「點同一顆關閉」走另一條路：直接做高度收合動畫。
+  第 2 步的 inline 起始值（`opacity: 0` ＋ `translateY`）必須由 JS 寫上、下一格 rAF 才清掉；
+  否則元素剛從 `display: none` 變出來的那一格瀏覽器不會跑 transition，會直接跳出來。
+
+  「點同一顆關閉」走另一條路：舊卡片淡出，同時 stage 高度動到 0。
 
 - **時間參數**
 
   | 項目 | 值 | 定義在哪 |
   |---|---|---|
   | 舊卡片淡出 | 300ms ease | code 的 `.is-fading` ＋ `FADE_OUT` |
-  | 新卡片高度 | 800ms `cubic-bezier(.22,.61,.36,1)` | class `.contact-router_panel` ＋ code 的 `EXPAND` |
+  | stage 高度 | 800ms `cubic-bezier(.22,.61,.36,1)` | class `.contact-router_stage` ＋ code 的 `EXPAND` |
   | 新卡片淡入 | 900ms、延遲 150ms | class `.contact-router_panel` |
   | 新卡片滑入 | `translateY(-1.5rem) → 0`、900ms、延遲 150ms | code |
   | 捲動 | 1.4s（Lenis） | code 的 `SCROLL` |
 
-  ⚠️ **三組必須成對維護**：`EXPAND` = class 上 height 的 duration；
+  ⚠️ **兩組必須成對維護**：`EXPAND` = `.contact-router_stage` 上 height 的 duration；
   `FADE_OUT` = `.is-fading` 的 opacity duration。不一致的話高度會在過場途中被改成
-  `auto` 而跳一下，或舊卡片還沒淡完就被歸零。
+  `auto` 而跳一下，或舊卡片還沒淡完就被換掉。
 
 - **方向一律由上往下**。之前讓兩個面板同時變高變矮，下面那個會被回流往上拉，
-  看起來像由下往上冒出來 —— 所以才改成「先淡出、再換」。
+  看起來像由下往上冒出來 —— 所以才改成「先淡出、再換」，並把高度收到 stage 一層。
 - **捲動**：`bringIntoView()` 把**按鈕**帶到 navbar 下方（navbar 高度執行期量測 ＋24px），
   優先用站上的 `window.lenis.scrollTo`，沒有才退回 `scrollIntoView`。
   捲動是在舊卡片淡出結束、新卡片開始展開時才觸發。
@@ -245,7 +272,7 @@ section#choose.section_contact-router
 > 本次是 2026-09-10 Terris 明確指示「動畫就用自訂寫 code」後採用，範圍限定 `/contact` 一頁、
 > 只作用在 `data-router-*`，不影響任何共用 class 與其他頁面。
 
-**新增 class**：`section_contact-router`、`contact-router_component`、`contact-router_panel`。
+**新增 class**：`section_contact-router`、`contact-router_component`、`contact-router_stage`、`contact-router_panel`（＋ combo `is-open`）。
 
 ### 3-5 新增的 class（全部照 Client-First `folder_element` 命名）
 
@@ -273,13 +300,14 @@ section#choose.section_contact-router
 | 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
 | 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
-| 4 | 動畫參數要調（.45s、`translateY(-1rem)`、延遲 .08s）就直接說，改 `custom-code/contact-router.html` 再同步到頁面 head | Claude |
+| 4 | 動畫參數要調（stage 高度 800ms、淡出 300ms、淡入 900ms delay 150ms、滑入 `translateY(-1.5rem)`、捲動 1.4s）就直接說。改 `custom-code/contact-router.html` → 重跑測試 → 再同步到頁面 head（2026-09-10 已確認 repo 與站上 head 逐字一致） | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
-| 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，**16 項**檢查全過，含切換時序）。改 code 或改那幾個 class 的值之後要重跑 | Claude |
+| 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，**24 項**檢查全過，含切換時序、以及「切換全程 stage／整頁高度不歸零」）。測試會把 `contact-router.html` 原封不動塞進 harness 模板再跑，所以驗過的就是裝上去的那份。改 code 或改那幾個 class 的值之後要重跑 | Claude |
 | 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
-| 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 11 個 class） | 未排 |
+| 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |
+| 10 | **居服訪客該不該看到 `section_home-care-banner`？** 它的 base 層是 `display: none`（改版前就沒顯示過）。要讓它現身得先解掉那條規則，而那是共用 class，需先查全站有無其他頁面依賴 | Terris |
 
 ---
 

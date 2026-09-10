@@ -1,10 +1,27 @@
 # contact-router 行為測試
 
-驗證 [`../contact-router.html`](../contact-router.html)（/contact 分流面板的展開動畫）的邏輯。
+驗證 [`../contact-router.html`](../contact-router.html)（/contact 分流面板的展開／切換動畫）的邏輯。
 2026-09-10 建立，起因：前面幾版都是「寫完直接裝上去、沒有實機驗證」，
-接連被 Terris 抓到卡片沒隱藏、捲太深、方向不一致三個問題。
+接連被 Terris 抓到卡片沒隱藏、捲太深、方向不一致、切換時 section 邊界閃過四個問題。
 
-`harness.html` 用**站上 Webflow class 的實際值**重建一個最小頁面，並模擬三件站上的事：
+## 為什麼測試跑的一定是站上那份 code
+
+`harness.html` 是**模板**，不能直接開。裡面有一個 `<!-- ROUTER_SNIPPET -->` 佔位符，
+`test_router.mjs` 會把 `../contact-router.html` 原封不動讀進來塞在那個位置，
+產生 `harness.generated.html`（不進 git）再跑。
+所以「測試驗過的 code」與「貼進 Webflow page head 的 code」是同一份，不會各自漂移。
+
+模板本身只提供**站上 Webflow class 的實際值**（2026-09-10 從 Designer 讀回）與最小 DOM：
+
+```
+section#choose.section_contact-router
+└ .contact-router_component
+   └ .contact-router_stage[data-router="stage"]     ← 高度過場在這一層
+      ├ .contact-router_panel[data-router-panel="homecare"]
+      └ .contact-router_panel[data-router-panel="residential"]
+```
+
+並模擬三件站上會發生的事：
 
 | 模擬對象 | 做法 |
 |---|---|
@@ -22,22 +39,42 @@ node test_router.mjs
 容器內已有 Chromium（`/opt/pw-browsers/chromium`），版本與 npm 上的 playwright 不一定相符，
 所以測試裡直接指定 `executablePath`，不要改成預設路徑。
 
-## 涵蓋的檢查（16 項）
+想拿別的版本跑（例如做反向對照）：`ROUTER_SRC=/path/to/other.html node test_router.mjs`。
 
-1. 初始兩個面板都隱藏（`height 0` / `visibility hidden`）
-2. 點居服 → 展開、按鈕加 `.is-active`、GA 送 `home_care`
-3. 捲動把選擇器帶到 navbar 下方（實測 top=96px）
-4. **切換時序**：點下去 150ms 時，舊卡片還在（高度未變）但 `opacity` 已在下降且帶 `.is-fading`，
-   而新卡片**還沒**開始展開 —— 證明是「先淡出、再換」而不是同時進行
-5. 切換 → 舊面板歸零、新面板展開
-6. **新面板起點與舊面板同一位置**（證明是由上往下長，不是被回流往上拉）
-7. 切換 → GA 送 `residential_day_care`
-8. document bubble 的捲動被 `stopPropagation()` 擋掉（`__bubbleScrolls === 0`）
-9. 面板內容的 `transform` 歸零
-10. 點同一顆 → 收合、`.is-active` 移除
+## 涵蓋的檢查（24 項）
 
-第 6 項當初是 fail：`contact-router_component` 的 `row-gap: 2rem` 讓收合的面板
-（高度 0 但仍佔一個 flex row）多產生一次 gap，兩個面板起點差 32px。
-改成 `row-gap: 0` 後通過——面板內的 section 本來就帶 `padding-section-large`，那 2rem 是多的。
+1. **初始**：兩個面板 `display:none`、stage `height 0` + `overflow hidden`
+   —— 這三件事都由 Webflow class 決定，不靠這支 JS，所以 Designer／Preview／發布後一致
+2. **點居服**：120ms 時 stage 高度介於 0 與最終值之間（是動畫不是瞬移）；
+   展開後面板 `display:block` / `opacity 1`；按鈕加 `.is-active`；GA 送 `home_care`
+3. **收尾交還 `height:auto`**：內容日後變高（CMS、換行）不會被 `overflow:hidden` 切掉
+4. **捲動**把選擇器帶到 navbar 下方（實測 top=109px）
+5. **切換時序**（點下去 150ms 時）：舊卡片還在、`opacity` 已降到 0.26 且帶 `.is-fading`，
+   新卡片**還沒** `is-open`，且 **stage 高度鎖在舊高度** —— 證明是「先淡出、再換」且版面不動
+6. **新面板起點與舊面板同一位置**（由上往下長，不是被回流往上拉）
+7. **切換全程 stage 高度沒有歸零**：整段切換每一格 rAF 都取樣，最低值必須 ≥ 兩張卡片的較小高度
+8. **切換全程整頁高度沒有塌陷**：`documentElement.scrollHeight` 的波動不得大於兩張卡片的高度差
+9. GA 送 `residential_day_care`；document bubble 的捲動被 `stopPropagation()` 擋掉
+10. 面板內容 `transform` 歸零
+11. **點同一顆**：收起（`display:none`）、stage 高度回 0、`.is-active` 移除
 
-> 改動 `contact-router.html` 或那兩個 class 的值之後，記得回來重跑一次。
+### 第 7、8 項是什麼問題
+
+Terris 回報「切換按鈕時會有明顯 section 一條線跳出，像是一整個 section 開又關」。
+舊架構是每個面板自己動高度：切換時舊面板高度先歸零，新面板再從 0 長起來，
+頁面總高度會瞬間掉 1328px 再長回來。整頁漸層 `.gradient-bg`（`position:absolute; inset:0`）
+跟著猛地重算，就看到那道邊界閃過。
+
+改成由 `.contact-router_stage` 擁有高度後，高度是從 1328px **連續動到** 1028px，中間不歸零。
+反向對照跑過：把切換那一段改回「瞬間歸零」，這兩項會 fail（`全程最低=0`、整頁 2536–3864），
+現在這版是 `全程最低=1028`、整頁 3564–3864（波動 300 = 兩張卡片的高度差）。
+
+### 第 6 項當初的 fail
+
+`contact-router_component` 的 `row-gap: 2rem` 讓收合的面板（高度 0 但仍佔一個 flex row）
+多產生一次 gap，兩個面板起點差 32px。改成 `row-gap: 0` 後通過——
+面板內的 section 本來就帶 `padding-section-large`，那 2rem 是多的。
+
+> 改動 `contact-router.html`，或改動 `contact-router_stage` / `contact-router_panel` /
+> `contact-router_component` 這三個 class 的值之後，記得回來重跑一次
+> （class 的值有改的話，`harness.html` 上半段那份 CSS 也要一起更新）。
