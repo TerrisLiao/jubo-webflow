@@ -18,6 +18,10 @@
 4. 居服 banner「派班更順手，核銷更省力」＋「申請 Demo」→ 原本指向 `#form`
 5. 服務據點 CMS → `CTA Section #1` → Footer
 
+改版後（2026-09-10 收工時）的順序：
+Hero（置中，按鈕列已隱藏）→ **`section_contact-router` 兩顆選擇 Tab** →
+（Tab 內容：居服窗口卡 / 業務名單）→ 站內表單 `#form` → 居服 banner → 服務據點 → CTA → Footer
+
 問題（按影響排序）：
 
 | # | 問題 | 證據 |
@@ -94,6 +98,54 @@ section#homecare.section_homecare-contact
 - 居服 banner「申請 Demo」的 Link 由 `pageSection → #form` 改為 Microsoft Forms（與 Hero 同一份）
 - 業務卡姓名 `.card_h2` 由 `h2` 改為 `h3`（**只改 tag，class 名不動**）
 
+### 3-6 改成「選了才顯示」的原生 Tabs（2026-09-10 追加，原第二階段提前做）
+
+Terris 追加要求：**不要一進來就把兩邊內容都攤出來**，Hero 置中，選了之後才吐出對應內容。
+
+先確認了兩件事：
+
+1. Hero 本來就是置中的（`product-hero_center-wrap` 是 `max-width: 45rem; margin: auto; align-items: center`，
+   四張圖是 `position: absolute; inset: 0` 的背景層）。真正靠左的是按鈕列
+   —— `.contact-routing_buttons` 在 base 是 `justify-content: flex-start`。
+   站上早就有 `.contact-routing_buttons.is-center` 這個 combo，這頁沒掛，已補上。
+2. **Webflow MCP 沒有 Interactions（IX2）的 API**，agent 無法建「點擊 → 顯示」的互動。
+   因此改用**原生 Tabs**（Terris 選擇）。
+
+結構（Hero 之後、站內表單之前）：
+
+```
+section.section_contact-router
+└ TabsWrapper.contact-router_tabs
+  ├ TabsMenu.contact-router_menu          ← 置中、max-width 45rem、手機改直排
+  │   ├ TabsLink「尚未選擇」               ← visibility: false（預設 tab，pane 是空的）
+  │   ├ TabsLink.cta-button「我是居服單位」
+  │   └ TabsLink.cta-button「我是住宿／日照機構」
+  └ TabsContent
+      ├ TabsPane（空）                     ← 一進來顯示這個，等於什麼都沒有
+      ├ TabsPane → section_homecare-contact（整段搬進來）
+      └ TabsPane → section_sales（整段搬進來）
+```
+
+- 兩顆 Tab 連結直接掛 `.cta-button`，外觀與 Hero 原本的按鈕一致。
+- Hero 原本那兩顆 CTA Button **改成隱藏（visibility: false），沒有刪除**，確認新版沒問題後可以再刪。
+- `contact-router_menu` 自己帶左右 padding（desktop `--desktop-spacer--medium`／
+  medium `--tablet-spacer--small`／small `--mobile-spacer--small`），數值與 `padding-global` 相同。
+  原因：`set_style` 在 TabsMenu 上無法一次掛兩個 class（實測回 `styles not found`），
+  所以把 `padding-global` 的值複製進自己的 class，不是不想沿用 utility。
+
+**量測必須跟著改（重要）**：head 的 GA4 程式原本靠 `rawHref === '#sales'` 判斷「選了住宿／日照」，
+Tab 連結沒有 `#sales` 這個 href，那條分支不會再觸發。因此兩顆 Tab 連結都加了程式已支援的屬性：
+
+| Tab | 屬性 |
+|---|---|
+| 我是居服單位 | `data-ga-event="contact_route_select"`、`data-solution-interest="home_care"`、`data-ga-cta-location="contact_router_tabs"` |
+| 我是住宿／日照機構 | 同上，`data-solution-interest="residential_day_care"` |
+
+居服卡的 CTA 指向 Microsoft Forms，head 程式會自動送 `contact_route_select(home_care)` ＋
+`homecare_form_open`，這部分不用動。
+
+**新增 class**：`section_contact-router`、`contact-router_tabs`、`contact-router_menu`。
+
 ### 3-5 新增的 class（全部照 Client-First `folder_element` 命名）
 
 | Class | 用途 | 關鍵值 |
@@ -119,11 +171,13 @@ section#homecare.section_homecare-contact
 |---|---|---|
 | 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 居服顧問窗口示意形象」；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | 決定卡片標題是否改成人名（目前是「居服顧問窗口」） | Terris |
-| 3 | 桌機／平板／手機三個斷點目視驗收 | Terris |
-| 4 | Publish | Terris 授權後 |
-| 5 | 第二階段：Hero 兩顆按鈕做主次、或用 Finsweet `fs-list` 讓業務名單只在選了住宿／日照後顯示 | 未排 |
-| 6 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
-| 7 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 8 個 class ＋ 1 個 combo） | 未排 |
+| 3 | **確認預設 tab**：Webflow 的「哪個 tab 預設開啟」不在 MCP 可寫的設定裡，agent 無法設定也讀不到。請在 Preview 確認一進來下面是空的；若不是，到 Navigator 點一下隱藏的「尚未選擇」tab 讓它成為 current | Terris |
+| 4 | Tab 的選中樣式（`w--current`）：MCP 的 pseudo 清單沒有 current，agent 改不了。想讓選中的按鈕看起來不一樣，要在 Designer 的 Tab Link → Current 狀態設定 | Terris |
+| 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
+| 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
+| 7 | Publish | Terris 授權後 |
+| 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
+| 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 11 個 class ＋ 1 個 combo） | 未排 |
 
 ---
 
@@ -140,3 +194,6 @@ section#homecare.section_homecare-contact
 - **驗證限制**：本帳號沒有 Webflow Analyze 權限（實測 403 `Analyze entitlement required`），
   無法從 MCP 取得改版前後的點擊數，成效要看 GA4／GTM。
 - Slater 的 `60294.css` / `60292.js` 是外部檔案，MCP 讀不到，只能確認 head 內嵌程式的行為。
+- **Webflow MCP 不支援 Interactions（IX2）**：沒有任何 interactions 工具，所以「點擊 → 淡入展開 → 自動捲動」
+  這種體驗必須在 Designer 手動建。本次改用原生 Tabs 就是為了避開這個限制。
+- **agent 看不到渲染結果**：Tabs 的預設開啟狀態、Tab 選中樣式、頭像裁切位置都需要人在 Preview 確認。
