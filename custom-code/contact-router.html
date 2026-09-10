@@ -125,7 +125,7 @@
         kids(panel).forEach(function (k) { k.style.transform = ''; });
       }
 
-      // 捲到按鈕本身（按鈕在 Hero 裡），按鈕會停在 navbar 下方，
+      // 捲到分流入口本身（入口卡在 Hero 裡），入口卡會停在 navbar 下方，
       // 剛展開的面板正好在它底下。站上的 Slater JS 有 window.lenis，
       // 優先交給它，直接用原生 scrollIntoView 會跟 Lenis 的 RAF 迴圈互相干擾。
       function bringIntoView() {
@@ -133,8 +133,13 @@
         var clearance = (nav ? nav.getBoundingClientRect().height : 0) + 24;
         if (window.lenis && typeof window.lenis.scrollTo === 'function') {
           window.lenis.scrollTo(wrapper, { offset: -clearance, duration: SCROLL });
-        } else if (wrapper.scrollIntoView) {
-          wrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          // 不要用 scrollIntoView({block:'start'})：它會把 wrapper 頂到視窗 0，
+          // 剛好躲到固定 navbar 後面。自己算 clearance，兩條路徑落點才一致。
+          window.scrollTo({
+            top: wrapper.getBoundingClientRect().top + window.pageYOffset - clearance,
+            behavior: 'smooth'
+          });
         }
       }
 

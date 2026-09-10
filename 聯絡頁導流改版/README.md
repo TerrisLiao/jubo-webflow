@@ -156,19 +156,67 @@ CTA「申請 Demo」→ 居服 Microsoft Forms）原本在 switcher **外面**�
 
 > **2026-09-10 追加調整**：選擇按鈕原本放在 `section_contact-router` 最上方，
 > 結果剛好壓在 Hero 與下一段的背景交界上，看起來像被切一刀（Terris 回報）。
-> 已把整組 `top-switcher_wrapper` **搬進 Hero 的 `product-hero_center-wrap`**
+> 已把整組入口**搬進 Hero 的 `product-hero_center-wrap`**
 > （原本那兩顆 CTA 的位置，它們仍是隱藏狀態），面板留在下方的 router section。
-> `bringIntoView()` 的捲動目標也跟著改成按鈕本身，這樣按鈕會停在 navbar 下方、
+> `bringIntoView()` 的捲動目標也跟著改成入口本身，這樣入口會停在 navbar 下方、
 > 剛展開的面板正好在它底下。
+
+#### 入口從 segmented pill 改成兩張選擇卡（2026-09-10）
+
+Terris 回報：**同事一開始沒選擇時，不知道下面還有內容**。
+
+診斷：問題不是「按鈕不夠明顯」，是**控件的形狀在傳達錯的意思**。
+`top-switcher_wrapper.is-product` 是 segmented pill（半透明白底、細字、兩段等寬），
+這種控件的語意是「在已經看得到的東西之間切換」。但這裡它下面什麼都沒有，
+而且**兩段都沒有 `.is-active`**（沒選之前整顆只是一片淡淡的白），所以它讀起來像裝飾。
+再加上標籤是身分句（「我是居服單位」）而不是動作句，更像篩選器的選項。
+
+改法（Terris 選定「把按鈕獨立出來」）：
+
+- 新增 `.contact-choice_wrap[data-router="wrapper"]`，內含兩張
+  `.contact-choice_item`（Link Block），各自有 `.contact-choice_title`
+  ＋ `.contact-choice_desc`（一行說明）＋ `.contact-choice_arrow`（→）。
+- **舊的 `top-switcher_wrapper.is-product` 設為隱藏，並移除它的 `data-router="wrapper"`**，
+  確保頁面上只有一個 router wrapper（已讀回確認 total_matches = 1）。
+  沒有刪除，待 Terris 確認後再刪（見待辦）。
+- 下方加一行 `.contact-choice_hint`「選擇後，下方會顯示對應的聯絡窗口」——
+  直接講出「下面有東西」，這是同事漏看的那件事。
+
+**為什麼是上下堆疊而不是並排**：`.product-hero_center-wrap` 是 `max-width: 45rem`，
+又位在 `.product-hero_component` 的 `.85fr` 欄裡，桌機實測只有 **573px**。
+兩張 22rem（352px）的卡片要並排需要 728px，塞不進去。實測比較過兩案：
+
+| | 卡片實際寬度 | 觀感 |
+|---|---|---|
+| 並排（縮到 15rem） | 240px | 塞得下，但卡片變小 —— 跟「要更明顯」的目標相反 |
+| **上下堆疊、填滿欄寬（採用）** | **573px × 102px** | 兩顆大按鈕，很難漏看 |
+
+`.contact-choice_item` 的 `.is-active` 是實心 teal ＋ 白字；
+說明與箭頭都用 `color: currentColor`（說明另加 `opacity: .65`），
+所以選中時整張卡的文字會一起轉白，不需要為每個子元素再開 combo class。
+
+自訂 code **完全不用改** —— 它只認 `[data-router="wrapper"]` /
+`[data-router-target]` / `[data-router-panel]`，不綁 class。
+harness 換成新 markup 後 25 項全過。
 
 ```
 section.section_about-hero
-└ … product-hero_center-wrap
-   ├ Section Tag「聯絡我們」／h1／說明段
+└ … product-hero_center-wrap                                  ← 桌機實測寬 573px
+   ├ Section Tag「聯絡我們」／h1「選擇您的機構類型」／說明段
    ├ div.contact-routing_buttons.is-center（舊的兩顆 CTA，已隱藏）
-   └ div.top-switcher_wrapper.is-product[data-router="wrapper"]   ← 選擇按鈕在這裡
-       ├ a.top-switcher_item[data-router-target="homecare"]   href="#choose" 「我是居服單位」
-       └ a.top-switcher_item[data-router-target="residential"] href="#choose" 「我是住宿／日照機構」
+   ├ div.contact-choice_wrap[data-router="wrapper"]            ← 分流入口在這裡
+   │   ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
+   │   │   ├ .contact-choice_text-wrap
+   │   │   │   ├ .contact-choice_title「我是居服單位」
+   │   │   │   └ .contact-choice_desc「由客戶成功顧問為你安排」
+   │   │   └ .contact-choice_arrow「→」
+   │   └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
+   │       ├ .contact-choice_text-wrap
+   │       │   ├ .contact-choice_title「我是住宿・日照機構」
+   │       │   └ .contact-choice_desc「找你所在區域的客戶經理」
+   │       └ .contact-choice_arrow「→」
+   ├ p.contact-choice_hint「選擇後，下方會顯示對應的聯絡窗口」
+   └ div.top-switcher_wrapper.is-product（舊的 pill，已隱藏、已移除 data-router）
 
 section#choose.section_contact-router
 └ div.contact-router_component
@@ -293,7 +341,9 @@ section#choose.section_contact-router
 > 本次是 2026-09-10 Terris 明確指示「動畫就用自訂寫 code」後採用，範圍限定 `/contact` 一頁、
 > 只作用在 `data-router-*`，不影響任何共用 class 與其他頁面。
 
-**新增 class**：`section_contact-router`、`contact-router_component`、`contact-router_stage`、`contact-router_panel`（＋ combo `is-open`）。
+**新增 class**：`section_contact-router`、`contact-router_component`、`contact-router_stage`、`contact-router_panel`（＋ combo `is-open`）、
+`contact-choice_wrap`、`contact-choice_item`（＋ combo `is-active`、hover）、`contact-choice_text-wrap`、
+`contact-choice_title`、`contact-choice_desc`、`contact-choice_arrow`、`contact-choice_hint`。
 
 ### 3-5 新增的 class（全部照 Client-First `folder_element` 命名）
 
@@ -350,7 +400,7 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
 | 5c | 頭像幾何已有自動測試：`custom-code/contact-card-geometry-test/`（4 項全過，用正式站樣式表 ＋ 正式站業務卡 markup 實測）。改 `homecare-contact_portrait` / `homecare-contact_photo` / `sales-portrait` 之後要重跑 | Claude |
 | 5b | 行為邏輯已有自動測試：`custom-code/contact-router-test/`（容器內 Chromium，**24 項**檢查全過，含切換時序、以及「切換全程 stage／整頁高度不歸零」）。測試會把 `contact-router.html` 原封不動塞進 harness 模板再跑，所以驗過的就是裝上去的那份。改 code 或改那幾個 class 的值之後要重跑 | Claude |
-| 6 | Hero 那兩顆隱藏的舊 CTA Button 確認可以刪了再刪 | Terris |
+| 6 | Hero 那兩顆隱藏的舊 CTA Button ＋ 隱藏的 `top-switcher_wrapper.is-product` 確認可以刪了再刪（都還留著、都已設為隱藏） | Terris |
 | 7 | Publish | Terris 授權後 |
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
 | 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |

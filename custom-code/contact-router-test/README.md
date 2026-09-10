@@ -4,6 +4,10 @@
 2026-09-10 建立，起因：前面幾版都是「寫完直接裝上去、沒有實機驗證」，
 接連被 Terris 抓到卡片沒隱藏、捲太深、方向不一致、切換時 section 邊界閃過四個問題。
 
+> 2026-09-10 入口由 segmented pill 改成兩張 `.contact-choice_item` 選擇卡。
+> **自訂 code 不用改**——它只認 `[data-router="wrapper"]` / `[data-router-target]` /
+> `[data-router-panel]`，不綁 class。harness 的 markup 已同步。
+
 ## 為什麼測試跑的一定是站上那份 code
 
 `harness.html` 是**模板**，不能直接開。裡面有一個 `<!-- ROUTER_SNIPPET -->` 佔位符，
@@ -41,14 +45,20 @@ node test_router.mjs
 
 想拿別的版本跑（例如做反向對照）：`ROUTER_SRC=/path/to/other.html node test_router.mjs`。
 
-## 涵蓋的檢查（24 項）
+## 涵蓋的檢查（25 項）
 
 1. **初始**：兩個面板 `display:none`、stage `height 0` + `overflow hidden`
    —— 這三件事都由 Webflow class 決定，不靠這支 JS，所以 Designer／Preview／發布後一致
 2. **點居服**：120ms 時 stage 高度介於 0 與最終值之間（是動畫不是瞬移）；
    展開後面板 `display:block` / `opacity 1`；按鈕加 `.is-active`；GA 送 `home_care`
 3. **收尾交還 `height:auto`**：內容日後變高（CMS、換行）不會被 `overflow:hidden` 切掉
-4. **捲動**把選擇器帶到 navbar 下方（實測 top=109px）
+4. **捲動**：入口卡停在 navbar 正下方（實測 wrapTop=96px、navbar=72px），
+   且剛展開的面板起點在視窗內（chooseTop=295px）。
+   斷言刻意寫成「表達意圖」而不是拿 `#choose` 的絕對座標當門檻——
+   入口從 pill 換成選擇卡之後高度會變，寫死座標會假性 fail。
+   這條當初改寫時抓到一個真的 bug：`bringIntoView()` 的 clearance 只做在 Lenis 那條路徑上，
+   fallback 用 `scrollIntoView({block:'start'})` 會把入口卡頂到視窗 0、剛好躲到固定 navbar 後面。
+   已改成自己算 `window.scrollTo`，兩條路徑落點一致。
 5. **切換時序**（點下去 150ms 時）：舊卡片還在、`opacity` 已降到 0.26 且帶 `.is-fading`，
    新卡片**還沒** `is-open`，且 **stage 高度鎖在舊高度** —— 證明是「先淡出、再換」且版面不動
 6. **新面板起點與舊面板同一位置**（由上往下長，不是被回流往上拉）

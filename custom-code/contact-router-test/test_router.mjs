@@ -70,12 +70,25 @@ check('展開是動畫不是瞬移（120ms 時高度介於 0 與最終值之間�
 await p.waitForTimeout(1500);
 hc = await state('homecare');
 st = await stage();
-const chooserTop = await p.evaluate(() => Math.round(document.getElementById('choose').getBoundingClientRect().top));
+const placement = await p.evaluate(() => ({
+  wrapTop: Math.round(document.querySelector('[data-router="wrapper"]').getBoundingClientRect().top),
+  navH: Math.round(document.querySelector('.navbar_component').getBoundingClientRect().height),
+  chooseTop: Math.round(document.getElementById('choose').getBoundingClientRect().top),
+  viewportH: window.innerHeight }));
 check('點居服：面板展開且不透明', hc.open && hc.disp === 'block' && hc.op === 1 && hc.height > 500, `h=${hc.height} op=${hc.op}`);
 check('點居服：stage 收尾交還 height:auto（內容變高不會被切）', st.inline === 'auto', `inline=${st.inline}`);
 check('點居服：按鈕變 is-active', await p.evaluate(() => document.querySelector('[data-router-target="homecare"]').classList.contains('is-active')));
 check('點居服：GA 事件送出 home_care', await p.evaluate(() => window.__ga.some(e => e.si === 'home_care')));
-check('點居服：捲動把選擇器帶到 navbar 下方（0–200px）', chooserTop >= 0 && chooserTop < 200, `top=${chooserTop}px`);
+// 捲動的目的是「選到的那張卡停在 navbar 正下方」，不是把 #choose 頂到某個固定位置。
+// 直接斷言意圖：入口卡剛好在 navbar 底下（clearance 是 navbar 高度 +24），
+// 而剛展開的面板起點還在視窗內。入口從 pill 換成選擇卡之後高度會變，
+// 所以不要拿 #choose 的絕對座標當門檻。
+check('點居服：入口卡停在 navbar 正下方',
+      placement.wrapTop >= placement.navH && placement.wrapTop <= placement.navH + 40,
+      `wrapTop=${placement.wrapTop}px navbar=${placement.navH}px`);
+check('點居服：剛展開的面板起點在視窗內',
+      placement.chooseTop > placement.wrapTop && placement.chooseTop < placement.viewportH,
+      `chooseTop=${placement.chooseTop}px viewport=${placement.viewportH}px`);
 
 const panelStartY = hc.top;
 const openHeightHc = hc.height;
