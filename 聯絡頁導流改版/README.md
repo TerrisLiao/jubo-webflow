@@ -204,10 +204,37 @@ Terris 回報「完全是錯誤的沒辦法點，直接把按鈕做到下一個 
 > `.product-hero_twoside-wrap` 雖然是 `position: absolute; inset: 0` 蓋住整個 hero，
 > 但 `.product-hero_center-wrap` 有 `z-index: 4`（`.hero-top-img` 只有 2／3），
 > 入口卡在它上面、應該收得到點擊。
-> 最可能的原因仍是**Preview 不執行 page custom code**：點下去 JS 沒跑、
+> 最可能的原因是**Preview 不執行 page custom code**：點下去 JS 沒跑、
 > 面板由 class 保持 `display: none`，而 `href="#choose"` 就在附近，
 > anchor 跳轉幾乎看不出移動 —— 看起來就完全沒反應。
-> 這是推論不是定論，只有發布到 staging 才驗得掉（見待辦 3）。
+> **staging 實測支持這個推論**：入口卡的中心點用 `document.elementFromPoint()` 測，
+> 最上層就是卡片本身（`blockedBy: null`），沒有任何覆蓋層。
+
+#### staging 實測（2026-09-10，已發布輸出）
+
+發布到 `jubo-health.webflow.io` 之後，把**已發布的 HTML 與它引用的 19 個 CSS／JS
+全部抓到本機**（站上的 Lenis、Webflow JS、Slater、GSAP、jQuery 都在），
+用容器內的 Chromium 實際點擊。這是整個功能第一次在真實輸出上被驗證：
+
+| 步驟 | stage 高度 | 居服面板 | 住宿面板 | active |
+|---|---|---|---|---|
+| 初始 | 0（inline 空） | `display:none` | `display:none` | 無 |
+| 點「我是居服單位」 | 1214（inline `auto`） | `block`、`is-open` | `none` | homecare |
+| 切「我是住宿・日照機構」 | 1832（inline `auto`） | `none` | `block`、`is-open` | residential |
+| 再點同一顆 | 0 | `none` | `none` | 無 |
+
+另外確認：
+
+- **`window.lenis` 存在** → 站上跑的是 `bringIntoView()` 的 Lenis 分支
+  （帶 navbar clearance 的那條），fallback 那條不會用到。
+- **入口卡收得到點擊**：兩張卡在中心點的 `elementFromPoint()` 都是卡片自己，
+  `blockedBy: null`，尺寸 576×102。
+- 頁面沒有來自這支 code 的 JS 錯誤（只有兩個是本機 harness 造成的：
+  `about:blank` 下讀 cookie 被拒、以及被 abort 的外部 script 造成的語法錯誤）。
+
+> 抓資源的做法留在 `custom-code/contact-router-test/`（`fetch-site-css.sh` 同款）。
+> 容器內的瀏覽器沒有外網，所以是「抓到本機再攔截請求供應」，
+> 圖片與 Google Fonts 直接 abort —— **行為驗得準，視覺不代表站上**。
 
 > ⚠️ **副作用（待 Terris 決定）**：hero 的 h1 還是「選擇您的機構類型」，
 > 但 hero 裡已經沒有可選的東西了。入口移到下一段之後，
@@ -421,7 +448,7 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 |---|---|---|
 | 1 | ~~照片上架~~ **已完成 2026-09-10**：asset `6aa22521339ce4908d70c4bb`（`jubo-homecare-window.webp`，132 KB），alt「Jubo 客戶成功顧問示意形象」（隨改名同步更新）；`.homecare-contact_photo` 的 `object-position` 設 `50% 22%`，因為原圖是 2:3、卡片框是 1:1.15，會從上下裁切，往上偏才不會切到頭 | 已完成 |
 | 2 | ~~決定卡片標題~~ **已定案 2026-09-10**：用職稱「客戶成功顧問」，不用人名 | 已完成 |
-| 3 | **要看展開動畫必須發布到 staging（webflow.io）**：Designer 與 Preview 都不執行 page custom code。Preview 只能確認「預設隱藏」是對的 | Terris 授權後 Claude 可代發 |
+| 3 | ~~要看展開動畫必須發布到 staging~~ **已完成 2026-09-10**：Terris 授權後發布到 `jubo-health.webflow.io`（`publishToWebflowSubdomain: true`、`customDomains: []`，兩個正式域名沒有動）。已在已發布輸出上實測通過，見下方「staging 實測」 | 已完成 |
 | 4 | 動畫參數要調（stage 高度 800ms、淡出 300ms、淡入 900ms delay 150ms、滑入 `translateY(-1.5rem)`、捲動 1.4s）就直接說。改 `custom-code/contact-router.html` → 重跑測試 → 再同步到頁面 head（2026-09-10 已確認 repo 與站上 head 逐字一致） | Claude |
 | 5 | 桌機／平板／手機三個斷點目視驗收（含頭像裁切 `object-position: 50% 22%` 要不要微調） | Terris |
 | 5c | 頭像幾何已有自動測試：`custom-code/contact-card-geometry-test/`（4 項全過，用正式站樣式表 ＋ 正式站業務卡 markup 實測）。改 `homecare-contact_portrait` / `homecare-contact_photo` / `sales-portrait` 之後要重跑 | Claude |
