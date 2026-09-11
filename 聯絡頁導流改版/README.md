@@ -253,6 +253,35 @@ Terris：「整體的 space 我希望多一點，然後卡片的副標題不需�
   ⚠️ 之後如果 `padding-global` 的值有變，這裡要一起改。
 - 卡片間距 1rem → **1.5rem**；提示行 `margin-top` .75rem → **1.5rem**。
 
+#### 再一輪：拿掉提示行、卡片縮短、箭頭改 gradient arrow（2026-09-11）
+
+Terris：「這個說明文字我覺得不需要，然後整個卡片不需要那麼長，你可以把箭頭製作成 gradient arrow。」
+（附了 navbar「預約諮詢」那顆按鈕的截圖當參考）
+
+- **提示行 `contact-choice_hint` 元素已移除**（class 未刪，見待辦）。
+- **卡片寬度 36rem → 24rem**（實測 576px → **384px**）。
+  24rem 不是隨便挑的：業務卡 `.single-sales_wrap` 與居服卡 `.homecare-contact_card`
+  都是 24rem，這樣全頁的卡片同寬。
+  > 我把「不需要那麼長」讀成**寬度**（跟先前「按鈕有點太長」同一個用法）。
+  > 若指的是高度，把 `.contact-choice_item` 的上下 padding 從 1.5rem 調小即可。
+- **箭頭改用站上現成的 gradient arrow**，不自己配色：
+  來源是 navbar `.glass-button`「預約諮詢」裡的 `.gradient-icon` —— 一支 18×18 的 SVG，
+  `linearGradient` 由 `#00B2C0`（offset .389）漸層到 `#3B58FF`（opacity .72）。
+  做法是 `.contact-choice_arrow`（2rem 白色圓形徽章）內放一個 HTML Embed
+  `.contact-choice_arrow-icon`（1.125rem）承載該 SVG。
+
+  ⚠️ **SVG 的 id 一定要改過**：原檔的 `mask0_9287_5721` / `paint0_linear_9287_5721`
+  在 navbar 已經出現，同一頁重複 id 會讓 `fill="url(#…)"` 指到**文件中第一個**同名
+  gradient（也就是 navbar 那個）。這裡改成 `cc_arrow_homecare` / `cc_arrow_residential`。
+
+  站上那顆徽章 `.glass-element.is-icon` 另外有 `transform: rotate(-45deg)`（所以看起來是 ↗）
+  與 7 層 `glass-effect__*`。**我沒有照抄那兩件**：箭頭維持指向右（→），
+  因為 ↗ 的語意是「開到別的地方」，而這兩顆是原地展開。要改成斜的就是加一行 rotate。
+
+republish 後實測（桌機 1440）：卡片 **384 × 82**、箭頭徽章 32 × 32、徽章內確認有 `linearGradient`；
+hero 底到第一張卡 64px、兩張卡之間 24px、最後一張卡底到下一段 64px。
+行為未受影響（stage 0 → 1214 → 1832 → 0）。
+
 republish 到 staging 後實測（桌機 1440）：
 
 | | 改之前 | 現在 |
@@ -329,14 +358,13 @@ section.section_about-hero
 section#choose.section_contact-router
 ├ div.contact-choice_layout                             ← 分流入口在這裡（2026-09-10 從 hero 搬來）
 │   └ div.container-large
-│       ├ div.contact-choice_wrap[data-router="wrapper"]   （max-width 36rem 置中，實測 576px）
-│       │   ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
-│       │   │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」
-│       │   │   └ .contact-choice_arrow「→」
-│       │   └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
-│       │       ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
-│       │       └ .contact-choice_arrow「→」
-│       └ p.contact-choice_hint「選擇後，下方會顯示對應的聯絡窗口」
+│       └ div.contact-choice_wrap[data-router="wrapper"]   （max-width 24rem 置中，實測 384px）
+│           ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
+│           │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」
+│           │   └ .contact-choice_arrow > .contact-choice_arrow-icon（HTML Embed：gradient arrow SVG）
+│           └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
+│               ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
+│               └ .contact-choice_arrow > .contact-choice_arrow-icon（HTML Embed：gradient arrow SVG）
 └ div.contact-router_component
    └ div.contact-router_stage[data-router="stage"]        ← 高度過場在這一層
       ├ div.contact-router_panel[data-router-panel="homecare"]
@@ -523,7 +551,7 @@ Terris 回報「居服頭像太長太大張，沒跟業務的一樣」。實測�
 | 8 | 第三階段：`#form` 正名為「異業合作與其他洽詢」；`銷售部門s` 加「服務對象」欄位 | 未排 |
 | 9 | `06_自訂Class完整清單.md` 需重新讀回快照（本次新增 12 個 class，含 `contact-router_stage`） | 未排 |
 | 11 | ~~拿掉 `.section_contact-form` 的背景~~ **已完成 2026-09-10**：Terris 選定移除。全站掃過只有 `/contact` 用到、只有一個實例；該 class 也只有這一個屬性。移除後 hero 到 CTA 全透明，線消失。**副作用**：聯絡表單那一段失去原本那層白 30%，現在與其他段同為 `#f8f8f8` | 已完成 |
-| 10b | `.contact-choice_desc` 現在沒有元素在用（副標題已移除）。要刪嗎？ | Terris |
+| 10b | `.contact-choice_desc` 與 `.contact-choice_hint` 現在都沒有元素在用（副標題與提示行已移除）。要刪嗎？ | Terris |
 | 10a | `.category-tag.is-audience` combo class 現在沒有元素在用（標籤已移除、尚未 publish、正式站樣式表裡沒有它）。要刪嗎？ | Terris |
 | 10 | **居服訪客該不該看到 `section_home-care-banner`？** 它的 base 層是 `display: none`（改版前就沒顯示過）。要讓它現身得先解掉那條規則，而那是共用 class，需先查全站有無其他頁面依賴 | Terris |
 
