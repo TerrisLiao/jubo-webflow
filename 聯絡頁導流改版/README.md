@@ -411,17 +411,21 @@ section#choose.section_contact-router
 │   └ div.container-large
 │       └ div.contact-choice_wrap[data-router="wrapper"]   （max-width 24rem 置中，實測 384px）
 │           ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
+│           │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」（flex-grow 1）
 │           │   ├ .contact-choice_icon-row > .contact-choice_service-icon > Embed（手捧愛心＝居服）
-│           │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」
 │           │   └ .contact-choice_arrow                    （2rem 圓形徽章、overflow clip 當遮罩）
 │           │       ├ .contact-choice_arrow-icon.is-1 > Embed（gradient arrow）
 │           │       └ .contact-choice_arrow-icon.is-2 > Embed（同一支，hover 交棒用）
 │           └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
+│               ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
 │               ├ .contact-choice_icon-row                （月亮＝住宿型、太陽＝日照）
 │               │   ├ .contact-choice_service-icon > Embed
 │               │   └ .contact-choice_service-icon > Embed
-│               ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
 │               └ .contact-choice_arrow > .is-1 / .is-2
+
+> 順序：**標題 → service icon → 箭頭徽章**（2026-09-11 Terris 指示把 icon 放到文字右邊）。
+> 靠 `.contact-choice_text-wrap` 的 `flex-grow: 1` 把後面兩組推到右側，
+> 不需要額外的 spacer。實測左緣座標 標題 25 → icon 239/279 → 箭頭 327。
 └ div.contact-router_component
    └ div.contact-router_stage[data-router="stage"]        ← 高度過場在這一層
       ├ div.contact-router_panel[data-router-panel="homecare"]
