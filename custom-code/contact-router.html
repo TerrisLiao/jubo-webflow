@@ -34,8 +34,36 @@
     transition: opacity .3s ease !important;
   }
   [data-router-target] { cursor: pointer; }
+
+  /* 入口卡的箭頭交棒動畫（2026-09-11）：游標移入時舊箭頭往右滑出、
+     新的從左邊滑進來。照 navbar .glass-button 裡兩顆 .gradient-icon
+     （is-1 / is-2）的同一套做法；徽章有 overflow: clip 當遮罩。
+
+     為什麼寫在這裡而不是 Webflow class：這是「父層 hover 影響子層」，
+     Webflow 的樣式面板只能寫元素自己的 hover，MCP 也一樣，表達不出來。
+     位置與尺寸仍然在 class 上（.contact-choice_arrow-icon.is-1 / .is-2），
+     這裡只負責位移與時序。 */
+  .contact-choice_arrow-icon {
+    transition: transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .contact-choice_arrow-icon.is-2 { transform: translateX(-170%); }
+
+  /* 選中的卡片是實心 teal，service icon 的圓底跟卡片同色會「消失」，
+     只剩淺色圖形浮著。所以把兩個 fill 都改成吃 CSS variable
+     （預設值就是 /login 原本的 #00B2C0 / #F0FEFF，靜止時完全一樣），
+     選中時對調成白底 teal 圖形，跟同一張卡上的白色箭頭徽章一致。 */
+  .contact-choice_item.is-active {
+    --cc-icon-bg: #ffffff;
+    --cc-icon-fg: #00b2c0;
+  }
+  .contact-choice_item.is-active .contact-choice_service-icon {
+    filter: drop-shadow(0 8px 12px rgba(8, 72, 78, .22));
+  }
+  .contact-choice_item:hover .contact-choice_arrow-icon.is-1 { transform: translateX(170%); }
+  .contact-choice_item:hover .contact-choice_arrow-icon.is-2 { transform: translateX(0); }
   @media (prefers-reduced-motion: reduce) {
-    [data-router-panel], [data-router-panel] > *, [data-router="stage"] {
+    [data-router-panel], [data-router-panel] > *, [data-router="stage"],
+    .contact-choice_arrow-icon {
       transition: none !important;
     }
   }

@@ -29,18 +29,29 @@
   .contact-choice_wrap{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;
     flex-wrap:nowrap;width:100%;grid-column-gap:1.5rem;grid-row-gap:1.5rem;
     max-width:24rem;margin-left:auto;margin-right:auto}
+  /* 玻璃質感抄 .card-wrapper.is-login-hub */
   .contact-choice_item{display:flex;flex-direction:row;align-items:center;justify-content:space-between;
     grid-column-gap:1rem;flex-grow:0;flex-shrink:1;flex-basis:auto;max-width:none;width:100%;
-    padding:1.5rem;border-radius:1.25rem;border:1px solid rgba(105,131,146,.15);
-    background:rgba(255,255,255,.5);color:#151717;text-decoration:none;text-align:left;
+    padding:1.5rem;border-radius:1.25rem;border:1px solid #ffffffc7;
+    background:#ffffffd1;-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px);
+    box-shadow:0 10px 28px #22393c14, inset 0 1px #ffffffe0;
+    color:#151717;text-decoration:none;text-align:left;
     transition:background-color .25s ease,border-color .25s ease,color .25s ease,transform .25s ease}
-  .contact-choice_item.is-active{background:#00b2c0;border-color:#00b2c0;color:#fff}
-  .contact-choice_text-wrap{display:flex;flex-direction:column;align-items:flex-start;grid-row-gap:.25rem}
+  .contact-choice_icon-row{display:flex;align-items:center;flex-shrink:0;gap:.5rem}
+  .contact-choice_service-icon{display:flex;width:2rem;height:2rem;flex:0 0 auto;
+    filter:drop-shadow(0 8px 12px #00b2c029)}
+  .contact-choice_item.is-active{background:#00b2c0;border-color:#00b2c0;color:#fff;
+    box-shadow:0 14px 34px #00b2c047, inset 0 1px #ffffff59}
+  .contact-choice_text-wrap{display:flex;flex-direction:column;align-items:flex-start;grid-row-gap:.25rem;flex-grow:1}
   .contact-choice_title{font-size:1.125rem;font-weight:500;line-height:150%;color:currentColor}
   .contact-choice_desc{font-size:.875rem;line-height:150%;color:currentColor;opacity:.65}
   /* 箭頭徽章：站上 navbar「預約諮詢」那顆 gradient arrow（#00B2C0 → #3B58FF） */
   .contact-choice_arrow{display:flex;justify-content:center;align-items:center;width:2rem;height:2rem;
-    flex-shrink:0;border-radius:50%;background:#fff;overflow:clip}
+    flex-shrink:0;border-radius:50%;background:#ffffffeb;overflow:clip;position:relative;
+    box-shadow:0 4px 10px #00b2c024, inset 0 0 0 1px #ffffffc7}
+  .contact-choice_arrow-icon.is-1{position:relative;z-index:2}
+  .contact-choice_arrow-icon.is-2{position:absolute;z-index:1;top:50%;left:50%;
+    margin-top:-.5625rem;margin-left:-.5625rem}
   .contact-choice_arrow-icon{display:flex;justify-content:center;align-items:center;
     width:1.125rem;height:1.125rem;flex-shrink:0}
   .navbar_component{position:fixed;top:0;left:0;right:0;height:72px;background:#fff;z-index:9}
@@ -59,18 +70,26 @@
     <a class="contact-choice_item" href="#choose" data-router-target="homecare"
        data-ga-event="contact_route_select" data-solution-interest="home_care"
        data-ga-cta-location="contact_router_choice">
+      <div class="contact-choice_icon-row"><div class="contact-choice_service-icon"><svg viewBox="0 0 32 32" width="100%" height="100%" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--cc-icon-bg,#00B2C0)"/></svg></div></div>
       <div class="contact-choice_text-wrap">
         <div class="contact-choice_title">我是居服單位</div>
       </div>
-      <div class="contact-choice_arrow"><div class="contact-choice_arrow-icon"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div></div>
+      <div class="contact-choice_arrow">
+        <div class="contact-choice_arrow-icon is-1"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div>
+        <div class="contact-choice_arrow-icon is-2"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div>
+      </div>
     </a>
     <a class="contact-choice_item" href="#choose" data-router-target="residential"
        data-ga-event="contact_route_select" data-solution-interest="residential_day_care"
        data-ga-cta-location="contact_router_choice">
+      <div class="contact-choice_icon-row"><div class="contact-choice_service-icon"><svg viewBox="0 0 32 32" width="100%" height="100%" aria-hidden="true"><circle cx="16" cy="16" r="16" fill="var(--cc-icon-bg,#00B2C0)"/></svg></div></div>
       <div class="contact-choice_text-wrap">
         <div class="contact-choice_title">我是住宿・日照機構</div>
       </div>
-      <div class="contact-choice_arrow"><div class="contact-choice_arrow-icon"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div></div>
+      <div class="contact-choice_arrow">
+        <div class="contact-choice_arrow-icon is-1"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div>
+        <div class="contact-choice_arrow-icon is-2"><svg width="100%" height="100%" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="#00B2C0"/></svg></div>
+      </div>
     </a>
   </div>
   </div></div>

@@ -282,6 +282,57 @@ republish 後實測（桌機 1440）：卡片 **384 × 82**、箭頭徽章 32 ×
 hero 底到第一張卡 64px、兩張卡之間 24px、最後一張卡底到下一段 64px。
 行為未受影響（stage 0 → 1214 → 1832 → 0）。
 
+#### 再一輪：箭頭交棒動畫、玻璃質感、/login 的服務 icon（2026-09-11）
+
+Terris：「指標會有一個箭頭動畫你沒有做進去，然後玻璃感跟其他的做得不一樣，
+可以幫我加點陰影跟模砂增加質感。然後新增放在登入畫面裡面的 icon。」
+
+**1. 箭頭交棒動畫** —— navbar 的 `.glass-button` 裡本來就有兩顆 `.gradient-icon`
+（`is-1` / `is-2`），hover 時一顆滑出、一顆滑進。我先前只放了一顆，所以沒有動畫。
+現在每個徽章放兩顆（`.contact-choice_arrow-icon.is-1` / `.is-2`），
+位移與時序寫在 page head code（見下方說明）。
+
+> **MCP 小發現**：`set_style` 一次給兩個**獨立的 global class** 會失敗
+> （`One or more styles not found`），但給「base + combo」的**組合鏈**是可以的。
+> 所以 `["contact-choice_arrow-icon", "is-1"]` 成功，
+> 而稍早 `["padding-global", "contact-choice_layout"]` 失敗。
+
+**2. 玻璃質感** —— 原本是 `white-50` ＋ `blur(5px)` ＋ 一條淡灰邊，比站上其他玻璃薄。
+改成直接抄 `/login` 的 `.card-wrapper.is-login-hub`（站上最完整的一套）：
+
+| | 之前 | 現在 |
+|---|---|---|
+| 底色 | `--neutral--white-50`（0.5） | `#ffffffd1`（0.82） |
+| 模糊 | `blur(5px)` | **`blur(22px)`** |
+| 邊框 | `--jbc-line` | `#ffffffc7` |
+| 陰影 | 無 | `0 10px 28px #22393c14, inset 0 1px #ffffffe0` |
+| hover | 只換邊框色 | `0 20px 54px #22393c1c, inset 0 1px #ffffffe0` ＋ 邊框 `#00b2c06b` |
+
+選中（teal）狀態另給 `0 14px 34px #00b2c047, inset 0 1px #ffffff59`，
+箭頭徽章也加了 `0 4px 10px #00b2c024, inset 0 0 0 1px #ffffffc7`。
+
+> 這些是**色碼字面值不是變數** —— 因為我是逐項照抄 `.card-wrapper.is-login-hub`
+> 與 `.glass-element` 的既有寫法，站上那些規則本來就用字面值。
+
+**3. /login 的服務 icon** —— 來源 `.login-hub_service-icon`（`/login` 三張卡片上的那組）：
+**月亮＝住宿型、太陽＝日照、手捧愛心＝居服**。對應到兩張入口卡：
+
+- 「我是居服單位」→ 手捧愛心 × 1
+- 「我是住宿・日照機構」→ 月亮 ＋ 太陽
+
+尺寸用 2rem（`/login` 是 2.5rem，這裡小一號才不會把卡片撐高），
+`filter: drop-shadow(0 8px 12px #00b2c029)` 照抄。
+
+> ⚠️ **SVG 的 fill 改成吃 CSS variable**：選中的卡片是實心 teal，而 icon 的圓底
+> 也是 `#00B2C0`，兩者同色會讓圓底「消失」、只剩淺色圖形浮著。
+> 所以把兩個 fill 改成 `var(--cc-icon-bg, #00B2C0)` / `var(--cc-icon-fg, #F0FEFF)`
+> —— **預設值就是 /login 的原色，靜止時與原檔完全一致**；
+> 選中時在 head code 裡對調成白底 teal 圖形，跟同一張卡上的白色箭頭徽章一致。
+
+**已發布輸出上實測 13 項全過**，包含動畫本身：靜止時箭頭 1 在中央、箭頭 2 藏在
+左邊 −31px；hover 700ms 後箭頭 1 到 +31px、箭頭 2 回到 0。
+四個 gradient id 都不重複也沒撞到 navbar 的。
+
 republish 到 staging 後實測（桌機 1440）：
 
 | | 改之前 | 現在 |
@@ -360,11 +411,17 @@ section#choose.section_contact-router
 │   └ div.container-large
 │       └ div.contact-choice_wrap[data-router="wrapper"]   （max-width 24rem 置中，實測 384px）
 │           ├ a.contact-choice_item[data-router-target="homecare"]     href="#choose"
+│           │   ├ .contact-choice_icon-row > .contact-choice_service-icon > Embed（手捧愛心＝居服）
 │           │   ├ .contact-choice_text-wrap > .contact-choice_title「我是居服單位」
-│           │   └ .contact-choice_arrow > .contact-choice_arrow-icon（HTML Embed：gradient arrow SVG）
+│           │   └ .contact-choice_arrow                    （2rem 圓形徽章、overflow clip 當遮罩）
+│           │       ├ .contact-choice_arrow-icon.is-1 > Embed（gradient arrow）
+│           │       └ .contact-choice_arrow-icon.is-2 > Embed（同一支，hover 交棒用）
 │           └ a.contact-choice_item[data-router-target="residential"]  href="#choose"
+│               ├ .contact-choice_icon-row                （月亮＝住宿型、太陽＝日照）
+│               │   ├ .contact-choice_service-icon > Embed
+│               │   └ .contact-choice_service-icon > Embed
 │               ├ .contact-choice_text-wrap > .contact-choice_title「我是住宿・日照機構」
-│               └ .contact-choice_arrow > .contact-choice_arrow-icon（HTML Embed：gradient arrow SVG）
+│               └ .contact-choice_arrow > .is-1 / .is-2
 └ div.contact-router_component
    └ div.contact-router_stage[data-router="stage"]        ← 高度過場在這一層
       ├ div.contact-router_panel[data-router-panel="homecare"]
