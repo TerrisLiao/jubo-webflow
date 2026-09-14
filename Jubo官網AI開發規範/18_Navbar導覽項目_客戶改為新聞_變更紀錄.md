@@ -5,7 +5,7 @@
 - 對象：`Navbar` Component Definition（component id `24d484de-b8de-0ddb-97f8-bf58fc68c6bf`，33 個實例）
 - 委託：Terris — 「把導覽的『客戶』改為『新聞』，連結指到新聞中心」
 - 主管理由：客戶成功故事已有多個進入管道，新聞只有首頁才進得去，入口分配不合理
-- 狀態：**已修改，未 Publish**（改 Component Definition 等同全站變更，需明確授權才發布）
+- 狀態：**已修改、已 Publish**（Terris 於 2026-09-14 自行發布）
 
 ---
 
@@ -52,7 +52,7 @@
 **驗證限制**
 
 - 未取截圖：本次只改文字與連結，未動樣式；且依 `17` 的經驗，頁面上的 Navbar instance 截圖會拿到快取畫面。
-- 未 Publish，因此線上 `jubo-health.com` 仍是「客戶」，實際線上效果要等發布後才能複驗。
+- 讀回驗證是在 Publish **之前**做的（Designer 端）；發布後未再以線上 CSS／DOM 複驗，若要確認線上結果，開 `jubo-health.com` 檢查 header 的第四個導覽項目是否為「新聞」且 href 指向 `/news`。
 - 手機抽屜在桌機斷點是 `display: none`，僅以元素樹確認。
 
 ---
@@ -62,6 +62,6 @@
 1. **`/customer-success-stories` 失去主導覽入口。** 這是本次調整刻意的取捨（主管認為該頁已有多個進入管道）。
    實際仍可從首頁客戶案例區、各解決方案頁、CMS 案例卡等進入；若日後發現流量明顯下降，可考慮把它收進
    `資源` mega menu，而不是放回第一層。
-2. **未 Publish。** Navbar 是 Component Definition，改動影響 33 個實例，發布等於全站發布，須 Terris 明確授權。
+2. **已 Publish（2026-09-14，Terris 自行發布）。** Navbar 是 Component Definition，這次發布同時更新 33 個實例，等於全站生效。
 3. `17_系統登入頁_結構與樣式修正紀錄.md` 內文出現的「…/ 資源 / 客戶 / 公司 / …」是當時的歷史紀錄，**不回頭修改**；
    導覽現況以本檔為準。
