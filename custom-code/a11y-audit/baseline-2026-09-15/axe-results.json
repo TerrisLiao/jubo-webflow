@@ -1,0 +1,1838 @@
+[
+ {
+  "name": "home",
+  "url": "https://www.jubo-health.com/",
+  "violations": [
+   {
+    "id": "aria-allowed-role",
+    "impact": "minor",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "ARIA role should be appropriate for the element",
+    "sample": [
+     {
+      "target": "div[data-platform-panel=\"1\"] > .is-right.tab-layout__col > .tab-visual__wrap[aria-live=\"polite\"][role=\"region\"] > .active.tab-visual__item[data-tabs=\"visual-item\"]",
+      "html": "<a id=\"tab1\" data-tabs=\"visual-item\" role=\"tabpanel\" href=\"/products/residential-care\" class=\"tab-visual__item active w-inline-block\">",
+      "msg": "Fix any of the following: ARIA role tabpanel is not allowed for given element"
+     }
+    ]
+   },
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 15,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 3,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w--current[href=\"/\"]",
+      "html": "<a href=\"/\" aria-current=\"page\" class=\"logo-link w-inline-block w--current\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": "div[data-platform-panel=\"1\"] > .is-right.tab-layout__col > .tab-visual__wrap[aria-live=\"polite\"][role=\"region\"] > .active.tab-visual__item[data-tabs=\"visual-item\"]",
+      "html": "<a id=\"tab1\" data-tabs=\"visual-item\" role=\"tabpanel\" href=\"/products/residential-care\" class=\"tab-visual__item active w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" aria-current=\"page\" class=\"logo-link is-footer w-inline-block w--current\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 67,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".hero_component > .section-header_wrapper",
+      "html": "<div class=\"section-header_wrapper\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".hero_main-img-wrapper",
+      "html": "<div data-parallax-scrub=\"1.5\" data-parallax=\"trigger\" data-parallax-start=\"2\" data-parallax-end=\"0\" class=\"hero_main-img-wrapper\" style=\"translate: none; rotate: none; scale: none",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 37,
+  "incomplete": [
+   {
+    "id": "aria-allowed-role",
+    "nodes": 6,
+    "help": "ARIA role should be appropriate for the element"
+   },
+   {
+    "id": "aria-hidden-focus",
+    "nodes": 28,
+    "help": "ARIA hidden element must not be focusable or contain focusable elements"
+   },
+   {
+    "id": "aria-prohibited-attr",
+    "nodes": 1,
+    "help": "Elements must only use permitted ARIA attributes"
+   },
+   {
+    "id": "color-contrast",
+    "nodes": 88,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 52
+ },
+ {
+  "name": "company",
+  "url": "https://www.jubo-health.com/company",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 18,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_company-hero",
+      "html": "<div class=\"section_company-hero\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".manifesto_component > .section-header_wrapper",
+      "html": "<div class=\"section-header_wrapper\"><div class=\"section_tag\"><div class=\"text-size-tiny\">Menifesto</div></div><h2 class=\"text-align-center\"><span class=\"gradient-headline\">我們相信，好的科",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 37,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 59,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 52
+ },
+ {
+  "name": "contact",
+  "url": "https://www.jubo-health.com/contact",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 9,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_about-hero",
+      "html": "<div class=\"section_about-hero\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "a[data-router-target=\"homecare\"] > .contact-choice_text-wrap",
+      "html": "<div class=\"contact-choice_text-wrap\"><div class=\"contact-choice_title\">我是居服單位</div></div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 40,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 36,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 49
+ },
+ {
+  "name": "news-list",
+  "url": "https://www.jubo-health.com/news",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 22,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 146,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_page-header",
+      "html": "<div class=\"section_page-header\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "a[href$=\"client-meetup-2026h2\"] > .news-card_headline-wrap > .news-card_headline-inner-wrap > .news-card_category-date-wrap",
+      "html": "<div class=\"news-card_category-date-wrap\"><div style=\"background-color:rgba(0, 178, 192, 0.15)\" class=\"category-tag\"><div fs-list-field=\"category\">最新消息</div></div><p class=\"text-si",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 39,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 30,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 50
+ },
+ {
+  "name": "news-item",
+  "url": "https://www.jubo-health.com/news/amy-lense-intro-2026",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 55,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_page-header",
+      "html": "<div class=\"section_page-header\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_news-content",
+      "html": "<div class=\"section_news-content\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 38,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 31,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 51
+ },
+ {
+  "name": "solution-res",
+  "url": "https://www.jubo-health.com/solutions/residential-care",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 17,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 40,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_client-logo",
+      "html": "<div class=\"section_client-logo is-shadows\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".product-big-numbers_component > .section-header_wrapper",
+      "html": "<div class=\"section-header_wrapper\"><div class=\"section_tag\"><div class=\"text-size-tiny\">智齡的實績</div></div><h2 class=\"text-align-center\">為什麼<span class=\"gradient-headline\">住宿型機構</sp",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 38,
+  "incomplete": [
+   {
+    "id": "aria-hidden-focus",
+    "nodes": 14,
+    "help": "ARIA hidden element must not be focusable or contain focusable elements"
+   },
+   {
+    "id": "color-contrast",
+    "nodes": 109,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 51
+ },
+ {
+  "name": "product-vitaltrolley",
+  "url": "https://www.jubo-health.com/products/vitaltrolley",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "heading-order",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "Heading levels should only increase by one",
+    "sample": [
+     {
+      "target": ".product-scroll-card_item:nth-child(1) > .product-scroll-card_content-left > h3",
+      "html": "<h3>行動量測更順手</h3>",
+      "msg": "Fix any of the following: Heading order invalid"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 24,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".solutions-basic-model_accordion:nth-child(1) > .faq5_question > .text-size-large",
+      "html": "<div class=\"text-size-large\">行動量測更順手</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".solutions-basic-model_accordion:nth-child(1) > .faq5_answer",
+      "html": "<div class=\"faq5_answer\" style=\"height: 0px;\"><div class=\"margin-bottom margin-small\"><div class=\"max-width-large\"><p>可調式推車設計搭配靈活鵝頸臂，讓設備高度與角度更符合現場操作需求。</p></div></div></div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 38,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 33,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 51
+ },
+ {
+  "name": "product-residential",
+  "url": "https://www.jubo-health.com/products/residential-care",
+  "violations": [
+   {
+    "id": "aria-allowed-role",
+    "impact": "minor",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "ARIA role should be appropriate for the element",
+    "sample": [
+     {
+      "target": "#tab1",
+      "html": "<a id=\"tab1\" data-tabs=\"visual-item\" role=\"tabpanel\" href=\"/products/care-assistant-app\" class=\"tab-visual__item active w-inline-block\">",
+      "msg": "Fix any of the following: ARIA role tabpanel is not allowed for given element"
+     }
+    ]
+   },
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "heading-order",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "Heading levels should only increase by one",
+    "sample": [
+     {
+      "target": ".product-features_component > .section-header_wrapper > .text-align-center",
+      "html": "<h3 class=\"text-align-center\">簡化工作流程，統整照護資料</h3>",
+      "msg": "Fix any of the following: Heading order invalid"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 3,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": "#tab1",
+      "html": "<a id=\"tab1\" data-tabs=\"visual-item\" role=\"tabpanel\" href=\"/products/care-assistant-app\" class=\"tab-visual__item active w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 40,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_about-hero",
+      "html": "<div class=\"section_about-hero\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_client-logo",
+      "html": "<div class=\"section_client-logo\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 37,
+  "incomplete": [
+   {
+    "id": "aria-allowed-role",
+    "nodes": 1,
+    "help": "ARIA role should be appropriate for the element"
+   },
+   {
+    "id": "aria-hidden-focus",
+    "nodes": 14,
+    "help": "ARIA hidden element must not be focusable or contain focusable elements"
+   },
+   {
+    "id": "color-contrast",
+    "nodes": 63,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 52
+ },
+ {
+  "name": "customer-stories-list",
+  "url": "https://www.jubo-health.com/customer-success-stories",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 6,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_tag",
+      "html": "<div class=\"section_tag\"><div class=\"text-size-tiny\">客戶故事</div></div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "h1",
+      "html": "<h1>成功案例</h1>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 36,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 32,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 53
+ },
+ {
+  "name": "customer-story",
+  "url": "https://www.jubo-health.com/customer-stories/daycare-story-1",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "heading-order",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "Heading levels should only increase by one",
+    "sample": [
+     {
+      "target": "h4",
+      "html": "<h4>每天忙著處理機構日常作業，你還有多少時間能專心陪伴長輩？</h4>",
+      "msg": "Fix any of the following: Heading order invalid"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 4,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "._2col-sticky_headline-wrap > .customer-story_other-content-wrap > .section_tag",
+      "html": "<div class=\"section_tag\"><div class=\"text-size-tiny\">更多成功故事</div></div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "._2col-sticky_headline-wrap > .customer-story_other-content-wrap > .customer-story_cms-list-wrap.w-dyn-list > .customer-story_cms-list.w-dyn-items[fs-list-loadcount=\"all\"]",
+      "html": "<div fs-list-loadcount=\"all\" fs-list-element=\"list\" fs-list-load=\"more\" role=\"list\" class=\"customer-story_cms-list w-dyn-items\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 36,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 33,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 53
+ },
+ {
+  "name": "feature-item",
+  "url": "https://www.jubo-health.com/features/jia-fang-guan-li",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 15,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "heading-order",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "Heading levels should only increase by one",
+    "sample": [
+     {
+      "target": "#w-node-fe36af9b-0775-d46a-f130-52d26e40c3b8-0cd5838d > .tab-content__wrap.is-detail > h3",
+      "html": "<h3>直覺式表單操作</h3>",
+      "msg": "Fix any of the following: Heading order invalid"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 6,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_hero",
+      "html": "<div class=\"section_hero\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "#home-platform",
+      "html": "<div id=\"home-platform\" class=\"section_product-intro\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 34,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 33,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 55
+ },
+ {
+  "name": "ai-jubo-ai",
+  "url": "https://www.jubo-health.com/ai/jubo-ai",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 19,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 47,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_product-hero-5",
+      "html": "<div class=\"section_product-hero-5\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".product-features_component > .section-header_wrapper:nth-child(1)",
+      "html": "<div class=\"section-header_wrapper\"><div class=\"section_tag\"><div class=\"text-size-tiny\">N-Copilot</div></div><h2 class=\"text-align-center\">專為照護工作打造的 AI 智慧助理</h2><p class=\"text-ali",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 37,
+  "incomplete": [
+   {
+    "id": "aria-allowed-role",
+    "nodes": 3,
+    "help": "ARIA role should be appropriate for the element"
+   },
+   {
+    "id": "color-contrast",
+    "nodes": 40,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   },
+   {
+    "id": "video-caption",
+    "nodes": 1,
+    "help": "<video> elements must have captions"
+   }
+  ],
+  "inapplicable": 51
+ },
+ {
+  "name": "careers",
+  "url": "https://www.jubo-health.com/careers",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 8,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_2col-sticky",
+      "html": "<div class=\"section_2col-sticky\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": ".section_culture",
+      "html": "<div class=\"section_culture\">",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 38,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 47,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 51
+ },
+ {
+  "name": "login",
+  "url": "https://www.jubo-health.com/login",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 14,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 36,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 44,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 53
+ },
+ {
+  "name": "jp-overview",
+  "url": "https://www.jubo-health.com/jp/overview",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 18,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">すべて拒否</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">すべて同意</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 1,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">「同意する」をクリックすることで、ウェブサイトの利用状況分析および閲覧体験向上のための Cookie 使用に同意されたものとみなされます。詳細については、當社の[プライバシーポリシー]をご確認ください。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 36,
+  "incomplete": [
+   {
+    "id": "aria-prohibited-attr",
+    "nodes": 2,
+    "help": "Elements must only use permitted ARIA attributes"
+   },
+   {
+    "id": "color-contrast",
+    "nodes": 106,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 53
+ },
+ {
+  "name": "iot-partners",
+  "url": "https://www.jubo-health.com/resources/iot-partners",
+  "violations": [
+   {
+    "id": "aria-command-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag412"
+    ],
+    "nodes": 1,
+    "help": "ARIA commands must have an accessible name",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_close",
+      "html": "<div fs-cc=\"close\" class=\"fs-cc-banner_close\" role=\"button\" tabindex=\"0\">",
+      "msg": "Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not exist or is empty aria-labelledby attribute does not exist, references elements tha"
+     }
+    ]
+   },
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "tags": [
+     "wcag2aa",
+     "wcag143"
+    ],
+    "nodes": 19,
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text-link",
+      "html": "<a fs-cc=\"open-preferences\" href=\"#\" class=\"fs-cc-banner_text-link black hover-effect\" role=\"button\" tabindex=\"0\">Cookie 偏好設定</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 13.5pt (18px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.fs-cc-button-alt[fs-cc=\"deny\"]",
+      "html": "<a fs-cc=\"deny\" href=\"#\" class=\"fs-cc-banner_button fs-cc-button-alt w-button\" role=\"button\" tabindex=\"0\">拒絕全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #00b2c0, background color: #ffffff, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     },
+     {
+      "target": ".fs-cc-banner_button.w-button[fs-cc=\"allow\"]",
+      "html": "<a fs-cc=\"allow\" href=\"#\" class=\"fs-cc-banner_button w-button\" role=\"button\" tabindex=\"0\">接受全部</a>",
+      "msg": "Fix any of the following: Element has insufficient color contrast of 2.58 (foreground color: #ffffff, background color: #00b2c0, font size: 12.0pt (16px), font weight: normal). Expected contrast ratio"
+     }
+    ]
+   },
+   {
+    "id": "link-name",
+    "impact": "serious",
+    "tags": [
+     "wcag2a",
+     "wcag244",
+     "wcag412"
+    ],
+    "nodes": 2,
+    "help": "Links must have discernible text",
+    "sample": [
+     {
+      "target": ".nav_component > .logo-link.w-inline-block[href=\"/\"]",
+      "html": "<a href=\"/\" class=\"logo-link w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     },
+     {
+      "target": ".is-footer",
+      "html": "<a href=\"/\" class=\"logo-link is-footer w-inline-block\">",
+      "msg": "Fix all of the following: Element is in tab order and does not have accessible text Fix any of the following: Element does not have text that is visible to screen readers aria-label attribute does not"
+     }
+    ]
+   },
+   {
+    "id": "region",
+    "impact": "moderate",
+    "tags": [
+     "best-practice"
+    ],
+    "nodes": 266,
+    "help": "All page content should be contained by landmarks",
+    "sample": [
+     {
+      "target": ".fs-cc-banner_text",
+      "html": "<div class=\"fs-cc-banner_text\">點擊「接受」即表示您同意我們使用 Cookie，以分析網站使用情況並提升您的瀏覽體驗。更多資訊請參閱我們的隱私權政策。</div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "#w-node-_3a1db3a2-f64e-4d31-123e-e8563cffe317-4cde729a > .section_tag",
+      "html": "<div class=\"section_tag\"><div class=\"text-size-tiny\">IoT設備列表</div></div>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     },
+     {
+      "target": "h1",
+      "html": "<h1 class=\"text-align-center\">打造最大的智齡<br>IoT 生態圈</h1>",
+      "msg": "Fix any of the following: Some page content is not contained by landmarks"
+     }
+    ]
+   }
+  ],
+  "passes": 40,
+  "incomplete": [
+   {
+    "id": "color-contrast",
+    "nodes": 54,
+    "help": "Elements must meet minimum color contrast ratio thresholds"
+   }
+  ],
+  "inapplicable": 49
+ }
+]

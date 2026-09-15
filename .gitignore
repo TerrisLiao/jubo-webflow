@@ -4,3 +4,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# 無障礙稽核的暫存工作目錄（抓下來的全站 HTML 快照、node_modules）
+custom-code/a11y-audit/_work/
