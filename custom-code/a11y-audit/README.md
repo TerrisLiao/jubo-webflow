@@ -35,6 +35,7 @@ node ../score.mjs                 # JA11Y-23 分數與階段預測
 | `axe-detail.mjs` | 列出對比／連結名稱／landmark 的**逐一節點**（要修哪個元素時看這個） |
 | `alt-breakdown.mjs` / `alt-plan.mjs` | 空 alt 依「版位」分組與覆蓋率曲線（排 E 組工作順序時看這個） |
 | `focus-test.mjs` | 實際 focus 前 30 個元素，讀 computed style 驗證焦點框 |
+| `scenario.mjs` | **「某條判準不修的話上限是多少」**。2026-09-15 用它算出顏色凍結後上限是 93.0%、連收合狀態也不修則是 87.7%（過不了 90%）。要改限制條件時編輯檔案底部的 `phases` 陣列 |
 
 ### 環境需求
 
@@ -57,6 +58,20 @@ node ../score.mjs                 # JA11Y-23 分數與階段預測
    - `axe-report.mjs` 裡 `region` / `link-name` / `aria-command-name` 的節點數應該降到 0
 3. **腳本只能證明機器測得到的部分。** 鍵盤走查、螢幕閱讀器、reduced-motion 實測
    仍然要照 `18_...md` 的「驗證方法」手動做一次
+
+---
+
+## 限制條件改變時怎麼重算
+
+`score.mjs` 算的是「全部修好會怎樣」；`scenario.mjs` 算的是**「某些項目永遠不修，上限在哪」**。
+2026-09-15 Terris 決定顏色不動、Slater 不動之後，就是用它重算出：
+
+```
+情境 1  顏色不動 + 收合狀態也不修  : 87.7%   ← 90% 過不了
+情境 2  顏色不動 + 另一支 script 修收合狀態 : 93.0%   ← 過，但要做到最後一張 alt
+```
+
+加新限制時，在 `scenario.mjs` 底部的 `phases` 裡把對應判準拿掉再跑一次即可。
 
 ---
 
