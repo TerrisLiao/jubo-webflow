@@ -56,7 +56,25 @@
 | Jubo Teal Air | `#20EDF1` | 32 237 241 | 87 0 5 0 | 3252 C |
 | Jubo Teal | `#00B2C0` | 0 178 192 | 87 0 28 0 | 7466 U / 7466 C |
 | Jubo Grey | `#373A36` | 55 58 54 | 57 47 53 66 | 419 U / 419 C |
-| Jubo Aurora Gradient | — | teal → cyan → 黃綠 | — | — |
+| Jubo Aurora Gradient | 見下 | teal → cyan → 黃綠 | — | — |
+
+### Aurora Gradient 的停點（取樣值，非官方標示）
+
+Style Guide 只給了色票圖、沒給數值。以下是從原稿 `.ai` 的那塊色票**直接取樣**出來的，
+方向是左上 → 右下：
+
+| 位置 | HEX |
+|---|---|
+| 左上 | `#44E7ED` |
+| 左下 | `#05B3BB`（≈ Jubo Teal） |
+| 中 | `#49D1B0` |
+| 右下偏中 | `#AED353` |
+| 右下 | `#D3D730` |
+
+網頁上用四個停點就夠：`#20EDF1 → #00B2C0 → #AED353 → #D3D730`（見
+[`../../poc/n-copilot-logo-motion.html`](../../poc/n-copilot-logo-motion.html) 的 B 格）。
+
+⚠️ 這是取樣不是官方數值。要正式用之前請設計端確認，確認後回來改成官方值。
 
 ### 標誌放在各種底色上
 
