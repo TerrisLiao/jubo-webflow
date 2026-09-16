@@ -105,3 +105,57 @@ CMS 文章中出現以 H4 排三行長敘述的用法。標題層級應為短標
 - 六個行高與 `.richtext` 字型堆疊均由 `update_style` 回傳的完整屬性確認寫入。
 - **視覺未驗證**：`element_snapshot_tool` 對 RichText 元素回傳失敗，CMS 模板頁也無法直接截圖。
 - **尚未 Publish**，線上仍是舊值。
+
+---
+
+## 線上驗證（2026-09-16）
+
+修正已發布，實際抓取線上頁面與樣式表確認。
+
+### 生效的樣式（線上 CSS 讀回）
+
+```css
+.richtext {
+  font-family: Poppins, PingFang TC, Microsoft JhengHei, Noto Sans TC, sans-serif;
+}
+.richtext h1 { line-height: 1.25 }
+.richtext h2 { line-height: 1.3  }
+.richtext h3 { line-height: 1.35 }
+.richtext h4 { line-height: 1.4  }
+.richtext h5 { line-height: 1.45 }
+.richtext h6 { line-height: 1.5  }
+```
+
+原本 h1–h6 皆為 `line-height: 100%`，即「H4 太靠近、難以閱讀」的成因，已全部替換。
+各斷點的覆寫只改 `font-size`，行高由 base 繼承，故手機版同樣生效。
+
+### 涵蓋範圍（逐頁實測）
+
+| 頁面 | `richtext` class | 樣式表 |
+|---|---|---|
+| `/news/blood-glucose-100` | `richtext w-richtext` ✅ | 同一份 |
+| `/news/client-meetup-2026h2` | `richtext w-richtext` ✅ | 同一份 |
+| `/news/amy-lense-intro-2026` | `richtext w-richtext` ✅ | 同一份 |
+| `/customer-stories/...daycare-transition-202510` | `richtext w-richtext` ✅ | 同一份 |
+
+### 結論：現有與未來文章皆自動套用
+
+樣式寫在 **Collection Page 範本的 `.richtext` class 上**，不是逐篇文章的設定。
+因此：
+
+- **現有文章**：全部已套用，無須逐篇處理
+- **未來新增的文章**：自動套用，無須任何額外動作
+- **兩個 Collection**（news 與 customer-stories）共用同一個 class 與同一份樣式表
+
+### 唯一的例外情況
+
+樣式作用於 CMS 編輯器產生的標準 `H1`–`H6` 與段落標籤。
+若撰稿者從 Word／Google Docs 貼上帶 **inline style** 的內容，
+行內樣式的優先權高於 class，該段落不會套用到新行高。
+→ 貼上時請使用「貼上為純文字」，再於編輯器內設定標題階層。
+
+### 字體成本
+
+`Noto Sans TC` 僅作為字體堆疊中的名稱，**未以 webfont 下載**
+（線上頁面只載入 `Poppins:300,400,500,600,700`）。
+使用者本機若已安裝才會用到，對 loading time 零成本。
