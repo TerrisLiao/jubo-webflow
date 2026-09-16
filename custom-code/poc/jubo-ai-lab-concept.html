@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jubo AI Lab — 視覺與互動概念 POC</title>
+<!--
+  用途：/ai-lab（Draft）的視覺與互動方向提案，給 Terris 看的可點版本。
+  這不是完稿，也不是要貼進 Webflow 的程式碼。確認方向後才會照 Client-First 重建。
+
+  設計約束（依 04_設計變數與色彩.md、09_GSAP動畫與互動規範.md、15_設計權威分層與頁面選擇矩陣.md）
+  - 亮底為主，highlight 一律用 gradient，不使用 --primary--ocean
+  - 顏色只用 Jubo Variables 既有值，沒有新增色票
+  - 函式庫沿用站上已載入的 GSAP 3.15 + ScrollTrigger（站上另有 Lenis，POC 未載）
+  - 沒有任何假造的 Jubo 產品 UI：對話區是網頁排版，不是產品截圖
+  - 文案全部是佔位，未經 jubo-write 審核，不可直接對外
+
+  參考來源：inkwell.tech（click & hold 變語氣、步驟塌縮）、OpenAI / Copy.ai（亮底 prompt hero）
+-->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+<style>
+  :root{
+    /* === Jubo Variables（值取自 04_設計變數與色彩.md，未新增任何顏色） === */
+    --primary--accent:#00b2c0;
+    --neutral--black:#151717;
+    --neutral--black-60:hsla(180,4.55%,8.63%,.6);
+    --neutral--white:#fff;
+    --neutral--white-30:hsla(0,0%,100%,.3);
+    --neutral--white-50:hsla(0,0%,100%,.5);
+    --neutral--bg-grey:#f8f8f8;
+    --gradient--teal:hsla(184.4,100%,37.65%,.14);
+    --gradient--light-teal:#9df8ff;
+    --gradient--blue:rgba(59,88,255,.5);
+    --gradient--purple:hsla(270.9,100%,54.71%,.5);
+    --gradient--announce-bar-purple:#b15dff;
+
+    --desktop-spacer--medium:4rem;
+    --desktop-spacer--large:8rem;
+
+    --tile-w:clamp(72px,6.4vw,118px);   /* POC 專用，非站上變數 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  body{
+    font-family:"PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+    color:var(--neutral--black);
+    background:var(--neutral--bg-grey);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  .note{
+    position:fixed;top:0;left:0;right:0;z-index:99;
+    background:var(--neutral--black);color:var(--neutral--white);
+    font-size:.75rem;letter-spacing:.04em;padding:.5rem 1rem;text-align:center;
+  }
+  .wrap{padding-left:var(--desktop-spacer--medium);padding-right:var(--desktop-spacer--medium)}
+  .container{max-width:82rem;margin:0 auto}     /* = container-large 82rem */
+  .container-s{max-width:56rem;margin:0 auto}   /* = container-small 56rem */
+  .label{
+    font-size:.8125rem;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--neutral--black-60);font-weight:500;
+  }
+  .label b{color:var(--primary--accent);font-weight:500}
+  h1{font-size:clamp(2.5rem,5.6vw,4.75rem);line-height:1.12;font-weight:600;letter-spacing:-.02em}
+  h2{font-size:clamp(1.75rem,3.2vw,2.75rem);line-height:1.25;font-weight:600;letter-spacing:-.01em}
+  .lead{font-size:1.125rem;color:var(--neutral--black-60);max-width:38rem}
+
+  /* ============ 流動 mesh 漸層（09 §10-4，純 CSS，零 JS 成本） ============ */
+  .mesh{position:absolute;inset:-20% -10%;z-index:0;pointer-events:none;filter:blur(60px);opacity:.95}
+  .mesh i{position:absolute;display:block;border-radius:50%;mix-blend-mode:normal}
+  .mesh i:nth-child(1){width:46vw;height:46vw;left:4%;top:2%;
+    background:radial-gradient(circle,var(--gradient--light-teal) 0%,transparent 66%);
+    animation:drift-a 22s ease-in-out infinite}
+  .mesh i:nth-child(2){width:38vw;height:38vw;right:6%;top:-4%;
+    background:radial-gradient(circle,var(--gradient--purple) 0%,transparent 64%);opacity:.55;
+    animation:drift-b 27s ease-in-out infinite}
+  .mesh i:nth-child(3){width:42vw;height:42vw;left:32%;bottom:-14%;
+    background:radial-gradient(circle,var(--gradient--blue) 0%,transparent 66%);opacity:.42;
+    animation:drift-c 31s ease-in-out infinite}
+  @keyframes drift-a{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(6vw,4vh,0) scale(1.12)}}
+  @keyframes drift-b{0%,100%{transform:translate3d(0,0,0) scale(1.05)}50%{transform:translate3d(-7vw,6vh,0) scale(.92)}}
+  @keyframes drift-c{0%,100%{transform:translate3d(0,0,0) scale(.95)}50%{transform:translate3d(4vw,-5vh,0) scale(1.15)}}
+  @media (prefers-reduced-motion:reduce){.mesh i{animation:none}}
+
+  /* ============ 1. Hero：亮底 prompt ============ */
+  .hero{position:relative;min-height:100svh;display:flex;align-items:center;
+    padding-top:7rem;padding-bottom:var(--desktop-spacer--large);overflow:hidden}
+  .hero .container{position:relative;z-index:1}
+  .hero h1{margin:1.25rem 0 1rem;max-width:20ch}
+  .hero h1 .grad{
+    background:linear-gradient(96deg,var(--primary--accent) 0%,
+      var(--gradient--announce-bar-purple) 58%,var(--gradient--light-teal) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+
+  .ask{margin-top:2.5rem;max-width:44rem}
+  .ask-box{
+    display:flex;align-items:center;gap:.75rem;
+    background:var(--neutral--white-50);
+    border:1px solid var(--neutral--white-30);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-radius:999px;padding:.875rem 1rem .875rem 1.375rem;
+    box-shadow:0 1px 2px rgba(21,23,23,.04),0 12px 40px -12px rgba(0,178,192,.28);
+    transition:box-shadow .4s,border-color .4s;
+  }
+  .ask-box:focus-within{border-color:rgba(0,178,192,.45);
+    box-shadow:0 1px 2px rgba(21,23,23,.04),0 16px 52px -12px rgba(0,178,192,.42)}
+  .ask-box input{flex:1;border:0;background:none;outline:none;font:inherit;font-size:1.0625rem;color:inherit}
+  .ask-box input::placeholder{color:var(--neutral--black-60)}
+  .ask-send{
+    width:2.25rem;height:2.25rem;flex:none;border:0;border-radius:50%;cursor:pointer;
+    background:var(--primary--accent);color:#fff;font-size:1rem;line-height:1;
+    display:grid;place-items:center;transition:transform .25s}
+  .ask-send:hover{transform:translateX(2px) scale(1.06)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.875rem}
+  .chip{
+    font:inherit;font-size:.875rem;cursor:pointer;
+    padding:.5rem .875rem;border-radius:999px;
+    border:1px solid rgba(21,23,23,.1);background:rgba(255,255,255,.55);
+    color:var(--neutral--black-60);transition:.25s}
+  .chip:hover{border-color:rgba(0,178,192,.45);color:var(--neutral--black);
+    background:#fff;transform:translateY(-1px)}
+
+  .answer{
+    margin-top:1.25rem;min-height:9.5rem;                 /* 防逐字時版面跳動（09 §10-2） */
+    border-radius:1.25rem;padding:1.375rem 1.5rem;
+    background:rgba(255,255,255,.62);border:1px solid var(--neutral--white-30);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}
+  .answer.on{opacity:1;transform:none}
+  .answer-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.625rem}
+  .orb{width:.875rem;height:.875rem;border-radius:50%;
+    background:conic-gradient(from 0deg,var(--primary--accent),var(--gradient--announce-bar-purple),
+      var(--gradient--light-teal),var(--primary--accent));
+    animation:spin 3.4s linear infinite;box-shadow:0 0 12px rgba(0,178,192,.6)}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .answer-head span{font-size:.8125rem;letter-spacing:.06em;color:var(--neutral--black-60)}
+  .answer p{font-size:1.0625rem;min-height:1.6em}
+  .caret{display:inline-block;width:.5em;height:1.05em;vertical-align:-.16em;margin-left:.1em;
+    background:var(--primary--accent);animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .dots{display:inline-flex;gap:.3rem;padding:.35rem 0}
+  .dots i{width:.4rem;height:.4rem;border-radius:50%;background:var(--primary--accent);opacity:.35;
+    animation:bounce 1.1s ease-in-out infinite}
+  .dots i:nth-child(2){animation-delay:.16s}.dots i:nth-child(3){animation-delay:.32s}
+  @keyframes bounce{0%,100%{transform:translateY(0);opacity:.35}50%{transform:translateY(-4px);opacity:1}}
+  .sources{margin-top:.875rem;font-size:.8125rem;color:var(--neutral--black-60);
+    opacity:0;transition:opacity .6s}
+  .sources.on{opacity:1}
+  .sources em{font-style:normal;color:var(--primary--accent)}
+
+  /* ============ 2. 按住變語氣 ============ */
+  .sec{padding:var(--desktop-spacer--large) 0;position:relative}
+  .sec-head{margin-bottom:3rem}
+  .sec-head h2{margin:.75rem 0 .75rem}
+
+  .morph{position:relative;border-radius:1.5rem;padding:2.25rem 2.5rem;
+    background:#fff;border:1px solid rgba(21,23,23,.07);
+    box-shadow:0 30px 80px -40px rgba(21,23,23,.25);overflow:hidden}
+  .morph::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+    background:linear-gradient(120deg,rgba(0,178,192,.10),rgba(177,93,255,.10) 55%,rgba(157,248,255,.14));
+    transition:opacity .45s}
+  .morph.hot::after{opacity:1}
+  .morph-txt{position:relative;font-size:1.1875rem;line-height:1.85;min-height:8.5rem}
+  .morph-txt .w{transition:opacity .18s,filter .18s}
+  .morph-b{position:absolute;inset:0}
+  .morph-b .w{color:var(--neutral--black)}
+  .morph-a .w{color:var(--neutral--black-60)}
+  .hold{
+    margin-top:1.75rem;display:inline-flex;align-items:center;gap:.75rem;cursor:pointer;
+    user-select:none;-webkit-user-select:none;touch-action:none;
+    padding:.75rem 1.25rem;border-radius:999px;border:1px solid rgba(21,23,23,.12);
+    background:rgba(255,255,255,.7);font-size:.9375rem}
+  .hold .ring{position:relative;width:1.25rem;height:1.25rem;flex:none}
+  .hold .ring svg{transform:rotate(-90deg)}
+  .hold .ring circle{fill:none;stroke-width:2.5}
+  .hold .ring .bg{stroke:rgba(21,23,23,.14)}
+  .hold .ring .fg{stroke:var(--primary--accent);stroke-linecap:round;
+    stroke-dasharray:50.3;stroke-dashoffset:50.3}
+
+  /* ====== 3. 卡片運鏡：環 → 爆開 → 聚焦 → 玻璃卡片牆（inkwell.tech 的手法） ======
+     同一批卡片在 3D 空間裡被重排，不是四段不同內容。純 CSS transform + GSAP scrub。 */
+  .flow{position:relative;height:100svh;overflow:hidden;
+    perspective:1100px;perspective-origin:50% 50%}
+  .flow-stage{position:absolute;inset:0;transform-style:preserve-3d}
+  .tile{
+    position:absolute;left:50%;top:50%;
+    width:var(--tile-w);aspect-ratio:3/4;
+    margin-left:calc(var(--tile-w) / -2);
+    margin-top:calc(var(--tile-w) * -.6667);
+    border-radius:.75rem;overflow:hidden;will-change:transform,opacity;
+    border:1px solid var(--neutral--white-30);
+    box-shadow:0 18px 44px -22px rgba(21,23,23,.4)}
+  .tile em{position:absolute;left:.45rem;right:.45rem;bottom:.4rem;font-style:normal;
+    font-size:.5rem;line-height:1.35;letter-spacing:.02em;
+    color:rgba(255,255,255,.94);text-shadow:0 1px 6px rgba(0,0,0,.4)}
+  .flow-copy{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:min(46rem,86vw);text-align:center;z-index:6;pointer-events:none}
+  .flow-copy h2{font-weight:500}
+  .flow-copy .swap{
+    background:linear-gradient(96deg,var(--primary--accent),var(--gradient--announce-bar-purple) 74%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:600}
+  .flow-cap{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--neutral--black-60);margin-top:1.25rem}
+  .flow-note{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);z-index:6;
+    width:min(40rem,86vw);text-align:center;font-size:1.0625rem;
+    color:var(--neutral--black-60);opacity:0;pointer-events:none}
+
+  /* 手機／reduced-motion：不 pin、不做 3D（09 §4-4） */
+  .flow.is-static{height:auto;padding:4rem 0;perspective:none}
+  .flow.is-static .flow-stage{position:static;display:grid;
+    grid-template-columns:repeat(3,1fr);gap:.5rem;transform-style:flat}
+  .flow.is-static .tile{position:static;width:auto;margin:0;
+    transform:none!important;opacity:1!important}
+  .flow.is-static .flow-copy,.flow.is-static .flow-note{position:static;transform:none;
+    opacity:1;margin:0 auto 2rem}
+  .flow.is-static .flow-note{margin:2rem auto 0}
+
+  /* ============ 4. CTA：滿版 gradient highlight ============ */
+  .cta{position:relative;overflow:hidden;border-radius:2rem;margin:0 auto;
+    padding:5.5rem 2rem;text-align:center;background:#fff}
+  .cta .mesh{filter:blur(48px);opacity:1}
+  .cta .inner{position:relative;z-index:1}
+  .cta h2{max-width:22ch;margin:0 auto 1rem}
+  .cta .lead{margin:0 auto}
+  .btn{display:inline-block;margin-top:2rem;padding:.9375rem 2rem;border-radius:999px;
+    background:var(--primary--accent);color:#fff;text-decoration:none;font-size:1rem;
+    box-shadow:0 16px 40px -14px rgba(0,178,192,.7);transition:transform .3s,box-shadow .3s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 22px 52px -14px rgba(0,178,192,.8)}
+
+  .foot{padding:4rem 0 6rem;font-size:.8125rem;color:var(--neutral--black-60)}
+
+  @media (max-width:767px){
+    .wrap{padding-left:1rem;padding-right:1rem}
+    .morph{padding:1.5rem}
+  }
+</style>
+</head>
+<body>
+
+<div class="note">POC ／ 方向提案 — 文案與數據皆為佔位，未經審核，不可對外</div>
+
+<!-- ============ 1. HERO ============ -->
+<section class="hero wrap">
+  <div class="mesh"><i></i><i></i><i></i></div>
+  <div class="container">
+    <p class="label">[ <b>JUBO AI</b> ／ 技術力展示 ]</p>
+    <h1>照護現場的答案，<br><span class="grad">本來就散在紀錄裡</span></h1>
+    <p class="lead">我們做的不是再多一個系統，是讓已經寫下來的東西，在需要的那一刻自己說話。</p>
+
+    <div class="ask">
+      <div class="ask-box">
+        <input id="q" type="text" placeholder="問問看 —— 例如：這位住民最近有什麼變化？" aria-label="示範用提問欄">
+        <button class="ask-send" id="send" aria-label="送出">→</button>
+      </div>
+      <div class="chips">
+        <button class="chip" data-a="0">這位住民最近三個月有什麼變化？</button>
+        <button class="chip" data-a="1">幫我整理今天的交班重點</button>
+        <button class="chip" data-a="2">這份評鑑表還缺哪些紀錄？</button>
+      </div>
+      <div class="answer" id="answer" aria-live="off">
+        <div class="answer-head"><span class="orb"></span><span>Jubo AI</span></div>
+        <p id="atext"></p>
+        <div class="sources" id="src"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. 按住變語氣 ============ -->
+<section class="sec wrap">
+  <div class="container-s">
+    <div class="sec-head">
+      <p class="label">[ 同一份紀錄，兩種讀法 ]</p>
+      <h2>它沒有改寫事實，<br>只是換一個人能用的說法</h2>
+      <p class="lead">左邊是現場當下寫進系統的原始紀錄。按住下面那顆鈕，看它變成交班時真正需要的那幾句。</p>
+    </div>
+
+    <div class="morph" id="morph">
+      <div class="morph-txt">
+        <div class="morph-a" id="mA"></div>
+        <div class="morph-b" id="mB"></div>
+      </div>
+      <div class="hold" id="hold">
+        <span class="ring"><svg width="20" height="20" viewBox="0 0 20 20">
+          <circle class="bg" cx="10" cy="10" r="8"></circle>
+          <circle class="fg" cx="10" cy="10" r="8" id="ring"></circle>
+        </svg></span>
+        <span id="holdTxt">按住不放</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3. 卡片運鏡（環 → 爆開 → 聚焦 → 玻璃牆） ============ -->
+<section class="flow" id="flow">
+  <div class="flow-stage" id="stage" aria-hidden="true"></div>
+  <div class="flow-copy" id="flowCopy">
+    <h2 id="flowH">照護的答案，散在每天寫下的紀錄裡</h2>
+    <p class="flow-cap" id="flowCap">Scroll to explore</p>
+  </div>
+  <p class="flow-note" id="flowNote">
+    十八道原本要依序跑完的行政流程，被壓成同時發生的一件事。
+  </p>
+</section>
+
+<!-- ============ 4. CTA ============ -->
+<section class="sec wrap">
+  <div class="container">
+    <div class="cta">
+      <div class="mesh"><i></i><i></i><i></i></div>
+      <div class="inner">
+        <p class="label">[ 下一步 ]</p>
+        <h2>想看它跑在你的機構資料上？</h2>
+        <p class="lead">我們可以用你現有的紀錄格式跑一次，看得到才算數。</p>
+        <a class="btn" href="#">預約一次實際演示</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot wrap"><div class="container">
+  POC — 對照 <code>09_GSAP動畫與互動規範.md</code> §10-2 / §10-4 / §10-5、<code>04_設計變數與色彩.md</code>。
+  顏色全部取自 Jubo Variables；未使用 <code>--primary--ocean</code>；highlight 一律走 gradient。
+</div></footer>
+
+<script>
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 1. Hero 串流回答（09 §10-2：中文 15–25 cps） ---------- */
+  var ANSWERS = [
+    { t:'近三個月的紀錄裡有三件事連在一起：夜間如廁次數從每晚 1 次變成 3 次、體重下降 2.4 公斤、家屬電訪兩次提到「比較沒精神」。單看任何一項都在正常範圍，放在一起才看得出趨勢。建議這次訪視先確認進食狀況與夜間活動。',
+      s:'依據：服務紀錄 87 筆 · 生理量測 142 筆 · 家屬聯繫 6 筆' },
+    { t:'今天需要交班的有兩位。302 床昨晚換藥後傷口滲液量增加，敷料已於 05:40 更換；208 床的家屬下午三點會到，上次提出的沐浴時間調整還沒有回覆。其餘住民狀況與昨日相同。',
+      s:'依據：夜班紀錄 · 護理處置 · 家屬溝通待辦' },
+    { t:'這份表目前缺三項：兩位住民的季度營養評估尚未歸檔、跌倒風險評估有一筆超過效期 11 天、以及上個月的感染管制會議紀錄沒有上傳。其他欄位都有對應的原始紀錄可以帶入。',
+      s:'依據：評鑑項目對照表 · 系統既有紀錄' }
+  ];
+  var ans=document.getElementById('answer'), atext=document.getElementById('atext'),
+      srcEl=document.getElementById('src'), input=document.getElementById('q');
+  var busy=null;
+
+  function stream(i){
+    if(busy) clearInterval(busy);
+    var a=ANSWERS[i%ANSWERS.length];
+    ans.classList.add('on'); srcEl.classList.remove('on'); srcEl.textContent='';
+    atext.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';
+    setTimeout(function(){
+      if(reduce){ atext.textContent=a.t; srcEl.innerHTML='<em>·</em> '+a.s; srcEl.classList.add('on'); return; }
+      var n=0, cps=19;                                  /* 中文舒適速度 */
+      atext.innerHTML='<span id="run"></span><span class="caret"></span>';
+      var run=document.getElementById('run');
+      busy=setInterval(function(){
+        n++; run.textContent=a.t.slice(0,n);
+        if(n>=a.t.length){
+          clearInterval(busy); busy=null;
+          atext.innerHTML=a.t;
+          srcEl.innerHTML='<em>·</em> '+a.s; srcEl.classList.add('on');
+        }
+      },1000/cps);
+    }, 850);                                            /* 先「想一下」 */
+  }
+  document.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click',function(){ input.value=c.textContent; stream(+c.dataset.a); });
+  });
+  document.getElementById('send').addEventListener('click',function(){ stream(0); });
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter') stream(0); });
+
+  /* ---------- 2. 按住變語氣（inkwell click & hold 的同構） ---------- */
+  var RAW='07:20 協助如廁，量 BP 138/82、P 76、T 36.4。早餐進食 1/2 碗，主訴無胃口。09:10 家屬來電詢問昨日用藥調整。10:05 下床活動 15 分鐘，步態較前日不穩，需一人扶持。午間拒絕點心。';
+  var SUM='這兩天胃口明顯下降，早餐只吃一半、午點心拒食。今天下床活動時步態比昨天不穩，需要一人扶持。生命徵象都在範圍內。家屬已主動來電關心用藥調整，建議回電時一併說明進食狀況。';
+  function paint(el,txt,cls){
+    el.className=cls; el.innerHTML='';
+    txt.split('').forEach(function(ch){
+      var s=document.createElement('span'); s.className='w'; s.textContent=ch; el.appendChild(s);
+    });
+    return el.querySelectorAll('.w');
+  }
+  var mA=document.getElementById('mA'), mB=document.getElementById('mB');
+  var wA=paint(mA,RAW,'morph-a'), wB=paint(mB,SUM,'morph-b');
+  wB.forEach(function(w){ w.style.opacity=0; });
+
+  var p=0, dir=-1, rafId=null;
+  var ring=document.getElementById('ring'), holdEl=document.getElementById('hold'),
+      holdTxt=document.getElementById('holdTxt'), morph=document.getElementById('morph');
+
+  function render(){
+    ring.style.strokeDashoffset = 50.3*(1-p);
+    morph.classList.toggle('hot', p>.02);
+    holdTxt.textContent = p>.98 ? '放開回到原始紀錄' : (p>.02 ? '繼續按住…' : '按住不放');
+    var na=wA.length, nb=wB.length;
+    for(var i=0;i<na;i++){
+      var t=(i/na);                                     /* 由左到右溶解 */
+      wA[i].style.opacity = p>t+.08 ? 0 : (p>t? 1-(p-t)/.08 : 1);
+      wA[i].style.filter  = p>t ? 'blur(2px)' : 'none';
+    }
+    for(var j=0;j<nb;j++){
+      var u=(j/nb)*.85;
+      wB[j].style.opacity = p>u+.12 ? 1 : (p>u? (p-u)/.12 : 0);
+    }
+  }
+  function tick(){
+    p = Math.max(0, Math.min(1, p + dir*(dir>0?0.014:0.026)));
+    render();
+    if((dir>0&&p<1)||(dir<0&&p>0)) rafId=requestAnimationFrame(tick); else rafId=null;
+  }
+  function start(){ dir=1; if(!rafId) rafId=requestAnimationFrame(tick); }
+  function end(){ dir=-1; if(!rafId) rafId=requestAnimationFrame(tick); }
+  ['mousedown','touchstart','pointerdown'].forEach(function(e){ holdEl.addEventListener(e,function(ev){ev.preventDefault();start();}); });
+  ['mouseup','mouseleave','touchend','pointerup','pointercancel'].forEach(function(e){ holdEl.addEventListener(e,end); });
+  render();
+
+  /* ---------- 3. 卡片運鏡：ring → burst → focus → wall ----------
+     四個階段各是一個 layout 函式，畫面上看到的是兩個 layout 之間的內插。
+     同一批 DOM 卡片從頭用到尾，沒有第二組元素。 */
+  var LABELS=['交班紀錄','生理量測','用藥紀錄','傷口照護','活動參與','家屬聯繫','評鑑表單','核銷資料',
+    '排班','跌倒風險','營養評估','照護計畫','日照接送','居服派案','異常通報','翻身擺位','進食紀錄','沐浴紀錄',
+    '復健追蹤','訪視摘要','夜間巡房','體重趨勢','感染管制','住民自主','用品請領','入住評估','月結摘要','歸檔'];
+  var GRADS=[
+    'linear-gradient(140deg,var(--primary--accent),var(--gradient--light-teal))',
+    'linear-gradient(140deg,var(--gradient--light-teal),var(--gradient--announce-bar-purple))',
+    'linear-gradient(140deg,var(--gradient--announce-bar-purple),var(--primary--accent))',
+    'linear-gradient(140deg,var(--gradient--blue),var(--gradient--light-teal))',
+    'linear-gradient(140deg,var(--primary--accent),var(--gradient--blue))',
+    'linear-gradient(140deg,var(--gradient--light-teal),var(--primary--accent))'
+  ];
+  var N=LABELS.length, HERO=Math.floor(N/2), tiles=[];
+  var stageEl=document.getElementById('stage'), flowEl=document.getElementById('flow');
+  for(var i=0;i<N;i++){
+    var t=document.createElement('div');
+    t.className='tile';
+    t.style.backgroundImage=GRADS[i%GRADS.length];
+    t.innerHTML='<em>'+LABELS[i]+'</em>';
+    stageEl.appendChild(t); tiles.push(t);
+  }
+
+  function ring(i){var a=(i/N)*6.2832-1.5708, R=Math.min(innerWidth,innerHeight)*.36;
+    return {x:Math.cos(a)*R, y:Math.sin(a)*R, z:0, ry:0, rz:((i%7)-3)*4, s:1, o:1};}
+  function burst(i){var a=(i/N)*6.2832-1.5708, R=Math.min(innerWidth,innerHeight)*1.05;
+    return {x:Math.cos(a)*R, y:Math.sin(a)*R, z:460, ry:0, rz:((i%7)-3)*12, s:2.1, o:0};}
+  function focus(i){return i===HERO
+    ? {x:0,y:0,z:150,ry:0,rz:0,s:3.2,o:1}
+    : {x:0,y:0,z:300,ry:0,rz:0,s:2.6,o:0};}
+  function wall(i){var d=i-(N-1)/2, gap=Math.max(118, innerWidth*.086);
+    return {x:d*gap, y:0, z:-Math.abs(d)*26, ry:-20, rz:0, s:2.7, o:1};}
+
+  function lerp(a,b,t){return a+(b-a)*t;}
+  function mix(A,B,t){return {x:lerp(A.x,B.x,t),y:lerp(A.y,B.y,t),z:lerp(A.z,B.z,t),
+    ry:lerp(A.ry,B.ry,t),rz:lerp(A.rz,B.rz,t),s:lerp(A.s,B.s,t),o:lerp(A.o,B.o,t)};}
+
+  var COPY=[
+    {p:.00,h:'照護的答案，散在每天寫下的紀錄裡',cap:'Scroll to explore'},
+    {p:.30,h:'AI 正在改變我們照顧<span class="swap">住宿型機構</span>的方式',cap:''},
+    {p:.44,h:'AI 正在改變我們照顧<span class="swap">日照中心</span>的方式',cap:''},
+    {p:.56,h:'AI 正在改變我們照顧<span class="swap">居家服務</span>的方式',cap:''}
+  ];
+  var hEl=document.getElementById('flowH'), capEl=document.getElementById('flowCap'),
+      copyEl=document.getElementById('flowCopy'), noteEl=document.getElementById('flowNote'), lastCopy=-1;
+
+  function render(p){
+    for(var i=0;i<N;i++){
+      var L = p<.30 ? mix(ring(i),burst(i),p/.30)
+            : p<.52 ? mix(burst(i),focus(i),(p-.30)/.22)
+                    : mix(focus(i),wall(i),(p-.52)/.48);
+      var st=tiles[i].style;
+      st.transform='translate3d('+L.x.toFixed(1)+'px,'+L.y.toFixed(1)+'px,'+L.z.toFixed(1)+'px)'
+        +' rotateY('+L.ry.toFixed(2)+'deg) rotateZ('+L.rz.toFixed(2)+'deg) scale('+L.s.toFixed(3)+')';
+      st.opacity=L.o.toFixed(3);
+    }
+    var k=0; for(var c=0;c<COPY.length;c++){ if(p>=COPY[c].p) k=c; }
+    if(k!==lastCopy){ lastCopy=k; hEl.innerHTML=COPY[k].h; capEl.textContent=COPY[k].cap; }
+    copyEl.style.opacity = p>.70 ? Math.max(0,1-(p-.70)/.10) : 1;
+    noteEl.style.opacity = p>.80 ? Math.min(1,(p-.80)/.12) : 0;
+  }
+
+  if(window.gsap && window.ScrollTrigger && !reduce && innerWidth>767){
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.create({
+      trigger:'#flow', start:'top top', end:'+=340%',
+      pin:true, scrub:.6, invalidateOnRefresh:true,
+      onUpdate:function(self){ render(self.progress); }
+    });
+    render(0);
+    addEventListener('resize',function(){ ScrollTrigger.refresh(); });
+  }else{
+    flowEl.classList.add('is-static');                /* 手機不 pin，退成靜態格線 */
+  }
+})();
+</script>
+</body>
+</html>
