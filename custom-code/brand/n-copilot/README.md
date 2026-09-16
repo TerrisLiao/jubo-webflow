@@ -139,3 +139,31 @@ Style Guide 列了三種「star flare」用法，都是把標誌的星芒放大�
 不是禁止 inline SVG 圖示 —— 站上本來就有 `icon-embed-*` 系列在做同一件事。
 
 不需要動畫的地方（footer、navbar 等），照常上傳成 Webflow Asset 用 `<img>` 就好。
+
+---
+
+## 8. After Effects 用的檔案
+
+**AE 不能匯入 SVG**（只吃 `.ai` / `.eps` / `.pdf`），而 `source/` 裡的原稿是整張品牌表
+（4948 × 1966，四種鎖定組合 × 五種底色），直接匯入會拿到一整張表。
+
+所以 `ae/` 底下放了四個**只含單一鎖定組合的乾淨向量 PDF**：
+
+| 檔案 | 尺寸 | 路徑數 | 大小 |
+|---|---|---|---|
+| `ae/n-copilot-mark.pdf` | 247.8 × 119.7 pt | 2 | 934 B |
+| `ae/n-copilot-horizontal.pdf` | 582.5 × 113.1 pt | 11 | 2.3 KB |
+| `ae/n-copilot-stacked.pdf` | 291.5 × 216.6 pt | 12 | 2.4 KB |
+| `ae/n-copilot-wordmark.pdf` | 379.3 × 74.1 pt | 10 | 2.1 KB |
+
+由 §1 那四個 SVG 轉出，向量與填色都來自原稿，沒有描圖也沒有點陣化。
+
+### AE 匯入流程
+
+1. `File > Import > File...` 選 `ae/n-copilot-mark.pdf`
+2. 拖進 comp
+3. `Layer > Create > Create Shapes from Vector Layer`
+   → 變成原生 shape layer，路徑可以下關鍵影格、可以套 Trim Paths
+
+轉成 shape layer 之後，兩片翼會是兩個獨立的 path group（因為原稿就是兩條 path），
+中間的四角星一樣是負空間，不是獨立物件 —— 詳見 §1 最後那段。
