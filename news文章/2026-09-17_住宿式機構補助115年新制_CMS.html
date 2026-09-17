@@ -3,6 +3,8 @@
   改寫方向：對齊風傳媒新聞體 — 新聞導語破題、名詞短語小標、一張統整表、
   來源寫在句子裡、FAQ 精簡為 3 題、移除 AEO 標籤雲目錄與問句式標題。
   文字依 speak-human-tw 處理。Heading 自 H2 起算，H1 留給 CMS 模板的 Name。
+  5 張資訊圖存放於 Webflow Assets。src 與 1672w 為 Webflow 匯入 Rich Text 時重新產生的副本路徑，
+  500/800/1080/1600 變體仍在原 Assets 路徑，兩者皆可正常取得。
 -->
 
 <p>衛福部《住宿式服務機構使用者補助方案》核定本上路，中重度失能者入住住宿式機構，每月補助從 1 萬元調高到 1 萬 5,000 元，全年最高 18 萬元。9 月 14 日起受理申請，效力追溯回 115 年 1 月 1 日，且不設排富規定。</p>
@@ -13,9 +15,6 @@
 .jb-figure{margin:1.75rem 0}
 .jb-figure img{display:block;width:100%;height:auto;border-radius:1.5rem}
 .jb-figure figcaption{font-size:.8125rem;color:var(--neutral--black-60);margin-top:.75rem;line-height:1.6}
-.jb-figure__todo{display:flex;align-items:center;justify-content:center;min-height:11rem;
-  border-radius:1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black-60);
-  font-size:.9375rem;text-align:center;padding:1.5rem;line-height:1.7}
 .jb-qa{background:var(--neutral--white);border-radius:1.5rem;padding:1.5rem 1.75rem;margin-bottom:.75rem}
 .jb-qa:last-child{margin-bottom:0}
 .jb-qa__q{font-size:1.0625rem;font-weight:700;margin:0 0 .6rem;line-height:1.55}
@@ -103,7 +102,7 @@
 <p>核定本把補助對象分成三類，金額與受理窗口都不一樣。機構要先把住民分好類，才知道該送哪裡。</p>
 
 <figure class="jb-figure">
-<div class="jb-figure__todo">［待置入圖片］誰可以領？可以領多少？<br><span style="font-size:.8125rem">alt：住宿式機構補助資格決策圖：長照 4 級以上或中度以上身障每月最高 15,000 元；112 年 1 月 1 日前持續入住的既有住民每月 5,000 元；已領身障住宿補助者原補助加 5,000 元。同月僅能擇一，補助以實際自付額為上限。</span></div>
+<img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf01236a_6aabba47da41ff8fda44b135_subsidy-eligibility-2026.png" srcset="https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba47da41ff8fda44b135_subsidy-eligibility-2026-p-500.png 500w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba47da41ff8fda44b135_subsidy-eligibility-2026-p-800.png 800w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba47da41ff8fda44b135_subsidy-eligibility-2026-p-1080.png 1080w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba47da41ff8fda44b135_subsidy-eligibility-2026-p-1600.png 1600w, https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf01236a_6aabba47da41ff8fda44b135_subsidy-eligibility-2026.png 1672w" sizes="(max-width: 48rem) 100vw, 48rem" width="1672" height="941" loading="lazy" alt="住宿式機構補助資格決策圖：長照 4 級以上或中度以上身障每月最高 15,000 元；112 年 1 月 1 日前持續入住的既有住民每月 5,000 元；已領身障住宿補助者原補助加 5,000 元。同月僅能擇一，補助以實際自付額為上限。">
 <figcaption>同一住民在同一個補助月份只能擇一，不得重複領取。</figcaption>
 </figure>
 
@@ -147,7 +146,7 @@
 <p>過去算全年，某個月少住幾天，其他月份補得回來。新制沒有這個緩衝，一個月只有全額或零兩種結果。</p>
 
 <figure class="jb-figure">
-<div class="jb-figure__todo">［待置入圖片］每月住幾天才算？<br><span style="font-size:.8125rem">alt：按月認列天數門檻圖：31 天的月份需住滿 16 天、30 天的月份需住滿 15 天、28 天的月份需住滿 14 天。住滿 15 天未達門檻該月不認列，住滿 16 天達到門檻認列 1 個月。入住當天算，離開當天不算。</span></div>
+<img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012373_6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026.png" srcset="https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026-p-500.png 500w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026-p-800.png 800w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026-p-1080.png 1080w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026-p-1600.png 1600w, https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012373_6aabba4774d1e869d154215e_subsidy-monthly-threshold-2026.png 1672w" sizes="(max-width: 48rem) 100vw, 48rem" width="1672" height="941" loading="lazy" alt="按月認列天數門檻圖：31 天的月份需住滿 16 天、30 天的月份需住滿 15 天、28 天的月份需住滿 14 天。住滿 15 天未達門檻該月不認列，住滿 16 天達到門檻認列 1 個月。入住當天算，離開當天不算。">
 <figcaption>未達門檻不予補助，沒有按比例給付。</figcaption>
 </figure>
 
@@ -160,7 +159,7 @@
 <p>關鍵在於保床的情況下不是「總天數減住院天數」。住院那幾天照算持續入住，真正要判斷的只有一件事：住院天數有沒有過半。</p>
 
 <figure class="jb-figure">
-<div class="jb-figure__todo">［待置入圖片］住院保床怎麼算？<br><span style="font-size:.8125rem">alt：住院天數認列判斷圖：機構有保留床位時，住院未達當月一半該月仍可認列，住院達當月一半該月不認列；沒有保床則核定本未明文規定，請向所在地政府確認。</span></div>
+<img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012376_6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026.png" srcset="https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026-p-500.png 500w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026-p-800.png 800w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026-p-1080.png 1080w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026-p-1600.png 1600w, https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012376_6aabba4767663ac6797f7812_subsidy-hospital-bed-reservation-2026.png 1672w" sizes="(max-width: 48rem) 100vw, 48rem" width="1672" height="941" loading="lazy" alt="住院天數認列判斷圖：機構有保留床位時，住院未達當月一半該月仍可認列，住院達當月一半該月不認列；沒有保床則核定本未明文規定，請向所在地主管機關確認。">
 <figcaption>保床的情況下不是「總天數減住院天數」，而是看住院天數有沒有過半。</figcaption>
 </figure>
 
@@ -206,7 +205,7 @@
 <p>115 年的方案 9 月 14 日才開辦，第一次檢核的時點已經過了。為了讓 1 至 8 月的追溯款早點撥下去，中央另以 10 月 31 日作為優先批次。但公告前並未逐一知會各地衛生局與社會局，部分縣市作業時程被壓縮，直接把收件期限往前拉。</p>
 
 <figure class="jb-figure">
-<div class="jb-figure__todo">［待置入圖片］115 年過渡與申請時程<br><span style="font-size:.8125rem">alt：115 年補助時程圖：1 月 1 日新制追溯起算、1 至 8 月舊案另有過渡認列、9 月 1 日全面按月認列、9 月 14 日開放申請、9 月 24 日與 30 日及 10 月 31 日為各地優先期限、12 月 16 日最終受理期限。</span></div>
+<img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012370_6aabba4767663ac6797f7845_subsidy-application-timeline-2026.png" srcset="https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7845_subsidy-application-timeline-2026-p-500.png 500w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7845_subsidy-application-timeline-2026-p-800.png 800w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7845_subsidy-application-timeline-2026-p-1080.png 1080w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba4767663ac6797f7845_subsidy-application-timeline-2026-p-1600.png 1600w, https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfa10deb502cf012370_6aabba4767663ac6797f7845_subsidy-application-timeline-2026.png 1672w" sizes="(max-width: 48rem) 100vw, 48rem" width="1672" height="941" loading="lazy" alt="115 年補助時程圖：1 月 1 日新制起算、1 至 8 月機構建立入住資料、9 月 1 日按月認列上線、9 月 14 日系統開始申請、12 月 16 日當年度申請截止；各縣市優先受理期限為 9 月 24 日、9 月 30 日與 10 月 31 日。">
 <figcaption>各縣市 1 至 8 月收件期限由智齡科技顧問向各縣市主管機關查詢彙整，仍可能調整，送件前請再確認。</figcaption>
 </figure>
 
@@ -223,7 +222,7 @@
 <p>還有一條容易漏掉：核定本規定評估結果已逾複評期限的，要先完成複評才能據以認定。複評沒跟上，政府系統判不到等級，補助就會斷在那裡。</p>
 
 <figure class="jb-figure">
-<div class="jb-figure__todo">［待置入圖片］誰負責什麼？<br><span style="font-size:.8125rem">alt：補助作業分工圖：申請人負責提出申請並備妥文件；住宿機構負責住民資格盤點、複評到期追蹤與配合查調；地方政府負責受理、依長照資訊系統比對入住日數並核定撥款。</span></div>
+<img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfb10deb502cf01237a_6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026.png" srcset="https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026-p-500.png 500w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026-p-800.png 800w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026-p-1080.png 1080w, https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026-p-1600.png 1600w, https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6aabbdfb10deb502cf01237a_6aabba48edff1cc46ea77443_subsidy-responsibility-workflow-2026.png 1672w" sizes="(max-width: 48rem) 100vw, 48rem" width="1672" height="941" loading="lazy" alt="補助作業分工圖：申請人負責確認資格、備妥文件、依期限送件；住宿式機構負責每月維護入住紀錄、確認住院與保床資料、提供必要證明；地方政府負責審查資格與月份、核定補助、撥款並通知結果。申請人原則上不需自行提出每日入住證明。">
 <figcaption>入住日數由受理機關比對認列，機構的工作是核對與回應查調，不是逐日舉證。</figcaption>
 </figure>
 
