@@ -82,23 +82,27 @@
 
 ### 顏色規則
 
-只用站上既有 Variables，**唯一例外**是深色重點底 `#007b85`。
+重點底色一律用 `--primary--accent`（#00b2c0），這是品牌主色，由 Terris 定案。
 
 | 用途 | 色值 |
 |---|---|
-| 重點底色（表頭、重點欄、數字卡） | `#007b85` ＋ `--neutral--white` 白字 |
-| 重點底上的數字 | `--gradient--light-teal` |
+| 重點底色（表頭、重點欄、數字卡） | `--primary--accent` ＋ `--neutral--white` 白字 |
+| 重點底上的數字 | `--neutral--white` ＋ `font-weight:700` |
 | 一般強調文字、圖示、時間軸節點 | `--primary--accent` |
-| 淡色 wash（可選項、次要highlight） | `--gradient--teal` ＋ 深色字 |
+| 淡色 wash（可選項、次要 highlight） | `--gradient--teal` ＋ 深色字 |
 | 卡片底 | `--neutral--white` |
 
-**不要用 `--primary--accent` #00b2c0 當底色配白字**：對比只有 2.58:1，
-低於 WCAG AA 的 4.5:1，白字會糊掉。`#007b85` 是同色相壓到亮度 26%，白字 5.03:1 通過。
+**已知取捨：** #00b2c0 配白字的對比是 2.58:1，低於 WCAG AA 的 4.5:1。
+這是品牌識別優先於無障礙標準的決定，不是疏漏。做法上要補償：
+重點底的字一律 `font-weight:600` 以上，字級不低於 .9375rem，
+不要在重點底上放小字或細體。內文長段落不要用重點底。
+
+**不要用 `--gradient--light-teal` #9df8ff 當重點底上的強調色**：
+在 #00b2c0 上只有 2.13:1，比白字更糊。要強調就用白字加粗。
 
 **不要用 `--primary--ocean` #175e5e 當重點底**：偏墨綠，視覺過重，已停用。
 
-`#007b85` 目前是 inline 色碼，還沒進 Variables。若長期沿用，建議新增
-`primary/accent-deep` 變數後改綁。
+**不要自己調深色版本**（例如 #007b85）：試過，Terris 認為偏離品牌色，已否決。
 
 ### 狀態表示
 
