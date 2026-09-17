@@ -111,6 +111,48 @@
 
 ---
 
+## ⚠️ 用 API 寫進去的 HTML，在 Webflow 後台編輯過就會被吃掉（2026-09-17 實測）
+
+只要在 Webflow Designer 或 Editor 打開文章、動到 Rich Text 欄位再儲存，
+Webflow 會用它自己的 sanitizer 重寫整個欄位。實際發生過的損壞：
+
+| 原本寫進去的 | 編輯後變成 |
+|---|---|
+| `<style>` 區塊 | 變成一個 `<p>`，CSS 原始碼直接顯示在頁面上，樣式全失效 |
+| `<table>`（3 個） | 全部塌成 `<p>` + `&nbsp;` + `<br>`，**表格結構與部分儲存格文字直接消失** |
+| `<div class="jb-qa">` | 攤平成連續 `<p>`，class 不見 |
+| `<h2 style="...">` | inline style 被移除 |
+| 自訂 `<figure class="jb-figure">` | 改寫成 Webflow 原生 `w-richtext-figure-type-image`，但 `data-rt-align` 留空、`height` 屬性保留，圖片顯示比例錯誤 |
+
+**儲存格內的文字會真的不見**，不是只有樣式跑掉。例如 `<span>1 萬 5,000 元</span>`
+與 `<strong>12 萬元</strong>` 編輯後整段消失，肉眼看表格是空的。
+
+### 因應方式
+
+1. **這類文章的 Content 欄位，只能透過 API 改。** 要改字請回到 repo 的 HTML 檔，
+   改完整份重寫進 CMS，不要在後台直接編輯內文。
+2. **後台只改這些欄位是安全的**：Name、Slug、Short Summary、Cover Image、
+   Publish Date、News Categories、Show on Homepage、Schema Plain Text。
+   這些是獨立欄位，不會觸發 Rich Text sanitizer。
+3. **圖片一律用 Webflow 原生 rich text figure 結構**，這是唯一能撐過後台編輯的寫法：
+
+```html
+<figure class="w-richtext-figure-type-image w-richtext-align-fullwidth"
+        data-rt-type="image" data-rt-align="fullwidth">
+  <div><img src="…" srcset="…" sizes="(max-width: 48rem) 100vw, 48rem"
+            loading="lazy" alt="…"></div>
+  <figcaption>圖說</figcaption>
+</figure>
+```
+
+不要加 `width` / `height` 屬性，也不要用自訂 class 包 `<img>`。
+
+4. **表格沒有能撐過後台編輯的寫法。** Webflow Rich Text 沒有原生表格。
+   如果這篇文章之後還會交給別人在後台維護，表格要嘛改成圖片，
+   要嘛接受「只能由 API 維護」這個限制，並在交接時講清楚。
+5. 發現內文爛掉時，先用 `list_collection_items` 讀回現況比對，
+   確認使用者在後台改了哪些文字（那些要保留），再整份重寫回去。
+
 ## 表格怎麼放進 CMS（2026-08-24 實測結論）
 
 `/news` 文章內文欄位（`Content`）是 **Rich Text** 型別。理論上 Rich Text 支援表格標籤，
