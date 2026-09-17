@@ -35,7 +35,7 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | `08_頁面與資訊架構.md` | 53 個頁面、資料夾結構、參考頁面 | 規劃新頁面時 |
 | **`09_GSAP動畫與互動規範.md`** | 動畫架構、GSAP 寫法、SaaS/AI Agent 頁動效做法、無障礙 | **做任何動畫前** |
 | **`11_AEO稽核與優化計畫.md`** | AI 答案引擎（AEO）稽核：JSON-LD 現況與錯誤、語意結構、FAQ、站外敘事一致性、量測 | **動 SEO / schema / metadata / 內容結構前** |
-| **`12_AEO文章寫作指南.md`** | 給每週產出 `/news` 文章的人：Playbook 內容寫法規則、現有選題缺口、結構與發文節奏檢查清單 | **寫 AEO 文章前**（不需要先讀 `11`） |
+| **`12_news文章寫作指南.md`** | 給每週產出 `/news` 文章的人：新聞體寫法、統整表作法、圖表與重點色規則、已驗證的 CMS 範本 | **寫 /news 文章前** |
 | **`13_外部AI資源評估與採用紀錄.md`** | 外部 skill／框架的評估結論（SML 不採用、Webflow 官方 skill 的採用邊界） | **要引入任何外部 AI 工具前** |
 | **`14_Webflow_Agent_Instructions同步規範.md`** ⭐ | 站上那兩份會被 MCP 自動載入的規則、逐條差異對照、同步程序、寫回紀錄 | **每次動工前**（尤其是只連 MCP、沒有 clone repo 的 session） |
 | **`15_設計權威分層與頁面選擇矩陣.md`** | Tier A/B/C 用哪個、Hero 怎麼選、各類頁面的 Section Flow、影像來源優先序 | **規劃新頁面／Landing Page 時** |

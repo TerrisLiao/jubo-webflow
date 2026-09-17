@@ -10,7 +10,7 @@
 4. 若規劃新頁面／Landing Page：`Jubo官網AI開發規範/15_設計權威分層與頁面選擇矩陣.md`
 5. 若動 class：`custom-code/slater-selectors.md`
 6. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
-7. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
+7. 若撰寫 `/news` 文章：`Jubo官網AI開發規範/12_news文章寫作指南.md`（新聞體，寫給人看；AEO 那套已停用）
 
 ## 核心原則
 
