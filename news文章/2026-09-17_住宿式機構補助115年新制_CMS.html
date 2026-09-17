@@ -1,0 +1,893 @@
+<!--
+  /news 文章 CMS Content 欄位內容（Rich Text）。
+  依 Jubo官網AI開發規範/12_AEO文章寫作指南.md 產出：
+  - 表格使用「已驗證的表格樣板」（基本版，非未驗證的斑馬紋變化版）
+  - 目錄沿用 custom-code/poc/news-toc-tagcloud.html
+  - FAQ 沿用 custom-code/poc/news-faq-accordion.html
+  - 所有 H2/H3 已給永久 id，目錄不必靠文字比對
+
+  ⚠️ Heading 層級說明：
+  /news 的 CMS 模板通常會把 Name 欄位渲染成頁面唯一的 H1，
+  因此本檔內容從 H2 起算，避免一頁兩個 H1。
+  若模板實際上沒有渲染 H1，請把第一個 H2 改成 H1 後其餘依序降一級。
+
+  透過 CMS API 寫入 Content 欄位。人工 Publish 前務必在 Editor / MCP snapshot
+  檢查桌機與手機版表格橫向捲動，並實際點擊每一題 FAQ。
+-->
+
+<p>115 年（2026 年）住宿式服務機構使用者補助，從每月最高 1 萬元調高到 <strong>1 萬 5,000 元</strong>，全年上限從 12 萬元提高到 <strong>18 萬元</strong>，9 月 14 日起受理申請，效力追溯回 115 年 1 月 1 日。</p>
+
+<p>但對機構來說，這次真正改變日常作業的不是金額，是<strong>認列方式</strong>：補助從「看全年累計住滿幾天」改成「一個月一個月認」，當月實際入住日數達該月日曆天數二分之一以上，才認列 1 個月補助。這代表機構要交出的不再是一句「住滿 180 天」，而是每一位住民、每一個月的實際在院天數——而且住院期間還要另外扣。</p>
+
+<p>衛福部為此編列約 166 億元，估計約 10 萬人受惠。</p>
+
+<p><strong>而且時間很趕。</strong>中央 9 月 14 日才公告，1 至 8 月的補助要在 10 月 31 日前提出申請；更麻煩的是，部分縣市自行訂了更早的期限——臺中市 9 月 24 日、臺北市與臺南市 9 月 30 日，等於機構只有十天到兩週，要把全院住民 1 至 8 月的實際在院天數全部算完並送件。</p>
+
+<div class="aeo-toc-embed">
+  <style>
+    .aeo-toc,
+    .aeo-toc *,
+    .aeo-toc *::before,
+    .aeo-toc *::after {
+      box-sizing: border-box;
+    }
+
+    .aeo-toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 0 0 2rem;
+      padding: 0;
+      list-style: none;
+    }
+
+    .aeo-toc li {
+      margin: 0;
+      padding: 0;
+    }
+
+    .aeo-toc a {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      min-height: 3.25rem;
+      padding: 0.7rem 1.5rem 0.75rem;
+      border: 0;
+      border-radius: 900px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.72),
+        rgba(255, 255, 255, 0.28)
+      );
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.9),
+        inset 0 -1px 1px rgba(21, 23, 23, 0.08),
+        0 8px 24px rgba(21, 23, 23, 0.08);
+      -webkit-backdrop-filter: blur(14px) saturate(150%);
+      backdrop-filter: blur(14px) saturate(150%);
+      color: var(--neutral--black);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.5;
+      text-decoration: none;
+      transition:
+        transform 180ms ease,
+        background 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .aeo-toc a::before {
+      position: absolute;
+      z-index: -1;
+      inset: 1px;
+      border-radius: inherit;
+      background: linear-gradient(
+        145deg,
+        rgba(255, 255, 255, 0.45),
+        rgba(255, 255, 255, 0) 58%
+      );
+      content: "";
+      pointer-events: none;
+    }
+
+    .aeo-toc a:hover {
+      transform: translateY(-2px);
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.82),
+        rgba(255, 255, 255, 0.38)
+      );
+      box-shadow:
+        inset 0 1px 1px rgba(255, 255, 255, 0.95),
+        inset 0 -1px 1px rgba(21, 23, 23, 0.06),
+        0 12px 28px rgba(21, 23, 23, 0.12);
+    }
+
+    .aeo-toc a:focus-visible {
+      outline: 3px solid var(--primary--accent);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 767px) {
+      .aeo-toc {
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .aeo-toc a {
+        min-height: 3rem;
+        padding: 0.625rem 1.25rem;
+        font-size: 1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aeo-toc a {
+        transition: none;
+      }
+    }
+  </style>
+
+  <nav aria-label="文章目錄">
+    <ul class="aeo-toc">
+      <li><a href="#subsidy-diff" data-heading="這次新制和舊制差在哪裡？">新舊制差異</a></li>
+      <li><a href="#subsidy-who" data-heading="誰可以領？補助分成哪幾類？">補助資格</a></li>
+      <li><a href="#subsidy-days" data-heading="「按月認列」一個月要住滿幾天才算？">天數門檻</a></li>
+      <li><a href="#subsidy-transition" data-heading="115 年 1 至 8 月的過渡期怎麼認列？">1–8 月過渡期</a></li>
+      <li><a href="#subsidy-hospital" data-heading="住院、請假期間的天數怎麼算？">住院天數</a></li>
+      <li><a href="#subsidy-exclusion" data-heading="哪些情況不予補助？">不予補助</a></li>
+      <li><a href="#subsidy-apply" data-heading="什麼時候要申請？流程長什麼樣子？">申請時程</a></li>
+      <li><a href="#subsidy-ops" data-heading="新制對機構端的行政工作有什麼實際影響？">機構端影響</a></li>
+      <li><a href="#subsidy-jubo" data-heading="Jubo 住宿式系統怎麼支援補助天數統計？">系統怎麼做</a></li>
+      <li><a href="#subsidy-faq" data-heading="常見問題">常見問題</a></li>
+    </ul>
+  </nav>
+
+  <script>
+    (function () {
+      var scriptEl = document.currentScript;
+
+      function normalize(text) {
+        return (text || "").replace(/\s+/g, "").trim();
+      }
+
+      function run() {
+        var embed = scriptEl.closest(".aeo-toc-embed");
+        var toc = embed && embed.querySelector(".aeo-toc");
+        var scope = scriptEl.closest(".w-richtext") || document;
+        if (!toc) return;
+
+        var links = toc.querySelectorAll('a[href^="#"]');
+        var headings = scope.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+        links.forEach(function (link) {
+          var requestedId = link.getAttribute("href").slice(1);
+          var target = requestedId
+            ? scope.querySelector("#" + CSS.escape(requestedId))
+            : null;
+
+          if (!target) {
+            var label = normalize(link.dataset.heading || link.textContent);
+
+            for (var index = 0; index < headings.length; index += 1) {
+              var heading = headings[index];
+              var headingText = normalize(heading.textContent);
+
+              if (
+                headingText === label ||
+                headingText.indexOf(label) !== -1 ||
+                label.indexOf(headingText) !== -1
+              ) {
+                target = heading;
+                break;
+              }
+            }
+          }
+
+          if (!target) return;
+          if (!target.id) target.id = requestedId;
+          link.setAttribute("href", "#" + target.id);
+        });
+
+        links.forEach(function (link) {
+          if (link.dataset.aeoTocBound) return;
+          link.dataset.aeoTocBound = "1";
+
+          link.addEventListener("click", function (event) {
+            var id = link.getAttribute("href").slice(1);
+            var target = scope.querySelector("#" + CSS.escape(id));
+            if (!target) return;
+
+            event.preventDefault();
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            history.replaceState(null, "", "#" + id);
+          });
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+      } else {
+        run();
+      }
+
+      window.addEventListener("load", run);
+    })();
+  </script>
+</div>
+
+<h2 id="subsidy-diff" style="font-weight:700;">這次新制和舊制差在哪裡？</h2>
+
+<p>三個地方：金額、認列方式、撥付方式。</p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">項目</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">舊制（114 年度以前）</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">115 年新制</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">每月補助金額</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">最高 1 萬元</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">最高 1 萬 5,000 元</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">每年補助上限</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">12 萬元</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">18 萬元</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">認列方式</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">以全年累計住滿 180 天為主要門檻，滿 180 天核給全額；未滿 180 天者，才就住滿當月二分之一日曆天的月份按 1/12 計</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">一律按月認列，當月實際入住達該月日曆天數 1/2 以上即認列 1 個月</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">撥付方式</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">審核後核撥</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">按月認列、分 2 期撥付</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">排富規定</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">不排富</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">不排富</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>坊間圖卡常把舊制寫成「未滿 180 天就沒有補助」，這並不正確。舊制未滿 180 天仍可就住滿半個月以上的月份按 1/12 請領，只是門檻與流程以年度累計為主。新制是把這個「按月」的算法變成唯一標準。</p>
+
+<h2 id="subsidy-who" style="font-weight:700;">誰可以領？補助分成哪幾類？</h2>
+
+<p>共三類，資格與金額都不一樣。</p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">類別</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">資格認定條件</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">補助金額</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">中、重度失能者</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">二擇一：<br>1. 經評估長照需要等級達第 4 級以上（4、5、6、7、8 級）<br>2. 持有身心障礙證明中度以上（中度、重度、極重度）</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">當月認列滿 1 個月者<br>1 萬 5,000 元／每月</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">既有住民</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">112 年 1 月 1 日前已實際入住機構並持續入住，未經評估或經評估未達第 4 級者</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">當月認列滿 1 個月者<br>5,000 元／每月（年最高 6 萬元）</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">加碼補助</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">已核定領取「身心障礙者住宿式照顧費用補助」，且持有身心障礙證明達中度以上者</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">當月認列滿 1 個月者<br>加碼 5,000 元／每月；未達中度不予核給</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p><strong>適用機構共 6 類</strong>：一般護理之家、精神護理之家、老人福利機構、身心障礙福利機構、榮譽國民之家、住宿式長照服務機構。</p>
+
+<p>「加碼補助」是這次新制的雙軌設計：原本領身心障礙者住宿式照顧費用補助的住民，<strong>不必放棄原有補助去換新制</strong>，原制度維持不變，另外每月加 5,000 元。</p>
+
+<p>對身心障礙住宿式機構來說，這一條影響最大：住民若同時符合中重度失能補助（每月 1 萬 5,000 元）與身障加碼補助（每月 5,000 元），<strong>每月最高可領到 2 萬元</strong>。實際核定金額仍以地方政府審認結果為準。</p>
+
+<p>過去長照 3.0 的加碼多集中在日照與居家服務的補助與部分負擔，這一輪則明顯往住宿式機構加。</p>
+
+<h2 id="subsidy-days" style="font-weight:700;">「按月認列」一個月要住滿幾天才算？</h2>
+
+<p>規則是一句話：<strong>當月實際入住日數達該月日曆天數二分之一以上，認列 1 個月；未滿二分之一，當月不予補助。</strong></p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">該月日曆天數</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">認列門檻</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">對應月份（115 年）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">31 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">住滿 16 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">1、3、5、7、8、10、12 月</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">30 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">住滿 15 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">4、6、9、11 月</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">28 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">住滿 14 天</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">2 月</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>其他計算細節：</p>
+
+<ul>
+  <li>入住日數以<strong>日曆天</strong>計算，出入機構天數採「算進不算出」。</li>
+  <li>補助月數的認列以補助年度內符合資格期間的入住情形計算，<strong>不得跨年度累計</strong>。</li>
+  <li>喘息服務期間不計入。</li>
+</ul>
+
+<h2 id="subsidy-transition" style="font-weight:700;">115 年 1 至 8 月的過渡期怎麼認列？</h2>
+
+<p>因為新制追溯回 1 月 1 日，但 9 月 14 日才開放申請，1 至 8 月採過渡認列，依住民狀況分成三種情形。</p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">住民情形</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">補助認定方式</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">112 年前既有住民（未經評估、經評估未達 4 級、未有中度以上證明）</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">每月 5,000 元，最高 6 萬元</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">1. 114 年度已核定 12 萬元者<br>2. 且 115 年實際入住累計達 180 日</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">1 至 8 月直接核 12 萬元，9 月以後按月認列</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">1. 114 年度核定 12 萬元但 115 年未達 180 天者<br>2. 或 114 年度未曾核定 12 萬元者</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">全部按月認列</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>按月認列這一組，起算日還要再分：</p>
+
+<ul>
+  <li><strong>115 年 9 月 30 日前入住者</strong>：依<strong>實際入住日</strong>起算。</li>
+  <li><strong>115 年 10 月 1 日後入住者</strong>：依<strong>提出申請日</strong>起算，不回溯到實際入住日。</li>
+</ul>
+
+<p><strong>10 月之後才入住的住民，拖越久申請、可認列的月份就越少。</strong>這是機構端最該主動提醒家屬的一條。</p>
+
+<h2 id="subsidy-hospital" style="font-weight:700;">住院、請假期間的天數怎麼算？</h2>
+
+<p>這是新制之下最容易算錯、也最容易被退件的一段：</p>
+
+<ul>
+  <li>住民於補助年度內<strong>住院期間，機構仍保留床位者，原則上視為持續入住</strong>，得依方案規定認列補助月數。</li>
+  <li><strong>但當月住院日數達該月日曆天數二分之一以上者，該月不列入補助月數認列。</strong></li>
+</ul>
+
+<p>「算進不算出」講白話就是：住民<strong>去醫院住院的那一天要扣掉</strong>，<strong>出院回到機構的那一天要算進機構</strong>。每一段住院都要這樣切一次。</p>
+
+<p>換句話說，機構要提供的不是「總天數」，而是「<strong>實際在院天數</strong>」——總天數扣掉住院天數。一位住民在 115 年 8 月住院 15 天，8 月就可能整個月不予認列；同一位住民如果分散在 1 月住院 28 天、3 月住院 21 天、8 月住院 15 天，那就是三個月分別要判斷。</p>
+
+<p>一間 50 床的機構，一年要處理的就是 50 位住民 × 12 個月 = 600 個判斷點，每一個都要有住院起訖日佐證。</p>
+
+<h2 id="subsidy-exclusion" style="font-weight:700;">哪些情況不予補助？</h2>
+
+<p>當年度曾經或已經具下列情形之一者，不予補助：</p>
+
+<ol>
+  <li>依《身心障礙者日間照顧及住宿式照顧費用補助辦法》第 2 條規定領取住宿式照顧費用補助者（惟 115 年新制改以「加碼補助」方式處理，詳見上方資格表）。</li>
+  <li>領有中低收入失能老人機構公費安置費補助者。</li>
+  <li>退輔會所屬榮民之家的安養床、失能養護床公費及失智養護床公費使用者。</li>
+  <li>退輔會所屬醫療機構附設護理之家收住的公務預算補助住民。</li>
+  <li>領有身心障礙證明之兒童及少年，經主管機關依《兒童及少年福利與權益保障法》安置於兒少安置機構，且家長未付費者。</li>
+</ol>
+
+<p>原則上就是：<strong>同一個月份已經由政府支付住宿費用的，不能再重複領這筆補助。</strong></p>
+
+<h2 id="subsidy-apply" style="font-weight:700;">什麼時候要申請？流程長什麼樣子？</h2>
+
+<p><strong>115 年 9 月 14 日起受理</strong>，向「最近一次入住機構所在地」的直轄市、縣（市）政府提出。身心障礙加碼補助則由原核定身心障礙者住宿式照顧費用補助的地方政府辦理。</p>
+
+<p>申請人順位：1. 機構使用者本人（優先）；2. 入住機構簽約人。</p>
+
+<h3 id="subsidy-apply-skip" style="font-weight:700;">符合這 3 個條件，不必重新申請</h3>
+
+<ol>
+  <li>114 年度已核有補助資格</li>
+  <li>115 年度持續入住原住宿式服務機構</li>
+  <li>補助資格未變更</li>
+</ol>
+
+<p>符合以上三項者，只要補正資料即可。</p>
+
+<h3 id="subsidy-apply-redo" style="font-weight:700;">這 4 種情形要重新申請</h3>
+
+<ol>
+  <li>申請身心障礙者住宿費用加碼補助</li>
+  <li>已領取加碼補助者更換戶籍所在地</li>
+  <li>更換入住機構</li>
+  <li>補助資格類別轉換</li>
+</ol>
+
+<h3 id="subsidy-apply-schedule" style="font-weight:700;">時程與核撥</h3>
+
+<p>中央的統一公告分成兩段：</p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">補助期間</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">中央公告的申請期限</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">115 年 1 月至 8 月</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">115 年 10 月 31 日前提出</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">115 年 9 月至 12 月</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">115 年 12 月 16 日前提出</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>10 月 31 日前提出的案件，地方政府預計於 11 月 30 日前完成審核，優先核撥 1 至 8 月補助款；後續案件列入第二期辦理，於 116 年初完成審查與核撥。</p>
+
+<h3 id="subsidy-apply-local" style="font-weight:700;">但有幾個縣市的期限比中央早很多</h3>
+
+<p>因為 9 月 14 日的公告事前並未逐一知會各地衛生局與社會局，各縣市的作業時程被壓縮，部分縣市直接把 1 至 8 月的收件期限往前拉：</p>
+
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">縣市</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">1 至 8 月的申請期限</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">臺中市</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">115 年 9 月 24 日前完成提出</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">臺北市、臺南市</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">115 年 9 月 30 日前完成提出</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">高雄市與其餘多數縣市</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">115 年 10 月 31 日前（同中央期限）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p>以上為智齡科技顧問於 2026 年 9 月 17 日向各縣市主管機關查詢彙整，各地公告仍可能調整，請以入住機構所在地政府的正式公告為準，或撥打 1966 長照專線確認。</p>
+
+<p>對臺中、臺北、臺南的機構來說，等於只有十天到兩週，要把全院住民 1 至 8 月的實際在院天數全部算完、備齊文件送件。住民人數多的機構，這段時間的行政負荷會非常吃緊。</p>
+
+<h3 id="subsidy-apply-docs" style="font-weight:700;">應備文件（以各縣市公告為準）</h3>
+
+<ul>
+  <li>申請書（含身分證影本、存摺封面影本）</li>
+  <li>年度入住契約書</li>
+  <li>繳費收據或繳費證明</li>
+  <li>長照需要等級評估結果或身心障礙證明影本</li>
+  <li>非本人申請者另附委託書</li>
+</ul>
+
+<p>政府已掌握的資料可逕依該資料審認，毋須重複檢附；機構可定期提供住民入住期間、收費金額與繳費情形的文件。</p>
+
+<h2 id="subsidy-ops" style="font-weight:700;">新制對機構端的行政工作有什麼實際影響？</h2>
+
+<p>金額調高對住民和家屬是好事，對機構行政則是新增工作量。具體多了三件事：</p>
+
+<ol>
+  <li><strong>要能分辨每位住民屬於哪一類。</strong>中重度失能、既有住民、加碼補助三類的金額不同、申請窗口也不同，機構得先知道住民的長照需要等級（CMS）、有沒有身障證明、證明是幾級、目前有沒有在領其他補助。</li>
+  <li><strong>要算得出「實際在院天數」，不是總天數。</strong>住院要扣、要記住院起訖日、要能回推每一個月的天數是否過半。</li>
+  <li><strong>要能按月出表，不是按年出表。</strong>新制按月認列、分期核撥，地方政府的補件與查核也會落在特定月份，機構得隨時查得到「某位住民在某個月到底住了幾天」。</li>
+</ol>
+
+<p>過去用紙本住民名冊或 Excel 手工統計的機構，這一輪會特別辛苦——尤其是 10 月 31 日這個優先核撥的時間點，距離開放申請只有六週。</p>
+
+<h2 id="subsidy-jubo" style="font-weight:700;">Jubo 住宿式系統怎麼支援補助天數統計？</h2>
+
+<p>智齡科技住宿式系統在「住民資料」下已有<strong>「年度收住日數統計」</strong>頁籤，這次新制要的資料，現有功能大多已經涵蓋。</p>
+
+<h3 id="subsidy-jubo-eligible" style="font-weight:700;">一眼看出誰符合資格</h3>
+
+<p>列表上有兩個直接對應資格條件的欄位：</p>
+
+<ul>
+  <li><strong>CMS（長照失能等級）</strong>：新制要 4 級以上，機構可以直接在列表上篩出符合的住民，不必逐一翻評估報告。</li>
+  <li><strong>領有補助</strong>：對應「持有身心障礙證明、已領身障補助」這條路徑，欄位顯示「是」就代表也符合資格。</li>
+</ul>
+
+<p>兩個欄位擺在一起，等於把「這位住民能不能申請、屬於哪一類」變成看一眼就知道的事。</p>
+
+<h3 id="subsidy-jubo-days" style="font-weight:700;">住院天數已經先扣好</h3>
+
+<p>新制的天數規則有兩層：要扣掉住院期間，而且採「算進不算出」——住院當天扣掉、出院返回機構當天算進機構。</p>
+
+<p>系統把每位住民整個年度的每一段住院都記下來，並同時呈現兩個數字：</p>
+
+<ul>
+  <li><strong>總天數</strong>：依合約計算，住民在機構的總期間。</li>
+  <li><strong>實際在院天數</strong>：總天數扣掉住院天數後的結果。</li>
+</ul>
+
+<p>欄位名稱刻意跟著政府申請表上的「實際在院天數」命名，機構填表時可以直接對照抄寫，不必再換算一次。註記欄會列出每一段住院的起訖（例如「115/01/13 住院（28 天）」），送件被要求佐證時直接調得出來。整份資料可依區域篩選、切換年度，並匯出 Excel。</p>
+
+<h3 id="subsidy-jubo-month" style="font-weight:700;">9 月 29 日新增「月份限定查詢」</h3>
+
+<p>現有的年度表是以「一整年」為單位設計的——那是 114 年度的遊戲規則。115 年改成按月認列之後，機構需要的是「某位住民在某個月住了幾天」。</p>
+
+<p>因此系統將於 <strong>9 月 29 日更新插件，在同一個畫面新增月份限定查詢</strong>，直接查單一月份的收住日數，不必再從年度資料回推。住院天數一樣會在背後先扣掉。</p>
+
+<h3 id="subsidy-jubo-support" style="font-weight:700;">趕不上 9 月底期限的縣市，顧問會先做教學</h3>
+
+<p>9 月 29 日的更新，來不及趕上臺中（9/24）、臺北與臺南（9/30）的期限。這幾個縣市的客戶，智齡顧問會先進行一對一教學，協助機構用現有的年度收住日數統計表，把 1 至 8 月的實際在院天數算出來並完成送件。</p>
+
+<p>其餘多數縣市期限在 10 月 31 日，機構還有約一個月的時間，插件更新後可以直接使用，不耽誤住民請領。</p>
+
+<h2 id="subsidy-faq" style="font-weight:700;">常見問題</h2>
+
+<div class="aeo-faq">
+  <style>
+    .aeo-faq,
+    .aeo-faq *,
+    .aeo-faq *::before,
+    .aeo-faq *::after {
+      box-sizing: border-box;
+    }
+
+    .aeo-faq {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .aeo-faq details {
+      overflow: hidden;
+      margin: 0;
+      border: 0;
+      border-radius: 2rem;
+      background: var(--neutral--white);
+      box-shadow: none;
+    }
+
+    .aeo-faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 2rem;
+      color: var(--neutral--black);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.5;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .aeo-faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .aeo-faq__icon {
+      position: relative;
+      flex: 0 0 2rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 999px;
+      background: var(--gradient--announce-bar-purple);
+    }
+
+    .aeo-faq__icon::before,
+    .aeo-faq__icon::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.75rem;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--neutral--black);
+      content: "";
+      transform: translate(-50%, -50%);
+      transition: transform 240ms ease;
+    }
+
+    .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .aeo-faq details[open] .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .aeo-faq__answer {
+      overflow: hidden;
+      height: 0;
+    }
+
+    .aeo-faq__answer-inner {
+      padding: 0 2rem 2rem;
+      color: var(--neutral--black);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .aeo-faq__answer-inner > :first-child {
+      margin-top: 0;
+    }
+
+    .aeo-faq__answer-inner > :last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 767px) {
+      .aeo-faq summary {
+        gap: 1rem;
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .aeo-faq__answer-inner {
+        padding: 0 1.5rem 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aeo-faq__icon::before,
+      .aeo-faq__icon::after {
+        transition: none;
+      }
+    }
+  </style>
+
+  <details>
+    <summary>
+      <span>這筆補助有排富規定嗎？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>沒有。住宿式服務機構使用者補助不設排富規定，也沒有資產限制，一般家庭同樣可以申請。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>舊制未滿 180 天就完全領不到嗎？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>不是。舊制未滿 180 天者，仍可就住滿當月二分之一日曆天的月份，按補助總金額的 1/12 請領。115 年新制則直接把「按月認列」變成唯一標準，不再以 180 天為主要門檻。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>住民原本就在領身心障礙者住宿式照顧費用補助，要放棄舊補助改領新制嗎？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>不用。115 年採雙軌設計，原有補助制度維持不變，只要持有中度以上身心障礙證明，可另外申請每月 5,000 元的住宿費用加碼補助。但這一項屬於「需重新申請」的情形，要另外提出。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>住民 115 年 11 月才入住，補助從哪一天起算？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>依提出申請日起算。115 年 10 月 1 日以後入住者不回溯到實際入住日，因此入住後應盡快提出申請，晚一天就少算一天。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>住民當月住院，那個月還算不算補助？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>機構保留床位的住院期間，原則上視為持續入住；但若當月住院日數達該月日曆天數二分之一以上，該月不列入補助月數認列。所以機構要提供的是扣除住院後的實際在院天數。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>已經領過 114 年度補助的住民，115 年要重新送一次件嗎？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>只要同時符合「114 年度已核有補助資格」「115 年度持續入住原機構」「補助資格未變更」三項，就不必重新申請，補正資料即可。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>申請截止日到底是 10 月 31 日還是 12 月 16 日？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>兩個都是，但對應的補助期間不同：1 至 8 月的補助要在 10 月 31 日前提出，9 至 12 月的補助要在 12 月 16 日前提出。要特別注意的是，部分縣市自訂了更早的期限（臺中 9/24、臺北與臺南 9/30），請務必以入住機構所在地政府的公告為準。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>身心障礙住宿式機構的住民，最多可以領多少？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>若同時符合中重度失能補助（每月 1 萬 5,000 元）與身障加碼補助（每月 5,000 元），每月最高可領 2 萬元。實際核定金額以地方政府審認結果為準。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>「算進不算出」到底怎麼算？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>住民去醫院住院的那一天要從在院天數扣掉，出院回到機構的那一天則算進機構。每一段住院都要分別這樣計算，再回推該月的在院天數是否達日曆天數的一半。</p>
+      </div>
+    </div>
+  </details>
+
+  <script>
+    (function () {
+      var scriptEl = document.currentScript;
+      var root = scriptEl.closest(".aeo-faq");
+      if (!root) return;
+
+      var reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      root.querySelectorAll("details").forEach(function (item) {
+        var summary = item.querySelector("summary");
+        var answer = item.querySelector(".aeo-faq__answer");
+        if (!summary || !answer) return;
+
+        var animation = null;
+        var isClosing = false;
+        var isExpanding = false;
+
+        summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+        answer.style.height = item.open ? "auto" : "0px";
+
+        summary.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (reduceMotion) {
+            item.open = !item.open;
+            answer.style.height = item.open ? "auto" : "0px";
+            summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+            return;
+          }
+
+          if (isClosing || !item.open) {
+            openItem();
+          } else if (isExpanding || item.open) {
+            closeItem();
+          }
+        });
+
+        function closeItem() {
+          isClosing = true;
+          isExpanding = false;
+          summary.setAttribute("aria-expanded", "false");
+
+          if (animation) animation.cancel();
+
+          var startHeight = item.offsetHeight + "px";
+          var endHeight = summary.offsetHeight + "px";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 320, easing: "cubic-bezier(0.4, 0, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.open = false;
+            answer.style.height = "0px";
+            item.style.height = "";
+            item.style.overflow = "";
+            isClosing = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isClosing = false;
+          };
+
+          item.style.overflow = "hidden";
+        }
+
+        function openItem() {
+          isExpanding = true;
+          isClosing = false;
+          item.open = true;
+          summary.setAttribute("aria-expanded", "true");
+          answer.style.height = "auto";
+
+          if (animation) animation.cancel();
+
+          var startHeight = summary.offsetHeight + "px";
+          var endHeight = item.offsetHeight + "px";
+          item.style.height = startHeight;
+          item.style.overflow = "hidden";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 360, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.style.height = "";
+            item.style.overflow = "";
+            answer.style.height = "auto";
+            isExpanding = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isExpanding = false;
+          };
+        }
+      });
+    })();
+  </script>
+</div>
+
+<p><em>資料來源：行政院與衛生福利部 115 年 9 月新聞稿、衛生福利部長照專區（1966 專線）、各直轄市與縣（市）政府 115 年度方案公告。各縣市 1 至 8 月收件期限由智齡科技顧問於 2026 年 9 月 17 日向各縣市主管機關查詢彙整。各縣市受理細節與截止日可能不同，實際請依入住機構所在地政府公告為準，或撥打 1966 長照專線查詢。本文更新日期：2026 年 9 月 17 日。</em></p>
