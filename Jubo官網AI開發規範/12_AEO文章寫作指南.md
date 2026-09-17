@@ -215,6 +215,11 @@ Webflow MCP snapshot 確認：
   `.aeo-toc a` 重現已確認的視覺，避免影響全站互動。
 - 每個連結都要保留 `href`（不能只做成沒有連結的標籤）。`data-heading` 放文章中的完整標題，
   畫面文字則使用短詞。
+- ⚠️ **玻璃高光必須寫成 `background` 的第二層，不可改回 `::before` + `z-index:-1`。**
+  2026-09-17 以 headless Chromium 實測確認：`::before{z-index:-1}` 搭配 `isolation:isolate`、
+  `overflow:hidden` 與 `backdrop-filter`，Chrome 會把模糊後的背景以**矩形**合成，圓角吃不到，
+  按鈕周圍出現方形殘影（深色或高彩度背景上特別明顯）。修正方式是移除 `::before`、
+  `isolation`、`overflow`，把高光漸層併進 `background` 疊層，hover 狀態兩層都要寫。
 - 最穩定的方式是透過 CMS API 先給 H2/H3 永久 `id`。若標題沒有 `id`，範本腳本才會用文字比對補上，
   並把連結改指向實際標題。
 - Code Embed 的 `<style>` 已在 Draft CMS 內容中確認可保存並顯示；正式網站互動仍要在發布後點擊確認。
