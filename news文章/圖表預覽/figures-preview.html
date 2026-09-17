@@ -28,9 +28,9 @@ p{font-size:1rem}
 .aeo-stat__k{font-size:.8125rem;color:var(--neutral--black-60);margin-bottom:.35rem}
 .aeo-stat__v{font-size:1.75rem;font-weight:700;color:var(--primary--accent);line-height:1.2}
 .aeo-stat__u{font-size:.8125rem;color:var(--neutral--black-60);margin-top:.35rem}
-.aeo-stat.is-key{background:var(--primary--accent)}
-.aeo-stat.is-key .aeo-stat__k,.aeo-stat.is-key .aeo-stat__u{color:var(--neutral--black)}
-.aeo-stat.is-key .aeo-stat__v{color:var(--neutral--black)}
+.aeo-stat.is-key{background:#007b85}
+.aeo-stat.is-key .aeo-stat__k,.aeo-stat.is-key .aeo-stat__u{color:rgba(255,255,255,.85)}
+.aeo-stat.is-key .aeo-stat__v{color:var(--neutral--white)}
 @media(max-width:600px){.aeo-stats{grid-template-columns:1fr}}
 
 /* ===== 2. 時間軸 ===== */
@@ -67,7 +67,7 @@ p{font-size:1rem}
 .aeo-cliff__c.is-off .aeo-cliff__amt{color:var(--neutral--black-60)}
 .aeo-cliff__c.is-on .aeo-cliff__amt{color:var(--primary--accent)}
 .aeo-cliff__mid{display:flex;align-items:center;justify-content:center}
-.aeo-cliff__mid span{background:var(--primary--accent);color:var(--neutral--black);
+.aeo-cliff__mid span{background:#007b85;color:var(--neutral--white);
   font-size:.8125rem;font-weight:700;padding:.4rem .85rem;border-radius:999px;white-space:nowrap}
 @media(max-width:600px){.aeo-cliff{grid-template-columns:1fr}
   .aeo-cliff__mid{padding:.25rem 0}}
@@ -96,9 +96,9 @@ th{text-align:left;padding:.9rem 1.25rem;background:var(--neutral--bg-grey);
   border-bottom:1px solid var(--neutral--black-60);font-weight:600}
 td{padding:.9rem 1.25rem;border-bottom:1px solid var(--neutral--black-60)}
 tr:last-child td{border-bottom:0}
-th.is-key{background:var(--primary--accent);color:var(--neutral--black)}
-td.is-key{background:var(--gradient--teal);font-weight:600}
-td.is-key .n{color:var(--primary--accent);font-weight:700}
+th.is-key{background:#007b85;color:var(--neutral--white)}
+td.is-key{background:#007b85;color:var(--neutral--white);font-weight:600;border-bottom-color:rgba(255,255,255,.3)}
+td.is-key .n{color:var(--gradient--light-teal);font-weight:700}
 </style></head><body><div class="wrap">
 
 <p class="note">圖表提案預覽　2026-09-17　顏色全部取自站上既有 Variables，沒有新色碼</p>
