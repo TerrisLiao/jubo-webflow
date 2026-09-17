@@ -19,17 +19,17 @@
 .aeo-stat__k{font-size:.8125rem;color:var(--neutral--black-60);margin-bottom:.35rem}
 .aeo-stat__v{font-size:1.75rem;font-weight:700;color:var(--primary--accent);line-height:1.2}
 .aeo-stat__u{font-size:.8125rem;color:var(--neutral--black-60);margin-top:.35rem}
-.aeo-stat.is-dark{background:var(--primary--ocean)}
-.aeo-stat.is-dark .aeo-stat__k,.aeo-stat.is-dark .aeo-stat__u{color:rgba(255,255,255,.7)}
-.aeo-stat.is-dark .aeo-stat__v{color:var(--gradient--light-teal)}
+.aeo-stat.is-key{background:var(--primary--accent)}
+.aeo-stat.is-key .aeo-stat__k,.aeo-stat.is-key .aeo-stat__u{color:var(--neutral--black)}
+.aeo-stat.is-key .aeo-stat__v{color:var(--neutral--black)}
 .aeo-tl{background:var(--neutral--white);border-radius:2rem;padding:2rem 1.75rem}
 .aeo-tl__track{display:grid;grid-template-columns:repeat(4,1fr);position:relative}
 .aeo-tl__track::before{content:"";position:absolute;left:8%;right:8%;top:.5rem;height:2px;background:var(--gradient--teal)}
 .aeo-tl__i{position:relative;text-align:center;padding:0 .3rem}
-.aeo-tl__dot{width:1.125rem;height:1.125rem;border-radius:999px;background:var(--primary--accent);margin:0 auto .75rem;box-shadow:0 0 0 4px var(--neutral--white)}
-.aeo-tl__i.is-final .aeo-tl__dot{background:var(--primary--ocean);width:1.375rem;height:1.375rem;margin-top:-.125rem}
+.aeo-tl__dot{width:1.125rem;height:1.125rem;border-radius:999px;background:var(--neutral--white);border:3px solid var(--primary--accent);margin:0 auto .75rem;box-shadow:0 0 0 4px var(--neutral--white)}
+.aeo-tl__i.is-final .aeo-tl__dot{background:var(--primary--accent);width:1.5rem;height:1.5rem;margin-top:-.1875rem}
 .aeo-tl__d{font-size:1.125rem;font-weight:700;color:var(--primary--accent)}
-.aeo-tl__i.is-final .aeo-tl__d{color:var(--primary--ocean)}
+.aeo-tl__i.is-final .aeo-tl__d{font-size:1.375rem}
 .aeo-tl__w{font-size:.875rem;margin-top:.15rem}
 .aeo-tl__t{font-size:.75rem;color:var(--neutral--black-60);margin-top:.3rem}
 .aeo-cliff{display:grid;grid-template-columns:1fr auto 1fr;gap:1rem;align-items:stretch}
@@ -43,7 +43,7 @@
 .aeo-cliff__c.is-off .aeo-cliff__amt{color:var(--neutral--black-60)}
 .aeo-cliff__c.is-on .aeo-cliff__amt{color:var(--primary--accent)}
 .aeo-cliff__mid{display:flex;align-items:center;justify-content:center}
-.aeo-cliff__mid span{background:var(--primary--ocean);color:var(--neutral--white);font-size:.8125rem;font-weight:700;padding:.4rem .85rem;border-radius:999px;white-space:nowrap}
+.aeo-cliff__mid span{background:var(--primary--accent);color:var(--neutral--black);font-size:.8125rem;font-weight:700;padding:.4rem .85rem;border-radius:999px;white-space:nowrap}
 .aeo-flow{background:var(--neutral--white);border-radius:2rem;padding:1.75rem}
 .aeo-q{font-size:1rem;font-weight:700;margin:0 0 .85rem}
 .aeo-br{border-left:2px solid var(--gradient--teal);padding-left:1.1rem;margin:0 0 .5rem}
@@ -70,7 +70,7 @@
 <div class="aeo-fig"><div class="aeo-stats">
 <div class="aeo-stat"><div class="aeo-stat__k">中重度失能，每月最高</div><div class="aeo-stat__v">15,000</div><div class="aeo-stat__u">元（原 10,000 元）</div></div>
 <div class="aeo-stat"><div class="aeo-stat__k">全年最高</div><div class="aeo-stat__v">18</div><div class="aeo-stat__u">萬元（原 12 萬元）</div></div>
-<div class="aeo-stat is-dark"><div class="aeo-stat__k">最終送件期限</div><div class="aeo-stat__v">12/16</div><div class="aeo-stat__u">逾期不予受理</div></div>
+<div class="aeo-stat is-key"><div class="aeo-stat__k">最終送件期限</div><div class="aeo-stat__v">12/16</div><div class="aeo-stat__u">逾期不予受理</div></div>
 </div></div>
 
 <div class="aeo-toc-embed">
@@ -173,7 +173,7 @@
       <tr>
         <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">項目</th>
         <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">114 年度以前</th>
-        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;background:var(--primary--ocean);color:var(--neutral--white);">115 年新制</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;background:var(--primary--accent);color:var(--neutral--black);">115 年新制</th>
       </tr>
     </thead>
     <tbody>

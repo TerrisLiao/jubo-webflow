@@ -28,9 +28,9 @@ p{font-size:1rem}
 .aeo-stat__k{font-size:.8125rem;color:var(--neutral--black-60);margin-bottom:.35rem}
 .aeo-stat__v{font-size:1.75rem;font-weight:700;color:var(--primary--accent);line-height:1.2}
 .aeo-stat__u{font-size:.8125rem;color:var(--neutral--black-60);margin-top:.35rem}
-.aeo-stat.is-dark{background:var(--primary--ocean)}
-.aeo-stat.is-dark .aeo-stat__k,.aeo-stat.is-dark .aeo-stat__u{color:rgba(255,255,255,.7)}
-.aeo-stat.is-dark .aeo-stat__v{color:var(--gradient--light-teal)}
+.aeo-stat.is-key{background:var(--primary--accent)}
+.aeo-stat.is-key .aeo-stat__k,.aeo-stat.is-key .aeo-stat__u{color:var(--neutral--black)}
+.aeo-stat.is-key .aeo-stat__v{color:var(--neutral--black)}
 @media(max-width:600px){.aeo-stats{grid-template-columns:1fr}}
 
 /* ===== 2. 時間軸 ===== */
@@ -39,12 +39,13 @@ p{font-size:1rem}
 .aeo-tl__track::before{content:"";position:absolute;left:8%;right:8%;top:.5rem;height:2px;
   background:var(--gradient--teal)}
 .aeo-tl__i{position:relative;text-align:center;padding:0 .3rem}
-.aeo-tl__dot{width:1.125rem;height:1.125rem;border-radius:999px;background:var(--primary--accent);
-  margin:0 auto .75rem;position:relative;box-shadow:0 0 0 4px var(--neutral--white)}
-.aeo-tl__i.is-final .aeo-tl__dot{background:var(--primary--ocean);width:1.375rem;height:1.375rem;
-  margin-top:-.125rem}
+.aeo-tl__dot{width:1.125rem;height:1.125rem;border-radius:999px;background:var(--neutral--white);
+  border:3px solid var(--primary--accent);margin:0 auto .75rem;position:relative;
+  box-shadow:0 0 0 4px var(--neutral--white)}
+.aeo-tl__i.is-final .aeo-tl__dot{background:var(--primary--accent);width:1.5rem;height:1.5rem;
+  margin-top:-.1875rem}
 .aeo-tl__d{font-size:1.125rem;font-weight:700;color:var(--primary--accent)}
-.aeo-tl__i.is-final .aeo-tl__d{color:var(--primary--ocean)}
+.aeo-tl__i.is-final .aeo-tl__d{font-size:1.375rem}
 .aeo-tl__w{font-size:.875rem;color:var(--neutral--black);margin-top:.15rem}
 .aeo-tl__t{font-size:.75rem;color:var(--neutral--black-60);margin-top:.3rem}
 @media(max-width:600px){
@@ -66,7 +67,7 @@ p{font-size:1rem}
 .aeo-cliff__c.is-off .aeo-cliff__amt{color:var(--neutral--black-60)}
 .aeo-cliff__c.is-on .aeo-cliff__amt{color:var(--primary--accent)}
 .aeo-cliff__mid{display:flex;align-items:center;justify-content:center}
-.aeo-cliff__mid span{background:var(--primary--ocean);color:var(--neutral--white);
+.aeo-cliff__mid span{background:var(--primary--accent);color:var(--neutral--black);
   font-size:.8125rem;font-weight:700;padding:.4rem .85rem;border-radius:999px;white-space:nowrap}
 @media(max-width:600px){.aeo-cliff{grid-template-columns:1fr}
   .aeo-cliff__mid{padding:.25rem 0}}
@@ -95,7 +96,7 @@ th{text-align:left;padding:.9rem 1.25rem;background:var(--neutral--bg-grey);
   border-bottom:1px solid var(--neutral--black-60);font-weight:600}
 td{padding:.9rem 1.25rem;border-bottom:1px solid var(--neutral--black-60)}
 tr:last-child td{border-bottom:0}
-th.is-key{background:var(--primary--ocean);color:var(--neutral--white)}
+th.is-key{background:var(--primary--accent);color:var(--neutral--black)}
 td.is-key{background:var(--gradient--teal);font-weight:600}
 td.is-key .n{color:var(--primary--accent);font-weight:700}
 </style></head><body><div class="wrap">
@@ -109,7 +110,7 @@ td.is-key .n{color:var(--primary--accent);font-weight:700}
     <div class="aeo-stat__v">15,000</div><div class="aeo-stat__u">元（原 10,000 元）</div></div>
   <div class="aeo-stat"><div class="aeo-stat__k">全年最高</div>
     <div class="aeo-stat__v">18</div><div class="aeo-stat__u">萬元（原 12 萬元）</div></div>
-  <div class="aeo-stat is-dark"><div class="aeo-stat__k">最終送件期限</div>
+  <div class="aeo-stat is-key"><div class="aeo-stat__k">最終送件期限</div>
     <div class="aeo-stat__v">12/16</div><div class="aeo-stat__u">逾期不予受理</div></div>
 </div></div>
 
@@ -189,7 +190,7 @@ td.is-key .n{color:var(--primary--accent);font-weight:700}
 <tr><td>撥款</td><td>審核後核撥</td><td class="is-key">分上、下半年 2 次檢核核發</td></tr>
 <tr><td>方案期程</td><td>逐年公告</td><td class="is-key">115/1/1 – 117/12/31</td></tr>
 </tbody></table></div>
-<p class="note">重點欄用 <code>--primary--ocean</code> 表頭 ＋ <code>--gradient--teal</code> 底色，
+<p class="note">重點欄用 <code>--primary--accent</code> 表頭（深色字，對比 6.97:1）＋ <code>--gradient--teal</code> 底色，
 數字用 <code>--primary--accent</code>。三個都是站上既有變數。</p>
 
 </div></body></html>
