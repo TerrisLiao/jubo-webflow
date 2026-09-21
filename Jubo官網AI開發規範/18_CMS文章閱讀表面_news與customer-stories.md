@@ -793,3 +793,33 @@ staging 驗證（`/customer-stories/customer-success-stories-jubostory11`）：
 > 不要在圖片後面另打一段內文當說明。前者 CSS 認得，後者認不得。
 
 （此條尚未寫入 12 號文件，待圖說方案確定全部範圍後一併補。）
+
+### 17-4. v6：圖說字級 15px → 17px（2026-09-21）
+
+Terris 回報「說明文字好像有一點太小」。量過站上實際字級後確認是設定偏小：
+
+| 元素 | 字級 |
+|---|---|
+| 內文 `p` | 18px |
+| 引言 `blockquote` | 17px |
+| 圖說 `figcaption`（v5） | **15px** ← 偏小 |
+
+15px 在中文下明顯吃力（中文沒有小寫字母，x-height 等效比拉丁文字更小）。
+改成與引言齊高的 17px，比內文小一級即可，內距同步放大：
+
+```css
+font-size: 1.0625rem;   /* 17px，原 .9375rem */
+line-height: 1.7;
+padding: 1.25rem 1.5rem;
+/* 手機：16px / 1rem 1.125rem */
+```
+
+staging 實測（`customer-success-stories-jubostory13`）：
+
+| 斷點 | 字級 | 行高 | 內距 | 黑字最低對比 |
+|---|---|---|---|---|
+| 1280px | 17px | 28.9px | 20px 24px | **9.46:1** |
+| 390px | 16px | 26.4px | 16px 18px | **9.88:1** |
+
+> 驗證限制：該篇尚未使用 Webflow 內建說明欄，截圖與量測是把圖片後的段落
+> 以探針方式注入 `figcaption` 後渲染的結果，樣式值為真實 computed style。
