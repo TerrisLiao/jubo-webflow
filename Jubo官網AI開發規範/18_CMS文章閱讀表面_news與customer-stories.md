@@ -264,3 +264,84 @@ Webflow 的 box-shadow 本來也不能綁色彩變數）。
 - **標題字重維持 300。** Terris 這次只提「太大」，未提字重。
   52px 的 CJK Light 字重比 80px 時好很多，但若之後覺得筆畫仍偏細，
   在兩個 combo 上加 `font-weight: 400` 即可，不影響其他頁面。
+
+---
+
+## 9. CMS 文章表格樣式（T2 重點欄版）
+
+- 日期：2026-09-21
+- 委託：Terris —「T2 寫進 css」
+- 狀態：**已修改，未 Publish**
+
+### 9-1. 問題
+
+`/news/ai-transformation-culture` 的對照表是 **CMS 內文裡手寫的 HTML Embed，每一格都有 inline style**。
+實測 computed 值：
+
+| 項目 | 原值 | 問題 |
+|---|---|---|
+| 外框底色 | `#ffffff`（純白） | 比文章白卡（92%）**更白**，出現一塊異色 |
+| 外框圓角 | `32px` | 卡片是 16px，不同調 |
+| 表頭底色 | `#f8f8f8` | 與白色只差 3%，等於看不見 |
+| 分隔線 | `rgba(21,23,23,0.6)` | 60% 黑，對 hairline 太重 |
+
+**症狀是「表頭太淡、線太深」，剛好相反。** 另外「效益數據與說明」是這張表的結論欄，
+卻與其他欄樣式完全相同，讀者沒有視覺著力點。
+
+### 9-2. 外部對照（Mobbin）
+
+掃過 Wispr Flow、Humble、Vanta、Serus、Stripe、GitHub 等 SaaS 的對照表，共同法則：
+
+- **只強調「結果」那一欄**，其餘保持安靜（Wispr Flow 的 Savings 欄、Serus 的 With Serus 欄、Humble 的自家欄）
+- **分隔線一律 5–12% 的淡灰**，沒有任何一家用到 60%
+
+採用 Wispr Flow / Serus 的「重點欄」路線。
+
+### 9-3. 實作位置
+
+Webflow Rich Text **原生不支援表格**，所以表格只能是 HTML Embed —— 這不算違反鐵律 4。
+但樣式不該寫在內文裡，因此改為集中管理：
+
+| 模板 | 頁面 id | 新增 element id |
+|---|---|---|
+| 新聞中心s Template | `69f82ba2b2602e6d6594d696` | `64d25a34-232e-f1bf-fedd-ab01119a2b25` |
+| 客戶成功案例s Template | `6a1c22366d4d91ecdbddfca6` | `a26dcb32-96a4-8bf4-16dd-15fefc5d6cee` |
+
+兩者都是 `HtmlEmbed` 元素，`append` 在各自的 `.page-wrapper` 末端，`code` 設定值為同一份
+`<style>` 區塊。這是站上既有的自訂 CSS 做法（`Page Gradient BG`、Announce Bar 都是這樣）。
+
+**沒有動 `Global Style` component**（35 個實例），所以不會外溢到其他 30 幾頁。
+
+### 9-4. 樣式內容
+
+| 對象 | 值 |
+|---|---|
+| 外框 | `background: transparent`、`1px solid rgba(21,23,23,.10)`、`border-radius: 1rem`（對齊卡片）、`overflow-x: auto` |
+| 儲存格 | `padding: 1rem 1.5rem`、`border-bottom: 1px solid rgba(21,23,23,.08)` |
+| 表頭 | `background: rgba(0,178,192,.09)`、`font-size: .875rem`、`weight 600`、`letter-spacing .03em` |
+| 表頭最後一欄 | `background: rgba(0,178,192,.16)` |
+| 內容最後一欄 | `background: rgba(0,178,192,.06)`、`weight 600` |
+| ≤767px | 字級 `.9375rem`、padding `.75rem 1rem` |
+
+### 9-5. 為什麼用 `!important`
+
+既有文章的表格每一格都有 inline style，一般 CSS 蓋不掉。用 `!important` 讓這份樣式
+**對新舊兩種寫法都生效** —— 就算作者沿用舊的 snippet 貼上，外觀也會被統一。
+
+> **後續清理建議**：把既有文章內文裡的 inline style 拿掉，改貼乾淨的 `<table>`，
+> 並在 `12_AEO文章寫作指南.md` 補一段「表格怎麼寫」。做完之後這份 CSS 的
+> `!important` 就可以拿掉。目前抽樣 10 篇文章只有 1 篇有表格，清理成本很低。
+
+### 9-6. 驗證與限制
+
+**已驗證**：兩個 embed 的 `code` 設定都用 `get_settings` 讀回，內容與預期一致。
+視覺以注入等值 CSS 在線上頁面預覽，表頭、重點欄、hairline 皆正確。
+
+**驗證限制**：**未 Publish**，預覽為模擬。`div:has(> table)` 用到 `:has()` 選擇器
+（Chrome 105+／Safari 15.4+／Firefox 121+）；若遇到過舊的瀏覽器，外框會維持原本的
+inline 白底，屬於降級而非破版。手機版表格未實機測試。
+
+### 9-7. 尚未處理
+
+表格設了 `min-width: 48rem` ＋ `overflow-x: auto`，手機上一定會橫向捲動，
+但**畫面沒有任何提示告訴使用者可以滑**。已向 Terris 提出，尚未決定要不要加漸層遮罩暗示。
