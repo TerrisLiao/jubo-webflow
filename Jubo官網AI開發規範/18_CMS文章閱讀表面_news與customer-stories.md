@@ -618,3 +618,128 @@ AAA 門檻為 7:1，全區間通過。
 
 低透明度的多色相漸層不等於「柔和」。teal 與紫的補色關係在 alpha < .3 疊白時
 會去飽和成灰紫；**要柔和就用同一色相拉明度，不要用兩個相隔很遠的色相拉透明度。**
+
+---
+
+## 14. v4 — 引言改成「白底卡片 + 角落柔光」（2026-09-21）
+
+### 14-1. 決策
+
+Terris 提供創辦人語錄卡作為參考：白底卡片，品牌色柔光從左下角滲入，
+大圓角、厚留白、淡陰影。這比 v3 的整片漸層更耐看，因為黑字坐在純白上，
+顏色只負責「氛圍」，不參與「可讀性」。
+
+```css
+.richtext blockquote {
+  background-color: var(--neutral--white);
+  background-image:
+    url("…feTurbulence… opacity='0.045'…"),
+    radial-gradient(55% 120% at  4% 112%, rgba(177, 93, 255, .30) 0%, rgba(177, 93, 255, 0) 62%),
+    radial-gradient(52% 115% at 22% 118%, rgba(  0,178,192, .34) 0%, rgba(  0,178,192, 0) 64%),
+    radial-gradient(45% 110% at 44% 122%, rgba(107,143,240, .22) 0%, rgba(107,143,240, 0) 66%);
+  border-radius: 1.5rem;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 6px 30px rgba(21, 23, 23, .07);
+  overflow: hidden;
+}
+```
+
+三層 radial-gradient 的圓心都放在卡片下緣之外（`at … 112%`／`118%`／`122%`），
+所以只有光暈的上緣進到卡片裡，不會在卡片中間留下色塊。
+
+### 14-2. 驗證（staging 實測）
+
+| 位置 | background-color | radius | 光暈層數 | 黑字對比 |
+|---|---|---|---|---|
+| /news 桌機 | `rgb(255,255,255)` | 24px | 3 | 10.82–16.36:1 |
+| /news 手機 390px | `rgb(255,255,255)` | 24px | 3 | 10.68–16.36:1 |
+| /customer-stories 桌機 | `rgb(255,255,255)` | 24px | 3 | 10.75–16.36:1 |
+
+---
+
+## 15. 補助文章：取消 Draft 並在 staging 驗證（2026-09-21）
+
+§11 修好的內容一直是 `isDraft: true`，不會被發布，因此從未被目視驗證。
+經 Terris 同意後取消 Draft 並發布 staging（僅 Webflow 子網域，未動正式站）。
+
+staging 實測 `/news/residential-institution-subsidy-2026`：
+
+| 項目 | 結果 |
+|---|---|
+| HTTP | 200 |
+| 表格數 | 3 |
+| 表格被 `.w-embed` 包住 | 3 / 3 |
+| 儲存格白字或透明字 | 0 / 41 |
+| 圖片 | 6 張，`naturalWidth === 0` 者 **0** |
+| FAQ `details` | 3 個，`bg rgb(255,255,255)`／`1px rgba(21,23,23,.09)`／`16px` |
+| `<style>`／`<script>` 以文字外洩 | 否 |
+| 殘留 inline style | 3 處，全部是 FAQ 手風琴 JS 執行期寫入的 `height/opacity`，非文章內容 |
+
+> **上正式站前**：若不打算讓這篇同時上線，記得先把 `isDraft` 改回 `true`。
+> 目前狀態是 `isDraft: false`，下一次 publish 到 `jubo-health.com` 就會一起上線。
+
+---
+
+## 16. 待決：圖片說明改成「圖上玻璃說明條」
+
+Terris 希望圖片說明變成壓在圖片上的毛玻璃條，且「後台填寫完就自動變成這樣」。
+
+### 16-1. 技術上可行，但兩個模板的作法不一樣
+
+| 模板 | 目前圖片說明怎麼寫 | 能不能純 CSS 做到 |
+|---|---|---|
+| `/news` | Webflow 內建圖片說明，產出真正的 `<figcaption>` | **可以**，一段 CSS 就好 |
+| `/customer-stories` | 圖片後面另外寫一段 `<p>`（不是 figcaption） | **不行**，見下 |
+
+`/customer-stories` 的圖片說明是 `<figure>` 的**兄弟段落**，不在 figure 裡面，
+因此無法用 `position:absolute` 疊到圖上。而且 `figure + p` 這個選擇器
+會誤傷「圖片後面剛好接一段正文」的情況——站上大量文章的圖片後面
+接的是空白段落 `<p>‍</p>` 或 `<blockquote>`，選擇器無法分辨哪一段是說明。
+
+**結論：要全站一致，作法是請編輯改用 Webflow 內建的圖片說明欄位**
+（rich text 內點選圖片 → 開啟 caption），不要再自己打一段 `<p>`。
+之後同一段 CSS 在兩個模板都會生效，這才符合「後台填寫完就自動變成這樣」。
+
+### 16-2. CSS（尚未上線，待決定範圍）
+
+```css
+.richtext figure.w-richtext-figure-type-image { position: relative; }
+.richtext figure.w-richtext-figure-type-image > div {
+  border-radius: 1.25rem; overflow: hidden; line-height: 0;
+}
+.richtext figure.w-richtext-figure-type-image figcaption {
+  position: absolute; left: 1.25rem; right: 1.25rem; bottom: 1.25rem;
+  margin: 0; padding: 1.125rem 1.375rem; text-align: left;
+  background: rgba(255, 255, 255, .72);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+          backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, .55);
+  border-radius: 1rem;
+  color: var(--neutral--black); font-size: .9375rem; line-height: 1.65;
+  box-shadow: 0 8px 28px rgba(21, 23, 23, .12);
+}
+```
+
+### 16-3. 實測
+
+在 staging 注入後量測（`backdrop-filter` 在測試瀏覽器回報 supported）：
+
+| 情境 | 說明條佔圖片高度 | 黑字對比（最低） |
+|---|---|---|
+| `/news` 6 張資訊圖 | 12%–21% | **10.80:1** |
+| `/customer-stories` 5 張真實照片（模擬 caption） | — | **9.91:1**（白底 .72）／12.41:1（白底 .82） |
+
+> 量測註記：第一次量到的低對比數字是取樣誤差——元素截圖包含了圓角外的四個角落，
+> 那裡露出的是底下的照片而不是玻璃。排除圓角後才是上表的數字。
+
+### 16-4. 必須先決定的取捨
+
+`/news` 的圖片多半是**資訊圖**，資料一路排到圖片下緣。玻璃條壓上去會蓋住
+最底下一列數字（實測補助文章第一張圖的「15,000 元／5,000 元」那排會被蓋到）。
+照片沒有這個問題。
+
+三個選項：
+
+1. 只在 `/customer-stories` 上線（照片為主，零風險），`/news` 維持說明在圖片下方。
+2. 兩邊都上線，但 `/news` 的資訊圖一律不填說明欄（說明寫進正文）。
+3. 兩邊都上線，日後新的資訊圖在設計時就把下緣留白。
