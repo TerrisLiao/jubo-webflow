@@ -823,3 +823,80 @@ staging 實測（`customer-success-stories-jubostory13`）：
 
 > 驗證限制：該篇尚未使用 Webflow 內建說明欄，截圖與量測是把圖片後的段落
 > 以探針方式注入 `figcaption` 後渲染的結果，樣式值為真實 computed style。
+
+---
+
+## 18. 舊文圖說轉換：改用腳本，不改內容（2026-09-21）
+
+### 18-1. 先試了手動改內容，失敗
+
+原訂作法：用 CMS API 把圖片後面那段 `<p>` 搬進 `<figcaption>`。
+Webflow 的 items API 不支援局部更新，必須整個 `content` 欄位重寫，
+也就是要把整篇文章逐字重打一次。
+
+實際做了兩篇之後，拿**正式站**（尚未發布，保有原文）當基準做逐字比對：
+
+| 文章 | 字數 | 差異 |
+|---|---|---|
+| `make-good-use-of-…`（順心） | 1242 | 0 |
+| `people-with-disabilities-are-better-developed`（香園） | 1470 | **3 個錯字** |
+
+香園那篇被改錯的字：
+
+| 位置 | 原文 | 誤寫成 |
+|---|---|---|
+| 753 | 徹底檢查 | 彻底檢查 |
+| 1283 | 工作崗位 | 工作岗位 |
+| 1420 | 做月餅 | 做月餜 |
+
+三個都是繁體字被替換成簡體或形近字。錯誤率約 0.2%，在 2000–2600 字的
+jubostory08–11 上預期每篇 4–6 個錯，而且每次修正又得整篇重打一次，
+可能再引入新的錯。**這個作法本身不可靠，已停用。**（三個錯字已修回。）
+
+### 18-2. 改用腳本：不動 CMS，只在瀏覽器裡搬位置
+
+在 story 模板的 embed 加一段腳本，把「圖片緊鄰的短段落」提升成 `figcaption`：
+
+```js
+var MIN = 4, MAX = 60;
+document.querySelectorAll('.richtext figure.w-richtext-figure-type-image').forEach(function (f) {
+  if (f.querySelector('figcaption')) return;          // 已用內建說明欄的跳過
+  var n = f.nextElementSibling;
+  if (!n || n.tagName !== 'P') return;
+  var t = (n.textContent || '').replace(/[\s​‌‍ ]/g, '');
+  if (t.length < MIN || t.length > MAX) return;
+  var cap = document.createElement('figcaption');
+  cap.innerHTML = n.innerHTML;                        // 保留 <strong>、<a> 等行內標記
+  f.appendChild(cap);
+  n.parentNode.removeChild(n);
+});
+```
+
+**4–60 字這個門檻是量出來的，不是猜的**：全站真正的圖說是 5–51 字，
+圖片後面的正文段落是 224–383 字，中間有很大的空隙。`<p>‍</p>` 這種
+空白段落會被 MIN 擋掉。
+
+優點：CMS 內容一個字都沒動、23 篇一次全部生效、將來編輯用內建說明欄或
+沿用舊寫法都會正確顯示。
+
+### 18-3. 驗證：23 篇逐字比對正式站
+
+| 結果 | 數量 |
+|---|---|
+| 內文逐字相同、圖片 src 相同、標題相同、figure 數相同 | **22 / 23** |
+| 玻璃圖說總數 | **37** |
+| 誤判（把正文當成圖說） | 0 |
+
+唯一一篇差異是 `customer-success-stories-jubostory13`（+6 字），
+來源是 Terris 自己在 Designer 裡開啟說明欄測試時新增的「高郁凱主任。」，
+不是本次改動造成的。
+
+所有 37 段被提升的圖說都是真正的圖說，包含人名型短圖說
+（「李思慧主任」5 字、「王人尹業務負責人」8 字）。
+
+### 18-4. 已知限制
+
+- 若日後有人在圖片後面寫一段**短於 60 字的正文**，會被誤判為圖說。
+  正確寫法仍是用 Webflow 內建說明欄。
+- 腳本在 `DOMContentLoaded` 執行，理論上有極短暫的「說明先出現在圖片下方」
+  的閃動；實測未觀察到，但這點取決於 embed 在頁面中的位置。
