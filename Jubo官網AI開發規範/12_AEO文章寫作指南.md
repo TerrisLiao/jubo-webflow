@@ -51,7 +51,34 @@
 
 ---
 
-## 表格怎麼放進 CMS（2026-08-24 實測結論）
+## 表格怎麼放進 CMS（2026-08-24 實測／**2026-09-21 重大修訂**）
+
+> ### ⚠️ 2026-09-21 修訂：舊做法會被 Webflow 消毒，已造成一次內容損毀
+>
+> 本章 2026-08-24 的結論是「透過 CMS API 把整段 HTML（含 inline style）直接寫進
+> `Content` 欄位」。那次測試只驗證了**寫入與渲染**，沒有驗證**之後有人在 Editor／Designer
+> 裡編輯這個項目會發生什麼事**。
+>
+> `/news/residential-institution-subsidy-2026` 踩到了這個坑：
+>
+> | | `<table>` | 狀態 |
+> |---|---|---|
+> | 線上已發布版 | 3 | 完整 |
+> | 被編輯過的草稿 | **0** | **已損毀** |
+>
+> **裸 HTML 放在 Rich Text 欄位，只要在 Editor／Designer 裡被存過一次就會被消毒：**
+>
+> - `<table>` 被拆成 `<p>` 裡一串 `<br>`，**而且會掉內容**（該文有兩格整格消失）
+> - `<style>`、`<script>` 變成純文字，直接顯示給讀者看
+>
+> **新規則（三條，缺一不可）：**
+>
+> 1. **所有 code 一律包在 `<div class="w-embed">` 裡**（含 `<script>` 者用
+>    `<div class="w-embed w-script">`）。Webflow 才會把它當成不可分割的程式碼區塊。
+> 2. **表格不要再寫 inline style。** 樣式已集中到兩個 CMS 模板的樣式表，
+>    見 `18_CMS文章閱讀表面_news與customer-stories.md` §9、§10。
+> 3. **寫完一定要重新讀回確認** `w-embed` 數量與 `<table>` 數量正確，不要只看渲染結果。
+
 
 `/news` 文章內文欄位（`Content`）是 **Rich Text** 型別。理論上 Rich Text 支援表格標籤，
 但實測發現：
@@ -67,7 +94,45 @@
   頁面上的 Variables 會編譯成 CSS 變數，inline style 裡可以直接用 `var(--neutral--black)`
   這種寫法引用，不用手打色碼。
 
-### 已驗證的表格樣板
+### 表格樣板（2026-09-21 起使用這個）
+
+```html
+<div class="w-embed">
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>欄位標題</th>
+          <th>欄位標題</th>
+          <th>結論／效益</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>內容</td>
+          <td>內容</td>
+          <td>結論</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+```
+
+就這樣，**沒有任何 style 屬性**。外框、圓角、表頭底色、hairline、手機字級全部由模板樣式表處理。
+
+- **最後一欄會自動套重點色**（teal 底＋加粗），所以請把「結論／效益／數據」放在最後一欄。
+  這是刻意的資訊設計，不是裝飾。
+- 外層那層 `<div>` 不要省略，它負責手機版的橫向捲動。
+- 顏色、間距、圓角都不要自己寫；要調整請改模板樣式表，一次對所有文章生效。
+
+<details>
+<summary>❌ 2026-08-24 的舊樣板（已停用，僅供辨識舊文章用）</summary>
+
+舊做法把 inline style 寫在每一格上。若你在既有文章看到下面這種寫法，那是舊版，
+**不要複製到新文章**；模板樣式表會用 `!important` 蓋掉它的外觀，但內容仍有被
+Editor 消毒的風險，建議順手改成上面的乾淨版。
+
 
 ```html
 <div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
@@ -99,6 +164,8 @@
 - 圓角以本次視覺確認的 `2rem` 為準。最後一列不能有底線，避免看起來像另一圈外框。
 - 如果同一篇文章裡有標題想跟表格風格搭，可以只在那個 `<h2>`／`<h3>` 上加
   `style="font-weight:700;"`；**不要改全站 tag selector 或 `heading-style-h#` utility class**。
+
+</details>
 
 ### 變化樣板：分組列＋斑馬紋（方案／規格比較表用）
 
@@ -176,14 +243,19 @@
   這違反 `00_AI工作守則.md` 鐵律 4「不要用 HTML Embed 畫假 UI」。方案頁如果真的需要 CTA 按鈕，
   屬於 Designer 頁面層級的需求，不是 `/news` 文章表格的範圍。
 
-### 已知的取捨
+### 已知的取捨（2026-09-21 更新）
 
-這個做法是把樣式寫死在每篇文章的 HTML 裡，不是集中在 Designer 的共用 class 上：
+樣式**已經改成集中管理**，不再寫死在每篇文章裡：
 
-- ✅ 顏色用 `var(--...)`，站上主色改了會自動跟著變
-- ❌ 間距、border 這類數值寫死在每篇文章裡，之後想整批調整要一篇一篇改，不能像改一個 class 一次生效
-- ❌ 沒有測過 `<style>` 區塊在正式頁面「顯示」時會不會被過濾掉，所以樣板刻意只用 inline style，
-  不要換成寫一段共用 `<style>` 再套 class 的做法，除非重新做過實際渲染驗證
+- ✅ 間距、border、圓角、表頭底色都在模板樣式表，改一次全部文章生效
+- ✅ 顏色綁 Variables，站上主色改了會自動跟著變
+- ✅ 內容與樣式分離，文章 HTML 只剩結構，作者不用碰樣式
+- ⚠️ 模板樣式表目前用 `!important`，才能蓋掉既有文章殘留的 inline style。
+  等舊文章都清乾淨之後可以拿掉
+
+> 2026-08-24 原本寫的是「不要換成共用 `<style>` 再套 class，除非重新做過實際渲染驗證」。
+> **該驗證已於 2026-09-21 完成**（見 `18_CMS文章閱讀表面` §9、§10），
+> 結論是共用樣式表可行且更穩健，原顧慮解除。
 
 ### 建議流程
 
@@ -221,9 +293,16 @@ Webflow MCP snapshot 確認：
 
 ### FAQ
 
-通用範本放在 `custom-code/poc/news-faq-accordion.html`，外觀對齊首頁最下方 FAQ：
+通用範本放在 `custom-code/poc/news-faq-accordion.html`。
 
-- 白底、`2rem` 圓角、無外框、無陰影。
+> **⚠️ 2026-09-21 起：整個 FAQ 區塊（`<style>` ＋ `<details>` ＋ `<script>`）
+> 必須包在 `<div class="w-embed w-script">` 裡。** 裸放在 Rich Text 會被 Editor 消毒成純文字
+> ——`/news/residential-institution-subsidy-2026` 就是這樣把 CSS 和 JS 顯示給讀者看的。
+>
+> 另外，**卡片外觀（底色、圓角、邊框、padding）已改由模板樣式表接管**，
+> 範本裡那幾行可以留著當 fallback，但實際呈現以模板為準：
+> 白底 ＋ `1px` 細框 ＋ `1rem` 圓角（原本的純白無框在新的白色閱讀卡上看不出邊界）。
+
 - 問題文字使用 `var(--neutral--black)`、`1.125rem`、`font-weight:400`。
 - 展開與收合都使用高度動畫：展開 `360ms`，收合 `320ms`；收合完成後才移除 `open`。
 - 必須更新 `aria-expanded`，並支援 `prefers-reduced-motion`。
