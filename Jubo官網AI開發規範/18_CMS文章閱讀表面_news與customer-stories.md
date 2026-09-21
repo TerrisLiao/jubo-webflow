@@ -743,3 +743,53 @@ Terris 希望圖片說明變成壓在圖片上的毛玻璃條，且「後台填�
 1. 只在 `/customer-stories` 上線（照片為主，零風險），`/news` 維持說明在圖片下方。
 2. 兩邊都上線，但 `/news` 的資訊圖一律不填說明欄（說明寫進正文）。
 3. 兩邊都上線，日後新的資訊圖在設計時就把下緣留白。
+
+---
+
+## 17. 圖說玻璃條：只在 /customer-stories 上線（2026-09-21）
+
+Terris 選擇 §16-4 的第 1 案：只在 `/customer-stories` 模板上線，`/news` 不動
+（`/news` 的圖多為資訊圖，玻璃條會蓋住圖片下緣的數據）。
+
+### 17-1. 已完成
+
+CSS 第 5 節只寫進 **story 模板的 embed**（page `6a1c22366d4d91ecdbddfca6`），
+news 模板的 embed 保持 v4 不變。已發布 staging。
+
+staging 驗證（`/customer-stories/customer-success-stories-jubostory11`）：
+
+| 檢查 | 結果 |
+|---|---|
+| `figure` 的 `position` | `relative` |
+| 探針 `figcaption` 的 `position` | `absolute` |
+| 背景 | `rgba(255,255,255,0.72)` |
+| `backdrop-filter` | `blur(20px) saturate(1.5)` |
+| 圓角 | `16px` |
+| `/news` 同樣探針 | `static`／透明 ← **確認未波及** |
+
+> 驗證註記：publish 後立刻讀取會拿到舊版 CSS（第一次量到規則沒生效），
+> 需等 CDN 更新或帶 cache-buster 參數重讀。這不是規則失敗。
+
+### 17-2. 現況：規則已上線，但還看不到效果
+
+全站 23 篇 customer story 掃描結果：
+
+| 項目 | 數量 |
+|---|---|
+| 文章 | 23 |
+| rich text 圖片 | 59 |
+| 使用 Webflow 內建圖片說明（`figcaption`） | **0** |
+| 圖片後面另打一段 `<p>` 當說明 | 29（分布在 8 篇） |
+| 圖片後面沒有說明（接 blockquote 或空段落） | 30 |
+
+因為目前沒有任何一張圖用內建說明欄，這段 CSS 現在是**休眠**狀態——
+新文章只要改用說明欄就會自動套上，舊文章則需要把那 29 段 `<p>` 轉成 `figcaption`。
+
+### 17-3. 寫作規範要跟上
+
+`12_AEO文章寫作指南.md` 與 story 的撰稿流程要補一條：
+
+> 圖片說明一律用 Webflow rich text 的內建說明欄（點選圖片 → 開啟說明），
+> 不要在圖片後面另打一段內文當說明。前者 CSS 認得，後者認不得。
+
+（此條尚未寫入 12 號文件，待圖說方案確定全部範圍後一併補。）
