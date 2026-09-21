@@ -478,3 +478,84 @@ blockquote 的漸層與顆粒、表格重點欄、FAQ 細框皆正確。
 3. 兩張圖缺 srcset（見 11-2），如要優化需重新上傳或在 Webflow 內重新插入。
 4. **寫作規範待補**：`12_AEO文章寫作指南.md` 應加一節「表格與 FAQ 怎麼寫」——
    一律用 HTML Embed、表格不寫 inline style。否則下一篇會重蹈覆轍。
+
+---
+
+## 12. v2 修正：表格白字與第二套 FAQ
+
+- 日期：2026-09-21
+- 回報：Terris —「table 跟 FAQ 還是有明顯錯誤」
+- 狀態：**已修正，已重新發布到 staging（正式網域未動）**
+
+### 12-1. 表格最後一欄變成白字（本次改動造成的迴歸）
+
+`/news/residential-institution-subsidy-2026` 的最後一欄，在套上 §9 的表格樣式後
+**文字變成白色，完全看不見**。
+
+根因是 §9 的 CSS **只覆寫了 `background`，沒有覆寫 `color`**。該文原本把最後一欄
+做成「實心 teal ＋ 白字」的強調欄：
+
+```html
+<th style="background:#00b2c0;color:var(--neutral--white);">115 年新制</th>
+<td style="color:var(--neutral--white);background:#00b2c0;">
+  <strong style="color:var(--neutral--white);">按月認列</strong>…
+```
+
+`!important` 把底色改成 6%／16% 的淡 teal 之後，inline 的白字留了下來 → 白底白字。
+全文共 **7 個**這樣的儲存格。
+
+**修正**：儲存格與其所有子元素都強制文字色。
+
+```css
+.richtext table th,
+.richtext table td { color: var(--neutral--black) !important; }
+.richtext table th *,
+.richtext table td * { color: inherit !important; }
+```
+
+子元素那條是必要的 —— `<strong style="color:var(--neutral--white);">` 有自己的 inline color，
+只改父層蓋不掉。
+
+> **教訓**：用 `!important` 覆寫既有 inline style 時，**同一組視覺屬性要一起覆寫**。
+> 只改 `background` 不改 `color`，等於把原作者的配色拆成一半，結果比不改更糟。
+
+### 12-2. 站上有兩套 FAQ 實作，§10 的規則只蓋到一套
+
+| 實作 | 選擇器 | 圖示 | 使用文章 |
+|---|---|---|---|
+| A | `.aeo-faq` | `+` 號（兩條線旋轉） | `ai-transformation-culture`、`residential-institution-subsidy-2026` |
+| B | `#jubo-research-faq` | chevron `∨`（`::after` 邊框轉 45°） | `long-term-care-ai-high-risk-resident-study` |
+
+§10 寫的是 `.richtext .aeo-faq details`，所以 B 完全沒有被套到，
+在新的白色閱讀卡上依然看不出卡片邊界。
+
+**修正**：改鎖 `details` 本身，與實作無關。
+
+```css
+.richtext details {
+  background: var(--neutral--white) !important;
+  border: 1px solid rgba(21, 23, 23, .09) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+.richtext details summary { padding: 1.5rem 1.75rem !important; }
+.richtext .aeo-faq__answer-inner,
+.richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
+```
+
+內層答案的 padding 仍需分別指定（兩套的內層 class 不同），但**卡片外觀已與實作無關**，
+日後再出現第三套也會自動套到。
+
+### 12-3. 驗證
+
+以 staging 實際渲染（非模擬）測量：
+
+| 項目 | 結果 |
+|---|---|
+| 表格 21 個儲存格中「白字或透明字」 | **0** |
+| 表格內 `<strong>` 的顏色 | 全部 `rgb(21,23,23)` |
+| `#jubo-research-faq` 的 `details` | `bg rgb(255,255,255)`／`border 1px rgba(21,23,23,.09)`／`radius 16px` |
+
+**驗證限制**：staging 上的補助文章是**舊的已發布內容**（含 inline style），
+不是 §11 修好的草稿 —— 草稿 `isDraft: true` 不會發布。也就是說，
+§11 的內容修復尚未在任何環境被目視驗證過。
