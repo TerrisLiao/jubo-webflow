@@ -144,3 +144,123 @@ Webflow 的 box-shadow 本來也不能綁色彩變數）。
    若希望連標題、封面圖一起包進白卡，改掛到 `.customer-story_template-right-wrap` 即可。
 4. **全站漸層的 `filter: blur(50px)`** 是否要一併優化（改用預先模糊的底圖或更柔的
    radial-gradient 取代 runtime blur，並補 `prefers-reduced-motion` 降級）。
+
+---
+
+## 8. 第二輪調整：承載面透明度與標題級距
+
+- 日期：2026-09-21
+- 委託：Terris —「白色可以再透明一點點，標題我覺得都太大」
+- 狀態：**已修改，未 Publish**
+
+### 8-1. 承載面改為 92% 白
+
+新增變數（依既有 `neutral/white-30`、`neutral/white-50` 的命名慣例）：
+
+| 變數 | id | 值 |
+|---|---|---|
+| `neutral/white-92` | `variable-b4b21da1-1cc5-4eb9-f31d-78f2c7f2ad9f` | `hsla(0, 0.00%, 100.00%, 0.92)` |
+
+`.news-content_wrap` 與 `.customer-story_content-wrap` 的 `background-color`
+由 `--neutral--white` 改綁 `--neutral--white-92`。
+
+**沒有加 `backdrop-filter`。** 漸層本身已經是 `blur(50px)` 的重擔（見 §6），
+再疊一層毛玻璃會再多一次合成。8% 的透出量足夠讓卡片不像硬白色塊。
+
+> 漸層在卡片底下的亮度區間約 `#f8f8f8`～`#edf9fa`（約 11 階），
+> 透出 8% 後的實際飄移約 0.9 階，肉眼無法察覺，不會把 §1 的問題帶回來。
+
+### 8-2. 內文標題級距（`.richtext h1`～`h6`）
+
+以內文 18px 為基準重訂級距，只改 `font-size`，`line-height` 與 `margin` 不動：
+
+| | 改前 main／medium／small | 改後 main／medium／small |
+|---|---|---|
+| `h1` | 3 / 2.75 / 2.5rem | **2.25 / 2.125 / 2rem** |
+| `h2` | 2.5 / 2.25 / 2rem | **2 / 1.875 / 1.625rem** |
+| `h3` | 2.25 / 2 / 1.75rem | **1.5 / 1.5 / 1.375rem** |
+| `h4` | 2 / 1.75 / 1.5rem | **1.25 / 1.25 / 1.125rem** |
+| `h5` | 1.75 / 1.5 / 1.25rem | **1.125rem（全斷點）** |
+| `h6` | 1.5 / 1.25 / 1rem | **1rem（全斷點）** |
+
+改後 h2 = 32px，約為內文 18px 的 1.78 倍，是一般長文合理的段落層級。
+
+> ⚠️ **這一項的影響範圍超出 news／customer-stories。**
+> `.richtext` 是全站共用 class（首頁 7 個實例、`/company` 3 個、`/careers` 1 個、
+> `/resources/education` 1 個）。逐頁用 DOM 查詢實際確認後，**真正含標題的只有
+> `/resources/education` 的「作者介紹」卡片**，其中一個 `h3`（人名「張麗君」）
+> 由 36px 變成 24px。其餘頁面的 `.richtext` 區塊內沒有 heading，不受影響。
+>
+> 之所以無法只鎖定兩個模板：`data_style_tool > update_style` **只能更新既有的
+> 巢狀 tag 樣式，不能新建**。嘗試建立 `.news-content_wrap h2` 回報
+> `Style "news-content_wrap > h2" not found`，因此 `.richtext hN` 是唯一路徑。
+
+### 8-3. 文章主標題（`/news`）
+
+`/news` 文章的 `h1` 原本只掛 `.text-align-center`，字級來自 **`h1` tag selector**
+（5rem／80px，weight 300）。依鐵律 5 不能改 tag selector，也不能改共用 utility，
+因此新增一個 `is-` combo：
+
+```
+.text-align-center.is-article-title
+  main 3.25rem（52px）｜medium 2.75rem｜small 2.25rem｜tiny 2rem
+```
+
+掛到 element `18c7f230-843d-6cbc-38cd-2157ba455bc5`（`styleNames: text-align-center, is-article-title`）。
+**用 `set_style` 換 class，不是重建元素，CMS 文字綁定未受影響。**
+
+> 這次 `set_style` 成功，與 §2-1 失敗的情況不同 —— 差別在於本次傳入的兩個名稱
+> 都能解析到實際存在的樣式（`text-align-center` 全域 ＋ 新建的 combo）。
+
+### 8-4. 相關文章區標題（`/news`）
+
+主標題縮到 52px 後，頁尾「相關文章／掌握更多長照科技趨勢」的 `h2`
+（同樣只掛 `.text-align-center`，吃 `h2` tag selector 的 3.8rem／60.8px）
+**變得比 h1 還大**，階層倒置。新增第二個 combo：
+
+```
+.text-align-center.is-section-title
+  main 2.5rem（40px）｜medium 2.25rem｜small 2rem
+```
+
+掛到 element `04280ff1-23c0-d6be-62c9-1ad5cbe16687`。
+現在階層是 H1 52px ＞ 區塊 H2 40px ＞ 內文 h2 32px ＞ 內文 18px。
+
+### 8-5. 客戶故事主標題
+
+`.client-story_template-h1`（單純 global class，無 combo）：
+
+| 斷點 | 改前 | 改後 |
+|---|---|---|
+| main | 3.8rem（60.8px） | **2.75rem（44px）** |
+| medium | 2.75rem | **2.5rem** |
+| small | 2rem | 2rem（不動） |
+
+### 8-6. 新增的 class 與變數彙整
+
+| 項目 | 名稱 | 說明 |
+|---|---|---|
+| 變數 | `neutral/white-92` | 對齊既有 `white-30`／`white-50` 命名 |
+| Combo | `.text-align-center.is-article-title` | CMS 文章主標 |
+| Combo | `.text-align-center.is-section-title` | 頁內區塊標題 |
+
+兩個 combo 都是 `is-` 前綴變體，符合鐵律 2；元素上的 class 數皆為 2（理想範圍）。
+
+### 8-7. 驗證與限制
+
+**已驗證**：三個樣式（兩個 combo ＋ `client-story_template-h1`）四斷點讀回，值正確；
+兩個元素的 `styleNames` 讀回確認 class 已掛上。用注入等值 CSS 的方式在線上頁面預覽，
+桌機主標 52px 單行、相關文章區 40px、內文 h2 32px，階層正確。
+
+**驗證限制**：仍**未 Publish**，預覽是模擬非 Webflow 實際輸出。
+客戶故事在 ≤991px 的版面（側欄切換成 `is-mobile`）依然沒有取得預覽。未測 Safari 與實機。
+
+### 8-8. 刻意沒做的 / 仍然偏大的
+
+- **`CTA Section #1` 的標題仍是 60.8px。** 「一起打造更有效率的工作模式」屬於共用
+  Component（id `6480c081-4cf2-3cca-2e61-b3d2258e42bb`），全站頁尾都在用，依鐵律 5
+  未動。結果是：文章頁最下方那顆 CTA 標題仍比文章 H1 大。其他頁面的 h1 是 80px
+  所以沒有倒置問題，**只有 CMS 文章頁會看到這個落差**。
+- **標題字重維持 300。** Terris 這次只提「太大」，未提字重。
+  52px 的 CJK Light 字重比 80px 時好很多，但若之後覺得筆畫仍偏細，
+  在兩個 combo 上加 `font-weight: 400` 即可，不影響其他頁面。
