@@ -900,3 +900,67 @@ document.querySelectorAll('.richtext figure.w-richtext-figure-type-image').forEa
   正確寫法仍是用 Webflow 內建說明欄。
 - 腳本在 `DOMContentLoaded` 執行，理論上有極短暫的「說明先出現在圖片下方」
   的閃動；實測未觀察到，但這點取決於 embed 在頁面中的位置。
+
+---
+
+## 19. FAQ 展開動畫（2026-09-21）
+
+### 19-1. 問題：新文章的 FAQ 沒有動畫
+
+Terris 回報「toggle down 的動畫不見了」，並指定首頁 FAQ（外包做的）為正確版本。
+
+實測後確認站上有**兩套** FAQ，行為不同：
+
+| 實作 | 用在哪 | 展開行為 |
+|---|---|---|
+| `.aeo-faq` | 補助新制等舊 AEO 文章 | 內容自帶腳本，有 height 動畫 |
+| `#jubo-research-faq` | 成大研究（最新那篇） | **純 `<details><summary>`，瀏覽器原生瞬間跳出，沒有動畫** |
+
+`#jubo-research-faq` 的 `<script>` 只做一件事：如果不是目標文章就把自己
+`remove()` 掉，完全沒有動畫邏輯。`<details>` 直接裝 `<summary>` + `<p>`，
+沒有可以做 height 過場的內層容器。所以不是動畫「壞了」，是從來沒有。
+
+### 19-2. 參數取自首頁，不是自己挑的
+
+從首頁的 `Webflow.require('ix2').store` 讀出 `.faq5_answer` 的動作設定：
+
+| 動作 | actionTypeId | duration | easing | 目標 |
+|---|---|---|---|---|
+| 展開 | `STYLE_SIZE` | **400** | **ease** | height → AUTO |
+| 收合 | `STYLE_SIZE` | **400** | **ease** | height → 0px |
+
+新腳本就用同一組 400ms / `ease`。
+
+### 19-3. 作法
+
+在 `/news` 模板 embed 加一段腳本（原始碼：`custom-code/cms-article/faq-accordion.js`）：
+
+1. 掃 `.richtext details`。
+2. 把 `<summary>` 以外的子元素包進 `.jb-faq__panel`。
+3. 接手 summary 的點擊，改成 `height` 過場（400ms / ease）。
+4. 展開結束後把高度設回 `auto`，內容變高也不會被裁切。
+5. **舊版 `.aeo-faq` 直接跳過**（偵測 `.aeo-faq__answer`），避免兩套腳本打架。
+6. `prefers-reduced-motion: reduce` 時不做動畫，直接開合。
+
+另外補一條 CSS：文章自帶的箭頭旋轉綁在 `details[open]`，但收合動畫跑完
+才會把 `open` 拿掉，箭頭會慢半拍。改用點擊當下就更新的 `aria-expanded` 當依據。
+
+### 19-4. 驗證（staging 實測）
+
+| 檢查 | 結果 |
+|---|---|
+| FAQ 題數 / 綁定成功 | 4 / 4 |
+| 展開 transition | 每題都是 `0.4s` `ease` |
+| 展開後 | `open=true`、`aria-expanded=true`、高度設回 `auto` |
+| 收合後 | `open=false`、`aria-expanded=false`、高度 `0px` |
+| 連點兩下 | 狀態正確、防重入旗標已清除，不會卡死 |
+| `prefers-reduced-motion` | 直接展開、不跑動畫 |
+| 舊版 `.aeo-faq` 是否被重複綁定 | 否（`data-jb-faq` 為 null、無 `.jb-faq__panel`） |
+| 線上 `<style>`／`<script>` 與 repo 檔案 | **逐字相同**（4075 / 3691 字元） |
+
+### 19-5. 兩個註記
+
+- Webflow 發布後 CDN 約需 20–60 秒才更新。太早比對會拿到舊版，
+  本次就先誤判過一次「程式碼沒更新」。
+- `/customer-stories` 模板**沒有**加這段腳本，因為 story 目前都沒有 FAQ。
+  日後要用再加即可（見 `custom-code/cms-article/README.md`）。
