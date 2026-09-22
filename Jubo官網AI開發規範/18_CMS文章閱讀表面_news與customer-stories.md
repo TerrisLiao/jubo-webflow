@@ -1363,9 +1363,9 @@ Preview 的部分不再追。
 `get_site` 顯示兩個自訂網域的 `lastPublished` 都是 **2026-09-22T03:48:58Z**，
 當時正式站已在服務 news v6 / story v12 與移除重複表格後的補助文章。
 
-我所有的 `publish_site` 呼叫都帶 `customDomains: []`，沒有請求過正式站發布，
-03:48 那次不是來自本工作階段的工具呼叫（Webflow Designer 的 Publish
-預設會發到所有網域）。歸屬未能確認，僅記錄事實。
+我所有的 `publish_site` 呼叫都帶 `customDomains: []`，沒有請求過正式站發布。
+**03:48 那次是 Terris 自己在 Webflow Designer 按的**（Designer 的 Publish
+預設會發到所有網域），已由 Terris 確認。
 
 **教訓**：「我沒有做過 X」不等於「X 沒有發生」。涉及線上狀態的宣稱，
 要以實際查詢為準，不能只依據自己的操作紀錄。
