@@ -129,12 +129,131 @@ Backups（Site Settings → Backups）還原到 2026-09-22 09:38 的版本。
 
 ---
 
+## 5.5　量測結果
+
+### 為什麼不是在 staging 上量的
+
+**Staging 發布失敗，不是沒試。** Webflow MCP 的 `publish_site` 只接受 domain id，
+而這個站的 domain id 只有兩個：`www.jubo-health.com` 與 `jubo-health.com`，
+兩個都是正式站。API 沒有開放 `publishToWebflowSubdomain` 這個參數：
+
+```
+publish_site { site_id, customDomains: [] }
+→ 400 Bad Request: "You must pass at least one valid domain id to the publish endpoint"
+```
+
+要發 staging 只能由人在 Designer 的 Publish 選單勾 `jubo-health.webflow.io`。
+**我沒有用那兩個正式 domain id 去發布。**
+
+### 改用本地模擬量測
+
+做法：抓線上 `/news` 的實際 HTML，把 54 個 `div.single-news_cover-img`
+換成 Webflow 會輸出的 `<img>` 標記（**真實的變體 URL、真實的檔案大小、
+真實的 `sizes="100vw"`**），加上 `.news-card_cover-img` 的 CSS，
+本地起 server，用同一組 harness 量。圖片全部走真實 CDN，所以位元組數是真的。
+
+| | 線上現況 | 改版模擬 | 差異 |
+|---|---|---|---|
+| **首屏圖片流量** | 8,863 KiB | **1,113 KiB** | **−87.4%** |
+| 首屏總傳輸 | 9,432 KiB | 1,870 KiB | −80.2% |
+| 首屏載入的圖片張數 | 58 | **5** | −53 |
+| load 完成 | 48.8 s | **10.8 s** | −77.8% |
+| FCP | 1,676 ms | 1,504 ms | −10% |
+
+版面驗證（兩個斷點，逐像素比對）：
+
+| | 線上現況 | 改版模擬 |
+|---|---|---|
+| 手機遮罩尺寸 | 388 × 218 | 388 × 218 ✅ |
+| 桌機遮罩尺寸 | 416 × 234 | 416 × 234 ✅ |
+| 長寬比 | 1.778 (16:9) | 1.778 (16:9) ✅ |
+| 圓角 | `24px 24px 0 0` | `24px 24px 0 0` ✅ |
+| `overflow` | `clip` | `clip` ✅ |
+| 內層元素 | `DIV.single-news_cover-img` | `IMG.news-card_cover-img` |
+
+---
+
+## 5.6　量測過程中發現的兩個新問題
+
+### 🔴 新發現 A：54 張封面裡有 45 張**根本沒有** responsive 變體
+
+逐張探測 `-p-500` / `-p-800` / `-p-1080` / `-p-1600`：
+
+| 變體數 | 張數 |
+|---|---|
+| 0 個（只有原圖） | **45** |
+| 3 個 | 8 |
+| 4 個 | 1 |
+
+那 45 張沒有變體的圖**合計 7.27 MB**。
+
+檔名特徵是雙重 URL 編碼（`%25E5%25A6%2582…`），是從別的平台（看起來像 WordPress）
+匯進 CMS 的，Webflow 從來沒有幫它們產生變體。
+
+**影響**：這次改動拿到的 87% 節省，**幾乎全部來自 `loading="lazy"`，不是來自 srcset。**
+要真的把檔案變小，必須把這 45 張重新上傳（見 `18_載入效能稽核` 的 P0-2）。
+原本 P0-2 被我列為「就算 P0-1 修好也要做」，現在證據更強：**它是必要的，不是加分題。**
+
+### 🟠 新發現 B：Webflow 對 CMS 綁定的 Image 輸出 `sizes="100vw"`
+
+這是站上既有 `.news_cover-img` 的實際輸出（不是推測）：
+
+```html
+<img src="…_11 (1).png" loading="lazy" alt="" sizes="100vw"
+     srcset="…-p-500.png 500w, …-p-800.png 800w, …-p-1080.png 1080w, …">
+```
+
+`sizes="100vw"` 等於告訴瀏覽器「這張圖佔滿整個視窗寬」，但實際上卡片只有 388px。
+結果：Pixel 7（DPR 2.625）算出需要 412 × 2.625 = 1,082px，**比 1080w 多 2px，
+所以跳過 -p-1080 直接抓原圖。**
+
+實測修正 `sizes` 的效果：
+
+| `sizes` | 首屏圖片 | 瀏覽器挑到的檔案 |
+|---|---|---|
+| `100vw`（Webflow 預設） | 1,118 KiB | 原圖、原圖、`-p-1600` |
+| `(max-width:767px) 94vw, (max-width:991px) 46vw, 29vw` | **853 KiB** | 全部 `-p-1080` |
+
+再省 24%。**待決策**：要不要在 Image 元素上加自訂 `sizes` 屬性覆蓋。
+我沒有動 —— 因為加了之後發布出來的 HTML 會不會變成兩個 `sizes` 屬性，
+沒有 staging 就無法驗證，我不想放一個沒驗過的東西上去。
+
+---
+
+## 5.7　Protocol 合規檢查
+
+對照 GitHub repo 的規範 ＋ 站上兩份 Agent Instruction
+（`rules/jubo-web-visual-system.md`、`rules/jubo-repo-source-of-truth.md`，兩份都已讀）：
+
+| 規則 | 出處 | 結果 |
+|---|---|---|
+| 鐵律 1：先找再用最後才建 | `00_AI工作守則` | ✅ 先查過 `news_cover-img`（有 1.25rem 圓角會與 `.img-mask` 打架、且無 aspect-ratio），不適用才新建 |
+| 鐵律 2：`folder_element` 命名 | `00_AI工作守則` | ✅ `news-card_cover-img`，folder 沿用既有的 `news-card_` |
+| 鐵律 3：核心結構巢狀不可改 | `00_AI工作守則` | ✅ 完全沒碰 |
+| 鐵律 4：不寫自訂 CSS／不用 Embed 做版面 | `00_AI工作守則` | ✅ 全部用 Webflow 原生樣式屬性 |
+| 鐵律 5：不動共用資產 | `00_AI工作守則` | ✅ Component／utility／Variables／tag selector 一個都沒動 |
+| Class 疊加上限 5 個 | `repo-source-of-truth` §5 | ✅ 新 Image 只有 1 個 class |
+| Slater 鎖住的 class 不可改名 | `slater-selectors.md` / §2 | ✅ 沒有改任何 class 名稱；兩個相關 class 都不在清單上 |
+| 查 CSS 要看完四個斷點 | `repo-source-of-truth` §3 | ✅ 用該文推薦的「查線上已發布 CSS」法，`single-news_cover-img` 全檔只有 1 條規則、無 media query 覆寫 |
+| 重構不可以改到設計 | `repo-source-of-truth` §4 | ✅ 沒改既有共用 class 的值；只「新增」站上原本沒有的 class（該節明文允許） |
+| 影像：照片用 `object-fit: cover`、16:9 | `visual-system` §11 | ✅ 兩項都符合 |
+| 圖片要有 Alt Text | `visual-system` §16 | ✅ **修正了既有缺陷** —— 原本是背景圖，完全沒有 alt |
+| 保留 Script Hooks（`data-*` 等） | `visual-system` §13 | ✅ 被刪的 div `attributes: []`，沒有任何 hook |
+| 未獲明確授權不得 Publish | `CLAUDE.md` / `visual-system` §2 | ✅ 正式站未發布。staging 已獲授權但 API 做不到（見 5.5） |
+| 自訂 class 要登錄清單 | `06_自訂Class完整清單` | ✅ 已登錄，並標註 `single-news_cover-img` 的現況 |
+
+⚠️ 未完成的 QA（需要 staging 或 Designer 才能做）：
+`visual-system` §17 要求四個斷點都實測。我只驗了 main 與 medium 兩個尺寸，
+**small（≤767）與 tiny（≤479）尚未實測。**
+
+---
+
 ## 6. 尚未完成 / 待決策
 
 | 項目 | 狀態 |
 |---|---|
 | `/news` 卡片封面 | ✅ 已改，未 publish |
-| 量測改善幅度 | ⏸ **需要先發布到 `.webflow.io` staging 才能測**，等 Terris 授權 |
+| 量測改善幅度 | ✅ 已用本地模擬量出（首屏 −87.4%），但 staging 實機驗證仍未做 |
 | 文章內頁「相關新聞」列表（`.single-news_cover-img`，每頁 23 個 × 40 頁） | ⏸ 未動，等 /news 驗證過再做 |
 | 首頁與 6 頁的 `.cases-img`（46 個，含 842 KiB 的 `cases-3.png`） | ⏸ 未動 |
 | `single-news_cover-img` class 的清理 | ⏸ 等上面兩項都轉完才能刪 |

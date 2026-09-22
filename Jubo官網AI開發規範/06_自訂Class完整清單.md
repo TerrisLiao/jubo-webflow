@@ -403,9 +403,10 @@ Client-First 規則：一個底線 `_` = 一層 folder。命名為 `folder_eleme
 - `news_cover-img-wrap`
 - `news_icon-wrap`
 
-### `news-card_` （5 個）
+### `news-card_` （6 個）
 
 - `news-card_category-date-wrap`
+- `news-card_cover-img`　← 2026-09-22 新增（`/news` 卡片封面改用 Image 元素，見 `19_news封面圖改用Image元素_變更紀錄.md`）
 - `news-card_headline-inner-wrap`
 - `news-card_headline-wrap`
 - `news-card_hidden`
@@ -987,7 +988,7 @@ Client-First 規則：一個底線 `_` = 一層 folder。命名為 `folder_eleme
 
 ### `single-news_` （1 個）
 
-- `single-news_cover-img`
+- `single-news_cover-img`　⚠️ 2026-09-22 起僅剩「文章內頁－相關新聞」在用；`/news` 已改用 `news-card_cover-img`。兩處都轉完後可評估刪除。
 
 ### `single-price_` （1 個）
 
