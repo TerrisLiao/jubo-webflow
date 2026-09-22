@@ -1,11 +1,6 @@
-
 /* ---------- 5. 圖片說明：圖上毛玻璃條（只在 story 模板） ---------- */
 /* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
-   編輯請在 rich text 點選圖片 → 開啟說明欄位填寫。
-   圖片後面另打一段內文不會被套用（自動提升的腳本已於 2026-09-22 移除）。
-   v12：本節不再有任何規則選到 img 或其包裝 div —— 之前那兩條會讓
-   Webflow CMS 編輯器把圖片顯示成灰色佔位。
-   staging 實測：真實照片上黑字最低對比 9.46:1，高於 AAA 的 7:1。 */
+   本節不會選到 img，所以不會影響後台編輯器顯示圖片。 */
 .richtext figure.w-richtext-figure-type-image { position: relative !important; }
 .richtext figure.w-richtext-figure-type-image figcaption {
   position: absolute !important;
@@ -25,7 +20,6 @@
   line-height: 1.7 !important;
   box-shadow: 0 8px 28px rgba(21, 23, 23, .12) !important;
 }
-/* 舊瀏覽器不支援 backdrop-filter 時，改用較不透明的白底保住可讀性 */
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .richtext figure.w-richtext-figure-type-image figcaption {
     background: rgba(255, 255, 255, .93) !important;
@@ -35,7 +29,7 @@
   .richtext figure.w-richtext-figure-type-image figcaption {
     left: .75rem !important;
     right: .75rem !important;
-    bottom: .75rem !important;
+    bottom: 1rem !important;
     padding: 1rem 1.125rem !important;
     font-size: 1rem !important;
     line-height: 1.65 !important;

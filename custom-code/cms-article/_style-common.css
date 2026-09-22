@@ -1,3 +1,10 @@
+/* ============================================================
+   CMS 文章樣式（/news 模板）
+   2026-09-22 v8　決議者：Terris
+   原始碼在 repo：custom-code/cms-article/
+   詳見 Jubo官網AI開發規範/18、12。
+   ============================================================ */
+
 /* ---------- 1. 表格 ---------- */
 .richtext div:has(> table) {
   background: transparent !important;
@@ -67,26 +74,38 @@
 .richtext details summary { padding: 1.5rem 1.75rem !important; }
 .richtext .aeo-faq__answer-inner,
 .richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
-
-/* 展開動畫用的內層容器，由 faq-accordion.js 在載入時建立 */
 .richtext details .jb-faq__panel { overflow: hidden !important; }
-
-/* 收合時箭頭要立刻轉回去。文章自帶的規則是綁 details[open]，
-   而收合動畫跑完才會把 open 拿掉，箭頭會慢半拍；
-   aria-expanded 是點擊當下就更新的，所以改用它當依據。 */
 .richtext #jubo-research-faq details summary[aria-expanded="false"]::after {
   transform: rotate(45deg) translateY(-0.2rem) !important;
 }
-
-/* 舊版 .aeo-faq 的加號圖示同樣綁在 details[open]，收合時會慢半拍，
-   一樣改用點擊當下就更新的 aria-expanded。 */
 .richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
   transform: translate(-50%, -50%) rotate(90deg) !important;
 }
 
 /* ---------- 4. 手機 ---------- */
+/* 手機上寬表格可以左右捲，但要讓人看得出來還有內容。
+   用 Komarov 的 scroll-shadow 技法：兩層「遮罩」跟著內容捲動
+   （background-attachment: local），兩層陰影固定在容器邊緣（scroll）。
+   捲到底時遮罩會蓋住陰影，所以陰影會自動出現／消失，不需 JS。 */
 @media screen and (max-width: 767px) {
-  .richtext table { font-size: .9375rem !important; }
+  .richtext div:has(> table) {
+    background-image:
+      linear-gradient(to right, var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to left,  var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)) !important;
+    background-position: left center, right center, left center, right center !important;
+    background-repeat: no-repeat !important;
+    background-size: 2.5rem 100%, 2.5rem 100%, .875rem 100%, .875rem 100% !important;
+    background-attachment: local, local, scroll, scroll !important;
+  }
+  /* 不給最小寬度的話，三欄表格會被壓成每行兩三個字（實測中間欄
+     變成「全年／累計／入住／日數」）。寧可讓它保持可讀寬度、左右捲，
+     上面的捲動陰影就是為了讓人知道右邊還有內容。 */
+  .richtext table {
+    font-size: .9375rem !important;
+    min-width: 34rem !important;
+  }
   .richtext table th,
   .richtext table td { padding: .75rem 1rem !important; }
   .richtext blockquote { padding: 1.5rem 1.25rem !important; }

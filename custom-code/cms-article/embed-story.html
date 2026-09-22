@@ -1,10 +1,9 @@
 <style>
 /* ============================================================
    CMS 文章樣式（/customer-stories 模板）
-   2026-09-22 v12　決議者：Terris
+   2026-09-22 v13　決議者：Terris
    原始碼在 repo：custom-code/cms-article/
-   ※ 本版本完全沒有任何規則選到 img 元素。
-   詳見 Jubo官網AI開發規範/18、12。
+   ※ 第 5 節（圖說玻璃條）只在本模板；沒有任何規則選到 img。
    ============================================================ */
 
 /* ---------- 1. 表格 ---------- */
@@ -76,26 +75,31 @@
 .richtext details summary { padding: 1.5rem 1.75rem !important; }
 .richtext .aeo-faq__answer-inner,
 .richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
-
-/* 展開動畫用的內層容器，由 faq-accordion.js 在載入時建立 */
 .richtext details .jb-faq__panel { overflow: hidden !important; }
-
-/* 收合時箭頭要立刻轉回去。文章自帶的規則是綁 details[open]，
-   而收合動畫跑完才會把 open 拿掉，箭頭會慢半拍；
-   aria-expanded 是點擊當下就更新的，所以改用它當依據。 */
 .richtext #jubo-research-faq details summary[aria-expanded="false"]::after {
   transform: rotate(45deg) translateY(-0.2rem) !important;
 }
-
-/* 舊版 .aeo-faq 的加號圖示同樣綁在 details[open]，收合時會慢半拍，
-   一樣改用點擊當下就更新的 aria-expanded。 */
 .richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
   transform: translate(-50%, -50%) rotate(90deg) !important;
 }
 
 /* ---------- 4. 手機 ---------- */
 @media screen and (max-width: 767px) {
-  .richtext table { font-size: .9375rem !important; }
+  .richtext div:has(> table) {
+    background-image:
+      linear-gradient(to right, var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to left,  var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)) !important;
+    background-position: left center, right center, left center, right center !important;
+    background-repeat: no-repeat !important;
+    background-size: 2.5rem 100%, 2.5rem 100%, .875rem 100%, .875rem 100% !important;
+    background-attachment: local, local, scroll, scroll !important;
+  }
+  .richtext table {
+    font-size: .9375rem !important;
+    min-width: 34rem !important;
+  }
   .richtext table th,
   .richtext table td { padding: .75rem 1rem !important; }
   .richtext blockquote { padding: 1.5rem 1.25rem !important; }
@@ -106,11 +110,7 @@
 
 /* ---------- 5. 圖片說明：圖上毛玻璃條（只在 story 模板） ---------- */
 /* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
-   編輯請在 rich text 點選圖片 → 開啟說明欄位填寫。
-   圖片後面另打一段內文不會被套用（自動提升的腳本已於 2026-09-22 移除）。
-   v12：本節不再有任何規則選到 img 或其包裝 div —— 之前那兩條會讓
-   Webflow CMS 編輯器把圖片顯示成灰色佔位。
-   staging 實測：真實照片上黑字最低對比 9.46:1，高於 AAA 的 7:1。 */
+   本節不會選到 img，所以不會影響後台編輯器顯示圖片。 */
 .richtext figure.w-richtext-figure-type-image { position: relative !important; }
 .richtext figure.w-richtext-figure-type-image figcaption {
   position: absolute !important;
@@ -130,7 +130,6 @@
   line-height: 1.7 !important;
   box-shadow: 0 8px 28px rgba(21, 23, 23, .12) !important;
 }
-/* 舊瀏覽器不支援 backdrop-filter 時，改用較不透明的白底保住可讀性 */
 @supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   .richtext figure.w-richtext-figure-type-image figcaption {
     background: rgba(255, 255, 255, .93) !important;
@@ -140,7 +139,7 @@
   .richtext figure.w-richtext-figure-type-image figcaption {
     left: .75rem !important;
     right: .75rem !important;
-    bottom: .75rem !important;
+    bottom: 1rem !important;
     padding: 1rem 1.125rem !important;
     font-size: 1rem !important;
     line-height: 1.65 !important;
