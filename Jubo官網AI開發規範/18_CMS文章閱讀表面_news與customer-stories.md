@@ -1406,3 +1406,176 @@ Preview 的部分不再追。
 `filter: blur(50px)` 讓捲動 FPS 降為約三分之一（正式站實測 13.0 → 40.2，3.09x；
 staging 12.7 → 41.7，3.28x）。兩邊倍數相同，代表**這是站台既有的設計取捨，
 與本次改動無關，也沒有惡化**。經 Terris 決定不處理，故不列為待辦。
+
+---
+
+## 27. CLS（版面位移）：真正的元凶是封面圖，不是內文圖片
+
+2026-09-22。Terris 交辦兩件事：補圖片寬高與 srcset、清掉舊文章的 inline style。
+查下去發現原本的歸因是錯的，以下是實測過程與結論。
+
+### 27-1. 原本的歸因錯了
+
+我先前記錄「文章圖片缺寬高，CLS 0.0639」，把矛頭指向內文圖片。
+實際用 `PerformanceObserver` 抓 `layout-shift` 的 `sources`，位移發生在
+**1193ms，第一張內文圖片載入之前**（第一張 1205ms 才載入），
+位移的元素是 `.customer-story_content-wrap` 整塊往下掉 387px ——
+387px 剛好是封面圖 `.client-story_template-img` 的高度。
+
+驗證：只把內文圖片補上 `width`/`height`（用攔截改寫線上 HTML），
+CLS 一位數都沒變（0.0928 → 0.0928）。只給封面加 `aspect-ratio`，
+CLS 直接歸零。**元凶是封面圖。**
+
+### 27-2. 為什麼封面沒有尺寸
+
+封面是 Designer 的 Image 元素綁 CMS 的 `cover-image` 欄位。
+Webflow 編譯期不知道每篇文章封面多大，輸出的 `<img>` 就沒有 width/height。
+
+內文圖片則是另一個原因：CMS 裡存的是 `width="auto" height="auto"`，
+而 Webflow **發布時會把 `auto` 當成無效值直接拿掉**，線上等於完全沒有尺寸。
+（實測：CMS 內容有 `width="auto"`，線上 DOM 讀回來 `width` 是 `null`。）
+
+### 27-3. 為什麼用 aspect-ratio 而不是 width/height 屬性
+
+兩種都試過：
+
+| 做法 | CLS | 版面 |
+|---|---|---|
+| 加 `width`/`height` 屬性 | 0.0000 | **壞了**：封面 896x504 → 896x810 |
+| 加 `aspect-ratio` | 0.0000 | 完全不變（896x504） |
+
+模板的 CSS 沒有給封面 `height: auto`，所以 HTML 的 height 屬性會贏過 CSS
+把圖片拉長。`aspect-ratio` 不會有這個問題。
+
+### 27-4. 只修封面會更糟，兩個要一起做
+
+節流網路（1.5Mbps / 200ms）＋捲到底的實測：
+
+| | /news 補助新制 | /customer-stories jubostory13 |
+|---|---|---|
+| 不處理 | 0.0639 | 0.0938 |
+| 只修封面 | **1.3303** | **0.2724** |
+| 封面 + 內文圖片 | 0.0000 | 0.0000 |
+
+只修封面反而惡化：封面預留高度後，捲動時更多內文圖片會在**可視範圍內**
+才載入撐開，位移就被計入。所以兩份對照表必須一起上。
+
+### 27-5. 實際做法
+
+不動 CMS 內文，改在**頁面自訂程式碼**放兩段產生出來的 CSS：
+
+```css
+.news-content_cover-img[src*="<24碼資產ID>"] { aspect-ratio: 1440 / 810; }
+.richtext figure img[src*="<24碼資產ID>"]    { aspect-ratio: 649 / 511; }
+```
+
+| 位置 | 內容 | 筆數 |
+|---|---|---|
+| `/news` 頁面 head | 封面比例（既有的報名按鈕樣式保留在前面） | 83 |
+| `/news` 頁面 footer | 內文圖片比例 | 99 |
+| `/customer-stories` 頁面 head | 封面比例 | 23 |
+| `/customer-stories` 頁面 footer | 內文圖片比例 | 59 |
+
+原始碼在 `custom-code/cms-article/`，用 `bash build.sh` 產生，
+對照表用 `tools/gen-cover-aspect.py`、`tools/gen-img-aspect.py` 重跑。
+
+**為什麼分成 head / footer 兩處**：全部塞進 embed 會讓 embed 到 23KB，
+超過 MCP 工具單次寫入的上限（實測約 13KB 就被截斷）。
+Webflow 頁面自訂程式碼剛好有 head 與 footer 兩個獨立區塊，拆開就都在限制內。
+`embed-news.html` / `embed-story.html` 這次**完全沒動**（維持 v8 / v13）。
+
+### 27-6. 踩到的坑：資產 ID 不能截短
+
+第一版用資產 ID 前 12 碼當 key，結果**同一批上傳的圖片前 12 碼一樣**
+（`6a75457ee950886e38406e6c`、`...e66`、`...e69`… 只差最後兩碼），
+一條規則同時選到 6 張比例不同的圖，全部被拉成同一個比例。
+
+實測抓到：jubostory13 六張圖的高度從 441/404/372/420/411/391 全變成 391。
+改用完整 24 碼後恢復正常。產生器現在會 assert 長度與前綴衝突。
+
+### 27-7. 選擇器刻意不用泛用的 img
+
+2026-09-21 泛用的 `.richtext img` 規則害後台編輯器看不到圖片（見 §19），
+所以這次限定 `.richtext figure img`，而且只設 `aspect-ratio`，
+不碰 `display` / `width` / `height` / `overflow`。
+
+### 27-8. 驗證結果
+
+發布 staging 後實測（無攔截、真實線上）：
+
+| 文章 | 桌機 1280 | 手機 390 |
+|---|---|---|
+| /news 補助新制 | 0.0000（0 次位移） | 0.0000 |
+| /news AI 轉型 | 0.0000 | 0.0000 |
+| /news 智慧照護交流會 | 0.0000 | 0.0000 |
+| /news 客戶見面會 | 0.0000 | 0.0000 |
+| /customer-stories jubostory13 | 0.0000 | 0.0000 |
+| /customer-stories jubostory07 | 0.0000 | 0.0000 |
+
+改動前同一批文章是 0.0639 ~ 0.3189。
+另外比對了 1280 / 768 / 390 三種寬度下 wrap / table / th / td / blockquote /
+figcaption / details / 報名按鈕的 computed style，以及文件總高度與每張圖的
+實際尺寸 —— 除了封面多了 `aspect-ratio` 之外**全部相同**，版面零變動。
+
+### 27-9. 維護
+
+新文章上線後要重跑產生器，否則新文章只是回到今天的行為（會有位移），
+不會壞掉。重跑方式見 `custom-code/cms-article/README.md`。
+
+## 28. 沒做完的事
+
+### 28-1. srcset：只有 20/151 張圖有變體，而且改不了
+
+站上文章圖片共 151 張、合計 **66MB**。逐張探測 Webflow 的 `-p-500` 等
+變體是否存在，結果只有 **20 張**有，其餘 131 張回 403。
+
+原因：這些圖片的 CDN 路徑掛在 `69f82ba1d504290f910e8826` 這個 bucket，
+**不是現在這個站的資產**（站是 `69ec2b02daa2e79f1da8772a`），
+在 Webflow 資產面板裡看不到，Webflow 也沒有替它們產生響應式變體。
+
+那 20 張若加上 srcset，可省 **18.0MB → 1.4MB**（最大一張 3000x2154 的
+1.25MB 照片，500w 變體只要 37KB）。但 srcset 只能寫進 CMS 內文，
+而內文寫入受工具上限限制（見 28-2），這次做不到。
+
+要做的話有兩條路：
+1. 在 Webflow 後台重新上傳那些圖片，Webflow 會自動產生變體與 srcset；
+2. 之後用容量足夠的方式寫 CMS 內文。
+
+### 28-2. 舊文章的 inline style 清不掉（工具限制）
+
+9 篇舊 AEO 文章的表格帶 inline style（`td` 123 處、`th` 28 處、
+`table` 9 處、外層 div 9 處），模板第 1 節的 `!important` 就是為了蓋掉它們。
+
+改法已經寫好也驗證過（只刪 `style` 屬性，結構完全不動；
+1280/991/390 三種寬度下 computed style 全部相同），**但寫不進去**：
+`update_collection_items` 要送整個 `content` 欄位，最小一篇轉成 JSON 也有
+12.8KB，而工具單次呼叫約 13.2KB 就被截斷。9 篇合計 135KB。
+
+順帶一提，清掉之後有一個實際的改善：`ai-transformation-culture` 那篇
+4 欄表格的 inline `min-width: 48rem`，會讓 768px 寬的裝置上第 4 欄被切掉
+必須左右捲；拿掉之後四欄剛好排得下、可讀。
+
+受影響的文章（8 篇是草稿，只有第一篇上線中）：
+
+| 文章 | 狀態 | inline style |
+|---|---|---|
+| `ai-transformation-culture` | 已發布 | table 1、th 4、td 12、div 1 |
+| `ltc-setup-checklist` | 草稿 | 同類型 |
+| `daycare01` | 草稿 | 同類型 |
+| `infosec` | 草稿 | 同類型 |
+| `ltc-system-guide` / `ltc-system-guide02` | 草稿 | 同類型 |
+| `icare01` / `icare02` / `icare03` | 草稿 | 同類型 |
+
+**Terris 可以自己做**：這些表格在 CMS 裡是 rich text 的 HTML embed，
+在 Webflow 編輯器裡點開那個 embed，把 `<div>`、`<table>`、`<th>`、`<td>`
+上的 `style="..."` 整段刪掉即可（一篇約 1.5KB，不用動其他內容）。
+9 篇都清完之後告訴我，我再把模板第 1 節的 `!important` 拿掉。
+
+注意 `icare01` 有 3 個 `white-space: nowrap`，刪掉之後那一欄的標籤會換行
+（不會壞，只是不再強制單行）。
+
+### 28-3. 一張真的壞掉的圖片
+
+`/news/smartcare-meetup2025` 的圖片指向舊 WordPress 站：
+`https://jubo-health.com/wp-content/uploads/2025/08/0911智慧照護應用交流會-1-724x1024.jpg`
+—— 實際回 404（301 轉址後找不到）。這張要重新上傳，我無法代勞。

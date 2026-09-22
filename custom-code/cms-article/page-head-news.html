@@ -1,0 +1,114 @@
+<!-- 2026 客戶見面會秋季場：報名按鈕 hover（僅作用於 .jn-cm2026h2_register-btn，不影響其他文章） -->
+<style>
+.jn-cm2026h2_register-btn{
+  transition: background-color .25s ease, box-shadow .25s ease, transform .2s ease;
+}
+.jn-cm2026h2_register-btn:hover{
+  background-color: rgba(242,242,242,.72) !important;
+  box-shadow: inset 0 1px 5px rgba(214,214,214,.20), 0 6px 16px rgba(21,23,23,.12) !important;
+  transform: translateY(-1px);
+}
+.jn-cm2026h2_register-btn svg{
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.jn-cm2026h2_register-btn:hover svg{
+  transform: rotate(-45deg) scale(1.12) !important;
+}
+@media (prefers-reduced-motion: reduce){
+  .jn-cm2026h2_register-btn,
+  .jn-cm2026h2_register-btn svg{ transition: none; }
+  .jn-cm2026h2_register-btn:hover{ transform: none; }
+  .jn-cm2026h2_register-btn:hover svg{ transform: rotate(-45deg) !important; }
+}
+</style>
+<style>
+/* ---------- 6. 封面圖比例（自動產生，請用 tools/gen-cover-aspect.py 重跑） ---------- */
+/* 封面是 Designer 的 Image 元素綁 CMS 欄位，Webflow 編譯期不知道尺寸，
+   輸出的 <img> 沒有 width/height，載入前預留 0 高度 —— 整篇內文會往下掉。
+   加 width/height 屬性會壞版（模板沒設 height:auto，屬性會贏過 CSS，
+   封面從 896x504 變成 896x810），所以改用 aspect-ratio：尺寸完全不變。
+   實測見規範 18 §27。沒列到的文章只是回到原本行為，不會壞。 */
+.news-content_cover-img[src*="6ab0ea5bc19e239ae1ffe387"] { aspect-ratio: 960 / 540; }
+.news-content_cover-img[src*="6aabe80cd148c724a2cb59a0"] { aspect-ratio: 1440 / 810; }
+.news-content_cover-img[src*="6a8bf012b31c21b445c54711"],
+.news-content_cover-img[src*="6a8d46c2dc0b11b41e52eb2e"],
+.news-content_cover-img[src*="6a8d50062309578fd6e99b8b"],
+.news-content_cover-img[src*="6a8ff8ffdc1cd02fd87e148a"],
+.news-content_cover-img[src*="6a94df4f7fc4bd35e93e11ef"],
+.news-content_cover-img[src*="6a94dfafd9580ac136ffed40"],
+.news-content_cover-img[src*="6a9536c86586d8f094fff730"],
+.news-content_cover-img[src*="6a96330877b35e9ae75f025f"],
+.news-content_cover-img[src*="6aaa512dfeb255745f4e238c"] { aspect-ratio: 1920 / 1080; }
+.news-content_cover-img[src*="6a1122144a11df5a0a3d0197"],
+.news-content_cover-img[src*="6a11223f86f678134db1c98f"],
+.news-content_cover-img[src*="6a9d36a9bde9c565bb9eb8c6"] { aspect-ratio: 2048 / 1365; }
+.news-content_cover-img[src*="6a7de8d1c9b99f9aa55be53a"] { aspect-ratio: 2680 / 2048; }
+.news-content_cover-img[src*="6a4fb605b513c822deb46757"],
+.news-content_cover-img[src*="6a66c950e174b9890d6c99fd"],
+.news-content_cover-img[src*="6a66cbe278c2488d88b9bc64"] { aspect-ratio: 1600 / 900; }
+.news-content_cover-img[src*="6a44ded29a1d404ea7cbe64c"] { aspect-ratio: 1254 / 1254; }
+.news-content_cover-img[src*="6a11227e6d8984fcaa9e00f7"] { aspect-ratio: 2560 / 1707; }
+.news-content_cover-img[src*="6a11222323ae063122a9844e"],
+.news-content_cover-img[src*="6a11222e04965e45942d2887"],
+.news-content_cover-img[src*="6a112274eb37217428c40139"],
+.news-content_cover-img[src*="6a66ccf9750f530b133d852e"] { aspect-ratio: 1200 / 800; }
+.news-content_cover-img[src*="6a11226c5738e8a9c5856e4e"] { aspect-ratio: 1040 / 752; }
+.news-content_cover-img[src*="6a66ccb155922e91b99d4030"] { aspect-ratio: 1406 / 943; }
+.news-content_cover-img[src*="6a112236ace0e68e14df176f"] { aspect-ratio: 1447 / 980; }
+.news-content_cover-img[src*="6a11223349ee86588278ec4c"] { aspect-ratio: 1080 / 695; }
+.news-content_cover-img[src*="6a11221c5738e8a9c58567e1"] { aspect-ratio: 1246 / 836; }
+.news-content_cover-img[src*="6a11220e21801b31895fa32b"] { aspect-ratio: 1200 / 756; }
+.news-content_cover-img[src*="6a11220a8dabce041e2c0173"] { aspect-ratio: 1600 / 1066; }
+.news-content_cover-img[src*="6a112207ace0e68e14df130d"] { aspect-ratio: 1600 / 801; }
+.news-content_cover-img[src*="6a112202a0ca9c598856ef93"] { aspect-ratio: 1600 / 1200; }
+.news-content_cover-img[src*="6a1121ffd6d952f141e17ff7"] { aspect-ratio: 1413 / 850; }
+.news-content_cover-img[src*="6a1121f5c652b2bcd572e2b3"] { aspect-ratio: 2048 / 1516; }
+.news-content_cover-img[src*="6a1121f33852dedd1ac8fec0"] { aspect-ratio: 1805 / 1365; }
+.news-content_cover-img[src*="6a1121f1d6d952f141e17e27"] { aspect-ratio: 1973 / 1422; }
+.news-content_cover-img[src*="6a112178d0f7f0309756ac08"],
+.news-content_cover-img[src*="6a11217ae03b535513635f77"],
+.news-content_cover-img[src*="6a11217c08631aa4484a86a2"],
+.news-content_cover-img[src*="6a11217eb4902b338ce34256"],
+.news-content_cover-img[src*="6a1121802f8a632aefe64d1e"],
+.news-content_cover-img[src*="6a11218fc871525c244d6b86"],
+.news-content_cover-img[src*="6a1121926704e9bc4940b545"],
+.news-content_cover-img[src*="6a112194b4902b338ce344c0"],
+.news-content_cover-img[src*="6a112197e2fdace27701cceb"],
+.news-content_cover-img[src*="6a11219c2f8a632aefe64f86"],
+.news-content_cover-img[src*="6a11219eed206a190cc85d08"],
+.news-content_cover-img[src*="6a1121a0ace0e68e14df06d4"],
+.news-content_cover-img[src*="6a1121a2b0f6cbf009faa230"],
+.news-content_cover-img[src*="6a1121a329536defd7e0c4f7"],
+.news-content_cover-img[src*="6a1121aab0f6cbf009faa308"],
+.news-content_cover-img[src*="6a1121b05b4e7aeea2c532e0"],
+.news-content_cover-img[src*="6a1121b5397e653fbcedb9d8"],
+.news-content_cover-img[src*="6a1121baeb37217428c3ed25"],
+.news-content_cover-img[src*="6a1121beb4902b338ce3478c"],
+.news-content_cover-img[src*="6a1121c35738e8a9c585605d"],
+.news-content_cover-img[src*="6a1121c4c871525c244d782d"],
+.news-content_cover-img[src*="6a1121c6f0a6cff8625ed675"],
+.news-content_cover-img[src*="6a1121c8cc5714116b834fbf"],
+.news-content_cover-img[src*="6a1121cab0f6cbf009faa775"],
+.news-content_cover-img[src*="6a1121ccd6d952f141e17aba"],
+.news-content_cover-img[src*="6a1121cee857613f33ad8d6b"],
+.news-content_cover-img[src*="6a1121d086f678134db1c0e6"],
+.news-content_cover-img[src*="6a1121d2e2fdace27701d1e5"],
+.news-content_cover-img[src*="6a1121d41188d2e2ab85621b"],
+.news-content_cover-img[src*="6a1121d8c652b2bcd572e0b7"],
+.news-content_cover-img[src*="6a1121ddeb37217428c3f039"],
+.news-content_cover-img[src*="6a1121dfa4b44b5af5656ded"],
+.news-content_cover-img[src*="6a1121e149ee86588278e60d"],
+.news-content_cover-img[src*="6a1121e21837367567b02799"],
+.news-content_cover-img[src*="6a1121e6ed206a190cc862be"] { aspect-ratio: 644 / 484; }
+.news-content_cover-img[src*="6a1121a5eb37217428c3ebc7"],
+.news-content_cover-img[src*="6a1121e4b0f6cbf009faa90a"] { aspect-ratio: 572 / 430; }
+.news-content_cover-img[src*="6a1121da2b90b09311ce5aee"] { aspect-ratio: 635 / 478; }
+.news-content_cover-img[src*="6a1121d549ee86588278e50a"] { aspect-ratio: 420 / 316; }
+.news-content_cover-img[src*="6a1121c0e857613f33ad8b40"] { aspect-ratio: 621 / 467; }
+.news-content_cover-img[src*="6a1121bcbb838252f0d02576"] { aspect-ratio: 452 / 340; }
+.news-content_cover-img[src*="6a1121b8040c1ecee9aa0362"] { aspect-ratio: 610 / 458; }
+.news-content_cover-img[src*="6a1121b31188d2e2ab855f64"] { aspect-ratio: 633 / 476; }
+.news-content_cover-img[src*="6a1121ad1188d2e2ab855ed6"] { aspect-ratio: 628 / 472; }
+.news-content_cover-img[src*="6a1121a8c871525c244d6ff5"] { aspect-ratio: 581 / 437; }
+.news-content_cover-img[src*="6a1121991837367567b020a3"] { aspect-ratio: 600 / 451; }
+</style>

@@ -1,0 +1,31 @@
+<style>
+/* ---------- 6. 封面圖比例（自動產生，請用 tools/gen-cover-aspect.py 重跑） ---------- */
+/* 封面是 Designer 的 Image 元素綁 CMS 欄位，Webflow 編譯期不知道尺寸，
+   輸出的 <img> 沒有 width/height，載入前預留 0 高度 —— 整篇內文會往下掉。
+   加 width/height 屬性會壞版（模板沒設 height:auto，屬性會贏過 CSS，
+   封面從 896x504 變成 896x810），所以改用 aspect-ratio：尺寸完全不變。
+   實測見規範 18 §27。沒列到的文章只是回到原本行為，不會壞。 */
+.client-story_template-img[src*="6a3e3dd8cbf99ca6aa1434df"],
+.client-story_template-img[src*="6a66c53da28ca7d3ffedd0c9"],
+.client-story_template-img[src*="6a66c5adf2282dcdfb361f5b"],
+.client-story_template-img[src*="6a66c64d80acd9f6e6a61116"],
+.client-story_template-img[src*="6a66c6750844a5c2cd3e3376"],
+.client-story_template-img[src*="6a66c694ca97e39b204d0ba7"],
+.client-story_template-img[src*="6a66c6ba2264855479941254"],
+.client-story_template-img[src*="6a66c6d8750f530b133bebce"],
+.client-story_template-img[src*="6a66c6fbfdb885cdd3b26b54"],
+.client-story_template-img[src*="6a7541fd4fd0dc5326c54d46"] { aspect-ratio: 1920 / 1080; }
+.client-story_template-img[src*="6a4de7745a04f6ca415a41f2"] { aspect-ratio: 2000 / 1414; }
+.client-story_template-img[src*="6a1cf95a350b6a58abebf4d7"],
+.client-story_template-img[src*="6a1cf9c6ce7c60654d813ff6"],
+.client-story_template-img[src*="6a1cfa19ad2b31e69170fcb9"],
+.client-story_template-img[src*="6a1cfa945999bd4226c1d987"] { aspect-ratio: 800 / 450; }
+.client-story_template-img[src*="6a66c77fe174b9890d6c376a"],
+.client-story_template-img[src*="6a66c7a562b58733cfeaf0bb"] { aspect-ratio: 2048 / 1152; }
+.client-story_template-img[src*="6a66c7c478c2488d88b8e6fe"] { aspect-ratio: 2048 / 1155; }
+.client-story_template-img[src*="6a1121e96d8984fcaa9df501"] { aspect-ratio: 368 / 207; }
+.client-story_template-img[src*="6a11218204965e45942d1899"],
+.client-story_template-img[src*="6a112188bd9cebc7209ce319"],
+.client-story_template-img[src*="6a11218b5b4e7aeea2c52f1e"],
+.client-story_template-img[src*="6a11218dd6d952f141e1737c"] { aspect-ratio: 644 / 484; }
+</style>
