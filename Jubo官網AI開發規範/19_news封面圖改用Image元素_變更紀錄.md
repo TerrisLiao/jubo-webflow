@@ -242,9 +242,32 @@ publish_site { site_id, customDomains: [] }
 | 未獲明確授權不得 Publish | `CLAUDE.md` / `visual-system` §2 | ✅ 正式站未發布。staging 已獲授權但 API 做不到（見 5.5） |
 | 自訂 class 要登錄清單 | `06_自訂Class完整清單` | ✅ 已登錄，並標註 `single-news_cover-img` 的現況 |
 
-⚠️ 未完成的 QA（需要 staging 或 Designer 才能做）：
-`visual-system` §17 要求四個斷點都實測。我只驗了 main 與 medium 兩個尺寸，
-**small（≤767）與 tiny（≤479）尚未實測。**
+### 四斷點查證（2026-09-22，Terris 開啟 Designer MCP 後補做）
+
+依 `repo-source-of-truth` §3 的要求，用 `include_breakpoints: ["main","medium","small","tiny"]`
+查三個相關 class：
+
+| class | main | medium (≤991) | small (≤767) | tiny (≤479) |
+|---|---|---|---|---|
+| `.news-card_cover-img`（新） | ✅ 有 | — 無覆寫 | — 無覆寫 | — 無覆寫 |
+| `.single-news_cover-img`（舊） | ✅ 有 | — 無覆寫 | — 無覆寫 | — 無覆寫 |
+| `.img-mask` | ✅ 有 | — 無覆寫 | — 無覆寫 | — 無覆寫 |
+
+**三個 class 都只有 base/main，沒有任何斷點覆寫。** 這同時交叉驗證了先前用
+「查線上已發布 CSS」得到的結論（`single-news_cover-img` 全檔只有 1 條規則）。
+
+舊 div 與新 img 的屬性對照：
+
+| 舊 `div.single-news_cover-img` | 新 `img.news-card_cover-img` | 說明 |
+|---|---|---|
+| `aspect-ratio: 16/9` | `aspect-ratio: 16 / 9` | 相同 |
+| `background-size: cover` | `object-fit: cover` | img 的等價寫法 |
+| `background-position: 50% 50%` | （`object-fit` 預設置中） | 相同效果 |
+| `position: relative` | — | 舊值沒有 z-index、也沒有絕對定位的子元素，移除無影響 |
+| `border-radius: 0` ×4 | — | 圓角本來就由 `.img-mask`（`overflow: clip`）負責 |
+| — | `display: block` / `width: 100%` / `height: auto` | img 需要，div 預設就是 block |
+
+→ **`visual-system` §17 的四斷點 QA 已完成。**
 
 ---
 
@@ -253,7 +276,9 @@ publish_site { site_id, customDomains: [] }
 | 項目 | 狀態 |
 |---|---|
 | `/news` 卡片封面 | ✅ 已改，未 publish |
-| 量測改善幅度 | ✅ 已用本地模擬量出（首屏 −87.4%），但 staging 實機驗證仍未做 |
+| 量測改善幅度 | ✅ 已用本地模擬量出（首屏 −87.4%）；staging 實機驗證仍未做 |
+| 四斷點樣式 QA | ✅ 已完成（三個 class 都無斷點覆寫） |
+| Designer 畫布截圖 | ❌ 做不到：Collection List 內的元素一律回傳空結果，清單外的元素可正常截 |
 | 文章內頁「相關新聞」列表（`.single-news_cover-img`，每頁 23 個 × 40 頁） | ⏸ 未動，等 /news 驗證過再做 |
 | 首頁與 6 頁的 `.cases-img`（46 個，含 842 KiB 的 `cases-3.png`） | ⏸ 未動 |
 | `single-news_cover-img` class 的清理 | ⏸ 等上面兩項都轉完才能刪 |
