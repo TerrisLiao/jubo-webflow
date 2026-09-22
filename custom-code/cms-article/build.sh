@@ -15,6 +15,7 @@ cd "$(dirname "$0")"
   echo '<style>'
   cat _cover-aspect-news.css
   echo '</style>'
+  cat _defer-thumbs-news.html
 } > page-head-news.html
 
 { echo '<style>'; cat _cover-aspect-story.css; echo '</style>'; } > page-head-story.html

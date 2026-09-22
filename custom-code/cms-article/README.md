@@ -17,6 +17,7 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 | `_cover-aspect-*.css` | 封面圖比例對照表（自動產生） |
 | `_img-aspect-*.css` | 內文圖片比例對照表（自動產生） |
 | `_page-head-existing-news.html` | news head 區塊裡既有的報名按鈕樣式，不要刪 |
+| `_defer-thumbs-news.html` | 相關文章縮圖延後載入（只在 news，為了 LCP） |
 | `build.sh` | 由上面的零件組出 `page-head-*` / `page-footer-*` |
 | `tools/gen-cover-aspect.py` | 產生封面比例對照表 |
 | `tools/gen-img-aspect.py` | 產生內文圖片比例對照表 |
@@ -34,8 +35,12 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 
 | 模板 | head | footer |
 |---|---|---|
-| `/news` | 報名按鈕樣式 + 封面比例（83 筆） | 內文圖片比例（99 筆） |
+| `/news` | 報名按鈕樣式 + 封面比例（83 筆）+ 縮圖延後載入 | 內文圖片比例（99 筆） |
 | `/customer-stories` | 封面比例（23 筆） | 內文圖片比例（59 筆） |
+
+另外在 Designer 上，兩個模板的封面 Image 元素各加了兩個自訂屬性
+`loading="eager"` 與 `fetchpriority="high"`（首屏的 LCP 元素不該是 lazy）。
+這是這次唯一動到 Designer 的地方，元素 ID 記在規範 18 §29-3。
 
 會拆開是因為全部塞進 embed 會到 23KB，超過工具單次寫入上限（約 13KB）。
 

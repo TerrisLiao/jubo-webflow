@@ -1579,3 +1579,135 @@ figcaption / details / 報名按鈕的 computed style，以及文件總高度與
 `/news/smartcare-meetup2025` 的圖片指向舊 WordPress 站：
 `https://jubo-health.com/wp-content/uploads/2025/08/0911智慧照護應用交流會-1-724x1024.jpg`
 —— 實際回 404（301 轉址後找不到）。這張要重新上傳，我無法代勞。
+
+---
+
+## 29. LCP：封面圖被判為低優先度，還被畫面外的縮圖插隊
+
+2026-09-22，CLS 歸零之後量完整的 Core Web Vitals，發現**真正沒過的是 LCP**。
+
+### 29-1. 起點
+
+手機 390px、1.6Mbps、CPU 4x 節流（接近 Lighthouse mobile）：
+
+| 指標 | /news AI 轉型 | /customer-stories jubostory13 | Google 門檻 |
+|---|---|---|---|
+| LCP | 4500ms | 5160ms | 良好 ≤2500、差 >4000 |
+| CLS | 0.0000 | 0.0000 | 良好 ≤0.1 |
+| TBT | 1859ms | 1033ms | （INP 的替代指標）良好 ≤200 |
+
+兩篇的 LCP 元素都是封面圖。
+
+### 29-2. 兩個原因，都不是「圖太大」
+
+封面圖本身只有 46–59KB（Webflow 已經給了 `-p-800` 變體與 srcset）。
+用 CDP 看 waterfall 才看出真正的原因：
+
+1. **封面圖的優先度是 `Low`**，而且帶著 `loading="lazy"`。
+   首屏的 LCP 元素設成 lazy 是反效果 —— 瀏覽器要等版面確認它在視窗內
+   才開始抓，實測 2032ms 才發出請求。
+2. **底部「相關文章」的 5 張縮圖在跟它搶頻寬**。那些圖是
+   `.single-news_cover-img` 的 inline `background-image`，
+   背景圖沒有 `loading="lazy"` 可用，瀏覽器一排版就抓；
+   而且背景圖不能用 srcset，抓的是原圖 —— 實測一張 695KB、一張 618KB。
+   它們在畫面外，卻把 188KB 的封面圖拖成 6.1 秒才下載完。
+
+### 29-3. 做了什麼
+
+**(1) 封面圖加 `loading="eager"` 與 `fetchpriority="high"`**
+（Designer 元素的自訂屬性，兩個模板各一個 Image 元素）
+
+| | 元素 ID |
+|---|---|
+| `/news` `.news-content_cover-img` | `0b14c12b-2d68-9994-30e1-a468aa575821` |
+| `/customer-stories` `.client-story_template-img` | `29867874-65d4-ab9d-e437-bf2e8af8284e` |
+
+驗證過 Webflow 不會輸出重複的 `loading` 屬性 —— 自訂屬性會取代它原本的
+`loading="lazy"`，線上只有一個 `loading="eager"`。
+
+實測（攔截改寫、同一篇比對）：
+
+| | LCP |
+|---|---|
+| /news AI 轉型 | 4648ms → **2004ms** |
+| /customer-stories jubostory13 | 5616ms → **1832ms** |
+
+**(2) 相關文章縮圖延後載入**（只在 `/news` 模板的頁面 head）
+
+用 `!important` 把 `background-image` 蓋成 `none`（`!important` 贏過
+inline style），等「捲到接近該區塊」或 `window load` 其中之一發生再放行。
+
+class 由 JS 加上，**JS 沒跑就不會加 class、規則不生效**，等於完全是原本的
+行為，不會出現圖永遠不見的情況。實測 JS 開啟與關閉都是 5/5 正常顯示。
+
+實測（/news 補助新制）：LCP 6820 / 6348ms → **4820 / 4788ms**，CLS 維持 0。
+
+### 29-4. 試過但無效的作法
+
+`content-visibility: auto` 加在 `.section_related-news` 上：
+**完全沒有減少圖片下載**（1411KB 一模一樣），LCP 反而從 4648ms 惡化到
+14164ms。背景圖不會因為 content-visibility 就不抓。已排除。
+
+### 29-5. 目前狀態（staging 實測）
+
+| 文章 | LCP | 評級 |
+|---|---|---|
+| /news AI 轉型 | 2064ms | 良好 |
+| /customer-stories jubostory13 | 2780ms | 需改善（接近） |
+| /news 補助新制 | 5464ms | **差** |
+| /news 智慧照護交流會 | 4960ms | **差** |
+
+CLS 全部 0.0000。還沒過的兩篇，卡在下一節。
+
+## 30. 還沒解決：27 張 PNG 封面
+
+站上 106 張封面圖裡有 **27 張是 PNG，平均 410KB**，而且都是照片類內容
+（PNG 存照片本來就會腫）。最誇張的是 644x484 的照片存成 567KB。
+
+實測用 canvas 轉 WebP（品質 0.82）：**11,074KB → 1,416KB，省 87%**。
+
+| 原圖 | 轉 WebP | 尺寸 |
+|---|---|---|
+| 873KB | 189KB | 2000x1414 |
+| 753KB | 52KB | 644x484 |
+| 694KB | 49KB | 644x484 |
+| 617KB | 48KB | 581x437 |
+| 567KB | 16KB | 644x484 |
+| 470KB | 12KB | 960x540 |
+
+這是 `/news` 剩下兩篇 LCP 沒過的直接原因（補助新制的封面 `-p-800.png`
+就是 187KB，換成 WebP 大約 40KB）。
+
+**為什麼不能用 Webflow 的壓縮 API**：這 106 張封面**沒有一張**在本站的
+資產面板裡（都掛在 `69f82ba1d504290f910e8826` 這個舊 bucket），
+`compress_assets` 只能處理站內資產。
+
+要解決只有兩條路，都需要 Terris 決定：
+
+1. **在 Webflow 後台重新上傳那 27 張封面**（轉成 WebP 或 JPEG）。
+   上傳後圖片會進入資產面板，Webflow 也會自動產生響應式變體。
+2. **由我用 API 做**：下載 → canvas 轉 WebP → 上傳為站內資產 →
+   更新 CMS 的 cover-image 欄位。技術上可行，payload 很小不受工具上限影響。
+   但這是替換 27 篇文章的封面圖檔，屬於內容變更，要先取得同意。
+   風險：WebP 0.82 對照片視覺上幾乎無損，但像「官網AEO封面.png」這種
+   圖文混合的（470KB → 12KB）壓縮比極高，要逐張看過再決定。
+
+## 31. 還沒解決：JS 造成的 TBT（影響 INP）
+
+TBT 約 830–1400ms（良好門檻 200ms），來自約 1.6MB 未壓縮的 JS：
+
+| 檔案 | 大小 |
+|---|---|
+| webflow.schunk ×2 | 838KB |
+| Google Analytics | 182KB |
+| swiper 12 | 152KB |
+| GTM | 126KB |
+| slater.app | 91KB |
+| jQuery 3.5.1 | 87KB |
+| GSAP + ScrollTrigger + Draggable + Inertia | 157KB |
+| Finsweet cookie consent | 29KB |
+| lenis | 13KB |
+
+文章頁不需要 swiper、GSAP Draggable、Inertia，但這些是**全站載入**的。
+改成按頁載入牽涉全站與 Slater 綁定的行為，風險與測試量都遠大於這次的改動，
+不在這次範圍內，列為待確認事項。
