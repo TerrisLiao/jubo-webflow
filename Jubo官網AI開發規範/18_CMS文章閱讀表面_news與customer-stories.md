@@ -992,3 +992,64 @@ Terris 回報「toggle down 的動畫不見了」，並指定首頁 FAQ（外包
 
 本次沒有出現錯字。逐字比對的基準改用「同一環境的前後快照」而非正式站，
 因為這篇的正式站版本是舊內容，不能當基準。
+
+---
+
+## 21. FAQ 動畫統一（2026-09-22）
+
+### 21-1. 問題：兩篇文章的 FAQ 動畫參數不同
+
+Terris 回報補助新制那篇「好像也沒有動畫」。實測後發現它**有**動畫，
+但參數跟首頁不同：
+
+| 位置 | 展開時間 | 曲線 |
+|---|---|---|
+| 首頁 FAQ（基準） | 400ms | `ease` |
+| 成大研究（純 details） | 400ms | `ease`（§19 已處理） |
+| 補助新制（舊版 `.aeo-faq`） | **520ms** | `cubic-bezier(.22,.61,.36,1)` |
+
+實測高度確實從 0 → 33 → 64 → 98px 漸變，但那條曲線是強力 ease-out，
+前段衝很快、後段拖尾，面板又只有 98px 高，看起來像「跳出來之後晃一下」。
+真正的問題是兩篇不一致。
+
+### 21-2. 作法：接管舊版，不改 CMS 內容
+
+`faq-accordion.js` v2 取消「跳過 `.aeo-faq`」的例外：
+
+- 舊版 `.aeo-faq`：沿用它既有的 `.aeo-faq__answer` 當動畫容器，
+  並把 `<summary>` 換成 `cloneNode(true)` 的複製品——複製品不帶事件監聽，
+  等於卸掉文章內容自帶腳本綁的 click，避免兩套邏輯同時 `preventDefault()`。
+  只動瀏覽器裡的 DOM，**CMS 內容一個字都沒改**。
+- 其他 `<details>`：維持 §19 的 `.jb-faq__panel` 作法。
+
+另補一條 CSS：`.aeo-faq` 的加號圖示也綁在 `details[open]`，收合時會慢半拍，
+改用 `aria-expanded` 當依據。
+
+### 21-3. 驗證
+
+| 檢查 | 結果 |
+|---|---|
+| 補助新制 `.aeo-faq` 的 transition | **0.4s / ease / height**（原 0.52s） |
+| 動畫容器 | `aeo-faq__answer`（沿用，未新增 DOM 層） |
+| 展開 → 收合 | `open` 與 `aria-expanded` 都正確、高度回 `auto` 再回 `0px` |
+| JS 錯誤 | 無 |
+| 純 `<details>` 路徑 | 注入測試：`data-jb-faq="1"`、`.jb-faq__panel` 建立成功 |
+| 線上 `<style>`／`<script>` 與 repo | 逐字相同（4295 / 4203 字元） |
+
+### 21-4. 過程中發現的兩件事
+
+**一、成大研究那篇在 staging 變成 404。**
+查 CMS：`isDraft: true`、`lastPublished: null`。整個 news collection
+87 篇裡有 23 篇是草稿。本次沒有動過這個項目（唯一改過的 news 內容是補助文章），
+但站台發布會把草稿狀態一併推上去，所以它從 staging 消失了。
+因此純 `<details>` 這條路徑改以注入測試驗證，而非在該篇實測。
+
+**二、Webflow 後台看到的灰色圖片佔位不是壞圖。**
+Terris 回報 story 文章在後台顯示灰色placeholder。實際掃描 staging 全部 23 篇：
+
+| 項目 | 結果 |
+|---|---|
+| 圖片總數 | 59 |
+| `naturalWidth === 0`（載入失敗） | **0** |
+
+線上顯示正常，灰色佔位是 Designer 畫布渲染 CMS 動態內容的呈現方式。

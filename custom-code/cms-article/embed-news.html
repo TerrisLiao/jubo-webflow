@@ -1,7 +1,7 @@
 <style>
 /* ============================================================
    CMS 文章樣式（/news 模板）
-   2026-09-21 v5　決議者：Terris
+   2026-09-22 v6　決議者：Terris
    原始碼在 repo：custom-code/cms-article/
    新文章請貼乾淨的 <table>／<details> FAQ，不要寫 inline style。
    詳見 Jubo官網AI開發規範/18、12。
@@ -87,6 +87,12 @@
   transform: rotate(45deg) translateY(-0.2rem) !important;
 }
 
+/* 舊版 .aeo-faq 的加號圖示同樣綁在 details[open]，收合時會慢半拍，
+   一樣改用點擊當下就更新的 aria-expanded。 */
+.richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg) !important;
+}
+
 /* ---------- 4. 手機 ---------- */
 @media screen and (max-width: 767px) {
   .richtext table { font-size: .9375rem !important; }
@@ -101,19 +107,25 @@
 <script>
 /* ============================================================
    CMS 文章 FAQ 手風琴：平滑展開動畫
-   2026-09-21　Jubo 官網
+   2026-09-22 v2　Jubo 官網
 
    為什麼需要這段：
-   新文章（例如成大研究那篇）的 FAQ 是最單純的 <details><summary>，
-   瀏覽器原生的展開是「瞬間跳出」，沒有任何動畫。
+   站上的文章 FAQ 有兩種寫法，行為各不相同——
+   1. 最單純的 <details><summary>（例如成大研究那篇）：
+      瀏覽器原生展開是「瞬間跳出」，完全沒有動畫。
+   2. 舊版 .aeo-faq（例如補助新制那篇）：內容自帶腳本，
+      有動畫，但用的是 520ms / cubic-bezier(.22,.61,.36,1)，
+      跟首頁不一樣，看起來前快後拖。
+
    首頁的 FAQ（外包版本）是 Webflow IX2 做的 height 動畫，
-   從 IX2 設定讀到的參數是 duration 400ms / easing "ease"，
-   這段腳本就是用同樣的參數，讓文章 FAQ 跟首頁一致。
+   從 IX2 設定讀到的參數是 duration 400ms / easing "ease"。
+   這段腳本用同一組參數接管上面兩種寫法，讓全站 FAQ 一致。
 
-   作法：把 <details> 裡除了 <summary> 以外的內容包進一個
-   .jb-faq__panel，接手 summary 的點擊，改成 height 過場。
-
-   已經自帶動畫腳本的舊版 .aeo-faq 會被跳過，不重複綁定。
+   作法：
+   - 舊版 .aeo-faq：直接沿用它既有的 .aeo-faq__answer 當動畫容器，
+     並把 <summary> 換成複製品以卸掉舊腳本綁的事件（不改 CMS 內容）。
+   - 其他 <details>：把 <summary> 以外的內容包進 .jb-faq__panel。
+   兩者之後都由這裡接手點擊，改成 height 過場。
    ============================================================ */
 (function () {
   var DUR = 400;          // 與首頁 FAQ 相同（Webflow IX2: STYLE_SIZE duration 400）
@@ -125,6 +137,13 @@
   }
 
   function panelOf(d) {
+    // 舊版 .aeo-faq 已經有一層 .aeo-faq__answer，沿用它就好
+    var legacy = d.querySelector('.aeo-faq__answer');
+    if (legacy) {
+      legacy.style.transition = '';
+      legacy.style.opacity = '';   // 舊腳本會留下 opacity:0，清掉
+      return legacy;
+    }
     var existing = d.querySelector('.jb-faq__panel');
     if (existing && existing.parentNode === d) return existing;
     var panel = document.createElement('div');
@@ -140,16 +159,19 @@
 
   function bind(d) {
     if (d.getAttribute('data-jb-faq') === '1') return;
-    // 舊版 .aeo-faq 自帶動畫腳本，不重複綁定
-    if (d.querySelector('.aeo-faq__answer')) return;
 
-    var summary = d.querySelector('summary');
-    if (!summary) return;
+    var old = d.querySelector('summary');
+    if (!old) return;
+
+    // 換成複製品：卸掉文章內容自帶腳本綁的 click，避免兩套邏輯打架。
+    // 只動瀏覽器裡的 DOM，CMS 內容不變。
+    var summary = old.cloneNode(true);
+    old.parentNode.replaceChild(summary, old);
 
     var panel = panelOf(d);
     d.setAttribute('data-jb-faq', '1');
     summary.setAttribute('aria-expanded', d.open ? 'true' : 'false');
-    if (!d.open) panel.style.height = '0px';
+    panel.style.height = d.open ? 'auto' : '0px';
 
     summary.addEventListener('click', function (e) {
       e.preventDefault();

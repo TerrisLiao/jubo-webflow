@@ -78,6 +78,12 @@
   transform: rotate(45deg) translateY(-0.2rem) !important;
 }
 
+/* 舊版 .aeo-faq 的加號圖示同樣綁在 details[open]，收合時會慢半拍，
+   一樣改用點擊當下就更新的 aria-expanded。 */
+.richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg) !important;
+}
+
 /* ---------- 4. 手機 ---------- */
 @media screen and (max-width: 767px) {
   .richtext table { font-size: .9375rem !important; }
