@@ -1099,3 +1099,58 @@ Terris 回報：我改過的那兩篇 customer story 在 Webflow 後台改不動
 能用模板層（CSS／JS）解決的呈現問題，就不要改 CMS 內容。
 改內容不只有逐字出錯的風險（§18-1 實測 0.2% 錯字率），
 還會讓那幾篇的結構跟其他文章不一樣，編輯在後台就會踩到。
+
+---
+
+## 23. 圖說玻璃條下架；後台灰色佔位的歸因（2026-09-22）
+
+### 23-1. 下架
+
+Terris 要求「把每一篇的圖片敘述還原放到內文，不要放到描述裡」，以便逐篇檢視。
+已把 story 模板的第 5 節（圖說玻璃條 CSS）與圖說提升腳本整段移除。
+CMS 內容未動——圖說本來就是內文段落，移除腳本後就回到原本的樣子。
+
+掃描 staging 全部 23 篇：
+
+| 項目 | 結果 |
+|---|---|
+| `figcaption` 數 | 12（集中在 jubostory12、jubostory13，各 6 個） |
+| 其餘 21 篇 | **0**，已回到原始呈現 |
+| 圖片 | 59 張，載入失敗 **0** |
+
+> jubostory12 與 jubostory13 的 12 個 `figcaption` 是 CMS 內容裡真實存在的，
+> 來自 Terris 自己在 Designer 開啟圖片說明欄的操作，不是本次腳本產生的，故未動。
+
+### 23-2. 後台灰色佔位：不是這次改動造成的
+
+Terris 抽查板橋至傑那篇（`customer-success-stories-jubostory11`），後台一樣是灰色佔位。
+**那篇從頭到尾沒有被改過**（`lastUpdated` 為 2026-06-23，早於本次工作）。
+同一個現象出現在沒動過的文章上，因此不是本次改動造成的。
+
+全站 23 篇 story 的圖片標籤形狀相同，都是匯入式的
+`<img ... width="auto" height="auto" loading="auto">`——這是當初從舊站匯入
+rich text 留下的寫法，`width="auto"` 並非合法的 HTML 屬性值。
+
+### 23-3. 我確實留下的差異（但不影響顯示）
+
+比對送出的 HTML：
+
+| 來源 | 圖片標籤 |
+|---|---|
+| 正式站（原始已發布版） | `<img alt="…" src="…" loading="lazy">` |
+| 我用 API 改過的兩篇（staging） | `<img alt="…" src="…" width="auto" height="auto" loading="auto">` |
+| 沒動過的文章（staging） | `<img alt="" src="…" loading="lazy">` |
+
+Webflow 透過 Designer 存檔時會把 rich text 正規化（拿掉 `width/height="auto"`、
+`loading` 改 `lazy`、重排 class 順序）；**用 API 寫入的內容則是逐字照存、照送**，
+不會經過那道正規化。所以那兩篇送出的標籤與其他篇不同。
+
+實測影響：圖片載入正常（59/59），純屬標籤形狀差異。
+若要讓那兩篇跟其他篇完全一致，最乾淨的方式是在 Webflow CMS 裡打開該項目再存一次，
+由 Webflow 自己做正規化——比再用 API 重寫一次安全。
+
+### 23-4. 教訓（補充 §22-5）
+
+用 API 寫 rich text 不只有逐字出錯的風險，還會**繞過 Webflow 的正規化**，
+讓那幾篇的標籤與其他文章不同。除非必要，rich text 內容應該在後台改，
+呈現問題一律留在模板層解決。

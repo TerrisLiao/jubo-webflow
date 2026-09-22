@@ -1,0 +1,106 @@
+<style>
+/* ============================================================
+   CMS 文章樣式（/customer-stories 模板）
+   2026-09-22 v9　決議者：Terris
+   原始碼在 repo：custom-code/cms-article/
+   ※ 圖片說明玻璃條已移除：圖說回到內文段落，方便後台逐篇檢視。
+   詳見 Jubo官網AI開發規範/18、12。
+   ============================================================ */
+
+/* ---------- 1. 表格 ---------- */
+.richtext div:has(> table) {
+  background: transparent !important;
+  border: 1px solid rgba(21, 23, 23, .10) !important;
+  border-radius: 1rem !important;
+  overflow-x: auto !important;
+  margin: 2rem 0 !important;
+}
+.richtext table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+.richtext table th,
+.richtext table td {
+  text-align: left !important;
+  padding: 1rem 1.5rem !important;
+  vertical-align: top !important;
+  border-bottom: 1px solid rgba(21, 23, 23, .08) !important;
+  color: var(--neutral--black) !important;
+}
+.richtext table th *,
+.richtext table td * { color: inherit !important; }
+.richtext table th {
+  background: rgba(0, 178, 192, .09) !important;
+  font-weight: 600 !important;
+  font-size: .875rem !important;
+  letter-spacing: .03em !important;
+  border-bottom: 1px solid rgba(0, 178, 192, .22) !important;
+}
+.richtext table th:last-child { background: rgba(0, 178, 192, .16) !important; }
+.richtext table td:last-child {
+  background: rgba(0, 178, 192, .06) !important;
+  font-weight: 600 !important;
+}
+.richtext table tbody tr:last-child td { border-bottom: 0 !important; }
+
+/* ---------- 2. 引言／重點卡片 ---------- */
+.richtext blockquote {
+  background-color: var(--neutral--white) !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E"),
+    radial-gradient(55% 120% at 4% 112%, rgba(177, 93, 255, .30) 0%, rgba(177, 93, 255, 0) 62%),
+    radial-gradient(52% 115% at 22% 118%, rgba(0, 178, 192, .34) 0%, rgba(0, 178, 192, 0) 64%),
+    radial-gradient(45% 110% at 44% 122%, rgba(107, 143, 240, .22) 0%, rgba(107, 143, 240, 0) 66%) !important;
+  border: none !important;
+  border-radius: 1.5rem !important;
+  padding: 2rem 2.25rem !important;
+  margin: 2.5rem 0 !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.85 !important;
+  color: var(--neutral--black) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 30px rgba(21, 23, 23, .07) !important;
+}
+
+/* ---------- 3. FAQ 手風琴 ---------- */
+.richtext details {
+  background: var(--neutral--white) !important;
+  border: 1px solid rgba(21, 23, 23, .09) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+.richtext details summary { padding: 1.5rem 1.75rem !important; }
+.richtext .aeo-faq__answer-inner,
+.richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
+
+/* 展開動畫用的內層容器，由 faq-accordion.js 在載入時建立 */
+.richtext details .jb-faq__panel { overflow: hidden !important; }
+
+/* 收合時箭頭要立刻轉回去。文章自帶的規則是綁 details[open]，
+   而收合動畫跑完才會把 open 拿掉，箭頭會慢半拍；
+   aria-expanded 是點擊當下就更新的，所以改用它當依據。 */
+.richtext #jubo-research-faq details summary[aria-expanded="false"]::after {
+  transform: rotate(45deg) translateY(-0.2rem) !important;
+}
+
+/* 舊版 .aeo-faq 的加號圖示同樣綁在 details[open]，收合時會慢半拍，
+   一樣改用點擊當下就更新的 aria-expanded。 */
+.richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg) !important;
+}
+
+/* ---------- 4. 手機 ---------- */
+@media screen and (max-width: 767px) {
+  .richtext table { font-size: .9375rem !important; }
+  .richtext table th,
+  .richtext table td { padding: .75rem 1rem !important; }
+  .richtext blockquote { padding: 1.5rem 1.25rem !important; }
+  .richtext details summary { padding: 1.25rem !important; }
+  .richtext .aeo-faq__answer-inner,
+  .richtext #jubo-research-faq__list p { padding: 0 1.25rem 1.25rem !important; }
+}
+</style>
