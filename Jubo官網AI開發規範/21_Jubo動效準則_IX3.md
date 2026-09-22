@@ -244,3 +244,90 @@ split 形式（兩個 `wf:hover` 觸發器 ＋ `assignedGroupId`）**每次載�
 - Token 數值（2px / 3px / 12px、150/250/500ms）是依 §13 的文字訂的，
   **沒有經過視覺審查**。Terris 看實品後可能要調。
 - 收斂預估「12–15 個」是依情境表推算，實際要看有多少頁面需要各自的 scope。
+
+---
+
+## 10. B 版（進階氛圍）實測紀錄 — 2026-09-22
+
+Terris 要求試做「更高級的氛圍」版本。在 `/news` staging 實作了兩個動效，正式站未動。
+
+| 互動 | id | 內容 |
+|---|---|---|
+| `B｜Page Headline Reveal (splitText)` | `i-8a44c92a` | H1 逐字浮現 ＋ 副標延後 0.3s 跟上 |
+| `B｜News Card Scroll Entrance` | `i-b7f7cbaf` | 卡片各自在進入視窗時淡入上移 |
+
+### 🔴 發現 E：`splitText: "words"` 對中文完全無效
+
+第一版用 `words`，實測 **整句被當成「一個詞」** —— 因為中文沒有空格。
+標題只是整塊淡入，逐詞效果根本沒發生。
+
+**中文一律用 `"chars"`。** 改用 `chars` 後正常拆成 10 個字元。
+
+> 這條對 Jubo 特別重要：全站標題都是中文，**任何 splitText 動效都不能用 `words`**。
+> 英文頁（若有）或日文頁的假名／漢字混排需另外測。
+
+### ✅ 拆字不影響排版（最大的疑慮已排除）
+
+| | 桌機 H1 | 手機 H1 |
+|---|---|---|
+| A 正式站（未拆字） | 800 × 96 | 366 × 94（2 行） |
+| B staging（拆成 10 個 span） | 800 × 96 | 366 × 94（2 行） |
+
+逐像素相同，無橫向溢出。GSAP 的 SplitText 有正確處理換行。
+
+### ✅ 韌性：reveal 不會把內容永久藏起來
+
+這是 reveal 類動效最大的風險（`20_` 稽核報告裡「JS 沒跑完就看不到內容」正是這一類）。
+兩項都通過：
+
+| 測試 | 結果 |
+|---|---|
+| `prefers-reduced-motion: reduce` | 標題 **可見**（`skip-to-end` 生效） |
+| 擋掉 IX3 的 GSAP（模擬 CDN 掛掉） | 標題 **仍可見**，高 96px |
+
+> ⚠️ **reveal 類動效的 `conditionalPlayback` 必須用 `skip-to-end`，不可用 `dont-animate`。**
+> `dont-animate` 在 FromTo 動畫上可能讓元素停在 from 狀態（opacity 0）＝永久隱形。
+> hover 類才用 `dont-animate`。
+
+### ⚠️ 成本：FCP 約 +376ms
+
+| | FCP（三次 / 中位數） |
+|---|---|
+| A 正式站 | 3016 / 2200 / 2004 → **2200ms** |
+| B staging | 2140 / 2576 / 2588 → **2576ms** |
+
+兩邊區間大幅重疊，成本存在但不大。合理對應下面這項。
+
+> **量測教訓**：第一次單次量到 A 1584ms / B 3148ms，看起來像 +1.5s 的大幅退步，
+> 重複三次後發現是雜訊。**單次量測不可下效能結論。**
+
+### 🔴 發現 F：IX3 會重複載入 GSAP（違反 §13）
+
+```
+cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js       28,343 bytes  ← Slater 用
+cdn.prod.website-files.com/gsap/3.15.0/gsap.min.js    28,343 bytes  ← IX3 自帶
+```
+
+同一版本、位元組完全相同，載兩次。`visual-system` §13 明文「**不得重複載入 Library**」。
+
+**解法是把遷移做完，不是停手**：jsDelivr 那組
+（gsap 28 ＋ ScrollTrigger 18 ＋ Draggable 13 ＋ Inertia 3 = **63 KB**）
+純粹為 Slater 而載。Slater 的互動全部搬到 IX3 之後可整組刪除 → **淨省 35 KB**。
+
+| 階段 | GSAP 成本 |
+|---|---|
+| 現在（純 IX2） | 63 KB（jsDelivr 四支） |
+| 過渡期（IX2 ＋ IX3 並存） | 91 KB ⚠️ 違反 §13 |
+| 完成後（純 IX3） | **28 KB** |
+
+**半途而廢是三種狀態裡最貴的。** 這是「要嘛不做，要嘛做完」的理由。
+
+### 待 Terris 目視判斷
+
+數據都通過了，但「氛圍是否更高級」只能看實品：
+**https://jubo-health.webflow.io/news**（對照 https://www.jubo-health.com/news）
+
+看點：
+1. 進頁時標題逐字浮現的節奏（0.035s/字，10 字共 0.35s）是否合適
+2. 往下捲時卡片逐一淡入的感覺
+3. 卡片 hover 上浮 3px 是否足夠、或太含蓄
