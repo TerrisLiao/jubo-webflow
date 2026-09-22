@@ -194,7 +194,31 @@ publish_site { site_id, customDomains: [] }
 要真的把檔案變小，必須把這 45 張重新上傳（見 `18_載入效能稽核` 的 P0-2）。
 原本 P0-2 被我列為「就算 P0-1 修好也要做」，現在證據更強：**它是必要的，不是加分題。**
 
-### 🟠 新發現 B：Webflow 對 CMS 綁定的 Image 輸出 `sizes="100vw"`
+### 🔴 新發現 B'（實機推翻了 B 的前提）：Webflow 對這個 Image **完全沒有輸出 srcset**
+
+Staging 實機輸出的 57 個 `<img>` 全部長這樣：
+
+```html
+<img src="…_11 (1).png" loading="lazy"
+     alt="115 年住宿式機構補助新制懶人包：費用、資格與如何認列一次看懂"
+     class="news-card_cover-img"/>
+```
+
+**沒有 `srcset`，也沒有 `sizes`。** 57 / 57 全部如此。
+
+原因應該是：透過 Data API 建立並綁定 CMS 欄位的 Image 元素，
+Webflow 沒有帶上產生 srcset 所需的變體 metadata
+（站上原有的 `.news_cover-img` 是在 Designer 裡手動建的，就有 srcset）。
+
+**所以效能的 86.5% 節省，100% 來自 `loading="lazy"`，完全沒有 srcset 的貢獻。**
+下面原本針對 `sizes="100vw"` 的分析仍然有參考價值，但要先解決「根本沒有 srcset」。
+
+**待辦**：在 Designer 裡手動重設一次這個 Image 的 CMS 圖片綁定（點掉再綁回），
+看 Webflow 會不會補上 srcset；若會，效能還能再往下走一截。
+
+---
+
+### 🟠 新發現 B（原始分析，前提已被 B' 推翻）：Webflow 對 CMS 綁定的 Image 輸出 `sizes="100vw"`
 
 這是站上既有 `.news_cover-img` 的實際輸出（不是推測）：
 
@@ -271,13 +295,132 @@ publish_site { site_id, customDomains: [] }
 
 ---
 
+## 5.8　Staging 實機驗證（2026-09-22 13:18，Terris 發布）
+
+Staging `jubo-health.webflow.io` 已發布；正式站確認未動（`Last Published` 仍為 09:38、
+新 class 線上 0 個）。
+
+### 效能：模擬預測準確
+
+| | 正式站（舊） | Staging（新） | 差異 |
+|---|---|---|---|
+| **首屏圖片流量** | 8,864 KiB | **1,195 KiB** | **−86.5%** |
+| 首屏總傳輸 | 9,433 KiB | 1,760 KiB | −81.3% |
+| 首屏載入圖片張數 | 58 | **5** | −53 |
+| load 完成 | 48.9 s | **10.7 s** | −78.1% |
+| FCP | 2,184 ms | 1,748 ms | −20.0% |
+
+（先前的本地模擬預測 −87.4%，實測 −86.5%，誤差 1%。）
+
+### 四斷點版面：全數通過
+
+| 斷點 | 遮罩尺寸 | 比例 | 圓角 | 橫向溢出 |
+|---|---|---|---|---|
+| main 1440 | 416 × 234 | 1.778 | `24px 24px 0 0` | 無 |
+| medium 991 | 472 × 265 | 1.778 | `24px 24px 0 0` | 無 |
+| small 767 | 366 × 206 | 1.778 | `24px 24px 0 0` | 無 |
+| tiny 479 | 455 × 256 | 1.778 | `24px 24px 0 0` | 無 |
+
+### Finsweet 分類篩選：正常
+
+逐一點擊七個分類，新舊兩站筆數完全一致：
+
+```
+選購指南:0  系統攻略:0  媒體報導:16  資安隱憂:2  科技浪潮:6  長照觀點:6  最新消息:24
+回到「所有文章」:57
+```
+
+### 封面欄位為空的 3 筆：沒有破圖
+
+`血糖試紙滿百盒送機器`、`Daycare Banner Landing Page-1`、`VitalLink Banner Landing Page`
+這 3 筆的 CMS 封面圖欄位本來就是空的（Terris 已確認）。
+
+Webflow 自動補上 `w-dyn-bind-empty`，而 Webflow 基礎 CSS 有
+`.w-dyn-bind-empty,.w-condition-invisible{display:none!important}`，
+所以**不會出現破圖 icon**。（我的自動化檢查用 `naturalWidth===0` 判定，
+那是誤判 —— 元素根本沒有被渲染。）
+
+---
+
+## 5.9　🔴 找到一個我造成的回歸：卡片 hover 縮放失效
+
+### 症狀
+
+| | hover 後封面的 transform |
+|---|---|
+| 正式站（舊） | `matrix(1.03, 0, 0, 1.03, 0, 0)` |
+| Staging（第一版） | `none` ← **動畫沒了** |
+
+### 根因
+
+從線上 `webflow.schunk.d685ec5c8704b2d.js` 挖出 IX2 定義：
+
+```js
+"a-15": { id:"a-15", title:"Img Hover [In]", actionItemGroups:[{ actionItems:[
+  { actionTypeId:"TRANSFORM_SCALE",
+    config:{ duration:350, easing:"outQuad",
+             target:{ useEventTarget:"CHILDREN",
+                      selector:".single-news_cover-img",        // ← 關鍵
+                      selectorGuids:["7b494da8-f4af-451f-0886-1fd815374035"] },
+             xValue:1.03, yValue:1.03 } },
+  { actionTypeId:"STYLE_OPACITY",
+    config:{ target:{ useEventTarget:"CHILDREN",
+                      selector:".news-card_headline-inner-wrap" }, value:.6 } }
+]}]}
+```
+
+觸發器 `e-78`(MOUSE_OVER) / `e-79`(MOUSE_OUT) 掛在卡片連結上，
+但**動畫的目標是「帶有 `.single-news_cover-img` 的子元素」**。
+我把那個 div 換成 Image 元素、class 也換了，選擇器就抓不到了。
+
+> **我先前的判斷錯在哪**：我查了 `data-w-id` 在哪個元素上（在連結上，沒錯），
+> 就下結論「動畫掛在連結不是封面圖上，應該安全」。
+> **我查的是觸發器的位置，不是動畫的目標。** IX2 的 target 可以是
+> 「自己」「子元素（依 class）」「全站同 class 元素」—— 必須分開查。
+
+### 為什麼不能改動畫的選擇器
+
+同一個 `a-15` 被 `/customer-success-stories` 共用（事件 `e-80`，
+target 指向 pageId `6a1cd470a75f99c148ea2cfe`）。那一頁還在用
+`.single-news_cover-img`，改選擇器會連帶弄壞它。
+
+### 採用的修法：把 IX2 的目標層還原
+
+```
+.img-mask.is-news-card
+└─ div.single-news_cover-img          ← 還原，只當 IX2 的動畫目標（無 CMS 綁定）
+   └─ img.news-card_cover-img          ← 真正的圖片：CMS 綁定 + lazy + alt
+```
+
+- 外層 div 被 hover 縮放 1.03×，內層 img 跟著一起縮放 → 視覺與原本一致
+- 外層**沒有綁 CMS 背景圖**，所以不會再下載原圖（效能成果保留）
+- `.news-card_cover-img` 同步調整：移除 `aspect-ratio`（改由外層提供），
+  改為 `display:block / width:100% / height:100% / object-fit:cover`
+- Navigator 顯示名稱設為 `Cover Hover Target (IX2 a-15)`，避免下一個人再刪掉它
+
+**狀態：已在 Designer 修好，尚未發布，等 Terris 再發一次 staging 驗證。**
+
+### 給後續工作的教訓
+
+改動任何元素前，**IX2 要查兩件事，不是一件**：
+
+1. 觸發器掛在哪個元素（`data-w-id`）
+2. **動畫的 target 用什麼選擇器** —— 到線上的
+   `webflow.schunk.*.js` 搜該元素的 w-id，找到 `actionListId`，
+   再搜該 actionList 的定義，看 `target.selector`
+
+---
+
 ## 6. 尚未完成 / 待決策
 
 | 項目 | 狀態 |
 |---|---|
 | `/news` 卡片封面 | ✅ 已改，未 publish |
-| 量測改善幅度 | ✅ 已用本地模擬量出（首屏 −87.4%）；staging 實機驗證仍未做 |
-| 四斷點樣式 QA | ✅ 已完成（三個 class 都無斷點覆寫） |
+| 量測改善幅度 | ✅ staging 實機量測完成：首屏 −86.5%、load 48.9s→10.7s |
+| 四斷點樣式 QA | ✅ 已完成（樣式查詢 ＋ staging 實機版面，四個斷點全過） |
+| Finsweet 分類篩選 | ✅ 新舊兩站筆數完全一致 |
+| 卡片 hover 動畫 | ⚠️ 第一版壞掉→已修，**待再發一次 staging 驗證** |
+| Webflow 是否輸出 srcset | ❌ 57 張全部沒有 srcset／sizes，只有 lazy + alt（見下）|
 | Designer 畫布截圖 | ❌ 做不到：Collection List 內的元素一律回傳空結果，清單外的元素可正常截 |
 | 文章內頁「相關新聞」列表（`.single-news_cover-img`，每頁 23 個 × 40 頁） | ⏸ 未動，等 /news 驗證過再做 |
 | 首頁與 6 頁的 `.cases-img`（46 個，含 842 KiB 的 `cases-3.png`） | ⏸ 未動 |
