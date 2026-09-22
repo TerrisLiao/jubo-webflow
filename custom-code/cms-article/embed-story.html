@@ -1,0 +1,149 @@
+<style>
+/* ============================================================
+   CMS 文章樣式（/customer-stories 模板）
+   2026-09-22 v13　決議者：Terris
+   原始碼在 repo：custom-code/cms-article/
+   ※ 第 5 節（圖說玻璃條）只在本模板；沒有任何規則選到 img。
+   ============================================================ */
+
+/* ---------- 1. 表格 ---------- */
+.richtext div:has(> table) {
+  background: transparent !important;
+  border: 1px solid rgba(21, 23, 23, .10) !important;
+  border-radius: 1rem !important;
+  overflow-x: auto !important;
+  margin: 2rem 0 !important;
+}
+.richtext table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+.richtext table th,
+.richtext table td {
+  text-align: left !important;
+  padding: 1rem 1.5rem !important;
+  vertical-align: top !important;
+  border-bottom: 1px solid rgba(21, 23, 23, .08) !important;
+  color: var(--neutral--black) !important;
+}
+.richtext table th *,
+.richtext table td * { color: inherit !important; }
+.richtext table th {
+  background: rgba(0, 178, 192, .09) !important;
+  font-weight: 600 !important;
+  font-size: .875rem !important;
+  letter-spacing: .03em !important;
+  border-bottom: 1px solid rgba(0, 178, 192, .22) !important;
+}
+.richtext table th:last-child { background: rgba(0, 178, 192, .16) !important; }
+.richtext table td:last-child {
+  background: rgba(0, 178, 192, .06) !important;
+  font-weight: 600 !important;
+}
+.richtext table tbody tr:last-child td { border-bottom: 0 !important; }
+
+/* ---------- 2. 引言／重點卡片 ---------- */
+.richtext blockquote {
+  background-color: var(--neutral--white) !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E"),
+    radial-gradient(55% 120% at 4% 112%, rgba(177, 93, 255, .30) 0%, rgba(177, 93, 255, 0) 62%),
+    radial-gradient(52% 115% at 22% 118%, rgba(0, 178, 192, .34) 0%, rgba(0, 178, 192, 0) 64%),
+    radial-gradient(45% 110% at 44% 122%, rgba(107, 143, 240, .22) 0%, rgba(107, 143, 240, 0) 66%) !important;
+  border: none !important;
+  border-radius: 1.5rem !important;
+  padding: 2rem 2.25rem !important;
+  margin: 2.5rem 0 !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.85 !important;
+  color: var(--neutral--black) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 30px rgba(21, 23, 23, .07) !important;
+}
+
+/* ---------- 3. FAQ 手風琴 ---------- */
+.richtext details {
+  background: var(--neutral--white) !important;
+  border: 1px solid rgba(21, 23, 23, .09) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+.richtext details summary { padding: 1.5rem 1.75rem !important; }
+.richtext .aeo-faq__answer-inner,
+.richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
+.richtext details .jb-faq__panel { overflow: hidden !important; }
+.richtext #jubo-research-faq details summary[aria-expanded="false"]::after {
+  transform: rotate(45deg) translateY(-0.2rem) !important;
+}
+.richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg) !important;
+}
+
+/* ---------- 4. 手機 ---------- */
+@media screen and (max-width: 767px) {
+  .richtext div:has(> table) {
+    background-image:
+      linear-gradient(to right, var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to left,  var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)) !important;
+    background-position: left center, right center, left center, right center !important;
+    background-repeat: no-repeat !important;
+    background-size: 2.5rem 100%, 2.5rem 100%, .875rem 100%, .875rem 100% !important;
+    background-attachment: local, local, scroll, scroll !important;
+  }
+  .richtext table {
+    font-size: .9375rem !important;
+    min-width: 34rem !important;
+  }
+  .richtext table th,
+  .richtext table td { padding: .75rem 1rem !important; }
+  .richtext blockquote { padding: 1.5rem 1.25rem !important; }
+  .richtext details summary { padding: 1.25rem !important; }
+  .richtext .aeo-faq__answer-inner,
+  .richtext #jubo-research-faq__list p { padding: 0 1.25rem 1.25rem !important; }
+}
+
+/* ---------- 5. 圖片說明：圖上毛玻璃條（只在 story 模板） ---------- */
+/* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
+   本節不會選到 img，所以不會影響後台編輯器顯示圖片。 */
+.richtext figure.w-richtext-figure-type-image { position: relative !important; }
+.richtext figure.w-richtext-figure-type-image figcaption {
+  position: absolute !important;
+  left: 1.25rem !important;
+  right: 1.25rem !important;
+  bottom: 1.5rem !important;
+  margin: 0 !important;
+  padding: 1.25rem 1.5rem !important;
+  text-align: left !important;
+  background: rgba(255, 255, 255, .72) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+          backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, .55) !important;
+  border-radius: 1rem !important;
+  color: var(--neutral--black) !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.7 !important;
+  box-shadow: 0 8px 28px rgba(21, 23, 23, .12) !important;
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    background: rgba(255, 255, 255, .93) !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    left: .75rem !important;
+    right: .75rem !important;
+    bottom: 1rem !important;
+    padding: 1rem 1.125rem !important;
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+    border-radius: .75rem !important;
+  }
+}
+</style>
