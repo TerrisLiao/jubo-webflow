@@ -399,3 +399,70 @@ JS 錯誤：無
 1. 進頁時標題逐字浮現的節奏（0.035s/字，10 字共 0.35s）是否合適
 2. 往下捲時卡片逐一淡入的感覺
 3. 卡片 hover 上浮 3px 是否足夠、或太含蓄
+
+---
+
+## §11 上線前完整驗證（8 項清單全跑）—— 2026-09-22
+
+刪掉問題互動後，**把第 8 項「全頁可見度普查」也跑了一次**。
+剛因為漏驗才寫下的規則，如果下一輪就跳過，等於沒寫。
+
+### 結果
+
+| # | 項目 | 結果 |
+|---|---|---|
+| 1 | 重複 hover 4 次 | ✅ 4/4 都是 `matrix(1,0,0,1,0,-3)` |
+| 2 | 卡片數 | ✅ staging 53 ＝ 正式站 53 |
+| 3 | `prefers-reduced-motion` | ✅ 卡片 53/53 可見、H1 opacity 1、高 96px |
+| 4 | 四斷點（1440 / 991 / 767 / 479） | ✅ 卡片全滿、H1 未溢出 |
+| 5 | Finsweet 分類篩選 | ✅ 七類皆正常（媒體報導 16、最新消息 23、長照觀點 6、科技浪潮 5、其餘 0） |
+| 6 | JS 錯誤 | ✅ 無 |
+| 7 | 擋掉 IX3 的 GSAP | ✅ 卡片 53/53 可見、H1 opacity 1 |
+| 8 | 全頁可見度普查 | ⚠️ 1 項差異 → **查清楚了，見下** |
+
+### 第 8 項的差異：`img-mask.is-news-card` staging 隱藏 3/53、正式站 0/53
+
+**先查證，不臆測。** 逐一比對三張卡的實測資料：
+
+| 卡片 | staging mask 高 | 正式站 mask 高 | `<img>` class |
+|---|---|---|---|
+| 血糖試紙滿百盒送機器 | 0 px | 234 px | `news-card_cover-img w-dyn-bind-empty` |
+| Daycare Banner Landing Page-1 | 0 px | 234 px | 同上 |
+| VitalLink Banner Landing Page | 0 px | 234 px | 同上 |
+
+就是先前已知、Terris 也確認過「本來就沒有封面圖」的那三筆。
+
+**成因（已驗證）**
+
+- CMS 封面欄位是空的 → Webflow 掛上 `w-dyn-bind-empty`
+  → base CSS `display:none!important` 把 `<img>` 收掉
+- `.img-mask.is-news-card` 本身**沒有任何高度規則**
+  （實測published CSS 只有 `border-bottom-*-radius:0`，連 `aspect-ratio` 都沒有）
+- 舊結構的高度來自被我移除的 `.single-news_cover-img` 包裹層（它帶 `aspect-ratio:16/9`）
+  → 包裹層一拿掉，空圖的遮罩就塌成 0
+
+### 但實際截圖顯示：塌掉的是**改善**，不是缺陷
+
+| | 正式站（現況） | staging（新結構） |
+|---|---|---|
+| 畫面 | 灰底、對角線、正中央寫著 **「Background Image」** | 沒有圖片區，直接顯示分類標籤＋標題 |
+| 判定 | 🔴 Webflow Designer 的**佔位圖漏到正式站** | ✅ 乾淨的純文字卡 |
+
+`.single-news_cover-img` 是 Block＋CMS 背景圖。背景圖為空時，
+Webflow 不會隱藏這個 div（`w-dyn-bind-empty` 只作用在綁定元素本身，
+背景圖綁定不算），於是 Designer 的預設佔位圖就這樣出現在線上。
+
+**換成 `<img>` 之後，空值才會被正確地收掉。**
+所以第 8 項這個紅旗的方向是反的：**新結構修掉了一個正式站現存的視覺瑕疵。**
+
+### 結論與後續
+
+- ❌ **不需要**為此補 `min-height` 或 `aspect-ratio`。補了反而會把空白框加回來。
+- ✅ 這三筆真正該做的是**在 CMS 補上封面圖**（內容工作，不是 CSS 工作）。
+- 補圖之後，卡片會自動恢復成 16:9 的正常樣子，不需要再改結構。
+
+### 驗證限制
+
+- Collection List 內的元素無法取得 Designer 畫布截圖（既有限制），
+  以上全部改用**已發布頁面的瀏覽器實測**（computed style ＋ 元素截圖）取得。
+- 量測時間 2026-09-22 16:59 UTC，staging 為當下最新發布版本。

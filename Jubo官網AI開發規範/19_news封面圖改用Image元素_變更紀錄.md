@@ -466,3 +466,22 @@ target 指向 pageId `6a1cd470a75f99c148ea2cfe`）。那一頁還在用
 4. 分類篩選（Finsweet）仍正常
 5. 卡片 hover 動畫（IX2）仍正常
 6. 重跑效能量測：目標 `/news` 9.43 MB → 約 1 MB
+
+---
+
+## 追加發現：改用 `<img>` 順手修掉了正式站的佔位圖瑕疵
+
+2026-09-22 上線前全頁普查時發現（詳見 `21_Jubo動效準則_IX3.md` §11）：
+
+正式站有 3 筆沒有封面圖的新聞，卡片上顯示的是 Webflow Designer 的
+**灰色「Background Image」佔位圖**（416×234）。
+
+成因：舊結構 `.single-news_cover-img` 是 Block ＋ CMS 背景圖綁定。
+背景圖綁定為空時 Webflow **不會**隱藏該 div，Designer 佔位圖因此漏到線上。
+
+改用 Image 元素後，空值會被 `w-dyn-bind-empty` → `display:none!important`
+正確收掉，卡片變成乾淨的純文字卡。
+
+**這三筆真正的處理方式是在 CMS 補封面圖**，不是加 CSS 把空白框補回來。
+
+受影響項目：血糖試紙滿百盒送機器／Daycare Banner Landing Page-1／VitalLink Banner Landing Page
