@@ -108,7 +108,7 @@ split 形式（兩個 `wf:hover` 觸發器 ＋ `assignedGroupId`）**每次載�
 | C | **統計數字 hover** | 上浮 | Trigger element | `y: -2` · fast · out | Stats Color Hover ×26 |
 | D | **圖示／文字連結 hover** | 透明度 | Trigger element | `opacity: .6` · fast · out | footer linkedin 等 |
 | E | **手風琴開合** | 展開／收合 | Trigger element ＋ Class | click · `togglePlayReverse` · base | FAQ accordion ×6 |
-| F | **捲動進場** | 淡入上移 | Class | `opacity 0→100` ＋ `y 12→0` · slow · out · `start: "top 85%"` | 67 個捲動觸發器 |
+| F | **捲動進場** | ⚠️ **暫緩** —— 見 §10 發現 G。`wf:scroll` ＋ `wf:class` 會讓整批元素永久隱形 | — | — | 67 個捲動觸發器（尚無安全寫法） |
 | G | **捲動視差／進度** | scrub | Class | `scrub` ＋ `start`/`end` | Product Item Scroll 等 |
 
 ### 為什麼 B、C 不再是「變色」
@@ -213,6 +213,10 @@ split 形式（兩個 `wf:hover` 觸發器 ＋ `assignedGroupId`）**每次載�
 6. **無 JS 錯誤**
 7. **發布到 staging 實測** —— 官方文件：
    `A successful create is not proof it played.`
+8. **🔴 全頁可見度普查**：不是只驗剛改的那個動效，而是**掃過整頁所有元素**，
+   確認沒有任何東西停在 `opacity: 0` / `visibility: hidden` / 高度 0。
+   reveal 類動效的失效是**靜默的** —— 沒有錯誤訊息，只有看不到的內容。
+   （2026-09-22 因為漏做這一項，讓 `/news` 的 53 張卡片在 staging 上全部隱形。）
 
 ---
 
@@ -321,6 +325,70 @@ cdn.prod.website-files.com/gsap/3.15.0/gsap.min.js    28,343 bytes  ← IX3 自�
 | 完成後（純 IX3） | **28 KB** |
 
 **半途而廢是三種狀態裡最貴的。** 這是「要嘛不做，要嘛做完」的理由。
+
+### 🔴🔴 發現 G：捲動進場把整份列表變成永久隱形（已移除）
+
+**這是本次工作階段最嚴重的一次失誤，而且是 Terris 發現的，不是我測出來的。**
+
+`B｜News Card Scroll Entrance`（`i-b7f7cbaf`）上線後，`/news` 的 **53 張卡片全部
+停在 `opacity: 0`，捲到任何位置都不會出現** —— 整份新聞列表變成一片空白。
+
+實測診斷：
+
+```
+載入後        53 張 → 可見 0、隱形 53
+捲到 1000px   53 張 → 可見 0、隱形 53
+捲到 2500px   53 張 → 可見 0、隱形 53
+捲到 5000px   53 張 → 可見 0、隱形 53
+用 lenis.scrollTo 53 張 → 可見 0、隱形 53
+ScrollTrigger: { hasScrollTrigger: true, count: 1 }   ← 53 張卡只註冊了 1 個
+JS 錯誤：無
+```
+
+#### 根因
+
+```json
+"triggers": [{ "extensionKey": "wf:scroll",
+               "target": {"extensionKey": "wf:class", "value": ["<list-item 的 class>"]} }],
+"timelines": [{ "actions": [{ "tt": 2,
+   "targets": [{"extensionKey": "wf:trigger-only", "value": ""}],
+   "properties": {"wf:transform": {"opacity": ["0%","100%"], "y": [16,0]}} }]}]
+```
+
+`wf:scroll` ＋ `wf:class` **只註冊一個 ScrollTrigger**，不是每個元素一個。
+但 `tt: 2`（FromTo）的 from 狀態（`opacity: 0`）**卻套用到該 class 的全部 53 個元素**。
+
+→ 一個觸發器永遠無法讓 53 個元素現身。**沒有任何錯誤訊息。**
+
+#### 由此得出的鐵律
+
+> 🚫 **`wf:scroll` 不可搭配 `wf:class` 觸發目標做 reveal。**
+>
+> 需要「每個元素各自進場」時，目前沒有安全的 API 寫法。
+> 除非能確認每個元素各自註冊了一個 ScrollTrigger，否則**不要對重複元素做 reveal**。
+
+補充判斷：53 筆的長列表本來就不適合逐一進場動畫 —— 使用者快速捲動時，
+動畫只會延遲內容出現。**這個效果不只是實作有問題，需求本身也可疑。**
+
+#### 我的流程失誤（要記取的部分）
+
+我在同一輪加了**兩個**互動（標題浮現 ＋ 卡片進場），但驗證腳本
+`bver.mjs` / `chars.mjs` **只檢查了標題**，完全沒量卡片的 opacity。
+
+> **規則：加了 N 個動效，就要驗 N 個 —— 而且要驗「整頁還看得見嗎」，
+> 不是只驗剛剛改的那一個。**
+
+這也正好印證 `18_載入效能稽核` 開頭的判斷：
+**「JS 沒跑完就看不到內容」是這個站最該防的失效模式** —— 結果我自己犯了一次。
+
+#### 處理
+
+- 互動 `i-b7f7cbaf` 已 `delete_interaction` 移除
+- staging 已重新發布，實測 **53 張卡全部可見、H1 正常、無 JS 錯誤**
+- **正式站全程未受影響**（所有 staging 發布都用 `publishToWebflowSubdomain: true`
+  且不帶 customDomains，實測正式站同樣 53/53 可見）
+
+---
 
 ### 待 Terris 目視判斷
 
