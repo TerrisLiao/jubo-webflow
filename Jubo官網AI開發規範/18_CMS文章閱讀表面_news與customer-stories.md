@@ -1173,3 +1173,53 @@ staging 驗證：
 | 香園（圖說在內文） | 0 | ✅ 同上 |
 
 四篇圖片載入失敗皆為 0。
+
+---
+
+## 24. 後台／Preview 不顯示圖片：逐步排除（2026-09-22）
+
+### 24-1. 找到的原因
+
+第 5 節原本有兩條規則會動到圖片本身：
+
+```css
+.richtext figure.w-richtext-figure-type-image > div {
+  border-radius: 1.25rem; overflow: hidden; line-height: 0;   /* ← 元凶之一 */
+}
+.richtext figure.w-richtext-figure-type-image img {
+  display: block; width: 100%; height: auto;                  /* ← 元凶之二 */
+}
+```
+
+拿掉這兩條之後，**Webflow CMS 編輯器裡的圖片就顯示出來了**（Terris 實測確認）。
+`figcaption` 的規則不可能讓圖片消失，所以一開始就先從這兩條下手。
+
+### 24-2. Designer Preview 仍不顯示 → 再縮一次範圍
+
+為了讓下一次測試能一次定案，v12 把**最後一條選到 `img` 的規則（圓角）也移除**。
+現在第 5 節只剩兩件事：
+
+```css
+.richtext figure.w-richtext-figure-type-image { position: relative; }
+.richtext figure.w-richtext-figure-type-image figcaption { /* 玻璃樣式 */ }
+```
+
+已用程式確認線上的 embed 中**沒有任何規則選到 `img`**。
+
+若 Preview 依舊不顯示圖片，就能確定與本 CSS 無關
+（Designer 會快取站台 CSS，重新整理 Designer 分頁後再看才準）。
+
+### 24-3. staging 驗證（v12）
+
+| 文章 | 圖片 | 載入失敗 | figcaption |
+|---|---|---|---|
+| jubostory13 | 7 | **0** | 6（Terris 自己填的，玻璃條正常） |
+| jubostory11 | 6 | **0** | 0 |
+| 香園 | 3 | **0** | 0 |
+
+### 24-4. 教訓
+
+模板 CSS 不只影響已發布的網站，也會進到 **Webflow 後台的編輯器與 Preview**。
+用 `!important` 改動 rich text 內部元素（尤其是 `img` 的 `display`／`width`／`height`
+與其包裝層的 `overflow`）會讓編輯者在後台看不到內容。
+動 rich text 內部結構的樣式時，要一併確認後台還能正常編輯。

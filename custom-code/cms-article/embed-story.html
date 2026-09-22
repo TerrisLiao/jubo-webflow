@@ -1,10 +1,9 @@
 <style>
 /* ============================================================
    CMS 文章樣式（/customer-stories 模板）
-   2026-09-22 v10　決議者：Terris
+   2026-09-22 v12　決議者：Terris
    原始碼在 repo：custom-code/cms-article/
-   ※ 第 5 節（圖說玻璃條）只在本模板，/news 沒有。
-      只對後台「圖片說明欄」生效；自動抓內文段落的腳本已移除。
+   ※ 本版本完全沒有任何規則選到 img 元素。
    詳見 Jubo官網AI開發規範/18、12。
    ============================================================ */
 
@@ -109,23 +108,15 @@
 /* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
    編輯請在 rich text 點選圖片 → 開啟說明欄位填寫。
    圖片後面另打一段內文不會被套用（自動提升的腳本已於 2026-09-22 移除）。
+   v12：本節不再有任何規則選到 img 或其包裝 div —— 之前那兩條會讓
+   Webflow CMS 編輯器把圖片顯示成灰色佔位。
    staging 實測：真實照片上黑字最低對比 9.46:1，高於 AAA 的 7:1。 */
 .richtext figure.w-richtext-figure-type-image { position: relative !important; }
-.richtext figure.w-richtext-figure-type-image > div {
-  border-radius: 1.25rem !important;
-  overflow: hidden !important;
-  line-height: 0 !important;
-}
-.richtext figure.w-richtext-figure-type-image img {
-  display: block !important;
-  width: 100% !important;
-  height: auto !important;
-}
 .richtext figure.w-richtext-figure-type-image figcaption {
   position: absolute !important;
   left: 1.25rem !important;
   right: 1.25rem !important;
-  bottom: 1.25rem !important;
+  bottom: 1.5rem !important;
   margin: 0 !important;
   padding: 1.25rem 1.5rem !important;
   text-align: left !important;
