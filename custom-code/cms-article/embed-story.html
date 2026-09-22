@@ -1,9 +1,10 @@
 <style>
 /* ============================================================
    CMS 文章樣式（/customer-stories 模板）
-   2026-09-22 v9　決議者：Terris
+   2026-09-22 v10　決議者：Terris
    原始碼在 repo：custom-code/cms-article/
-   ※ 圖片說明玻璃條已移除：圖說回到內文段落，方便後台逐篇檢視。
+   ※ 第 5 節（圖說玻璃條）只在本模板，/news 沒有。
+      只對後台「圖片說明欄」生效；自動抓內文段落的腳本已移除。
    詳見 Jubo官網AI開發規範/18、12。
    ============================================================ */
 
@@ -102,5 +103,57 @@
   .richtext details summary { padding: 1.25rem !important; }
   .richtext .aeo-faq__answer-inner,
   .richtext #jubo-research-faq__list p { padding: 0 1.25rem 1.25rem !important; }
+}
+
+/* ---------- 5. 圖片說明：圖上毛玻璃條（只在 story 模板） ---------- */
+/* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
+   編輯請在 rich text 點選圖片 → 開啟說明欄位填寫。
+   圖片後面另打一段內文不會被套用（自動提升的腳本已於 2026-09-22 移除）。
+   staging 實測：真實照片上黑字最低對比 9.46:1，高於 AAA 的 7:1。 */
+.richtext figure.w-richtext-figure-type-image { position: relative !important; }
+.richtext figure.w-richtext-figure-type-image > div {
+  border-radius: 1.25rem !important;
+  overflow: hidden !important;
+  line-height: 0 !important;
+}
+.richtext figure.w-richtext-figure-type-image img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+}
+.richtext figure.w-richtext-figure-type-image figcaption {
+  position: absolute !important;
+  left: 1.25rem !important;
+  right: 1.25rem !important;
+  bottom: 1.25rem !important;
+  margin: 0 !important;
+  padding: 1.25rem 1.5rem !important;
+  text-align: left !important;
+  background: rgba(255, 255, 255, .72) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+          backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, .55) !important;
+  border-radius: 1rem !important;
+  color: var(--neutral--black) !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.7 !important;
+  box-shadow: 0 8px 28px rgba(21, 23, 23, .12) !important;
+}
+/* 舊瀏覽器不支援 backdrop-filter 時，改用較不透明的白底保住可讀性 */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    background: rgba(255, 255, 255, .93) !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    left: .75rem !important;
+    right: .75rem !important;
+    bottom: .75rem !important;
+    padding: 1rem 1.125rem !important;
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+    border-radius: .75rem !important;
+  }
 }
 </style>
