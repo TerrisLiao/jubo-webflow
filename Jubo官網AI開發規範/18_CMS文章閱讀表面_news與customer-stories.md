@@ -1223,3 +1223,27 @@ staging 驗證：
 用 `!important` 改動 rich text 內部元素（尤其是 `img` 的 `display`／`width`／`height`
 與其包裝層的 `overflow`）會讓編輯者在後台看不到內容。
 動 rich text 內部結構的樣式時，要一併確認後台還能正常編輯。
+
+### 24-5. 結案：Preview 與本 CSS 無關（2026-09-22）
+
+把 story 模板的 embed **整段清空**後發布，Terris 在 Designer preview 仍看不到圖片。
+因此可以確定：**Designer preview 不顯示 rich text 圖片，與本專案的模板 CSS 無關**，
+是 Webflow 對這批舊站匯入圖片的既有行為。
+
+（過程中也試過「圖片不在資產庫」的假設：用網址前綴當 asset ID 去查，
+`/news` 那篇在 Designer 正常的圖片同樣查不到記錄，所以該假設無法分辨，未採用。）
+
+**實際有解決的是 CMS 編輯器**：移除選到 `img` 與其包裝 div 的規則後，
+Terris 確認編輯器裡看得到圖片、也能編輯。Terris 決定「能在 CMS draft 修改就夠了」，
+Preview 的部分不再追。
+
+已將 story 模板還原為 v12 並發布 staging：
+
+| 文章 | embed | 選到 img 的規則 | 圖片 | figcaption |
+|---|---|---|---|---|
+| jubostory13 | v12 | 無 | 7 / 壞 0 | 6（absolute，玻璃正常） |
+| jubostory11 | v12 | 無 | 6 / 壞 0 | 0 |
+| 香園 | v12 | 無 | 3 / 壞 0 | 0 |
+| 順心 | v12 | 無 | 3 / 壞 0 | 0 |
+
+引言卡片、表格、FAQ 樣式一併復原。Terris 將自行逐篇整理要套玻璃圖說的內容。
