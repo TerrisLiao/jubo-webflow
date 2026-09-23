@@ -94,12 +94,15 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
 .c-net .ln-l{transform-origin:50% 100%;animation-direction:reverse}
 @keyframes c-flow-x{from{background-position:0% 0}to{background-position:-200% 0}}
 @keyframes c-flow-y{from{background-position:0 0%}to{background-position:0 -200%}}
-.chip{position:absolute;z-index:3;display:flex;align-items:center;gap:8px;padding:7px 12px 7px 10px;border-radius:999px;white-space:nowrap;
-  background:rgba(255,255,255,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(0,128,138,.18);
-  box-shadow:0 8px 24px -12px rgba(21,40,70,.35);font-size:14px;color:var(--ink);opacity:0;pointer-events:none}
-.chip .n{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--teal-ink)}
-.chip .d{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,178,192,.5);animation:c-ping 1.8s ease-out infinite}
-@keyframes c-ping{0%{box-shadow:0 0 0 0 rgba(0,178,192,.55)}100%{box-shadow:0 0 0 9px rgba(0,178,192,0)}}
+.chip{position:absolute;z-index:3;display:grid;gap:2px;padding:12px 18px 14px 16px;border-radius:16px;white-space:nowrap;overflow:hidden;isolation:isolate;
+  background:#fff url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E");box-shadow:0 6px 30px rgba(21,23,23,.07);color:var(--ink);opacity:0;pointer-events:none}
+.chip .g{position:absolute;inset:0;z-index:-1;transform-origin:0% 100%;opacity:0;
+  background:
+    radial-gradient(55% 120% at 4% 112%,rgba(177,93,255,.30),rgba(177,93,255,0) 62%),
+    radial-gradient(52% 115% at 22% 118%,rgba(0,178,192,.34),rgba(0,178,192,0) 64%),
+    radial-gradient(45% 110% at 44% 122%,rgba(107,143,240,.22),rgba(107,143,240,0) 66%)}
+.chip .n{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--teal-ink)}
+.chip .t{font-size:15px;font-weight:500;line-height:1.35}
 
 /* ---------- notes ---------- */
 .notes{max-width:1100px;margin:0 auto clamp(48px,8vh,96px);display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -113,7 +116,9 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
   :root{--radius:24px}
   .b-gallery{grid-template-columns:repeat(2,1fr);gap:12px}
   .c-gallery{grid-template-columns:repeat(2,1fr);gap:12px;max-width:340px}
-  .chip{font-size:12px;padding:5px 10px 5px 8px;gap:6px}
+  .c-net .v{display:none}
+  .chip{padding:8px 12px 9px 11px;border-radius:12px}
+  .chip .t{font-size:12px}
   .chip .n{font-size:10px}
   .c-sticky{gap:20px;padding-block:24px 0}
   .notes{grid-template-columns:1fr}
@@ -159,10 +164,10 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
         <div class="c-grid" aria-hidden="true"></div>
         <div class="c-glow" aria-hidden="true"></div>
         <div class="c-net" aria-hidden="true"><i class="ln h ln-t"></i><i class="ln v ln-r"></i><i class="ln h ln-b"></i><i class="ln v ln-l"></i></div>
-        <div class="chip" data-p="1" aria-hidden="true"><i class="d"></i><span class="n">01</span><span class="t">政策與補助案</span></div>
-        <div class="chip" data-p="0" aria-hidden="true"><i class="d"></i><span class="n">02</span><span class="t">需求訪談</span></div>
-        <div class="chip" data-p="3" aria-hidden="true"><i class="d"></i><span class="n">03</span><span class="t">AI 系統整合</span></div>
-        <div class="chip" data-p="2" aria-hidden="true"><i class="d"></i><span class="n">04</span><span class="t">場域落地</span></div>
+        <div class="chip" data-p="1" aria-hidden="true"><i class="g"></i><span class="n">01</span><span class="t">政策與補助案</span></div>
+        <div class="chip" data-p="0" aria-hidden="true"><i class="g"></i><span class="n">02</span><span class="t">需求訪談</span></div>
+        <div class="chip" data-p="3" aria-hidden="true"><i class="g"></i><span class="n">03</span><span class="t">AI 系統整合</span></div>
+        <div class="chip" data-p="2" aria-hidden="true"><i class="g"></i><span class="n">04</span><span class="t">場域落地</span></div>
         <p class="c-tagline"><span class="seg-l">縮短 AI 技術與場域實踐的最後一哩路</span><span class="seg-l">做你最值得信賴的科技夥伴</span></p>
         <div class="c-progress" aria-hidden="true"><i></i></div>
       </div>
@@ -170,7 +175,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
     </div>
     <div class="wrap"><div class="next"><span class="eyebrow">服務項目</span><p>不只懂科技技術，更懂政策語言，智齡數位透過專業的「技術場域化」轉譯能力，位政府機關、大型企業與醫護集團提供高效、穩健且具擴充性的系統整合方案，讓 AI 真正落地，在第一線發揮潛力。</p></div></div>
     <div class="wrap"><div class="notes">
-      <div class="note"><h3>這一版的做法</h3><ul><li>照片和標語在同一個固定區塊（和現在智齡數位頁的 sticky 結構相同）</li><li>聚攏：照片飛到標語四角，標語從畫面下方升到中央（頁首時看不到標語）</li><li>串聯：01→04 順時針連線、節點標籤逐字打出，連線上數據持續流動</li><li>點亮：整圈串完時標語也點亮完成</li><li>散開：照片、連線、標籤淡出，只留下標語</li></ul></div>
+      <div class="note"><h3>這一版的做法</h3><ul><li>照片和標語在同一個固定區塊（和現在智齡數位頁的 sticky 結構相同）</li><li>聚攏：照片飛到標語四角，標語從畫面下方升到中央（頁首時看不到標語）</li><li>串聯：01→04 順時針連線、節點卡片（沿用新聞 Quote 樣式）浮現、漸層光暈開、文字逐字打出，連線上數據持續流動</li><li>點亮：整圈串完時標語也點亮完成</li><li>散開：照片、連線、標籤淡出，只留下標語</li></ul></div>
       <div class="note"><h3>優點</h3><ul><li>照片和標語連成一個完整的故事，不會捲過照片就斷掉</li><li>標語一直看得到；關閉動態時是「照片一排、標語在下」的靜止排版</li><li>連線是水平／垂直細線（IX3 scaleX／scaleY），數據流動是 CSS 循環動畫，全部 IX3＋CSS 做得到</li><li>節點標籤只寫業務流程，不放數字</li></ul></div>
       <div class="note"><h3>要注意</h3><ul><li>照片落點在 IX3 裡是固定數值：桌機／平板一組、手機一組</li><li>捲動距離約 2.3 個螢幕高，比原版長一些</li></ul></div>
     </div></div>
@@ -264,10 +269,11 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
         gsap.set(net.l, { left:cx(TL), top:cy(TL), height:cy(BL)-cy(TL) });
         gsap.set(net.r, { left:cx(TR), top:cy(TR), height:cy(BR)-cy(TR) });
         chips.forEach(function(ch){
-          var sp = spots[+ch.dataset.p], ph = s.height * (narrowS ? 0.19 : 0.24);
+          var sp = spots[+ch.dataset.p], ph = s.height * (narrowS ? 0.19 : 0.24), pw = ph * 0.75, chH = ch.offsetHeight;
           var below = sp.y > .5, right = sp.x > .5;
-          gsap.set(ch, { left: right ? 'auto' : Math.max(8, cx(sp) - ph*0.2), right: right ? Math.max(8, s.width - cx(sp) - ph*0.2) : 'auto',
-                         top: below ? cy(sp) + ph*0.5 + 10 : 'auto', bottom: below ? 'auto' : s.height - cy(sp) + ph*0.5 + 10 });
+          gsap.set(ch, { left: right ? 'auto' : Math.max(8, cx(sp) - pw/2 - 16),
+                         right: right ? Math.max(8, s.width - (cx(sp) + pw/2) - 16) : 'auto',
+                         top: below ? cy(sp) - ph/2 - chH/2 : cy(sp) + ph/2 - chH/2, bottom:'auto' });
         });
         var t = tagEl.getBoundingClientRect();
         geo = { tagY:(s.top + s.height/2) - (t.top + t.height/2),
@@ -298,7 +304,8 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
         .to(net.l, { scaleY:1, duration:0.07 }, 0.57);
       chips.forEach(function(ch, i){
         var at = 0.34 + i * 0.07;
-        tl.fromTo(ch, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.04 }, at);
+        tl.fromTo(ch, { opacity:0, y:10, scale:0.96 }, { opacity:1, y:0, scale:1, ease:'power2.out', duration:0.04 }, at);
+        tl.fromTo(ch.querySelector('.g'), { opacity:0, scale:0.6 }, { opacity:1, scale:1, ease:'power2.out', duration:0.06 }, at + 0.02);
         tl.fromTo(ch.querySelectorAll('.t .c'), { opacity:0 }, { opacity:1, stagger:{ each:0.006 }, duration:0.01 }, at + 0.01);
       });
       // 3. light up the tagline as the loop closes

@@ -1042,7 +1042,8 @@ Terris：原本的動畫「不好看」、「不用按照原來的」。流程�
 | 結構 | 沿用現有 `product-hero#4_content-bottom`（sticky）；照片、標語、連線、標籤都在裡面。標語 `header156_text-wrapper` 本來就放在 sticky 區塊下方外側（top 1080px），正好是「頁首看不到標語」的起點 |
 | 照片聚攏／散開 | IX3 scroll scrub，`wf:inst` 指定四個 wrapper；x/y/scale/rotation/opacity 為固定數值 → **桌機＋平板一組、手機一組**（breakpoint conditionalPlayback 互斥） |
 | 連線 | 四條水平／垂直 3px 細線 div（新元素），IX3 scaleX／scaleY 0→1 畫出；品牌漸層（#00B2C0 → #7C8CFF → #B15DFF，與解決方案頁進度條同色）沿 01→04 順時針流動，用 `jubo-motion.css` 的 `@keyframes` background-position（background-size 200%，位移 -200% 無縫循環） |
-| 節點標籤 | 新元素；IX3 Set（opacity 0）＋To，文字 splitText chars |
+| 節點卡片 | 新元素；外觀沿用新聞 CMS 富文字 `.richtext blockquote`（白底＋雜訊質感、左下角紫／青／藍三團 radial-gradient 光、0 6px 30px rgba(21,23,23,.07) 陰影），縮成 16px 圓角小卡：上行 mono「01」、下行名稱。進場：卡片 opacity＋y＋scale → 漸層光層（子元素）由左下角 scale 0.6→1 暈開 → 文字 splitText chars 逐字出現。不使用閃動圓點（Terris 指定移除）。IX3 Set（opacity 0）＋To |
 | 標語點亮 | splitText chars，Set 顏色淺灰＋To 深色 stagger；**不用 from-state**（§14） |
 | 點陣網格／光暈 | 新元素，CSS 背景；IX3 控制 opacity |
+| 手機 | 只保留上下兩條橫線（直線會穿過標語），卡片縮小 |
 | 靜止狀態 | `.header156_text-wrapper` 的 class 樣式 opacity 0 要在 `jubo-motion.css` 覆寫為 1；reduced-motion 時照片一排、標語在下（`@media (prefers-reduced-motion)` 取消 sticky 外側定位） |
