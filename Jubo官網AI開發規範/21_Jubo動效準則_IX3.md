@@ -531,3 +531,90 @@ Terris 選 C，並已在 Designer 刪除漢堡鈕上 2 個 IX2 Click 觸發器�
 
 > 規則：`togglePlayReverse` 的互動，reduced-motion 一律用 `dont-animate`。
 > `skip-to-end` 只適合單向播放（load、scroll 進場）。
+
+
+---
+
+## §14 🔴 IX3「起始值」會讓內容在 webflow.js 載入前被隱藏（2026-09-23）
+
+### 發現
+
+只要 IX3 動作帶有**靜止時的起始值**（`tt: 1`／`tt: 2`，例如 `opacity: ["0%","100%"]`），
+Webflow 發布時會自動在 `<head>` 插入：
+
+```css
+html.w-mod-js:not(.w-mod-ix3) :is(目標選取器…) { visibility: hidden !important; }
+```
+
+`w-mod-js` 在 head 的 inline script 就加上；`w-mod-ix3` 要等 **391 KB 的 webflow.js 下載並執行完**才加。
+中間這段時間，所有目標都是 `visibility:hidden`。webflow.js 載入失敗的話，就**永遠**看不到。
+
+### 實測（Pixel 7、1.6 Mbps／150 ms、CPU ×4，各 3 次取中位數）
+
+| | 正式站 | staging（有標題逐字浮現） |
+|---|---|---|
+| 首次繪製 FCP | 2,096 ms | 2,272 ms |
+| **`/news` 標題可見** | **2,013 ms** | **10,054 ms** |
+| 擋掉 webflow.js | 標題可見 | **標題永遠隱藏** |
+
+9/22 驗證時量的是 FCP，FCP 只差 +376 ms，所以沒發現。**FCP 量的是「有東西畫出來」，不是「標題看得到」。**
+
+### 鐵律
+
+> 🚫 **靜止時不得留起始值。** 需要「從 0 淡入」時，改用：
+> `tt: 3` Set `opacity: "0%"`（position 0）＋ `tt: 0` To `opacity: "100%"`。
+> Set 只在觸發時才執行，靜止時元素是原本的樣子，Webflow 就不會產生隱藏規則。
+>
+> 例外：真正在「首屏」的 load 進場動畫，這個寫法會變成「先看到 → 消失 → 再浮現」，
+> 在慢速網路上更糟。**首屏內容不做 load 進場動畫。**
+
+驗證清單新增第 9 項：**發布後檢查 `<head>` 有沒有 `w-mod-ix3` 隱藏規則，有的話逐一確認目標。**
+並且在慢速網路條件下量「關鍵內容可見時間」，不只量 FCP。
+
+### 已處理
+
+- 選單 C 版（`i-8ae0e508`）項目淡入改為 Set＋To，隱藏規則中已不再出現選單項目 ✅
+- `/news` 標題逐字浮現（`i-8a44c92a`）**待 Terris 決定**：它就是 10 秒延遲的來源
+
+---
+
+## §15 Cookie 與 Glass 按鈕遷移（2026-09-23）
+
+### Cookie（Finsweet Cookie Consent v1）
+
+Finsweet 用 `dispatchEvent("click")` 點 `[fs-cc="interaction"]` 隱藏元素：第一下顯示、第二下隱藏，
+自己記錄狀態。所以 IX3 用 `wf:click` ＋ `togglePlayReverse` 可以直接接上。
+
+| 互動 | id | 內容 |
+|---|---|---|
+| Cookie Banner Toggle | `i-2573cdba` | Set display flex ＋ Set yPercent 100 → To yPercent 0（400ms，ease 5） |
+| Cookie Preferences Toggle | `i-25e6a62c` | Set display flex ＋ Set opacity 0／y 12 → To opacity 1／y 0（300ms，ease 5） |
+
+- **刻意不加 reduced-motion 條件**：顯示／隱藏寫在動畫裡，`dont-animate` 會讓橫幅永遠不出現、無法同意 Cookie
+- 注意：CSS 在 ≤991px 把 `.fs-cc-banner_component` 設為 `display:flex`，
+  但 Finsweet 自己會注入 `display:none` 並在元素上寫 inline `display:none`，所以不依賴 IX2 初始狀態
+
+### 偏好設定開關 → CSS
+
+改讀 `:checked`（見 `custom-code/jubo-motion.css`）。已驗證原本的 IX2 **沒有**狀態脫鉤問題
+（Finsweet 重開時會用模擬點擊還原），但有一個既有瑕疵：**未勾選時底色是品牌青色**，看起來像已開啟。CSS 版改為 #ccc。
+
+### Glass 按鈕箭頭 → CSS
+
+- IX3 做不到：箭頭是觸發元素的子元素，且同一元件在全站重複
+- 實測原效果：箭頭 is-1 由 0 → +27px 滑出、is-2 由 −27px → 0 滑入，約 150ms 延遲後才開始
+- CSS 版：`.5s cubic-bezier(.625,.05,0,1)`，**與 Slater 的文字逐字翻滾同一條曲線、同時開始**
+- 以 `.glass-element.is-cta` 限定，排除「回到頂部」按鈕
+
+### 部署位置
+
+CSS 放在 **Site Settings → Custom Code → Footer** 的 `<style id="jubo-motion">`。
+不放 head：head 有 15 KB 既有程式碼，API 寫入是整段取代，重打風險太高；footer 只有 6 行。
+
+### 驗證狀態
+
+| 項目 | 狀態 |
+|---|---|
+| Glass 靜止／hover 3 次／離開 | ✅（模擬移除 IX2 後） |
+| 偏好設定視窗開關 | ✅（模擬移除 IX2 後） |
+| 橫幅收起、開關取消勾選 | ⏸ 模擬不乾淨（IX2 已先寫入 inline 樣式），**等 Designer 實際刪除 IX2 後重測** |

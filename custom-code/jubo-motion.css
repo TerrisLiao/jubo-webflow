@@ -1,0 +1,34 @@
+/*
+ * Jubo motion CSS — 部署位置：Webflow Site Settings → Custom Code → Footer（<style id="jubo-motion">）
+ * 本檔是正本；站上那份是衍生部署品。兩邊不一致時以本檔為準。
+ *
+ * 取代的 IX2：
+ *   - Glass Btn Hover In / Out（29 個觸發器，12+13 份重複 action list）
+ *   - Preferences Checkbox [CHECK] / [UNCHECK]（Finsweet Cookie 偏好設定開關）
+ *
+ * 為什麼用 CSS 而不是 IX3：
+ *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
+ *   - 開關改讀 :checked，狀態由 checkbox 本身決定，不會跟實際勾選脫鉤
+ *   - 不需要 JS：webflow.js 載入失敗或很慢時照樣正確
+ *
+ * 設計：
+ *   - 箭頭 easing / 時長與 Slater 的文字逐字翻滾相同（0.5s cubic-bezier(.625,.05,0,1)），兩者同步
+ *   - ≤991px 時 .gradient-icon.is-2 本來就 display:none，所以只在桌機＋可 hover 裝置生效
+ *   - .glass-element.is-cta 限定範圍，排除「回到頂部」(.is-to-top)
+ *   - 未勾選的開關底色改為 #ccc（原本初始是品牌青色，看起來像已開啟）
+ */
+@media (hover:hover) and (min-width:992px){
+  .glass-element.is-cta .gradient-icon.is-1,
+  .glass-element.is-cta .gradient-icon.is-2{transition:transform .5s cubic-bezier(.625,.05,0,1)}
+  .glass-element.is-cta .gradient-icon.is-2{transform:translateX(-150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-1{transform:translateX(150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-2{transform:translateX(0)}
+}
+.fs-cc-prefs_checkbox-field{background-color:#ccc;transition:background-color .2s ease}
+.fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:checked){background-color:var(--primary--accent,#00b2c0)}
+.fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:focus-visible){outline:2px solid var(--primary--accent,#00b2c0);outline-offset:2px}
+.fs-cc-prefs_toggle{transition:transform .25s ease}
+.fs-cc-prefs_checkbox:checked ~ .fs-cc-prefs_toggle{transform:translateX(20px)}
+@media (prefers-reduced-motion:reduce){
+  .glass-element.is-cta .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle{transition:none}
+}
