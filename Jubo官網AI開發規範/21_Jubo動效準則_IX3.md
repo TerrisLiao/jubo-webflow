@@ -897,3 +897,20 @@ Terris：「改成 IX3」「評估完之後可以優化，不一定要按照原�
 | 客戶成功案例 `6a1cd470…2cfe` | `de015a64-a10c-409d-5f96-4327bbeca7c0` | 客戶成功案例s → Article Cover Image | Article Headline |
 
 綁定前已驗證：客戶案例卡片的背景圖確實是 `Article Cover Image`（asset ID 與 CMS 一致），不是 `Slider Headshot`。
+
+### staging 驗證（2026-09-23，IX2 刪除＋staging 發布後）
+
+| 頁面 | 卡片 | `<img>` | 與 prod 圖片 asset 對照 | alt | lazy | hover（進/出 ×2） | 首屏載入圖片 prod → staging |
+|---|---|---|---|---|---|---|---|
+| `/news` | 53 | 53 | 53/53 相同 | 0 缺 | 53 | -3 → 0 → -3 → 0 | 4,434KB → 4,421KB（已於 19 修過，持平） |
+| `/news/ai-transformation-culture`（範本） | 4 | 4 | 4/4 相同 | 0 缺 | 4 | -3 → 0 → -3 → 0 | 6 張 1,406KB → 2 張 **187KB** |
+| `/customer-success-stories` | 23 | 23 | 23/23 相同 | 0 缺 | 23 | -3 → 0 → -3 → 0 | 23 張 3,164KB → 6 張 **557KB** |
+
+- IX2 `Img Hover` 綁定數：6 → **0**；三頁皆無 JS 錯誤。
+- 圖片 `object-fit: cover`，尺寸與原背景圖卡片一致（416×234／728×410）。
+- 範本頁相關新聞的 `srcset` 為 0：Webflow 對部分 CMS 圖片沒有產生 responsive 版本（不影響顯示；lazy load 已經拿到主要效益）。
+- 驗證限制：hover 以 Playwright 真實滑鼠事件測試邏輯；容器無 GPU，過場手感需實機確認。
+
+### 可清理候選（未授權刪除）
+
+- `.single-news_cover-img`：新聞範本與客戶案例的舊背景圖 div 已移除，此 class 可能全站無實例。刪除前依 CLAUDE.md 先查 Slater、IX2、Component。
