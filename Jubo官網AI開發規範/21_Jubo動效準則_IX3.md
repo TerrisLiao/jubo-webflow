@@ -862,3 +862,38 @@ MCP **無法刪除 IX2**，但 `designer_tool` 可以操作 Terris 開著的 Des
 
 首次使用：智齡數位 Modal 2／3 的 X 按鈕，刪除後彈窗完全由 IX3 控制，驗證通過。
 仍綁元素的 IX2：47 → **45**。
+
+---
+
+## §20 相關新聞與客戶案例卡片：IX3 上浮＋改用 Image 元素（2026-09-23）
+
+Terris：「改成 IX3」「評估完之後可以優化，不一定要按照原設計」。
+
+### 原本（IX2 `Img Hover [In]/[Out]`，6 個觸發器）
+
+| 頁面 | 卡片 | 效果 |
+|---|---|---|
+| `/news` | 列表 53 張 | 封面圖 scale 1.03＋標題 opacity 0.6（350ms outQuad） |
+| 新聞內頁（範本，50 篇） | 相關新聞 22–23 張 | 同上 |
+| `/customer-success-stories` | 23 張 | 同上 |
+
+### 評估與優化
+
+| 原效果 | 問題 | 處理 |
+|---|---|---|
+| 封面 scale 1.03 | 子元素目標，IX3 做不到；站上規範「避免大幅 Scale」 | 改為**整張卡片上浮 3px**（`wf:trigger-only`） |
+| 標題淡化 0.6 | 子元素目標；**hover 時使用者正要讀標題，字卻變淡** | 拿掉 |
+
+→ 三種頁面共用**同一個** IX3（`i-b019b836`，scope 由 `/news` 改為 **site**），不再各自一份。
+
+### 順帶的效能修正
+
+新聞內頁的相關新聞與客戶案例頁都是 23 張 **background-image** 卡片 —— 與 `18_載入效能稽核` P0-1 的 `/news` 同一個問題
+（無 lazy load、無 srcset，全部原圖）。比照 `19_news封面圖改用Image元素` 的做法：
+
+| 頁面 | 新增 Image（`.news-card_cover-img`） | assetId 綁定 | altText 綁定 |
+|---|---|---|---|
+| 新聞中心s Template `69f82ba2…d696` | `4aaef260-aa23-4e7a-7534-307443eaf82e` | 新聞中心s → Cover Image | Name |
+| 客戶成功案例 `6a1cd470…2cfe` | `de015a64-a10c-409d-5f96-4327bbeca7c0` | 客戶成功案例s → Article Cover Image | Article Headline |
+
+綁定前已驗證：客戶案例卡片的背景圖確實是 `Article Cover Image`（asset ID 與 CMS 一致），不是 `Slider Headshot`。
