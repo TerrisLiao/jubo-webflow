@@ -845,3 +845,20 @@ Webflow 原本烘焙在 HTML 的 `.faq5_answer{height:0}` inline 已消失（`he
 | FAQ 過渡動畫 | ✅ 會執行（700ms 內展開完成）；容器 fps 極低，點擊後約 300ms 才開始推進，**需真機確認手感** |
 | JS 錯誤 | 無 |
 | 全頁可見度普查（12 頁 × 桌機／手機，含日本頁、智齡數位） | ✅ 相對正式站多出的隱藏元素 0 項 |
+
+---
+
+## §19 IX2 刪除流程改進：由 MCP 代為選取元素（2026-09-23）
+
+MCP **無法刪除 IX2**，但 `designer_tool` 可以操作 Terris 開著的 Designer：`switch_page`、`select_element`。
+
+新流程：
+1. 我先列出元素上的**全部** IX2 動作（§16 教訓）
+2. 用 `designer_tool` 切頁、選好元素
+3. Terris 在右側 Interactions 分頁刪除，回覆「下一個」
+4. 全部刪完後發布 staging，重新解析 IX2 驗證
+
+條件：Designer 必須開著且連上 MCP Bridge。隱藏元素（如彈窗內）選取時畫布上可能看不到外框，以 Navigator 與右側 class 名稱確認。
+
+首次使用：智齡數位 Modal 2／3 的 X 按鈕，刪除後彈窗完全由 IX3 控制，驗證通過。
+仍綁元素的 IX2：47 → **45**。
