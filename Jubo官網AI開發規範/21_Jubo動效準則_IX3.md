@@ -1012,3 +1012,37 @@ Terris：「我們應該拆掉所有 IX2」。以下三組確認「刪除後的�
 ### 發現的既有問題（非本次造成）
 
 - 智齡數位手機選單打開後，抽屜 `.navbar3_menu` 蓋住漢堡按鈕（390px 寬時按鈕在 x=323，被抽屜覆蓋），使用者看不到 X，只能點抽屜外側關閉。正式站相同。待修（按鈕 z-index 或抽屜寬度）。
+
+## §24 智齡數位頁首（Header 156）重新設計：「最後一哩路」串聯網（2026-09-23，原型階段）
+
+Terris：原本的動畫「不好看」、「不用按照原來的」。流程：
+
+1. 參考 Mobbin 後提出 A（照片展開成全幅）／B（標語逐字點亮）／C（弧形舞台）三個方向；Terris 要求 A、B 都做原型比較。
+2. Terris 選 B（「A 有點太風格化」），要求「圖片也帶去下方的標語區塊、環繞標語、再往下時消失」→ B+。
+3. Terris：「hero 時不能先看到下方的標語」「加一點 AI、data、串聯的動畫」→ 目前版本。
+
+- 原型（不公開 Artifact）：https://claude.ai/artifact/RtxUPiFe2NYvktKYKSSjY8
+- 原型原始碼：`custom-code/poc/jubo-digital-hero-prototype.html`（照片以 `{{P1}}`…佔位；GSAP 3.12.5 ScrollTrigger，只使用 IX3 做得到的屬性）
+
+### 分鏡（sticky 區塊內，捲動約 2.3 個螢幕高）
+
+| 階段 | 捲動進度 | 內容 |
+|---|---|---|
+| 聚攏 | 0 → 0.34 | 四張照片縮小（桌機 24%／手機 19% 螢幕高）、帶 ±4–6° 傾斜，交錯飛到四角；標語從 sticky 區塊**下方外側**升到正中央 |
+| 串聯 | 0.30 → 0.64 | 點陣網格與中央光暈淡入；01→04 順時針畫出連線（上→右→下→左）；四個節點標籤依序彈出、逐字打出 |
+| 點亮 | 0.38 → 約 0.75 | 標語逐字由淺灰（#AEB8C6）變深（#151717） |
+| 散開 | 0.80 → 1 | 標籤、連線、網格、照片往外飄散淡出，只留下標語 |
+
+節點（順時針，照片對應）：01 政策與補助案（西裝男士，左上）→ 02 需求訪談（顧問女士，右上）→ 03 AI 系統整合（拿平板的 Jubo 同仁，右下）→ 04 場域落地（護理師，左下）。**只寫業務流程，不放任何數字**，避免無根據的宣稱。
+
+### 落地到 Webflow 的做法（待 Terris 確認原型後執行）
+
+| 元素 | 做法 |
+|---|---|
+| 結構 | 沿用現有 `product-hero#4_content-bottom`（sticky）；照片、標語、連線、標籤都在裡面。標語 `header156_text-wrapper` 本來就放在 sticky 區塊下方外側（top 1080px），正好是「頁首看不到標語」的起點 |
+| 照片聚攏／散開 | IX3 scroll scrub，`wf:inst` 指定四個 wrapper；x/y/scale/rotation/opacity 為固定數值 → **桌機＋平板一組、手機一組**（breakpoint conditionalPlayback 互斥） |
+| 連線 | 四條水平／垂直細線 div（新元素），IX3 scaleX／scaleY 0→1 畫出；虛線流動用 `jubo-motion.css` 的 `@keyframes` background-position |
+| 節點標籤 | 新元素；IX3 Set（opacity 0）＋To，文字 splitText chars |
+| 標語點亮 | splitText chars，Set 顏色淺灰＋To 深色 stagger；**不用 from-state**（§14） |
+| 點陣網格／光暈 | 新元素，CSS 背景；IX3 控制 opacity |
+| 靜止狀態 | `.header156_text-wrapper` 的 class 樣式 opacity 0 要在 `jubo-motion.css` 覆寫為 1；reduced-motion 時照片一排、標語在下（`@media (prefers-reduced-motion)` 取消 sticky 外側定位） |
