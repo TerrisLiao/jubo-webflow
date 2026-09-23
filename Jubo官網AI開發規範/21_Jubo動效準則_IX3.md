@@ -774,3 +774,61 @@ IX2 `Modal 1/2/3 [Close]` 仍在（6 個：每個彈窗的 X 按鈕與背景各 
 本輪遷移為了驗證，多次做了**全站** staging 發布（選單、Cookie、Glass、彈窗），這些全站改動因此也出現在日本頁的 staging 上。
 日本頁本身的元素與 class 未被修改，但發布行為本身與該規則衝突，當時未先確認。
 → 已向 Terris 提出；在得到答覆前，涉及日本頁的變更只更新程式碼與 repo，不發布。
+
+---
+
+## §18 FAQ 手風琴 → 15 行 JS 管狀態＋CSS 管動畫（2026-09-23）
+
+### 原本的 IX2：兩套疊在一起
+
+| | 內容 | 評估 |
+|---|---|---|
+| Class 觸發 `.faq5_question`（e-301/302） | 旁邊 `.faq5_answer` 高度 0↔auto（400ms）、`.faq5_icon-wrapper` 轉 45°（＋→×） | **真正在做事的** |
+| 元素觸發 ×8（Jubo AI 5、照護推車 3） | 動畫目標寫死成 Jubo AI 第 1 題的第二個圖示；部分綁在**答案內文**上 | 殘骸：點 Jubo AI 第 2～5 題會動到第 1 題的圖示；照護推車頁目標不存在 |
+
+5 頁（首頁 7 題 CMS、Jubo AI 5、照護推車 5、Amy 8、Amy Banner 8）結構一致：
+`.solutions-basic-model_accordion > .faq5_question + .faq5_answer(1 子元素)`。Amy 兩頁的題目沒有圖示（正式站也不會轉）。
+
+### 為什麼不是 IX3 或純 CSS
+
+- IX3：「點題目 → 開**旁邊**那個答案」＝ 觸發元素的兄弟，且每頁多題，無法只開被點的那一題
+- 純 CSS：沒有地方存「開／關」狀態（除非改成 `<details>`，要在 Designer 重做 5 頁結構）
+- → **JS 只切換 `.is-faq-open` class（`custom-code/jubo-faq.js`），動畫全部交給 CSS（`jubo-motion.css`）**
+
+### 設計
+
+- `grid-template-rows: 0fr ↔ 1fr` 做 height:auto 的過渡，不用 JS 量高度；400ms ease、圖示 200ms ease（同原值）
+- 答案內 `.margin-bottom.margin-small` 的 1rem 外距 → 改為內層 `padding-bottom`：外距會在收合後殘留 16px，
+  放在同一層的 padding 也會殘留（padding 不會被自己的高度裁掉），必須放到再內一層
+- 以後代選取器覆寫，**不改共用 utility `margin-small`**
+- 補無障礙：`role=button`、`tabindex=0`、`aria-expanded`、`aria-controls`、Enter／空白鍵、`:focus-visible` 外框
+- 各題獨立開關（同原 IX2，不自動收起其他題）
+
+### 驗證（注入正式站頁面，未發布）
+
+| | 結果 |
+|---|---|
+| 5 頁 × 桌機＋首頁手機：靜止高度 | ✅ 全部 0 |
+| 展開高度 | ✅ 與 IX2 完全相同（首頁 124、Jubo AI 70、照護推車 43、Amy 97/70；手機 232/205） |
+| 多題各自開關、再關閉 | ✅ |
+| `aria-expanded` | ✅ 每次切換正確 |
+| 鍵盤 Enter 開／空白鍵關 | ✅ |
+| 與舊 IX2 並存（刪除前就發布的情況） | ✅ 不衝突（`height:auto!important` 蓋掉 IX2 的 inline 高度；圖示兩邊同步旋轉） |
+
+**測試環境限制**：此雲端容器無 GPU，實站僅約 14 fps（擋掉 webflow.js 時 7 fps），
+過渡動畫的時間在這裡量不準，會出現「慢一拍」的讀數。**邏輯驗證一律關閉 transition 或等畫面靜止後讀值**；
+實際流暢度待發布後在真機確認。
+
+### 待 Designer 刪除（先列出元素上的全部動作）
+
+| 位置 | 元素 | 該元素上的全部 IX2 | 刪什麼 |
+|---|---|---|---|
+| 任一頁任一題 | `faq5_question`（class 觸發） | Mouse click（Open 3／Close 3） | 刪 Mouse click（class 觸發，刪一次全站） |
+| Jubo AI 第 1 題 | `faq5_question` | 另有元素觸發 Mouse click（Open／Close） | 刪 |
+| Jubo AI 第 2 題 | 外層 `solutions-basic-model_accordion` | Mouse click（Open／Close） | 刪 |
+| Jubo AI 第 3 題 | 答案內的段落（無 class） | Mouse click | 刪 |
+| Jubo AI 第 4 題 | 答案內 `max-width-large` | Mouse click | 刪 |
+| Jubo AI 第 5 題 | 答案內 `margin-bottom margin-small` | Mouse click | 刪 |
+| 照護推車 第 3／4／5 題 | 同 Jubo AI 第 3／4／5 題 | Mouse click | 刪 |
+
+這些元素上**沒有其他 IX2 動作**，整個刪除即可。

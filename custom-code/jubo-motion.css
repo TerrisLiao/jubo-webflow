@@ -9,6 +9,11 @@
  *     對箭頭送假的 mouseover 來觸發 IX2。改成 CSS 後由 .cascading-slider_content-wrap:hover 直接驅動，
  *     Slater 那段送出的事件變成無害的空操作。
  *   - Preferences Checkbox [CHECK] / [UNCHECK]（Finsweet Cookie 偏好設定開關）
+ *   - FAQ 5 accordion [Open]/[Close]（18 個觸發器：1 組 class 觸發＋8 個綁錯元素的殘骸）
+ *     開關狀態由 custom-code/jubo-faq.js 切換 .is-faq-open；動畫全由下方 CSS 負責
+ *     · grid-template-rows 0fr↔1fr 做 height:auto 的過渡，不必用 JS 量高度
+ *     · 答案內的 .margin-bottom 外距改為內層 padding，否則收合後殘留 16px
+ *     · height:auto!important 蓋掉 IX2 烘焙的 inline height:0（IX2 刪除後可移除 !important）
  *   - Stats Color Hover In / Out（34 個觸發器，13+13 份重複 action list）
  *     卡片 hover → 背景照片 .big-numbers-stats-bg 淡入、數字／標題／說明由黑轉白
  *     · 只作用在「有背景照片」的卡片（:has(.big-numbers-stats-bg)）；沒照片的卡片轉白會白底白字
@@ -54,7 +59,18 @@
 .fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:focus-visible){outline:2px solid var(--primary--accent,#00b2c0);outline-offset:2px}
 .fs-cc-prefs_toggle{transition:transform .25s ease}
 .fs-cc-prefs_checkbox:checked ~ .fs-cc-prefs_toggle{transform:translateX(20px)}
+/* FAQ accordion */
+.solutions-basic-model_accordion > .faq5_answer{display:grid;grid-template-rows:0fr;height:auto!important;overflow:hidden;transition:grid-template-rows .4s ease}
+.solutions-basic-model_accordion > .faq5_answer > *{min-height:0;overflow:hidden}
+.solutions-basic-model_accordion > .faq5_answer > .margin-bottom{margin-bottom:0}
+.solutions-basic-model_accordion > .faq5_answer > .margin-bottom > *{padding-bottom:1rem}
+.solutions-basic-model_accordion.is-faq-open > .faq5_answer{grid-template-rows:1fr}
+.faq5_icon-wrapper{transition:transform .2s ease}
+.solutions-basic-model_accordion.is-faq-open > .faq5_question .faq5_icon-wrapper{transform:rotate(45deg)}
+.faq5_question{cursor:pointer}
+.faq5_question:focus-visible{outline:2px solid var(--primary--accent,#00b2c0);outline-offset:4px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){
+  .solutions-basic-model_accordion > .faq5_answer,.faq5_icon-wrapper,
   .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle,
   .single-stats_wrapper .big-numbers-stats-bg,.single-stats_wrapper .stats-unit_wrapper,.single-stats_wrapper .stats-h3,.single-stats_wrapper .stats-headline_wrap{transition:none}
 }
