@@ -466,3 +466,68 @@ Webflow 不會隱藏這個 div（`w-dyn-bind-empty` 只作用在綁定元素本�
 - Collection List 內的元素無法取得 Designer 畫布截圖（既有限制），
   以上全部改用**已發布頁面的瀏覽器實測**（computed style ＋ 元素截圖）取得。
 - 量測時間 2026-09-22 16:59 UTC，staging 為當下最新發布版本。
+
+
+---
+
+## §12 驗證清單第 7 項的修正（2026-09-23）
+
+**原本的第 7 項沒有測到它要測的東西。**
+
+`/news` 驗證時我只擋了 `cdn.prod.website-files.com/gsap/3.15.0/`（IX3 自帶的那份），
+但頁面上還有 Slater 從 `cdn.jsdelivr.net/npm/gsap@3.15` 載入的另一份，
+IX3 會直接用 `window.gsap`，所以動畫照跑，測試等於沒擋。
+
+**修正後的做法：用 `/gsap/` 擋掉兩份。** 重測結果：
+
+| | staging | 正式站 |
+|---|---|---|
+| `/news` H1 | opacity 1、高 96px ✅ | 同左 |
+| `/news` 卡片 | 53/53 可見 ✅ | 同左 |
+| 手機選單 | ❌ 打不開 | ❌ 打不開（**既有問題**，不是這次造成的） |
+
+手機選單在 GSAP 或 Slater 任一個沒載入時都打不開（Slater 開頭就呼叫 `gsap`，
+整支 script 中斷）。這是 `18_載入效能稽核` P1-1 的單點故障，不是 IX3 遷移造成的。
+
+> 教訓：頁面上有**兩份**同一個函式庫時，擋掉其中一份不叫「擋掉」。
+> 驗證前先列出所有來源。
+
+---
+
+## §13 導覽列 C 版（兩段式）上 staging —— 2026-09-23
+
+Terris 選 C，並已在 Designer 刪除漢堡鈕上 2 個 IX2 Click 觸發器。
+
+互動 `i-8ae0e508`，scope `site`：
+
+| 動作 | 目標 | 值 | 時間 |
+|---|---|---|---|
+| 收攏 | `.mobile-menu-icon_wrap .menu-top-lline` / `.menu-bottom-line` | y ±3.95px | 0–150ms，ease 4 |
+| 旋轉 | 同上 | rotation ±45° | 150–400ms，ease 5 |
+| 項目淡入 | `.mobile-menu_link-wrap > .mobile-menu-link`、`… .accordion-question.is-mobile-drawer`、`.mobile-menu_btn-wrap` | opacity 0→100% | 200ms 起，500ms，each 30ms |
+
+觸發：`wf:click` on `.mobile-menu-icon_wrap`，`control: togglePlayReverse`。
+
+- 3.95px 是實測值（Pixel 7、iPhone SE、900px 三種寬度相同）：兩條線中心距 7.89px 的一半
+- 用 `wf:selector` 而不是 `wf:class`：`.accordion-question` 也用在其他頁的 FAQ，只選類別會連 FAQ 一起淡入
+
+### 驗證結果
+
+| 項目 | 結果 |
+|---|---|
+| staging IX2 是否還綁漢堡鈕 | ✅ 0 次（正式站仍 8 次，未受影響） |
+| 開關 3 輪（`/news`、`/`） | ✅ 每輪都正確開成 X、關回 ≡ |
+| X 交點 | ✅ 誤差 0.01px（原 IX2 偏 1.5px） |
+| 兩段式 | ✅ 140ms 時 y=±2.75、尚未旋轉 |
+| 抽屜內手風琴（Slater） | ✅ 展開 148px |
+| JS 錯誤 | ✅ 無 |
+| reduced-motion | ⚠️ 見下 |
+
+### 🔴 reduced-motion 踩到的坑：`skip-to-end` 不能用在 toggle
+
+第一版設 `skip-to-end`：**每次點擊都跳到終點**，所以關掉選單後漢堡鈕仍是 X。
+改成 `dont-animate` 後：選單正常開關、項目可見，但**漢堡鈕在這個模式下不會變 X**
+（按 ≡ 一樣可以關）。
+
+> 規則：`togglePlayReverse` 的互動，reduced-motion 一律用 `dont-animate`。
+> `skip-to-end` 只適合單向播放（load、scroll 進場）。
