@@ -1030,7 +1030,7 @@ Terris：原本的動畫「不好看」、「不用按照原來的」。流程�
 |---|---|---|
 | 聚攏 | 0 → 0.34 | 四張照片縮小（桌機 24%／手機 19% 螢幕高）、帶 ±4–6° 傾斜，交錯飛到四角；標語從 sticky 區塊**下方外側**升到正中央 |
 | 串聯 | 0.30 → 0.64 | 點陣網格與中央光暈淡入；01→04 順時針畫出連線（上→右→下→左）；四個節點標籤依序彈出、逐字打出 |
-| 點亮 | 0.38 → 約 0.75 | 標語逐字由淺灰（#AEB8C6）變深（#151717） |
+| 點亮 | 0.38 → 約 0.75 | 標語逐字由淺灰（#AEB8C6）變深（#151717）；標語分兩段：「縮短 AI 技術與場域實踐的最後一哩路」／「做你最值得信賴的科技夥伴」（Terris 指定，拿掉逗號；Webflow 落地時要改文案） |
 | 散開 | 0.80 → 1 | 標籤、連線、網格、照片往外飄散淡出，只留下標語 |
 
 節點（順時針，照片對應）：01 政策與補助案（西裝男士，左上）→ 02 需求訪談（顧問女士，右上）→ 03 AI 系統整合（拿平板的 Jubo 同仁，右下）→ 04 場域落地（護理師，左下）。**只寫業務流程，不放任何數字**，避免無根據的宣稱。
@@ -1041,7 +1041,7 @@ Terris：原本的動畫「不好看」、「不用按照原來的」。流程�
 |---|---|
 | 結構 | 沿用現有 `product-hero#4_content-bottom`（sticky）；照片、標語、連線、標籤都在裡面。標語 `header156_text-wrapper` 本來就放在 sticky 區塊下方外側（top 1080px），正好是「頁首看不到標語」的起點 |
 | 照片聚攏／散開 | IX3 scroll scrub，`wf:inst` 指定四個 wrapper；x/y/scale/rotation/opacity 為固定數值 → **桌機＋平板一組、手機一組**（breakpoint conditionalPlayback 互斥） |
-| 連線 | 四條水平／垂直細線 div（新元素），IX3 scaleX／scaleY 0→1 畫出；虛線流動用 `jubo-motion.css` 的 `@keyframes` background-position |
+| 連線 | 四條水平／垂直 3px 細線 div（新元素），IX3 scaleX／scaleY 0→1 畫出；品牌漸層（#00B2C0 → #7C8CFF → #B15DFF，與解決方案頁進度條同色）沿 01→04 順時針流動，用 `jubo-motion.css` 的 `@keyframes` background-position（background-size 200%，位移 -200% 無縫循環） |
 | 節點標籤 | 新元素；IX3 Set（opacity 0）＋To，文字 splitText chars |
 | 標語點亮 | splitText chars，Set 顏色淺灰＋To 深色 stagger；**不用 from-state**（§14） |
 | 點陣網格／光暈 | 新元素，CSS 背景；IX3 控制 opacity |
