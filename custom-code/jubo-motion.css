@@ -31,6 +31,12 @@
  *     · 範圍 cover 0%→50%：與 IX2 的 keyframe 0→50 相同（進度條從畫面底部進入 → 到畫面中間時填滿）
  *     · 不支援 view() 的瀏覽器（舊版 Safari、Firefox）與 reduced-motion：直接顯示填滿的進度條，不會缺內容
  *     · 動畫值優先於 inline style，IX2 刪除前兩者並存也不會打架
+ *   - Product Item [Scroll]（7 個觸發器；照護推車、照護助理 APP、招募、智齡照顧網、Jubo 健康 APP 的
+ *     .product-scroll-card_item，智齡安心寶、HI居服 APP 的 .product-scroll-card-2-col_item；全站 19 張卡片都有綁）
+ *     原本：捲入時 scale .9→1、透明→不透明（cover 0→20%），捲出時再縮小淡出（cover 70→90%）
+ *     現在：只保留進場，scale 改為 .95（較輕）；拿掉退場 —— 使用者還在讀的卡片不該淡掉
+ *     · 包在 @supports + prefers-reduced-motion:no-preference 裡：不支援或關閉動態時卡片直接顯示，
+ *       任何情況下都不會「靜止時是隱藏的」
  *
  * 為什麼用 CSS 而不是 IX3：
  *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
@@ -92,6 +98,13 @@
   .timeline15_progress-bar{animation:jubo-timeline-fill linear both;animation-timeline:view();animation-range:cover 0% cover 50%}
 }
 @supports not (animation-timeline:view()){.timeline15_progress-bar{width:400%}}
+/* Product scroll cards: scroll-linked entrance only */
+@keyframes jubo-card-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .product-scroll-card_item,.product-scroll-card-2-col_item{animation:jubo-card-in linear both;animation-timeline:view();animation-range:cover 0% cover 20%}
+  }
+}
 @media (prefers-reduced-motion:reduce){
   .solutions-basic-model_accordion > .faq5_answer,.faq5_icon-wrapper,
   .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle,
