@@ -14,7 +14,7 @@
  *     · 只作用在「有背景照片」的卡片（:has(.big-numbers-stats-bg)）；沒照片的卡片轉白會白底白字
  *     · 靜止時照片隱藏靠 class 本身的 opacity:0，不依賴 JS
  *     · 手機點擊原本就沒有效果，維持（只在 hover:hover 裝置生效）
- *     · 排除日本頁（:lang(ja)）：/jp/overview 3 張有照片的卡片目前沒有 hover，是否加上待 Terris 決定
+ *     · 日本頁 /jp/overview 3 張有照片的卡片原本沒有 hover（沒綁 IX2），2026-09-23 Terris 決定一併加上
  *
  * 為什麼用 CSS 而不是 IX3：
  *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
@@ -44,10 +44,10 @@
 .single-stats_wrapper .stats-h3,
 .single-stats_wrapper .stats-headline_wrap{transition:color .3s ease}
 @media (hover:hover){
-  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .big-numbers-stats-bg{opacity:1}
-  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-unit_wrapper,
-  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-h3,
-  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-headline_wrap{color:var(--neutral--white,#fff)}
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .big-numbers-stats-bg{opacity:1}
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-unit_wrapper,
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-h3,
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-headline_wrap{color:var(--neutral--white,#fff)}
 }
 .fs-cc-prefs_checkbox-field{background-color:#ccc;transition:background-color .2s ease}
 .fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:checked){background-color:var(--primary--accent,#00b2c0)}

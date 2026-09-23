@@ -756,7 +756,7 @@ IX2 `Modal 1/2/3 [Close]` 仍在（6 個：每個彈窗的 X 按鈕與背景各 
 | | 卡片數 | 處理 |
 |---|---|---|
 | 有照片、有 IX2（首頁 3、公司 5、三個解決方案頁各 3） | 17 | ✅ 套用 |
-| 有照片、無 IX2（`/jp/overview`） | 3 | ⏸ 以 `:not(:lang(ja))` 排除，維持無效果，待 Terris 決定 |
+| 有照片、無 IX2（`/jp/overview`） | 3 | ✅ 2026-09-23 Terris 決定一併加上（原本無 hover，推測複製頁面時漏掉） |
 | 無照片（長照專業成長 14、Jubo AI 4、暑期實習 4 等） | 31 | ✅ 以 `:has(.big-numbers-stats-bg)` 排除，避免白底白字 |
 
 ### 驗證（staging，擋掉含 IX2 的 webflow.js 以模擬刪除後）
@@ -766,3 +766,11 @@ IX2 `Modal 1/2/3 [Close]` 仍在（6 個：每個彈窗的 X 按鈕與背景各 
 - **測試方法教訓**：這些頁面有 Slater 視差與 Lenis 平滑捲動，`scrollIntoView` 後立刻用滑鼠座標 hover，
   卡片還在移動，結果會隨機錯誤。**有視差／平滑捲動的頁面，hover 測試用 forcePseudoState。**
 - ⏸ 過渡時間（300ms）在擋掉 webflow.js 的情況下幀率不穩，無法量準；**待 Designer 刪 IX2 後，以真實頁面量測**。
+
+
+### ⚠️ 待確認：日本頁「AI 不得自行 Publish（含 staging）」與本次遷移流程的衝突
+
+`JP日本市場頁面改版/README.md` 規定 AI 不得自行發布，含 staging。
+本輪遷移為了驗證，多次做了**全站** staging 發布（選單、Cookie、Glass、彈窗），這些全站改動因此也出現在日本頁的 staging 上。
+日本頁本身的元素與 class 未被修改，但發布行為本身與該規則衝突，當時未先確認。
+→ 已向 Terris 提出；在得到答覆前，涉及日本頁的變更只更新程式碼與 repo，不發布。
