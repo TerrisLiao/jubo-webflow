@@ -680,3 +680,55 @@ staging 全站 IX2 事件 354 個，仍綁元素 119 個（遷移前 149）。
 - 智齡數位 3 顆「了解更多」（本頁第 1、3、5 個 `tab-content__wrap is-product`）
 
 **全頁可見度普查**（第 8 項）：10 頁 × 桌機／手機，staging 相對正式站多出的隱藏元素 **0 項**，JS 錯誤 0。
+
+---
+
+## §16 智齡數位彈窗：誤刪復原＋修掉正式站既有 bug（2026-09-23）
+
+### 發生了什麼
+
+`/ecosystem/jubo-digital` 的 3 顆「了解更多」（`href="#"`，本頁第 1、3、5 個 `tab-content__wrap is-product`）
+同一顆按鈕上綁了兩種 IX2：Glass hover **＋ 點擊開啟 Modal 1/2/3**。
+刪除 Glass hover 時連同點擊一起刪掉，staging 上彈窗打不開。
+
+**流程失誤（我的）**：給刪除清單時只列了 Glass 的 hover，沒有先檢查同一元素上是否還有其他 IX2。
+→ 規則：**給 Designer 刪除清單前，必須列出該元素上的全部 IX2 事件，並明確標示「只刪哪一個」。**
+
+另外發現按鈕 3 的 hover-out 原本綁的是 `Stats Color Hover Out 13`（接錯動畫，既有瑕疵），已隨刪除消失。
+
+### 🔴 正式站既有 bug：用 X 關閉彈窗後整頁被隱形遮罩擋住
+
+實測（正式站，桌機）：點 X 後彈窗 `display:flex; opacity:0`，**沒有收起**，
+`modal_background-overlay`（z-index 99、全螢幕）擋住整頁，「了解更多」按鈕也點不到。
+點背景關閉則正常。
+
+原因：IX2 `Modal N [Close]` 的內容位移用 `useEventTarget: SIBLINGS`，X 按鈕不是 `.modal_content-wrapper` 的兄弟，
+該動作找不到目標，第二組（`display: none`）永遠不執行。
+
+### 處理（全部 IX3，scope 限本頁）
+
+| 互動 | id | 內容 |
+|---|---|---|
+| Modal 1 Open | `i-fde5a41e` | click（wf:inst 按鈕 1）restart：Set display flex／opacity 0／內容 yPercent 100 → To opacity 1（200ms）＋ yPercent 0（500ms） |
+| Modal 2 Open | `i-3f709c38` | 同上，按鈕 2 |
+| Modal 3 Open | `i-38967c27` | 同上，按鈕 3 |
+| Modal Close | `i-9e2c8559` | click `.modal_close-button` 或 `.modal_background-overlay` restart：To opacity 0 ＋ 內容 yPercent 100（300ms，ease 4）→ **Set display none（300ms）** |
+
+- 用 `restart`：每次點擊都要能重新打開／關閉
+- 不加 reduced-motion 條件：顯示／隱藏寫在動畫裡（同 Cookie）
+- 關閉一律作用在三個彈窗（同時只會開一個），避開「只關自己那個」需要的子元素目標
+
+### 驗證（staging）
+
+| | 結果 |
+|---|---|
+| 3 個彈窗 × 開→X 關 × 2 輪 | ✅ 每次關閉都 `display:none`，按鈕可再點 |
+| 點背景關閉 | ✅ |
+| 手機 Pixel 7 | ✅ |
+| 點擊後捲動位置不跳 | ✅ |
+| JS 錯誤 | 無 |
+
+### 待刪
+
+IX2 `Modal 1/2/3 [Close]` 仍在（6 個：每個彈窗的 X 按鈕與背景各 1），與 IX3 並存時無害
+（IX3 最後一定會 `display:none`），但遷移完成前要刪掉。
