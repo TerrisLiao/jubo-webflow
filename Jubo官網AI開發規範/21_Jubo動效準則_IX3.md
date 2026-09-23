@@ -574,7 +574,23 @@ html.w-mod-js:not(.w-mod-ix3) :is(目標選取器…) { visibility: hidden !impo
 ### 已處理
 
 - 選單 C 版（`i-8ae0e508`）項目淡入改為 Set＋To，隱藏規則中已不再出現選單項目 ✅
-- `/news` 標題逐字浮現（`i-8a44c92a`）**待 Terris 決定**：它就是 10 秒延遲的來源
+- `/news` 標題逐字浮現（`i-8a44c92a`）：**Terris 2026-09-23 決定保留**（「我覺得那個動畫沒問題」）
+
+### 決策紀錄：標題逐字浮現保留
+
+三種網路條件實測（各 3 次中位數，`/news` 標題可見時間）：
+
+| 條件 | 正式站 | staging（有動畫） | 差距 |
+|---|---|---|---|
+| PageSpeed 行動版標準（1.6 Mbps／150 ms／CPU ×4） | 1,930 ms | 9,886 ms | +8.0 s |
+| 一般 4G（9 Mbps／60 ms／CPU ×2） | 823 ms | 2,540 ms | +1.7 s |
+| Wi-Fi 桌機（50 Mbps／20 ms／CPU ×1） | 811 ms | 1,486 ms | +0.7 s |
+
+已知且接受的風險：
+- webflow.js 載入失敗（被擋、CDN 異常）時，`/news` 標題不會顯示
+- PageSpeed Insights 行動版分數預期會反映這段延遲
+
+若日後要回頭處理：刪除互動 `i-8a44c92a` 並發布即可，不影響其他元素。
 
 ---
 
@@ -618,3 +634,27 @@ CSS 放在 **Site Settings → Custom Code → Footer** 的 `<style id="jubo-mot
 | Glass 靜止／hover 3 次／離開 | ✅（模擬移除 IX2 後） |
 | 偏好設定視窗開關 | ✅（模擬移除 IX2 後） |
 | 橫幅收起、開關取消勾選 | ⏸ 模擬不乾淨（IX2 已先寫入 inline 樣式），**等 Designer 實際刪除 IX2 後重測** |
+
+
+### §15 補充：Cookie 實測通過（Designer 已刪除 IX2 後）
+
+staging IX2 事件 384 → 374（漢堡鈕 4 ＋ Cookie 6），Cookie 相關殘留 0。
+
+| 情境 | 桌機 1440 | 手機 Pixel 7 | 平板 900 |
+|---|---|---|---|
+| 首次載入橫幅滑入 | ✅ 837→799 | ✅ 726→593 | ✅ |
+| 點「Cookie 偏好設定」→ 橫幅收、視窗開 | ✅ | ✅ | — |
+| 開關 3 次（勾／取消／勾） | ✅（桌機渲染較慢，約 250ms 才起動，1.5s 內到位） | ✅ | — |
+| 未勾選底色 | ✅ 灰 | ✅ 灰 | — |
+| 儲存並關閉 → 換頁不再出現 | ✅ | ✅ | — |
+| 重開偏好設定，狀態正確還原 | ✅ 分析 ☑ 20px 青 | ✅ | — |
+| 按 X 關閉 | ✅ | ✅ | — |
+| 接受全部 → 換頁 | — | ✅ 不再出現 | — |
+| 拒絕全部 → 換頁 | — | — | ✅ 不再出現 |
+| JS 錯誤 | 無 | 無 | — |
+
+### §15 補充：Glass 動畫還用在首頁「解決方案」輪播
+
+15 個綁 Glass IX2 的元素中，首頁 4 個是 `.cascading-slider_content-wrap` 卡片裡的 `.home-solutions_icon-link`，
+不是 `.glass-button`。Slater 在卡片 hover 時對箭頭送假 mouseover 觸發 IX2。
+已在 `jubo-motion.css` 補上 `.cascading-slider_content-wrap:hover` 規則，**刪 IX2 前必須先有這條**，否則首頁卡片會失去箭頭效果。

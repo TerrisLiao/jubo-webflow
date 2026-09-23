@@ -4,6 +4,10 @@
  *
  * 取代的 IX2：
  *   - Glass Btn Hover In / Out（29 個觸發器，12+13 份重複 action list）
+ *     其中 4 個不在 .glass-button 上，而是首頁「解決方案」輪播卡片裡的 .home-solutions_icon-link：
+ *     Slater（60292.js「CASCADING SLIDER — delegate hover to inner arrow」）在卡片 hover 時
+ *     對箭頭送假的 mouseover 來觸發 IX2。改成 CSS 後由 .cascading-slider_content-wrap:hover 直接驅動，
+ *     Slater 那段送出的事件變成無害的空操作。
  *   - Preferences Checkbox [CHECK] / [UNCHECK]（Finsweet Cookie 偏好設定開關）
  *
  * 為什麼用 CSS 而不是 IX3：
@@ -19,10 +23,15 @@
  */
 @media (hover:hover) and (min-width:992px){
   .glass-element.is-cta .gradient-icon.is-1,
-  .glass-element.is-cta .gradient-icon.is-2{transition:transform .5s cubic-bezier(.625,.05,0,1)}
-  .glass-element.is-cta .gradient-icon.is-2{transform:translateX(-150%)}
-  .glass-button:hover .glass-element.is-cta .gradient-icon.is-1{transform:translateX(150%)}
-  .glass-button:hover .glass-element.is-cta .gradient-icon.is-2{transform:translateX(0)}
+  .glass-element.is-cta .gradient-icon.is-2,
+  .home-solutions_icon-link .gradient-icon.is-1,
+  .home-solutions_icon-link .gradient-icon.is-2{transition:transform .5s cubic-bezier(.625,.05,0,1)}
+  .glass-element.is-cta .gradient-icon.is-2,
+  .home-solutions_icon-link .gradient-icon.is-2{transform:translateX(-150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-1,
+  .cascading-slider_content-wrap:hover .home-solutions_icon-link .gradient-icon.is-1{transform:translateX(150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-2,
+  .cascading-slider_content-wrap:hover .home-solutions_icon-link .gradient-icon.is-2{transform:translateX(0)}
 }
 .fs-cc-prefs_checkbox-field{background-color:#ccc;transition:background-color .2s ease}
 .fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:checked){background-color:var(--primary--accent,#00b2c0)}
@@ -30,5 +39,5 @@
 .fs-cc-prefs_toggle{transition:transform .25s ease}
 .fs-cc-prefs_checkbox:checked ~ .fs-cc-prefs_toggle{transform:translateX(20px)}
 @media (prefers-reduced-motion:reduce){
-  .glass-element.is-cta .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle{transition:none}
+  .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle{transition:none}
 }
