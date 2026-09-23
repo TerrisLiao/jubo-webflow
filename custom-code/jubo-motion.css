@@ -20,6 +20,17 @@
  *     · 靜止時照片隱藏靠 class 本身的 opacity:0，不依賴 JS
  *     · 手機點擊原本就沒有效果，維持（只在 hover:hover 裝置生效）
  *     · 日本頁 /jp/overview 3 張有照片的卡片原本沒有 hover（沒綁 IX2），2026-09-23 Terris 決定一併加上
+ *   - CTA 67 image top / bottom [Loop]（6 個觸發器；智齡照顧網、Jubo 健康 APP、長照專業成長 的頁首照片牆）
+ *     兩排照片 50 秒橫向無限捲動 → CSS @keyframes
+ *     · 每排是兩份相同的 .product-hero-3_image-list，中間 column-gap 16px；位移 50% + 8px 才是剛好一份的距離，
+ *       原本 IX2 只移 50%，每圈接縫處會跳 8px，這裡順便修掉
+ *     · keyframes 必須寫 from：沒寫的話起點會吃到 IX2 殘留的 inline transform
+ *     · 滑鼠停在照片牆上暫停（WCAG 2.2.2：自動移動超過 5 秒的內容要能暫停）；reduced-motion 完全不動
+ *   - timeline_progress_bar（1 個 class 觸發器；三個解決方案頁、智齡安心寶、IoT 設備列表 的「導入流程」時間軸）
+ *     捲動時漸層進度條從 0 填到 400%（= 四個步驟的總寬）→ CSS scroll-driven animation（animation-timeline: view()）
+ *     · 範圍 cover 0%→50%：與 IX2 的 keyframe 0→50 相同（進度條從畫面底部進入 → 到畫面中間時填滿）
+ *     · 不支援 view() 的瀏覽器（舊版 Safari、Firefox）與 reduced-motion：直接顯示填滿的進度條，不會缺內容
+ *     · 動畫值優先於 inline style，IX2 刪除前兩者並存也不會打架
  *
  * 為什麼用 CSS 而不是 IX3：
  *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
@@ -69,8 +80,22 @@
 .solutions-basic-model_accordion.is-faq-open > .faq5_question .faq5_icon-wrapper{transform:rotate(45deg)}
 .faq5_question{cursor:pointer}
 .faq5_question:focus-visible{outline:2px solid var(--primary--accent,#00b2c0);outline-offset:4px;border-radius:4px}
+/* CTA 67 image marquee */
+@keyframes jubo-marquee-l{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
+@keyframes jubo-marquee-r{from{transform:translateX(0)}to{transform:translateX(calc(50% + 8px))}}
+.product-hero-3_image-list-top{animation:jubo-marquee-l 50s linear infinite}
+.product-hero-3_image-list-bottom{animation:jubo-marquee-r 50s linear infinite}
+@media (hover:hover){.product-hero-3_images-layout:hover > *{animation-play-state:paused}}
+/* Process timeline progress bar */
+@keyframes jubo-timeline-fill{from{width:0%}to{width:400%}}
+@supports (animation-timeline:view()){
+  .timeline15_progress-bar{animation:jubo-timeline-fill linear both;animation-timeline:view();animation-range:cover 0% cover 50%}
+}
+@supports not (animation-timeline:view()){.timeline15_progress-bar{width:400%}}
 @media (prefers-reduced-motion:reduce){
   .solutions-basic-model_accordion > .faq5_answer,.faq5_icon-wrapper,
   .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle,
   .single-stats_wrapper .big-numbers-stats-bg,.single-stats_wrapper .stats-unit_wrapper,.single-stats_wrapper .stats-h3,.single-stats_wrapper .stats-headline_wrap{transition:none}
+  .product-hero-3_image-list-top,.product-hero-3_image-list-bottom{animation:none}
+  .timeline15_progress-bar{animation:none;width:400%}
 }
