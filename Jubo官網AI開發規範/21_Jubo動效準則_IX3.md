@@ -658,3 +658,25 @@ staging IX2 事件 384 → 374（漢堡鈕 4 ＋ Cookie 6），Cookie 相關殘�
 15 個綁 Glass IX2 的元素中，首頁 4 個是 `.cascading-slider_content-wrap` 卡片裡的 `.home-solutions_icon-link`，
 不是 `.glass-button`。Slater 在卡片 hover 時對箭頭送假 mouseover 觸發 IX2。
 已在 `jubo-motion.css` 補上 `.cascading-slider_content-wrap:hover` 規則，**刪 IX2 前必須先有這條**，否則首頁卡片會失去箭頭效果。
+
+### §15 補充：Glass 按鈕驗證（2026-09-23，Designer 刪除 IX2 後）
+
+staging 全站 IX2 事件 354 個，仍綁元素 119 個（遷移前 149）。
+
+**已刪乾淨並驗證通過**（靜止 0/−27 → hover 27/0 → 離開 0/−27，連續 3 次；無 IX2 inline 殘留）：
+
+| 位置 | 結果 |
+|---|---|
+| Navbar「預約諮詢」（元件，全站） | ✅ |
+| 首頁解決方案箭頭 ×4（直接 hover／整張卡片 hover 都正確） | ✅ |
+| 住宿型照護系統 詳細介紹 ×2 | ✅ |
+| 日照型照護系統 詳細介紹 ×1 | ✅ |
+| 居服照護系統 `is-aa` 清單 ×2 | ✅ |
+| 手機（≤991px）第二個箭頭維持隱藏、無 transform | ✅ |
+
+**尚未刪除**（仍綁 IX2，CSS 被 inline 蓋過，行為與正式站相同）：
+
+- 居服照護系統 `tab-layout__wrap is-bb` 清單內 2 顆（本頁第 7、8 個 `tab-content__wrap is-product`）
+- 智齡數位 3 顆「了解更多」（本頁第 1、3、5 個 `tab-content__wrap is-product`）
+
+**全頁可見度普查**（第 8 項）：10 頁 × 桌機／手機，staging 相對正式站多出的隱藏元素 **0 項**，JS 錯誤 0。
