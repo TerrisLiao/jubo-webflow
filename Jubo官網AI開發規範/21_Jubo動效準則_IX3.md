@@ -907,6 +907,7 @@ Terris：「改成 IX3」「評估完之後可以優化，不一定要按照原�
 | `/customer-success-stories` | 23 | 23 | 23/23 相同 | 0 缺 | 23 | -3 → 0 → -3 → 0 | 23 張 3,164KB → 6 張 **557KB** |
 
 - IX2 `Img Hover` 綁定數：6 → **0**；三頁皆無 JS 錯誤。
+- 全頁可見性掃描（13 頁 × 桌機／手機，staging 對 prod）：差異 **0 項**。
 - 圖片 `object-fit: cover`，尺寸與原背景圖卡片一致（416×234／728×410）。
 - 範本頁相關新聞的 `srcset` 為 0：Webflow 對部分 CMS 圖片沒有產生 responsive 版本（不影響顯示；lazy load 已經拿到主要效益）。
 - 驗證限制：hover 以 Playwright 真實滑鼠事件測試邏輯；容器無 GPU，過場手感需實機確認。
