@@ -732,3 +732,37 @@ staging 全站 IX2 事件 354 個，仍綁元素 119 個（遷移前 149）。
 
 IX2 `Modal 1/2/3 [Close]` 仍在（6 個：每個彈窗的 X 按鈕與背景各 1），與 IX3 並存時無害
 （IX3 最後一定會 `display:none`），但遷移完成前要刪掉。
+
+---
+
+## §17 Stats 卡片 hover（照片淡入＋文字轉白）→ CSS（2026-09-23）
+
+### 原本的效果（IX2 `Stats Color Hover In/Out`，34 個觸發器、13+13 份重複 action list）
+
+整張 `.single-stats_wrapper` hover 時：
+- 背景照片 `.big-numbers-stats-bg`：opacity 0 → 1（300ms ease）
+- `.stats-unit_wrapper`／`.stats-h3`／`.stats-headline_wrap`：黑（`--neutral--black`）→ 白（`--neutral--white`）
+
+靜止時照片隱藏是 **class 本身的 `opacity:0`**，不是 IX2，所以刪 IX2 不會讓照片冒出來。
+手機點擊原本就沒有效果，新版維持。
+
+### 為什麼是 CSS
+
+「hover 卡片 → 改卡片裡的照片與文字」＝ 觸發元素的子元素，IX3 做不到；
+`.single-stats_wrapper:hover .big-numbers-stats-bg` 是 CSS 的基本能力。
+
+### 範圍
+
+| | 卡片數 | 處理 |
+|---|---|---|
+| 有照片、有 IX2（首頁 3、公司 5、三個解決方案頁各 3） | 17 | ✅ 套用 |
+| 有照片、無 IX2（`/jp/overview`） | 3 | ⏸ 以 `:not(:lang(ja))` 排除，維持無效果，待 Terris 決定 |
+| 無照片（長照專業成長 14、Jubo AI 4、暑期實習 4 等） | 31 | ✅ 以 `:has(.big-numbers-stats-bg)` 排除，避免白底白字 |
+
+### 驗證（staging，擋掉含 IX2 的 webflow.js 以模擬刪除後）
+
+- 用 CDP `CSS.forcePseudoState` 強制 `:hover`（不依賴滑鼠座標），並暫時關閉 transition 驗證邏輯：
+  17 張全部「圖 0／黑 → 圖 1／白 → 圖 0／黑」✅；日本頁 3 張不變 ✅；無照片 22 張（抽 3 頁）文字不變 ✅
+- **測試方法教訓**：這些頁面有 Slater 視差與 Lenis 平滑捲動，`scrollIntoView` 後立刻用滑鼠座標 hover，
+  卡片還在移動，結果會隨機錯誤。**有視差／平滑捲動的頁面，hover 測試用 forcePseudoState。**
+- ⏸ 過渡時間（300ms）在擋掉 webflow.js 的情況下幀率不穩，無法量準；**待 Designer 刪 IX2 後，以真實頁面量測**。

@@ -9,6 +9,12 @@
  *     對箭頭送假的 mouseover 來觸發 IX2。改成 CSS 後由 .cascading-slider_content-wrap:hover 直接驅動，
  *     Slater 那段送出的事件變成無害的空操作。
  *   - Preferences Checkbox [CHECK] / [UNCHECK]（Finsweet Cookie 偏好設定開關）
+ *   - Stats Color Hover In / Out（34 個觸發器，13+13 份重複 action list）
+ *     卡片 hover → 背景照片 .big-numbers-stats-bg 淡入、數字／標題／說明由黑轉白
+ *     · 只作用在「有背景照片」的卡片（:has(.big-numbers-stats-bg)）；沒照片的卡片轉白會白底白字
+ *     · 靜止時照片隱藏靠 class 本身的 opacity:0，不依賴 JS
+ *     · 手機點擊原本就沒有效果，維持（只在 hover:hover 裝置生效）
+ *     · 排除日本頁（:lang(ja)）：/jp/overview 3 張有照片的卡片目前沒有 hover，是否加上待 Terris 決定
  *
  * 為什麼用 CSS 而不是 IX3：
  *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
@@ -33,11 +39,22 @@
   .glass-button:hover .glass-element.is-cta .gradient-icon.is-2,
   .cascading-slider_content-wrap:hover .home-solutions_icon-link .gradient-icon.is-2{transform:translateX(0)}
 }
+.single-stats_wrapper .big-numbers-stats-bg{transition:opacity .3s ease}
+.single-stats_wrapper .stats-unit_wrapper,
+.single-stats_wrapper .stats-h3,
+.single-stats_wrapper .stats-headline_wrap{transition:color .3s ease}
+@media (hover:hover){
+  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .big-numbers-stats-bg{opacity:1}
+  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-unit_wrapper,
+  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-h3,
+  .single-stats_wrapper:not(:lang(ja)):has(.big-numbers-stats-bg):hover .stats-headline_wrap{color:var(--neutral--white,#fff)}
+}
 .fs-cc-prefs_checkbox-field{background-color:#ccc;transition:background-color .2s ease}
 .fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:checked){background-color:var(--primary--accent,#00b2c0)}
 .fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:focus-visible){outline:2px solid var(--primary--accent,#00b2c0);outline-offset:2px}
 .fs-cc-prefs_toggle{transition:transform .25s ease}
 .fs-cc-prefs_checkbox:checked ~ .fs-cc-prefs_toggle{transform:translateX(20px)}
 @media (prefers-reduced-motion:reduce){
-  .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle{transition:none}
+  .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle,
+  .single-stats_wrapper .big-numbers-stats-bg,.single-stats_wrapper .stats-unit_wrapper,.single-stats_wrapper .stats-h3,.single-stats_wrapper .stats-headline_wrap{transition:none}
 }
