@@ -915,3 +915,46 @@ Terris：「改成 IX3」「評估完之後可以優化，不一定要按照原�
 ### 可清理候選（未授權刪除）
 
 - `.single-news_cover-img`：新聞範本與客戶案例的舊背景圖 div 已移除，此 class 可能全站無實例。刪除前依 CLAUDE.md 先查 Slater、IX2、Component。
+
+## §21 CTA 67 照片牆與導入流程進度條：改用 CSS（2026-09-23）
+
+Terris 同意順序後進行；兩者都是「不需要 JS 的純視覺動畫」，改寫在 `custom-code/jubo-motion.css`（站上 Footer `<style id="jubo-motion">`）。
+
+### CTA 67 image top / bottom [Loop]（6 個觸發器 → 0）
+
+| | 原本（IX2） | 現在（CSS） |
+|---|---|---|
+| 頁面 | 智齡照顧網、Jubo 健康 APP、長照專業成長 的頁首照片牆 | 同 |
+| 動作 | 50 秒平移 -50%（下排 +50%），結束瞬間歸零，無限重複 | `@keyframes` 50 秒 linear infinite |
+| 接縫 | 每排是兩份相同清單＋16px gap；只移 50% 會**每圈跳 8px** | 移 `50% + 8px`＝剛好一份，實測一圈位移＝一份寬（2,592px／4,320px） |
+| 暫停 | 無 | 滑鼠停在照片牆上暫停（WCAG 2.2.2） |
+| reduced-motion | 照動 | 不動 |
+| 依賴 | webflow.js 載入後才開始動 | 無 JS 依賴，首屏就開始 |
+
+- 智齡照顧網、Jubo 健康 APP 的下排 `.product-hero-3_image-list-bottom` 帶 `.hide`（display:none），CSS 對它無影響。
+- keyframes 必須寫 `from`；沒寫的話起點會吃到元素當下的 inline transform（IX2 殘留時會亂跳）。
+
+### timeline_progress_bar（1 個 class 觸發器 → 0）
+
+| | 原本（IX2） | 現在（CSS） |
+|---|---|---|
+| 位置 | `Section CTA Process` 元件（三個解決方案頁、智齡安心寶、IoT 設備列表） | 同 |
+| 動作 | 捲動 scrub：寬度 0 → 400%（keyframe 0→50） | `animation-timeline: view()`、`animation-range: cover 0% cover 50%` |
+| 手機 | 容器 display:none，無效果 | 同 |
+| 不支援 view() | — | 直接顯示填滿（`@supports not`） |
+| reduced-motion | 照動 | 直接顯示填滿 |
+
+- 祖先 `.page-wrapper`、`.all-sections-wrapper` 是 `overflow: clip`（不是 hidden），不會變成 scroll container，`view()` 綁得到視窗。若日後有人改成 `overflow: hidden`，進度條會停在 0% —— 動這兩個 class 前要注意。
+- 進度條在 `Section CTA Process` 元件裡，Designer 要進元件 canvas 才選得到（`designer_tool open_canvas component_id`）。
+
+### staging 驗證
+
+| 項目 | 結果 |
+|---|---|
+| IX2 綁定 | 39 → **32** |
+| 照片牆 3 頁 | 動畫 `jubo-marquee-l/r` 執行中、inline IX2 殘留無、接縫 0px |
+| 進度條 5 頁（桌機） | 畫面 y=1000→0%、800→88%、600→265%、300→400%（5 頁一致） |
+| reduced-motion | 照片牆不動；進度條 5 頁皆 400% |
+| 可見性掃描（6 頁 × 桌機／手機） | 差異 0 |
+
+驗證限制：容器無 GPU，只驗數值與邏輯；Firefox／舊 Safari 的 fallback 未實機測（邏輯為 `@supports not` → 填滿）。
