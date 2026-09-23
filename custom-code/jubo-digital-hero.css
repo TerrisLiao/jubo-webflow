@@ -1,0 +1,64 @@
+/*
+ * 智齡數位頁首「最後一哩路」捲動動畫 — 樣式
+ * 部署位置：Webflow 頁面 /ecosystem/jubo-digital（page id 6a0d68268bcb665e0371bacd）→ Page Settings → Custom Code → Before </body>（<style id="jd-hero">）
+ * 本檔是正本；站上那份是衍生部署品。搭配 custom-code/jubo-digital-hero.js。
+ * 取代 IX2「Header 156 [Scroll] Desktop / Tablet / Mobile」。設計與分鏡：Jubo官網AI開發規範/21_Jubo動效準則_IX3.md §24、§25
+ *
+ * 靜止狀態（腳本沒跑、或 prefers-reduced-motion）：照片一排、標語在照片下方，全部看得到。
+ * 動畫狀態只在腳本加上 .jd-hero-on 之後才生效。
+ */
+
+/* 標語的 class 樣式本身是 opacity 0（原本靠 IX2 顯示），這裡讓它永遠看得到 */
+.header156_text-wrapper{opacity:1}
+/* 本頁外層 combo class 是 overflow:hidden，會讓 sticky 失效；clip 裁切效果相同但不形成捲動容器（不支援 clip 的舊瀏覽器維持 hidden） */
+.all-sections-wrapper.is-jubo-digital{overflow:clip}
+
+.jd-hero-on .product-hero-4_content-bottom{overflow:hidden}
+/* 原 IX2 觸發器改當捲動距離：sticky 區塊固定約 2.3 個螢幕高 */
+.jd-hero-on .product-hero-4_ix-trigger{position:relative;inset:auto;margin:0;height:230vh;pointer-events:none}
+.jd-hero-on .product-hero-4_content-bottom > .container-large{position:relative;z-index:1}
+/* 標語起點：sticky 區塊下方外側（頁首時看不到） */
+.jd-hero-on .header156_text-wrapper{top:100%;bottom:auto;left:0;right:0;z-index:2}
+.header156_text-wrapper .max-width-medium{max-width:none}
+/* 標語分兩段（文案中的換行以 pre-line 呈現）；寬度以標語字級計算 */
+.header156_text-wrapper .heading-style-h3{max-width:20em;margin-inline:auto;white-space:pre-line;font-size:clamp(26px,3.4vw,48px);line-height:1.4;letter-spacing:.02em;text-wrap:balance}
+.jd-hero-on .header156_text-wrapper .jd-c{color:#AEB8C6}
+.product-hero-4_image-wrapper{box-shadow:0 18px 40px -18px rgba(21,40,70,.35)}
+
+.jd-grid,.jd-glow,.jd-net{position:absolute;pointer-events:none;z-index:0}
+.jd-grid{inset:0;opacity:0;
+  background-image:radial-gradient(rgba(0,128,138,.22) 1px,transparent 1.4px);background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(60% 55% at 50% 50%,#000 30%,transparent 75%);mask-image:radial-gradient(60% 55% at 50% 50%,#000 30%,transparent 75%)}
+.jd-glow{left:50%;top:50%;width:min(720px,90vw);aspect-ratio:2/1;translate:-50% -50%;border-radius:50%;opacity:0;
+  background:radial-gradient(closest-side,rgba(0,178,192,.16),rgba(120,150,255,.08) 55%,transparent)}
+.jd-net{inset:0}
+.jd-ln{position:absolute;display:block;border-radius:3px;
+  background-image:linear-gradient(var(--jd-dir),#00B2C0,#7C8CFF 25%,#B15DFF 50%,#7C8CFF 75%,#00B2C0);
+  box-shadow:0 0 12px rgba(0,178,192,.35),0 0 2px rgba(177,93,255,.4)}
+.jd-ln.is-h{height:3px;margin-top:-1px;--jd-dir:90deg;background-size:200% 100%;animation:jd-flow-x 2.6s linear infinite;transform:scaleX(0)}
+.jd-ln.is-v{width:3px;margin-left:-1px;--jd-dir:180deg;background-size:100% 200%;animation:jd-flow-y 2.6s linear infinite;transform:scaleY(0)}
+.jd-ln.is-t{transform-origin:0 50%}
+.jd-ln.is-r{transform-origin:50% 0}
+.jd-ln.is-b{transform-origin:100% 50%;animation-direction:reverse}
+.jd-ln.is-l{transform-origin:50% 100%;animation-direction:reverse}
+@keyframes jd-flow-x{from{background-position:0% 0}to{background-position:-200% 0}}
+@keyframes jd-flow-y{from{background-position:0 0%}to{background-position:0 -200%}}
+
+/* 節點卡片：沿用新聞 CMS 富文字 .richtext blockquote 的外觀 */
+.jd-card{position:absolute;z-index:3;display:grid;gap:2px;padding:12px 18px 14px 16px;border-radius:16px;white-space:nowrap;overflow:hidden;isolation:isolate;opacity:0;pointer-events:none;
+  background:#fff url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E");
+  box-shadow:0 6px 30px rgba(21,23,23,.07);color:var(--neutral--black,#151717)}
+.jd-card-glow{position:absolute;inset:0;z-index:-1;transform-origin:0% 100%;opacity:0;
+  background:
+    radial-gradient(55% 120% at 4% 112%,rgba(177,93,255,.30),rgba(177,93,255,0) 62%),
+    radial-gradient(52% 115% at 22% 118%,rgba(0,178,192,.34),rgba(0,178,192,0) 64%),
+    radial-gradient(45% 110% at 44% 122%,rgba(107,143,240,.22),rgba(107,143,240,0) 66%)}
+.jd-card-num{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.08em;line-height:1.3;color:#00808A}
+.jd-card-label{font-size:15px;font-weight:500;line-height:1.35}
+
+@media (max-width:767px){
+  .jd-ln.is-v{display:none}
+  .jd-card{padding:8px 12px 9px 11px;border-radius:12px}
+  .jd-card-label{font-size:12px}
+  .jd-card-num{font-size:10px}
+}
