@@ -958,3 +958,28 @@ Terris 同意順序後進行；兩者都是「不需要 JS 的純視覺動畫」
 | 可見性掃描（6 頁 × 桌機／手機） | 差異 0 |
 
 驗證限制：容器無 GPU，只驗數值與邏輯；Firefox／舊 Safari 的 fallback 未實機測（邏輯為 `@supports not` → 填滿）。
+
+## §22 產品捲動卡片（Product Item [Scroll]）：改用 CSS scroll-driven，只留進場（2026-09-23）
+
+| | 原本（IX2） | 現在（CSS） |
+|---|---|---|
+| 範圍 | 7 頁 19 張卡片：`.product-scroll-card_item`（照護推車、照護助理 APP、招募、智齡照顧網、Jubo 健康 APP；1 個 class 觸發器）＋ `.product-scroll-card-2-col_item`（智齡安心寶 5、HI居服 APP 1；逐張綁的 element 觸發器） | 同 19 張，用 class 選取（已確認全站這兩個 class 的實例都有綁 IX2，沒有擴大範圍） |
+| 進場 | cover 0→20%：scale .9→1、opacity 0→1 | cover 0→20%：scale **.95**→1、opacity 0→1 |
+| 退場 | cover 70→90%：縮小淡出 | **拿掉**（還在讀的卡片不應該消失） |
+| reduced-motion | 照動 | 不動，直接顯示 |
+| 不支援 view() | — | 不動，直接顯示 |
+| 靜止時隱藏 | IX2 由 JS 設 opacity 0（JS 失敗則顯示） | 只有在支援且未關閉動態時才有進場；任何 fallback 都是顯示 |
+
+- 另有一個孤兒事件 `Product Item [Scroll] 2`（e-409，class 觸發但 selector 為 null，不作用於任何元素），隨 e-51 一起請 Terris 刪除。
+- `.product-scroll-card-2-col_item` 內含兩個 `product-scroll-card_content`，觸發器在外層 item 上；在 Designer 容易誤選到子層 `_content_wrap`（那裡的 Element trigger 是空的）。
+
+### staging 驗證
+
+| 項目 | 結果 |
+|---|---|
+| IX2 綁定 | 32 → **25**（Product Item = 0） |
+| 7 頁 × 桌機 1440／手機 390 | 卡片頂在畫面 102%→0%、90%→0.34、75%→0.8、50% 以上→1；捲出畫面頂端時仍為 1（不再淡出） |
+| reduced-motion | 7 頁所有位置 opacity 1、scale 1 |
+| 可見性掃描（7 頁 × 桌機／手機） | 差異 0 |
+
+驗證限制：數值驗證；過場手感需實機確認。
