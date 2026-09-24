@@ -1,0 +1,273 @@
+<title>智齡數位 Flowline 原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --ink:#14213D;--ink-60:rgba(20,33,61,.64);--ink-10:rgba(20,33,61,.10);
+  --fog:#F6F7FB;--white:#FFFFFF;--teal:#00B2C0;--sky:#6FC3F7;--lav:#A89CF5;--blush:#F5B8D2;--deep:#0B6F78;
+  --unlit:#B9C2D0;
+  --flow:linear-gradient(90deg,#00B2C0,#6FC3F7 38%,#A89CF5 70%,#F5B8D2);
+  --sans:"Poppins","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--fog);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+.wrap{padding-inline:max(16px,5vw)}
+.container{max-width:80rem;margin-inline:auto}
+.eyebrow{display:flex;align-items:center;gap:.75rem;font-size:.8125rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-60);font-weight:500}
+.eyebrow::before{content:"";width:2rem;height:1px;background:var(--flow);flex:none}
+.heading{font-size:clamp(1.875rem,3.4vw,2.75rem);line-height:1.3;font-weight:300;letter-spacing:.04em;text-wrap:balance}
+.muted{color:var(--ink-60)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.95rem 1.7rem;border-radius:999px;background:var(--ink);color:var(--white);font-size:1rem;line-height:1.2;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -12px rgba(20,33,61,.5)}
+.btn:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.btn.ghost{background:rgba(255,255,255,.72);color:var(--ink);border:1px solid var(--ink-10)}
+
+/* HERO */
+.hero{position:relative;overflow:clip;padding-top:4rem;
+  background:radial-gradient(40% 60% at 85% 20%,rgba(168,156,245,.28),transparent 70%),radial-gradient(45% 55% at 10% 65%,rgba(0,178,192,.16),transparent 70%),radial-gradient(35% 45% at 60% 95%,rgba(245,184,210,.25),transparent 70%),var(--fog)}
+.hero-inner{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:4rem;align-items:center;padding-block:clamp(4rem,8vw,8rem)}
+.hero-copy{position:relative;z-index:3;display:flex;flex-direction:column;align-items:flex-start;gap:1.5rem}
+.tag{font-size:.875rem;color:var(--ink-60);padding:.35rem .9rem;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid var(--ink-10)}
+h1{font-size:clamp(2.25rem,5vw,4rem);line-height:1.2;font-weight:300;letter-spacing:.06em;text-wrap:balance}
+h1 .grad{background:var(--flow);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:400}
+.lead{max-width:34em;color:var(--ink-60)}
+.actions{display:flex;flex-wrap:wrap;gap:1rem}
+.note{font-size:.875rem;color:var(--ink-60)}
+.hero-photo{position:relative;z-index:1;aspect-ratio:4/5;border-radius:1.5rem;overflow:hidden;box-shadow:0 30px 60px -30px rgba(20,33,61,.35);max-width:100%}
+.hero-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.ribbon{position:absolute;inset:0;z-index:2;pointer-events:none;width:100%;height:100%}
+
+/* PROOF */
+.proof{position:relative;z-index:4;margin-top:-4rem;background:linear-gradient(180deg,transparent 4rem,var(--fog) 4rem)}
+.proof-card{position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;padding:3rem;border-radius:1.5rem;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);box-shadow:0 20px 50px -30px rgba(20,33,61,.3)}
+.proof-card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:var(--flow)}
+.stat{display:flex;flex-direction:column;gap:.75rem}
+.stat+.stat{border-left:1px solid var(--ink-10);padding-left:2rem}
+.num{font-size:clamp(2.25rem,3.4vw,3rem);line-height:1.05;font-weight:300;font-variant-numeric:tabular-nums;background:linear-gradient(90deg,#00B2C0,#6FC3F7 45%,#A89CF5);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.stat p{font-size:.9375rem;color:var(--ink-60)}
+
+/* LAST MILE STAGE */
+.mile{position:relative;background:var(--fog)}
+.stage{position:relative;height:100vh;min-height:560px;overflow:hidden;
+  background:radial-gradient(50% 45% at 50% 50%,rgba(111,195,247,.10),transparent 70%)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.stage-label{position:absolute;left:50%;top:clamp(1.25rem,7vh,4.5rem);transform:translateX(-50%);z-index:3;white-space:nowrap}
+.tagline{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:min(92%,21em);text-align:center;
+  font-size:clamp(1.5rem,3.2vw,2.875rem);line-height:1.45;font-weight:300;letter-spacing:.04em;white-space:pre-line;text-wrap:balance}
+.tagline .c{color:var(--ink)}
+.js-anim .tagline .c{color:var(--unlit)}
+.photo{position:absolute;z-index:2;width:clamp(96px,11vw,168px);aspect-ratio:3/4;border-radius:1rem;overflow:hidden;box-shadow:0 18px 40px -18px rgba(20,33,61,.35);translate:-50% -50%}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.node{position:absolute;z-index:4;translate:-50% -50%;display:grid;gap:2px;padding:.7rem 1.1rem .8rem 1rem;border-radius:1rem;background:var(--white);box-shadow:0 8px 30px rgba(20,33,61,.08);white-space:nowrap;overflow:hidden;isolation:isolate}
+.node::after{content:"";position:absolute;inset:0;z-index:-1;opacity:var(--glow,1);
+  background:radial-gradient(60% 130% at 0% 115%,rgba(168,156,245,.32),transparent 62%),radial-gradient(55% 120% at 25% 120%,rgba(0,178,192,.34),transparent 64%)}
+.node b{font-weight:500;font-size:.6875rem;letter-spacing:.14em;color:var(--teal)}
+.node span{font-size:.9375rem;font-weight:500}
+
+/* NEXT */
+.next{background:var(--white);padding-block:clamp(4rem,8vw,7rem)}
+.next .container{display:flex;flex-direction:column;gap:1rem;max-width:48rem;margin-inline:auto}
+.next-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;max-width:80rem;margin:3rem auto 0}
+.svc{position:relative;overflow:hidden;min-height:13rem;padding:1.75rem;border-radius:1.25rem;display:flex;flex-direction:column;gap:.75rem;
+  background:radial-gradient(70% 55% at 0% 105%,rgba(0,178,192,.22),transparent 70%),radial-gradient(60% 50% at 45% 115%,rgba(168,156,245,.22),transparent 70%),var(--fog)}
+.svc i{font-style:normal;font-size:.8125rem;letter-spacing:.16em;color:var(--teal);font-weight:500}
+.svc h3{font-size:1.125rem;font-weight:500;line-height:1.4}
+
+.proto-note{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:20;font-size:.75rem;color:var(--ink-60);background:rgba(255,255,255,.85);border:1px solid var(--ink-10);border-radius:999px;padding:.35rem .8rem;backdrop-filter:blur(8px)}
+
+@media (max-width:991px){
+  .hero-inner{grid-template-columns:1fr;gap:2.5rem}
+  .hero-photo{aspect-ratio:16/10}
+  .proof-card{grid-template-columns:1fr 1fr}
+  .stat+.stat{border-left:0;padding-left:0}
+  .next-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  .proof-card{grid-template-columns:1fr;padding:2rem}
+  .next-grid{grid-template-columns:1fr}
+  .node{padding:.5rem .75rem .55rem .7rem;border-radius:.75rem}
+  .node span{font-size:.8125rem}
+  .node b{font-size:.625rem}
+}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+</style>
+
+<header class="hero">
+  <canvas class="ribbon" id="heroRibbon" aria-hidden="true"></canvas>
+  <div class="wrap"><div class="container hero-inner">
+    <div class="hero-copy">
+      <div class="tag">智齡科技全資子公司</div>
+      <h1>大健康產業的<br><span class="grad">數位工程</span>領航者</h1>
+      <p class="lead">縮短 AI 技術與場域實踐的最後一哩路。智齡數位是智齡科技（Jubo）2022 年成立的全資子公司，由母公司公共事業核心團隊獨立成軍，三年來專注承接政府補助案、大型委託案，以及醫護集團的數位轉型。</p>
+      <div class="actions"><a class="btn" href="#contact">來信洽詢 →</a><a class="btn ghost" href="#mile">看我們怎麼做</a></div>
+      <div class="note">歡迎來信洽詢，我們將於 7 個工作日內安排專人與您聯繫。</div>
+    </div>
+    <div class="hero-photo"><img src="{{P3FULL}}" alt="智齡數位團隊成員在醫療場域"></div>
+  </div></div>
+</header>
+
+<section class="proof"><div class="wrap"><div class="container proof-card">
+  <div class="stat"><div class="num">41 萬</div><p>名長照專業人員，是我們維運的國家級學習平台的註冊會員</p></div>
+  <div class="stat"><div class="num">99.91%</div><p>服務穩定率，累積超過兩萬小時營運不間斷</p></div>
+  <div class="stat"><div class="num">91 TB</div><p>平台每月平均流量傳輸量，具備高併發處理能力</p></div>
+  <div class="stat"><div class="num">3,000+</div><p>每月處理的技術諮詢通數，提供全方位系統支援</p></div>
+</div></div></section>
+
+<section class="mile" id="mile" aria-label="最後一哩路">
+  <div class="stage" id="stage">
+    <canvas id="mileRibbon" aria-hidden="true"></canvas>
+    <div class="stage-label eyebrow">Approach — 我們的做法</div>
+    <div class="photo" data-i="0"><img src="{{P2}}" alt=""></div>
+    <div class="photo" data-i="1"><img src="{{P1}}" alt=""></div>
+    <div class="photo" data-i="2"><img src="{{P4}}" alt=""></div>
+    <div class="photo" data-i="3"><img src="{{P3}}" alt=""></div>
+    <div class="node" data-i="0"><b>01</b><span>政策與補助案</span></div>
+    <div class="node" data-i="1"><b>02</b><span>需求訪談</span></div>
+    <div class="node" data-i="2"><b>03</b><span>AI 系統整合</span></div>
+    <div class="node" data-i="3"><b>04</b><span>場域落地</span></div>
+    <p class="tagline" id="tagline">縮短 AI 技術與場域實踐的最後一哩路
+做你最值得信賴的科技夥伴</p>
+  </div>
+</section>
+
+<section class="next" id="contact">
+  <div class="wrap">
+    <div class="container">
+      <div class="eyebrow">Service — 服務項目</div>
+      <h2 class="heading">服務項目</h2>
+      <p class="muted">從單一系統到整組數位轉型，四條主線涵蓋政府與醫護集團最常見的專案型態。</p>
+    </div>
+    <div class="next-grid">
+      <div class="svc"><i>01</i><h3>客製化智慧管理平台</h3><p class="muted">根據業主營運邏輯與政策規範，開發具備高度擴充性的管理系統。</p></div>
+      <div class="svc"><i>02</i><h3>政府與醫院數位專案管理</h3><p class="muted">熟稔公部門採購規範與流程，從提案、執行到驗收。</p></div>
+      <div class="svc"><i>03</i><h3>Copilot 對話式 AI 輔助系統</h3><p class="muted">串接真實 HIS／NIS 資料，用自然語言完成個案查詢與紀錄。</p></div>
+      <div class="svc"><i>04</i><h3>跨平台行動 App 開發</h3><p class="muted">串接管理端與使用者端，縮短資訊落差。</p></div>
+    </div>
+  </div>
+</section>
+<div class="proto-note">原型：往下捲動看「最後一哩路」</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var STOPS=[[0,[0,178,192]],[.38,[111,195,247]],[.72,[168,156,245]],[1,[245,184,210]]];
+  function strandColor(t){for(var i=0;i<STOPS.length-1;i++){var a=STOPS[i],b=STOPS[i+1];if(t<=b[0]){var k=(t-a[0])/(b[0]-a[0]);return a[1].map(function(v,j){return Math.round(v+(b[1][j]-v)*k)})}}return STOPS[3][1]}
+  function fit(cv){var r=cv.getBoundingClientRect(),d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d);var c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);return {c:c,w:r.width,h:r.height}}
+  function strandAlpha(u){return .28+.5*Math.pow(1-Math.abs(u)*2,.6)}
+
+  /* ---------- HERO RIBBON: draw-in, silk breathing, travelling light ---------- */
+  var hero=document.getElementById('heroRibbon'), H=fit(hero), N=40, PTS=70;
+  var heroStart=performance.now(), glints=[{s:0,p:.1,v:.00012},{s:0,p:.55,v:.00009},{s:0,p:.8,v:.00015}];
+  glints.forEach(function(g,i){g.s=[15,20,25][i]});
+  function heroPoint(t,u,time){
+    var w=H.w,h=H.h, x=-60+t*(w+120);
+    var c=h*(.80-.12*(t-.5)+.08*Math.sin(t*Math.PI*1.35+.4+time*.00018));
+    var width=h*.26*(.35+.65*Math.sin(t*Math.PI));
+    return [x,c+u*width*Math.cos(t*Math.PI*2.0+1.2+time*.00035)];
+  }
+  function drawHero(now){
+    var c=H.c; c.clearRect(0,0,H.w,H.h);
+    var time=reduce?0:now-heroStart, reveal=reduce?1:Math.min(1,time/2200);
+    for(var i=0;i<N;i++){
+      var u=i/(N-1)-.5, col=strandColor(i/(N-1));
+      var local=Math.max(0,Math.min(1,(reveal*1.25-(i%7)*.03)));
+      var e=1-Math.pow(1-local,3), last=Math.floor(e*(PTS-1));
+      if(last<1)continue;
+      c.beginPath();
+      for(var k=0;k<=last;k++){var p=heroPoint(k/(PTS-1),u,time);k?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1])}
+      c.strokeStyle='rgba('+col+','+strandAlpha(u).toFixed(3)+')';c.lineWidth=1;c.stroke();
+    }
+    if(!reduce&&reveal>=1){
+      glints.forEach(function(g){
+        g.p+=g.v*16; if(g.p>1.1){g.p=-.1;g.s=13+Math.floor(Math.random()*14)}
+        var u=g.s/(N-1)-.5, col=strandColor(g.s/(N-1));
+        c.beginPath();
+        for(var k=0;k<=12;k++){var t=g.p-.08+k*.08/12;if(t<0||t>1)continue;var p=heroPoint(t,u,time);c.lineTo(p[0],p[1])}
+        c.strokeStyle='rgba('+col+',.95)';c.lineWidth=1.6;c.shadowColor='rgba('+col+',.8)';c.shadowBlur=6;c.stroke();c.shadowBlur=0;
+      });
+    }
+  }
+
+  /* ---------- LAST-MILE RIBBON: threads 01 → 04 as you scroll ---------- */
+  var stage=document.getElementById('stage'), mile=document.getElementById('mileRibbon'), M=fit(mile);
+  var photos=[].slice.call(stage.querySelectorAll('.photo')), nodes=[].slice.call(stage.querySelectorAll('.node'));
+  var geo={};
+  function layout(){
+    M=fit(mile); var w=M.w,h=M.h, narrow=w<700;
+    // node = where the ribbon knots; photo sits outward toward the corner
+    var nd=narrow?[[.28,.27],[.72,.25],[.72,.75],[.28,.77]]:[[.25,.28],[.75,.26],[.75,.74],[.25,.76]];
+    var ph=narrow?[[.15,.22],[.85,.2],[.85,.84],[.15,.86]]:[[.12,.30],[.88,.28],[.88,.72],[.12,.74]];
+    geo.nodes=nd.map(function(p){return [p[0]*w,p[1]*h]});
+    nodes.forEach(function(el,i){el.style.left=geo.nodes[i][0]+'px';el.style.top=geo.nodes[i][1]+'px'});
+    photos.forEach(function(el,i){el.style.left=ph[i][0]*w+'px';el.style.top=ph[i][1]*h+'px'});
+    var P=[[-.06*w,.56*h]].concat(geo.nodes,[[1.06*w,.95*h]]);
+    // Catmull-Rom centreline, sampled per segment so node i sits exactly at u=i
+    var SEG=P.length-1, per=48, pts=[];
+    for(var s=0;s<SEG;s++){
+      var p0=P[Math.max(0,s-1)],p1=P[s],p2=P[s+1],p3=P[Math.min(P.length-1,s+2)];
+      for(var j=0;j<per;j++){var t=j/per,t2=t*t,t3=t2*t;
+        pts.push({u:s+t,x:.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),
+                            y:.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)})}
+    }
+    pts.push({u:SEG,x:P[SEG][0],y:P[SEG][1]});
+    for(var k=0;k<pts.length;k++){var a=pts[Math.max(0,k-1)],b=pts[Math.min(pts.length-1,k+1)],dx=b.x-a.x,dy=b.y-a.y,l=Math.hypot(dx,dy)||1;pts[k].nx=-dy/l;pts[k].ny=dx/l}
+    geo.pts=pts; geo.seg=SEG; geo.width=Math.min(w,h)*(narrow?.10:.13);
+  }
+  var mileState={prog:reduce?1:0,fade:1};
+  function drawMile(now){
+    var c=M.c; c.clearRect(0,0,M.w,M.h);
+    var pts=geo.pts, time=reduce?0:now, headU=mileState.prog*geo.seg;
+    var S=26;
+    for(var i=0;i<S;i++){
+      var su=i/(S-1)-.5, col=strandColor(i/(S-1)), started=false;
+      c.beginPath();
+      for(var k=0;k<pts.length;k++){
+        var q=pts[k]; if(q.u>headU)break;
+        var off=su*geo.width*Math.sin(Math.PI*q.u+.12*Math.sin(time*.0006+q.u))*(.55+.45*Math.abs(Math.sin(Math.PI*q.u*.5+.8)));
+        var x=q.x+q.nx*off,y=q.y+q.ny*off; started?c.lineTo(x,y):(c.moveTo(x,y),started=true);
+      }
+      c.strokeStyle='rgba('+col+','+(strandAlpha(su)*mileState.fade).toFixed(3)+')';c.lineWidth=1;c.stroke();
+    }
+  }
+
+  /* ---------- tagline chars ---------- */
+  var tag=document.getElementById('tagline');
+  tag.innerHTML=tag.textContent.split('').map(function(ch){return ch==='\n'?'\n':(ch===' '?' ':'<span class="c">'+ch+'</span>')}).join('');
+  var chars=[].slice.call(tag.querySelectorAll('.c'));
+
+  function frame(now){drawHero(now);drawMile(now);if(!reduce)requestAnimationFrame(frame)}
+  layout();
+  window.addEventListener('resize',function(){H=fit(hero);layout();if(reduce){drawHero(0);drawMile(0)}});
+
+  if(reduce||!window.gsap||!window.ScrollTrigger){mileState.prog=1;drawHero(0);drawMile(0);if(!reduce)requestAnimationFrame(frame);return}
+
+  document.documentElement.classList.add('js-anim');
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.set(photos,{autoAlpha:0,scale:.82});
+  gsap.set(nodes,{autoAlpha:0,y:10});
+  nodes.forEach(function(n){n.style.setProperty('--glow',0)});
+  var tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:stage,start:'top top',end:'+=220%',pin:true,scrub:.6,invalidateOnRefresh:true,onRefresh:layout}});
+  // gather: photos arrive at the corners
+  photos.forEach(function(p,i){tl.to(p,{autoAlpha:1,scale:1,ease:'power2.out',duration:.12},.02+i*.03)});
+  // thread: ribbon draws through 01→04; each node lights as the ribbon reaches it
+  tl.to(mileState,{prog:1,duration:.62},.1);
+  nodes.forEach(function(n,i){
+    var at=.1+.62*((i+1)/geo.seg)-.02;
+    tl.to(n,{autoAlpha:1,y:0,ease:'power2.out',duration:.05},at);
+    tl.to(n,{'--glow':1,duration:.08,ease:'power2.out'},at+.01);
+  });
+  // light: the tagline inks in behind the ribbon
+  tl.to(chars,{color:'#14213D',stagger:{each:.012},duration:.05},.22);
+  // release: photos and nodes drift outward, ribbon settles
+  photos.forEach(function(p,i){var dx=(i===0||i===3)?-40:40,dy=(i<2)?-30:30;tl.to(p,{x:dx,y:dy,autoAlpha:0,duration:.14,ease:'power1.in'},.84+i*.01)});
+  tl.to(nodes,{autoAlpha:0,y:-8,duration:.1,stagger:.01},.84);
+  tl.to(mileState,{fade:.35,duration:.14},.84);
+  tl.to({},{duration:.02},.98);
+  requestAnimationFrame(frame);
+})();
+</script>
