@@ -1,0 +1,362 @@
+<title>智齡數位 Clinical Aura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#F6F8FB;--white:#FFFFFF;--ink:#0F1E33;--muted:#5A6A7E;--hair:rgba(15,30,51,.08);
+  --teal:#00A7B5;--aqua:#A6EBF0;--peri:#6F7CF4;--blush:#F3B5D9;--lav:#BBAAF7;--deep:#0B5F6A;
+  --sans:"Poppins","Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.06 0 0 0 0 0.12 0 0 0 0 0.2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:1.0625rem;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3,p{margin:0}
+a{color:inherit}
+.wrap{padding-inline:max(16px,5vw)}
+.container{max-width:78rem;margin-inline:auto}
+.label{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:.6rem}
+.label::before{content:"+";color:var(--teal);font-weight:500}
+.h2{font-size:clamp(1.875rem,3.2vw,2.75rem);line-height:1.3;font-weight:300;letter-spacing:.03em;text-wrap:balance}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-size:.9375rem;line-height:1.2;text-decoration:none;border:0;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 12px 26px -14px rgba(15,30,51,.55)}
+.btn:focus-visible,.link:focus-visible,.x:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.btn.glass{background:rgba(255,255,255,.62);color:var(--ink);border:1px solid rgba(255,255,255,.9);backdrop-filter:blur(12px);box-shadow:0 1px 0 rgba(255,255,255,.8) inset}
+
+/* ---------- aura + fluted glass (shared) ---------- */
+.aura{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;filter:blur(48px);opacity:.9;will-change:transform}
+.b1{width:46vw;height:46vw;max-width:720px;max-height:720px;right:-6vw;top:-10vw;background:radial-gradient(circle at 40% 40%,#F3B5D9,rgba(243,181,217,0) 68%);animation:drift1 22s ease-in-out infinite}
+.b2{width:40vw;height:40vw;max-width:640px;max-height:640px;right:8vw;top:14vw;background:radial-gradient(circle at 50% 50%,#6F7CF4,rgba(111,124,244,0) 66%);opacity:.75;animation:drift2 26s ease-in-out infinite}
+.b3{width:34vw;height:34vw;max-width:560px;max-height:560px;right:30vw;top:4vw;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 66%);animation:drift3 30s ease-in-out infinite}
+.b4{width:26vw;height:26vw;max-width:420px;max-height:420px;right:2vw;bottom:-8vw;background:radial-gradient(circle,#00A7B5,rgba(0,167,181,0) 64%);opacity:.55;animation:drift1 34s ease-in-out infinite reverse}
+@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-4vw,3vw) scale(1.08)}}
+@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(3vw,-2vw) scale(.92)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(-3vw,4vw)}}
+.flute{position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.55) 0,rgba(255,255,255,.14) 10px,rgba(255,255,255,0) 26px,rgba(15,30,51,.05) 40px,rgba(255,255,255,.4) 44px);
+  backdrop-filter:blur(26px) saturate(1.25);-webkit-backdrop-filter:blur(26px) saturate(1.25)}
+.grain{position:absolute;inset:0;background-image:var(--grain);opacity:.18;mix-blend-mode:multiply;pointer-events:none}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:clip;background:var(--white)}
+.hero .flute{-webkit-mask-image:linear-gradient(90deg,transparent 18%,#000 55%);mask-image:linear-gradient(90deg,transparent 18%,#000 55%)}
+.hero .fade{position:absolute;inset:auto 0 0;height:30%;background:linear-gradient(180deg,rgba(255,255,255,0),var(--ground))}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:3rem;align-items:center;padding-block:clamp(5rem,9vw,8.5rem) clamp(4rem,7vw,6.5rem)}
+.hero-copy{display:flex;flex-direction:column;align-items:flex-start;gap:1.5rem}
+h1{font-size:clamp(2.35rem,5vw,4.1rem);line-height:1.18;font-weight:300;letter-spacing:.05em;text-wrap:balance}
+h1 b{font-weight:400;color:var(--teal)}
+.lead{max-width:32em;color:var(--muted)}
+.actions{display:flex;flex-wrap:wrap;gap:.75rem}
+.who{font-family:var(--mono);font-size:.75rem;letter-spacing:.06em;color:var(--muted)}
+.hero-visual{position:relative;justify-self:end;width:min(100%,30rem)}
+.frame{position:relative;aspect-ratio:4/5;border-radius:2rem;overflow:hidden;box-shadow:0 40px 80px -40px rgba(15,30,51,.45)}
+.frame img{width:100%;height:100%;object-fit:cover;display:block}
+.chip{position:absolute;display:grid;gap:.1rem;padding:.8rem 1rem;border-radius:1rem;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 40px -22px rgba(15,30,51,.4)}
+.chip b{font-size:1.5rem;font-weight:400;line-height:1.1;font-variant-numeric:tabular-nums}
+.chip span{font-size:.75rem;color:var(--muted)}
+.chip.c1{left:-2.5rem;bottom:14%}
+.chip.c2{right:-1.25rem;top:9%;font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em}
+
+/* ---------- DATA BLOCKS ---------- */
+.data{padding-block:clamp(3rem,6vw,5rem)}
+.data-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:1.5rem;margin-bottom:2rem}
+.data-head p{max-width:30em}
+.blocks{display:grid;grid-template-columns:2fr 1fr;gap:1rem}
+.rows{display:grid;gap:1rem}
+.row{display:grid;grid-template-columns:minmax(9rem,32%) 1fr;min-height:6rem;border-radius:.25rem;overflow:hidden;background:#EEF1F5}
+.row .v{display:flex;align-items:center;padding-inline:1.5rem;font-size:clamp(2rem,3.4vw,2.75rem);font-weight:300;letter-spacing:-.01em;color:#3B4A5E;font-variant-numeric:tabular-nums}
+.row .t{display:flex;align-items:center;justify-content:flex-end;padding:1rem 1.5rem;text-align:right;color:var(--muted);font-size:.9375rem}
+.row:nth-child(1) .v{background:#CDEFF3}
+.row:nth-child(2) .v{background:#DCE0FD}
+.row:nth-child(3) .v{background:#FBE1EF}
+.dark{border-radius:.25rem;background:var(--ink);color:#fff;padding:1.75rem;display:flex;flex-direction:column;justify-content:space-between;gap:2rem}
+.dark .v{font-size:clamp(2.75rem,4.4vw,3.75rem);font-weight:300;line-height:1;font-variant-numeric:tabular-nums}
+.dark p{color:rgba(255,255,255,.72);font-size:.9375rem}
+
+/* ---------- APPROACH STAGE ---------- */
+.stage{position:relative;height:100vh;min-height:600px;overflow:hidden;background:var(--ground)}
+.orb{position:absolute;width:min(46vw,560px);aspect-ratio:1;border-radius:50%;translate:-50% -50%;pointer-events:none;filter:blur(40px);opacity:.85;
+  background:radial-gradient(circle at 45% 45%,rgba(111,124,244,.85),rgba(243,181,217,.6) 42%,rgba(166,235,240,.35) 62%,rgba(166,235,240,0) 72%)}
+.stage .grain{opacity:.12}
+.stage-label{position:absolute;left:50%;top:clamp(1.25rem,7vh,4rem);transform:translateX(-50%);z-index:3;white-space:nowrap}
+.tagline{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:min(92%,20em);text-align:center;font-size:clamp(1.5rem,3.1vw,2.75rem);line-height:1.45;font-weight:300;letter-spacing:.04em;white-space:pre-line;text-wrap:balance}
+.js .tagline .c{color:#B7C1CF}
+.node{position:absolute;z-index:4;translate:-50% -50%;width:min(17rem,40vw);display:grid;grid-template-columns:auto 1fr;gap:.25rem .9rem;align-items:center;padding:1rem;border-radius:1.25rem;
+  background:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 20px 50px -30px rgba(15,30,51,.35);transition:box-shadow .4s ease,border-color .4s ease}
+.node.on{border-color:rgba(0,167,181,.45);box-shadow:0 0 0 4px rgba(0,167,181,.10),0 24px 60px -28px rgba(15,30,51,.45)}
+.node .ic{grid-row:span 2}
+.node small{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--teal)}
+.node strong{font-weight:500;font-size:1rem;line-height:1.35}
+.node p{grid-column:1/-1;font-size:.8125rem;color:var(--muted);line-height:1.5}
+.node .who-img{position:absolute;right:-.6rem;top:-.9rem;width:2.75rem;height:2.75rem;border-radius:50%;overflow:hidden;border:2px solid #fff;box-shadow:0 6px 16px -6px rgba(15,30,51,.4)}
+.node .who-img img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* glass icon */
+.ic{position:relative;width:3.25rem;height:3.25rem;border-radius:1rem;display:grid;place-items:center;overflow:hidden;
+  background:linear-gradient(150deg,rgba(255,255,255,.95),rgba(214,244,247,.7));border:1px solid rgba(255,255,255,.95);box-shadow:0 10px 24px -14px rgba(0,120,140,.55),inset 0 -6px 12px rgba(166,235,240,.55)}
+.ic::before{content:"";position:absolute;width:70%;height:70%;border-radius:50%;left:40%;top:38%;background:radial-gradient(circle,rgba(111,124,244,.45),rgba(111,124,244,0) 70%);filter:blur(4px)}
+.ic svg{position:relative;width:1.5rem;height:1.5rem;fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- SERVICES ---------- */
+.services{position:relative;overflow:clip;padding-block:clamp(4rem,8vw,7rem);background:linear-gradient(180deg,var(--ground),#E6F7FA 60%,#DDF3F7)}
+.services .head{display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:end;margin-bottom:2.5rem}
+.svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.svc{display:flex;flex-direction:column;gap:1rem;padding:1.5rem;border-radius:.5rem;background:rgba(255,255,255,.88);min-height:17rem}
+.svc .n{font-family:var(--mono);font-size:.75rem;color:#9AA6B6}
+.svc h3{font-size:1.0625rem;font-weight:500;line-height:1.45}
+.svc p{font-size:.9375rem;color:var(--muted)}
+
+/* ---------- PROJECTS ---------- */
+.projects{padding-block:clamp(4rem,8vw,7rem)}
+.projects .head{display:flex;flex-direction:column;gap:1rem;max-width:44rem;margin-bottom:2.5rem}
+.p-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem}
+.card{display:flex;flex-direction:column;border-radius:1.25rem;overflow:hidden;background:var(--white);border:1px solid var(--hair)}
+.card.wide{grid-column:1/-1;display:grid;grid-template-columns:1.1fr 1fr}
+.cover{position:relative;min-height:12.5rem;overflow:hidden;display:flex;align-items:flex-end;padding:1.25rem;background:#E9EEF6}
+.cover .blob{filter:blur(34px)}
+.cover .flute{-webkit-mask-image:none;mask-image:none}
+.cover .org{position:relative;z-index:2;display:flex;flex-wrap:wrap;gap:.5rem}
+.pill{font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;padding:.35rem .7rem;border-radius:999px;background:rgba(255,255,255,.75);border:1px solid rgba(255,255,255,.95);backdrop-filter:blur(8px)}
+.body{display:flex;flex-direction:column;gap:.85rem;padding:1.5rem;flex:1}
+.body h3{font-size:1.25rem;font-weight:500;line-height:1.4}
+.meta{font-size:.8125rem;color:var(--muted)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;padding-block:.5rem;border-block:1px solid var(--hair)}
+.metrics b{display:block;font-size:1.375rem;font-weight:400;font-variant-numeric:tabular-nums}
+.metrics span{font-size:.75rem;color:var(--muted)}
+.link{align-self:flex-start;margin-top:auto;display:inline-flex;align-items:center;gap:.4rem;padding:.55rem .95rem;border-radius:999px;border:1px solid var(--hair);background:var(--ground);font:inherit;font-size:.875rem;color:var(--ink);text-decoration:none;cursor:pointer;transition:background .2s ease}
+.link:hover{background:#E7F6F8}
+
+/* ---------- MODAL ---------- */
+dialog{border:0;padding:0;width:min(44rem,calc(100% - 32px));max-height:min(88vh,52rem);border-radius:1.5rem;background:var(--white);color:var(--ink);box-shadow:0 40px 100px -40px rgba(15,30,51,.6);overflow:hidden}
+dialog::backdrop{background:rgba(15,30,51,.35);backdrop-filter:blur(6px)}
+dialog[open]{animation:rise .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+.m-cover{position:relative;height:9rem;overflow:hidden;background:#E9EEF6}
+.m-scroll{overflow:auto;max-height:calc(min(88vh,52rem) - 9rem);padding:1.75rem;display:flex;flex-direction:column;gap:1rem}
+.m-scroll h3{font-size:1.375rem;font-weight:500;line-height:1.4}
+.m-list{list-style:none;margin:0;padding:0;display:grid;gap:.75rem}
+.m-list li{display:grid;grid-template-columns:auto 1fr;gap:.25rem 1rem;padding:1rem;border-radius:.75rem;background:var(--ground)}
+.m-list li::before{content:"+";grid-row:span 2;color:var(--teal);font-family:var(--mono)}
+.m-list strong{font-weight:500}
+.m-list span{font-size:.9375rem;color:var(--muted)}
+.x{position:absolute;right:1rem;top:1rem;z-index:3;width:2.5rem;height:2.5rem;border-radius:50%;border:1px solid rgba(255,255,255,.95);background:rgba(255,255,255,.75);backdrop-filter:blur(8px);cursor:pointer;font-size:1.25rem;line-height:1;color:var(--ink)}
+
+/* ---------- CTA ---------- */
+.cta{position:relative;overflow:clip;background:var(--deep);color:#fff}
+.cta .blob{opacity:.55}
+.cta .flute{background:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0,rgba(255,255,255,.03) 10px,rgba(255,255,255,0) 26px,rgba(0,0,0,.06) 40px,rgba(255,255,255,.1) 44px)}
+.cta-in{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.5rem;padding-block:clamp(5rem,9vw,8rem)}
+.cta .label{color:rgba(255,255,255,.75)}.cta .label::before{color:var(--aqua)}
+.cta h2{font-size:clamp(1.75rem,3.6vw,3rem);font-weight:300;letter-spacing:.1em;line-height:1.4}
+.cta p{color:rgba(255,255,255,.8)}
+.mail{font-family:var(--mono);font-size:.875rem;color:rgba(255,255,255,.85);user-select:all}
+.btn.light{background:#fff;color:var(--deep)}
+
+@media (max-width:991px){
+  .hero-grid,.services .head,.card.wide{grid-template-columns:1fr}
+  .hero-visual{justify-self:start;width:min(100%,26rem)}
+  .blocks{grid-template-columns:1fr}
+  .svc-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .p-grid,.svc-grid{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row .t{justify-content:flex-start;text-align:left;padding-top:.25rem}
+  .row .v{padding-top:1rem}
+  .chip.c1{left:.75rem}.chip.c2{right:.75rem}
+  .node{width:min(11.5rem,46vw);padding:.7rem;grid-template-columns:1fr}
+  .node .ic{display:none}
+  .node p{display:none}
+  .node .who-img{width:2.1rem;height:2.1rem}
+  .metrics{grid-template-columns:1fr 1fr 1fr;gap:.5rem}
+}
+@media (prefers-reduced-motion:reduce){.blob{animation:none}dialog[open]{animation:none}.btn{transition:none}}
+</style>
+
+<header class="hero">
+  <div class="aura" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="blob b4"></div><div class="flute"></div><div class="grain"></div><div class="fade"></div></div>
+  <div class="wrap"><div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="label">Jubo Digital — 智齡科技全資子公司</div>
+      <h1>大健康產業的<br><b>數位工程</b>領航者</h1>
+      <p class="lead">縮短 AI 技術與場域實踐的最後一哩路。智齡數位由智齡科技（Jubo）公共事業核心團隊獨立成軍，專注承接政府補助案、大型委託案，以及醫護集團的數位轉型。</p>
+      <div class="actions"><a class="btn" href="#contact">來信洽詢 →</a><a class="btn glass" href="#projects">看專案成果</a></div>
+      <div class="who">衛生福利部 · 中央健康保險署 · 國家衛生研究院 合作專案</div>
+    </div>
+    <div class="hero-visual">
+      <div class="frame"><img src="{{P3FULL}}" alt="醫療場域中的照護人員"></div>
+      <div class="chip c1"><b>99.91%</b><span>國家級學習平台服務穩定率</span></div>
+      <div class="chip c2">HIS ／ NIS 串接</div>
+    </div>
+  </div></div>
+</header>
+
+<section class="data" aria-label="實績數據"><div class="wrap"><div class="container">
+  <div class="data-head">
+    <h2 class="h2">實際維運中的系統規模</h2>
+    <p class="muted">以下數字來自我們維運的衛福部長期照顧專業人員數位學習平臺（2023–2025）。</p>
+  </div>
+  <div class="blocks">
+    <div class="rows">
+      <div class="row"><div class="v">41 萬</div><div class="t">名長照專業人員註冊會員</div></div>
+      <div class="row"><div class="v">91 TB</div><div class="t">每月平均流量傳輸</div></div>
+      <div class="row"><div class="v">3,000+</div><div class="t">每月處理的技術諮詢通數</div></div>
+    </div>
+    <div class="dark"><div><div class="v">99.91%</div><p style="margin-top:.5rem;color:#fff">服務穩定率</p></div><p>累積超過兩萬小時營運，教學服務不間斷；通過衛福部資安內部稽核，無重大缺失。</p></div>
+  </div>
+</div></div></section>
+
+<section class="stage" id="stage" aria-label="最後一哩路">
+  <div class="orb" id="orb" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="stage-label label">Approach — 我們的做法</div>
+  <div class="node" data-i="0"><span class="ic"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></span><small>01</small><strong>政策與補助案</strong><p>釐清政策依據與驗收標準</p><span class="who-img"><img src="{{P2}}" alt=""></span></div>
+  <div class="node" data-i="1"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg></span><small>02</small><strong>需求訪談</strong><p>走進場域，記錄真實動線</p><span class="who-img"><img src="{{P1}}" alt=""></span></div>
+  <div class="node" data-i="2"><span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 3v4M14 3v4M10 17v4M14 17v4M3 10h4M3 14h4M17 10h4M17 14h4"/></svg></span><small>03</small><strong>AI 系統整合</strong><p>串接 HIS／NIS 與既有設備</p><span class="who-img"><img src="{{P4}}" alt=""></span></div>
+  <div class="node" data-i="3"><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 21V8l8-5 8 5v13"/><path d="M10 21v-5h4v5M12 8v4M10 10h4"/></svg></span><small>04</small><strong>場域落地</strong><p>導入、驗收與跨年度維運</p><span class="who-img"><img src="{{P3}}" alt=""></span></div>
+  <p class="tagline" id="tagline">縮短 AI 技術與場域實踐的最後一哩路
+做你最值得信賴的科技夥伴</p>
+</section>
+
+<section class="services"><div class="wrap"><div class="container">
+  <div class="head"><div style="display:flex;flex-direction:column;gap:1rem"><div class="label">Service — 服務項目</div><h2 class="h2">四條主線，涵蓋政府與醫護集團最常見的專案型態</h2></div><p class="muted">從單一系統到整組數位轉型，同一支團隊負責提案、開發、導入到維運。</p></div>
+  <div class="svc-grid">
+    <div class="svc"><span class="n">01</span><span class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 14h3"/></svg></span><h3>客製化智慧管理平台</h3><p>依業主營運邏輯與政策規範開發，優化行政效率與風險控管。</p></div>
+    <div class="svc"><span class="n">02</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/></svg></span><h3>政府與醫院數位專案管理</h3><p>熟稔公部門採購規範與流程，從提案、執行到驗收全週期負責。</p></div>
+    <div class="svc"><span class="n">03</span><span class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16v9H10l-4 4v-4H4z"/><path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01"/></svg></span><h3>Copilot 對話式 AI 輔助系統</h3><p>串接真實 HIS／NIS 資料，醫護人員用自然語言完成個案查詢與紀錄。</p></div>
+    <div class="svc"><span class="n">04</span><span class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="3" width="10" height="18" rx="2"/><path d="M11 18h2"/></svg></span><h3>跨平台行動 App 開發</h3><p>串接管理端與使用者端，縮短資訊落差、提升服務體驗。</p></div>
+  </div>
+</div></div></section>
+
+<section class="projects" id="projects"><div class="wrap"><div class="container">
+  <div class="head"><div class="label">Projects — 專案成果</div><h2 class="h2">每一案都是公部門與醫護現場的實際協作</h2><p class="muted">點「查看專案介紹」看完整內容。</p></div>
+  <div class="p-grid">
+    <article class="card wide">
+      <div class="cover" aria-hidden="false"><div class="aura" aria-hidden="true"><div class="blob" style="width:70%;height:120%;left:-10%;top:-20%;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 65%)"></div><div class="blob" style="width:60%;height:110%;right:-10%;top:-30%;background:radial-gradient(circle,#6F7CF4,rgba(111,124,244,0) 65%);opacity:.7"></div><div class="blob" style="width:50%;height:90%;right:20%;bottom:-40%;background:radial-gradient(circle,#F3B5D9,rgba(243,181,217,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div>
+        <div class="org"><span class="pill">衛生福利部</span><span class="pill">2023 – 2025</span><span class="pill">主打專案</span></div></div>
+      <div class="body">
+        <h3>長期照顧專業人員數位學習平臺</h3>
+        <div class="meta">跨年度維運與改版專案｜全台長照人員取得專業認證的核心平台</div>
+        <div class="metrics"><div><b>99.91%</b><span>服務穩定率</span></div><div><b>41 萬</b><span>註冊會員</span></div><div><b>91 TB</b><span>每月傳輸</span></div></div>
+        <button class="link" type="button" data-open="m1">查看專案介紹 →</button>
+      </div>
+    </article>
+    <article class="card">
+      <div class="cover"><div class="aura" aria-hidden="true"><div class="blob" style="width:80%;height:130%;left:-20%;top:-30%;background:radial-gradient(circle,#BBAAF7,rgba(187,170,247,0) 65%)"></div><div class="blob" style="width:70%;height:120%;right:-20%;bottom:-40%;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div>
+        <div class="org"><span class="pill">中央健康保險署</span><span class="pill">資安查核</span></div></div>
+      <div class="body"><h3>健康存摺 SDK 介接應用資安管理計畫</h3><p class="meta">實地走訪全國介接廠商，首創 SDK 應用效益評估模型。</p><button class="link" type="button" data-open="m2">查看專案介紹 →</button></div>
+    </article>
+    <article class="card">
+      <div class="cover"><div class="aura" aria-hidden="true"><div class="blob" style="width:80%;height:130%;left:-10%;bottom:-40%;background:radial-gradient(circle,#00A7B5,rgba(0,167,181,0) 62%);opacity:.6"></div><div class="blob" style="width:70%;height:120%;right:-20%;top:-40%;background:radial-gradient(circle,#F3B5D9,rgba(243,181,217,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div>
+        <div class="org"><span class="pill">中央健康保險署</span><span class="pill">115 年度</span></div></div>
+      <div class="body"><h3>地區醫院個案管理系統</h3><p class="meta">全民健康保險數位照護獎勵計畫：手機、平板、電腦多端同步的個案管理。</p><button class="link" type="button" data-open="m3">查看專案介紹 →</button></div>
+    </article>
+    <article class="card">
+      <div class="cover"><div class="aura" aria-hidden="true"><div class="blob" style="width:80%;height:130%;left:-20%;top:-20%;background:radial-gradient(circle,#F3B5D9,rgba(243,181,217,0) 65%)"></div><div class="blob" style="width:60%;height:110%;right:-10%;bottom:-30%;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div>
+        <div class="org"><span class="pill">跨縣市社區</span><span class="pill">AI · IoT</span></div></div>
+      <div class="body"><h3>智慧健康社區「好食運」計畫</h3><p class="meta">AI 分析結合智慧手環，陪長輩建立 180 天健康自我管理習慣。</p><a class="link" href="https://www.jubo-health.com/ecosystem/jubo-health-app">前往專案頁 ↗</a></div>
+    </article>
+    <article class="card">
+      <div class="cover"><div class="aura" aria-hidden="true"><div class="blob" style="width:80%;height:130%;right:-20%;top:-30%;background:radial-gradient(circle,#6F7CF4,rgba(111,124,244,0) 65%);opacity:.6"></div><div class="blob" style="width:70%;height:120%;left:-10%;bottom:-40%;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div>
+        <div class="org"><span class="pill">國家衛生研究院</span><span class="pill">公私協力</span></div></div>
+      <div class="body"><h3>長期照顧服務機構資源整合平台</h3><p class="meta">一站式長照導航平台，為長照機構與照顧家庭搭建橋梁。</p><a class="link" href="https://www.jubo-health.com/resources/care-facility-matching-platform">前往專案頁 ↗</a></div>
+    </article>
+  </div>
+</div></div></section>
+
+<section class="cta" id="contact">
+  <div class="aura" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="flute"></div><div class="grain"></div></div>
+  <div class="wrap"><div class="container cta-in">
+    <div class="label">Contact — 聯絡我們</div>
+    <h2>找到對的夥伴，<br>是專案成功的第一步。</h2>
+    <p>歡迎來信洽詢，我們將於 7 個工作日內安排專人與您聯繫。</p>
+    <a class="btn light" href="mailto:jdt@jubo.health">來信洽詢 →</a>
+    <span class="mail">jdt@jubo.health</span>
+  </div></div>
+</section>
+
+<dialog id="modal" aria-labelledby="m-title">
+  <div class="m-cover" aria-hidden="true"><div class="aura"><div class="blob" style="width:60%;height:200%;left:-5%;top:-60%;background:radial-gradient(circle,#A6EBF0,rgba(166,235,240,0) 65%)"></div><div class="blob" style="width:55%;height:190%;right:-5%;top:-50%;background:radial-gradient(circle,#6F7CF4,rgba(111,124,244,0) 65%);opacity:.7"></div><div class="blob" style="width:40%;height:160%;left:40%;top:0;background:radial-gradient(circle,#F3B5D9,rgba(243,181,217,0) 65%)"></div><div class="flute"></div><div class="grain"></div></div></div>
+  <button class="x" type="button" id="m-close" aria-label="關閉">×</button>
+  <div class="m-scroll">
+    <div class="label" id="m-org"></div>
+    <h3 id="m-title"></h3>
+    <p class="muted" id="m-desc"></p>
+    <ul class="m-list" id="m-list"></ul>
+    <a class="btn" href="#contact" id="m-cta" style="align-self:flex-start">洽詢類似專案 →</a>
+  </div>
+</dialog>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  /* ---------- project modal (content from the live page's modal1–3) ---------- */
+  var DATA={
+    m1:{org:'合作單位：中華民國衛生福利部｜2023 – 2025',title:'長期照顧專業人員數位學習平臺',
+      desc:'本專案承接衛福部關鍵人才培訓系統，針對大規模流量與嚴謹資安需求進行全面改版與維運。在確保每月平均 91 TB 高流量傳輸的同時，維持系統高度穩定與資安零缺失，是全台長照人員取得專業認證的核心平台。',
+      list:[['極致穩定運作','服務穩定率達 99.91%，在兩萬小時的營運中，確保教學服務不間斷。'],['大規模流量負載','每月支撐 8 萬人次瀏覽量與 41 萬名會員，具備處理高併發數據流的技術實力。'],['資安合規保證','通過衛福部資安內部稽核，無重大缺失，確保公部門數據與個人隱私高度安全。'],['專業客服量能','每月處理 3,000+ 通技術諮詢，提供全方位的系統支援與使用者溝通。']]},
+    m2:{org:'合作單位：衛生福利部中央健康保險署',title:'健康存摺系統軟體開發套件（SDK）介接應用資安管理計畫',
+      desc:'本專案受衛福部健保署委託，針對國內多元醫療健康 App 介接「健康存摺 SDK」之過程，進行嚴謹的資安查核與效益評析。透過實地走訪與制度建立，確保醫療數據在高度安全的環境下，發揮最大的健康促進效益。',
+      list:[['建立資安查核標準','定義健康存摺 SDK 介接之資安規範，確保第三方廠商落實最高等級的數據保護。'],['實地專案查核','親自實地查訪全國 SDK 介接廠商，檢視其系統架構與資安落實狀況，提供專業改善建議。'],['應用效益機制','首創 SDK 應用效益評估模型，量化個人健康數據對醫療管理與健康生活之實質貢獻。'],['跨領域生態鏈結','串接台大醫院、大樹健康、中華健康雲等多元場域，優化「健康存摺」之生態體系應用。']]},
+    m3:{org:'合作單位：衛生福利部中央健康保險署',title:'115 年度全民健康保險數位照護獎勵計畫',
+      desc:'本專案配合健保署推動醫院及基層院所資訊系統雲端化，由 Jubo 提供完整的數位個案管理解決方案。針對地區醫院在執行全人照護計畫時的數位化痛點，透過跨平台的數據整合與即時追蹤工具，強化醫療院所與社區間的照護連結，確保國家級健康政策的高效落地。',
+      list:[['數位無痛轉型','支援手機、平板與電腦多端同步，協助地區醫院從紙本管理全面升級數位自動化。'],['全人照護整合','整合 Jubo 健康 App，即時串聯個案數據，達成「全人、全家、全社區」整合性照護目標。'],['穩定維運支持','具備專業的技術支援團隊，確保執行跨年度計畫運行穩定無虞。']]}
+  };
+  var dlg=document.getElementById('modal'), last=null;
+  function fill(d){
+    document.getElementById('m-org').textContent=d.org;
+    document.getElementById('m-title').textContent=d.title;
+    document.getElementById('m-desc').textContent=d.desc;
+    var ul=document.getElementById('m-list'); ul.innerHTML='';
+    d.list.forEach(function(it){var li=document.createElement('li'),s=document.createElement('strong'),p=document.createElement('span');s.textContent=it[0];p.textContent=it[1];li.appendChild(s);li.appendChild(p);ul.appendChild(li)});
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-open]');
+    if(b){last=b;fill(DATA[b.getAttribute('data-open')]);dlg.showModal();dlg.querySelector('.m-scroll').scrollTop=0;return}
+    if(e.target===dlg||e.target.closest('#m-close'))dlg.close();
+    if(e.target.closest('#m-cta'))dlg.close();
+  });
+  dlg.addEventListener('close',function(){if(last)last.focus()});
+
+  /* ---------- approach stage: aura travels 01 → 04 ---------- */
+  var stage=document.getElementById('stage'), orb=document.getElementById('orb');
+  var nodes=[].slice.call(stage.querySelectorAll('.node'));
+  var pos;
+  function layout(){
+    var w=stage.clientWidth,h=stage.clientHeight,narrow=w<700;
+    var p=narrow?[[.3,.18],[.7,.32],[.7,.82],[.3,.68]]:[[.2,.3],[.8,.26],[.8,.74],[.2,.7]];
+    pos=p.map(function(q){return [q[0]*w,q[1]*h]});
+    nodes.forEach(function(n,i){n.style.left=pos[i][0]+'px';n.style.top=pos[i][1]+'px'});
+  }
+  layout();
+  var tag=document.getElementById('tagline');
+  tag.innerHTML=tag.textContent.split('').map(function(ch){return ch==='\n'?'\n':'<span class="c">'+ch+'</span>'}).join('');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!window.gsap||!window.ScrollTrigger){orb.style.left='50%';orb.style.top='50%';nodes.forEach(function(n){n.classList.add('on')});
+    window.addEventListener('resize',layout);return}
+  document.documentElement.classList.add('js');
+  gsap.registerPlugin(ScrollTrigger);
+  var chars=[].slice.call(tag.querySelectorAll('.c'));
+  var state={t:0};
+  function place(){ // orb follows a smooth loop through the four nodes, starting off-canvas left
+    var pts=[[-0.15*stage.clientWidth,stage.clientHeight*.55]].concat(pos),seg=pts.length-1,u=Math.min(seg-1e-6,state.t*seg),i=Math.floor(u),k=u-i;
+    var e=k*k*(3-2*k),a=pts[i],b=pts[i+1];
+    gsap.set(orb,{left:a[0]+(b[0]-a[0])*e,top:a[1]+(b[1]-a[1])*e});
+    nodes.forEach(function(n,j){n.classList.toggle('on',state.t>=(j+1)/seg-.04)});
+  }
+  gsap.set(nodes,{autoAlpha:0,y:14});
+  var tl=gsap.timeline({defaults:{ease:'none'},scrollTrigger:{trigger:stage,start:'top top',end:'+=200%',pin:true,scrub:.7,invalidateOnRefresh:true,onRefresh:function(){layout();place()}}});
+  tl.to(state,{t:1,duration:.7,onUpdate:place},.08);
+  nodes.forEach(function(n,i){tl.to(n,{autoAlpha:1,y:0,duration:.06,ease:'power2.out'},.08+.7*((i+1)/4)-.12)});
+  tl.to(chars,{color:'#0F1E33',stagger:{each:.01},duration:.05},.2);
+  tl.to(orb,{scale:1.6,opacity:.45,duration:.14},.84);
+  tl.to({},{duration:.02},.98);
+  place();
+  window.addEventListener('resize',function(){layout();place()});
+})();
+</script>
