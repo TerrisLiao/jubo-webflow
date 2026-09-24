@@ -13,6 +13,12 @@
 /* 本頁外層 combo class 是 overflow:hidden，會讓 sticky 失效；clip 裁切效果相同但不形成捲動容器（不支援 clip 的舊瀏覽器維持 hidden） */
 .all-sections-wrapper.is-jubo-digital{overflow:clip}
 
+/* 靜止版（腳本沒跑或 reduced-motion）：取消 sticky 與絕對定位，照片一排、標語接在下面 */
+.product-hero-4_component:not(.jd-hero-on){min-height:0}
+.product-hero-4_component:not(.jd-hero-on) .product-hero-4_content-bottom{position:relative;height:auto;display:block}
+.product-hero-4_component:not(.jd-hero-on) .header156_text-wrapper{position:relative;inset:auto;padding-block:clamp(48px,9vh,112px)}
+.product-hero-4_component:not(.jd-hero-on) .product-hero-4_ix-trigger{display:none}
+
 .jd-hero-on .product-hero-4_content-bottom{overflow:hidden}
 /* 原 IX2 觸發器改當捲動距離：sticky 區塊固定約 2.3 個螢幕高 */
 .jd-hero-on .product-hero-4_ix-trigger{position:relative;inset:auto;margin:0;height:230vh;pointer-events:none}

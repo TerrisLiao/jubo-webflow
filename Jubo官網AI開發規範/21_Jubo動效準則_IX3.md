@@ -1047,3 +1047,36 @@ Terris：原本的動畫「不好看」、「不用按照原來的」。流程�
 | 點陣網格／光暈 | 新元素，CSS 背景；IX3 控制 opacity |
 | 手機 | 只保留上下兩條橫線（直線會穿過標語），卡片縮小 |
 | 靜止狀態 | `.header156_text-wrapper` 的 class 樣式 opacity 0 要在 `jubo-motion.css` 覆寫為 1；reduced-motion 時照片一排、標語在下（`@media (prefers-reduced-motion)` 取消 sticky 外側定位） |
+
+## §25 智齡數位頁首落地：改用 GSAP 捲動腳本，不用 IX3（2026-09-24）
+
+Terris 確認原型（§24）後落地到 staging。**實作方式從 IX3 改為頁面層級 GSAP 腳本**：
+
+- 原因：照片落點、連線長度、卡片位置都要依當下 sticky 區塊的寬高計算。IX3 只能填固定數值（依斷點最多分組），實測推算在 1920×1080 時下排照片會壓到標語、1280×720 時落點偏差過大。
+- GSAP 3.15＋ScrollTrigger 已由全站 Footer 載入（Slater 依賴），IX3 底層也是 GSAP，不增加任何載入量。
+- 正本：`custom-code/jubo-digital-hero.css`、`custom-code/jubo-digital-hero.js`；部署在智齡數位頁 Page Settings → Before `</body>`（`<style id="jd-hero">`＋`<script id="jd-hero-js">`）。**只影響這一頁**（`product-hero-4_*`、`header156_*` 全站僅此頁使用，已驗證）。
+
+### 落地時發現並修正的既有問題
+
+| 問題 | 影響 | 處理 |
+|---|---|---|
+| `.all-sections-wrapper.is-jubo-digital` 是 `overflow: hidden` | 讓 `product-hero#4_content-bottom` 的 sticky 完全失效（原 IX2 版其實沒有固定住） | 本頁 CSS 改為 `overflow: clip`（裁切效果相同、不形成捲動容器；不支援的舊瀏覽器維持 hidden） |
+| `product-hero#4_ix-trigger` 有 `margin-top: 900px` | 改當捲動距離時多出 900px 空白 | 動畫狀態下 `margin: 0; height: 230vh` |
+| `header156_text-wrapper` 的 class 樣式 `opacity: 0` | 刪 IX2 後標語永久看不見 | 本頁 CSS 覆寫 `opacity: 1` |
+| `product-hero#4_content-bottom` 是橫向 flex | 靜止版標語會擠到照片旁 | 靜止版改 `display: block` |
+
+### 狀態切換
+
+- 腳本執行（有 GSAP、未開 reduced-motion）→ 元件加上 `.jd-hero-on`：sticky 固定 230vh、標語從區塊下方外側升到中央、注入裝飾層（網格、光暈、四條漸層連線、四張節點卡片，皆 `aria-hidden`）。
+- 靜止版（`.product-hero-4_component:not(.jd-hero-on)`）：取消 sticky 與絕對定位，照片一排、標語在下方、隱藏捲動距離元素。
+- 文案：標語改為兩段「縮短 AI 技術與場域實踐的最後一哩路／做你最值得信賴的科技夥伴」（Webflow 內容，以換行＋`white-space: pre-line` 呈現）。
+
+### staging 驗證（2026-09-24）
+
+| 項目 | 結果 |
+|---|---|
+| IX2 綁定 | 3 → **0**（全站歸零；資料內殘留 235 個孤兒事件，見 22） |
+| 動畫：1440×900、1920×1080、1280×720、390×844 | 頁首時標語不在畫面內；聚攏後標語停在中央（各尺寸 tagTop 383／473／299／261）；串聯時 4 張卡片全出現；散開後卡片 0；只有移動途中照片與標語短暫交錯 |
+| reduced-motion 桌機／手機 | `.jd-hero-on` 未加上；標語 opacity 1、兩段（手機 3 行）、位於照片下方、不壓到下一段；無 JS 錯誤 |
+
+驗證限制：容器無 GPU，只驗數值與截圖；實際流暢度需實機確認。
