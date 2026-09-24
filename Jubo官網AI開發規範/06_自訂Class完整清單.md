@@ -641,6 +641,9 @@ Client-First 規則：一個底線 `_` = 一層 folder。命名為 `folder_eleme
 - `jubo-digital_category-tag`
 - `jubo-digital_category-tag-wrapper`
 
+> 2026-09-24：草稿頁「智齡數位（改版草稿）」另有一組草稿專用 class（`jubo-digital_hero-*`、`_proof-*`、`_service-card`、`_case-*`、`_step-*`、`_bullet-*`、`_section-head`、`_flagship-*`），以及 combo `jubo-digital_category-tag.is-outline`、`jubo-digital_case-meta.is-on-dark`。
+> `jubo-digital_category-tag`／`-wrapper` 正式頁也有用，**不可改 base**，草稿只加 combo。清單與用途見 `23_智齡數位子品牌改版草稿_2026-09-24.md`。
+
 ### `mm_` （2 個）
 
 - `mm_inner-left-wrapper`
