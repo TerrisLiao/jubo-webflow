@@ -224,6 +224,28 @@ dialog.drawer[open]{animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
   .metrics{grid-template-columns:1fr 1fr 1fr;gap:.5rem}
 }
 @keyframes sheetup{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+/* ---------- reveal: sticky section, photo grows from a small frame to (almost) full screen — adapted from the test site's "HOME - About scroll" ---------- */
+.reveal{position:relative;height:300vh;background:var(--ground)}
+.reveal-sticky{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.reveal-media{position:absolute;inset:0;clip-path:inset(38vh 41vw 38vh 41vw round 1.25rem);will-change:clip-path}
+.reveal-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 35%;will-change:transform}
+.reveal-tint{position:absolute;inset:0;background:linear-gradient(0deg,rgba(11,40,56,.78),rgba(11,40,56,.15) 55%,transparent),radial-gradient(60% 50% at 85% 10%,rgba(166,235,240,.35),transparent 70%),radial-gradient(50% 45% at 5% 20%,rgba(243,181,217,.22),transparent 70%)}
+.reveal-media .grain{opacity:.18}
+.reveal-copy{position:absolute;left:0;right:0;bottom:0;padding:0 clamp(1.5rem,6vw,6rem) clamp(2.5rem,8vh,5rem);color:#fff;opacity:0;transform:translateY(1.5rem)}
+.reveal-copy .label{color:rgba(255,255,255,.8)}.reveal-copy .label::before{color:var(--aqua)}
+.reveal-copy h2{margin:.9rem 0 1rem;font-size:clamp(1.75rem,3.6vw,3.25rem);line-height:1.3;font-weight:300;letter-spacing:.04em;max-width:18em;text-wrap:balance}
+.reveal-copy p{max-width:34em;color:rgba(255,255,255,.82)}
+.reveal-word{position:absolute;left:50%;top:50%;margin:0;font-size:clamp(2.25rem,5.2vw,4.75rem);font-weight:300;letter-spacing:.06em;line-height:1;white-space:nowrap;color:var(--ink);will-change:transform}
+.reveal-word b{font-weight:400;color:var(--teal)}
+.reveal-hint{position:absolute;left:50%;bottom:2rem;transform:translateX(-50%);font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;color:var(--muted)}
+.reveal.is-static{height:auto}
+.reveal.is-static .reveal-sticky{position:relative;height:auto;min-height:0;padding:4rem 5%}
+.reveal.is-static .reveal-word{position:static;display:inline-block;font-size:clamp(1.75rem,4vw,3rem);margin:0 .4em 1.5rem 0}
+.reveal.is-static .reveal-media{position:relative;inset:auto;aspect-ratio:16/9;clip-path:none;border-radius:1.25rem;overflow:hidden}
+.reveal.is-static .reveal-media img{transform:none}
+.reveal.is-static .reveal-copy{opacity:1;transform:none}
+.reveal.is-static .reveal-hint{display:none}
+@media (max-width:767px){.reveal{height:260vh}.reveal-copy h2{font-size:1.625rem}.reveal.is-static .reveal-media{aspect-ratio:4/5}}
 @media (prefers-reduced-motion:reduce){dialog.drawer[open]{animation:none}.card,.shot img{transition:none}.blob{animation:none}dialog[open]{animation:none}.btn{transition:none}}
 </style>
 
@@ -244,6 +266,23 @@ dialog.drawer[open]{animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
     </div>
   </div></div>
 </header>
+
+<section class="reveal" id="reveal" aria-labelledby="reveal-title">
+  <div class="reveal-sticky">
+    <p class="reveal-word" data-w="1" aria-hidden="true">從<b>政策</b></p>
+    <p class="reveal-word" data-w="2" aria-hidden="true">到<b>現場</b></p>
+    <div class="reveal-media">
+      <img src="{{P4FULL}}" data-fx=".58" data-fy=".3" alt="智齡數位同仁在醫院走廊，拿平板向護理師說明系統">
+      <div class="reveal-tint"></div><div class="grain"></div>
+      <div class="reveal-copy">
+        <div class="label">The last mile — 從政策到現場</div>
+        <h2 id="reveal-title">縮短 AI 技術與場域實踐的最後一哩路</h2>
+        <p>系統不是驗收那天就結束。我們走進醫院、護理站與長照機構，陪第一線把流程跑順，直到每天都用得上。</p>
+      </div>
+    </div>
+    <div class="reveal-hint" aria-hidden="true">SCROLL ↓</div>
+  </div>
+</section>
 
 <section class="data" aria-label="實績數據"><div class="wrap"><div class="container">
   <div class="data-head">
@@ -435,5 +474,38 @@ dialog.drawer[open]{animation:slidein .5s cubic-bezier(.2,.8,.2,1)}
   tl.to({},{duration:.02},.98);
   place();
   window.addEventListener('resize',function(){layout();place()});
+})();
+
+/* ---------- reveal ---------- */
+(function(){
+  var sec=document.getElementById('reveal'); if(!sec) return;
+  var media=sec.querySelector('.reveal-media'), img=media.querySelector('img'), copy=sec.querySelector('.reveal-copy'),
+      w1=sec.querySelector('[data-w="1"]'), w2=sec.querySelector('[data-w="2"]'), hint=sec.querySelector('.reveal-hint'), sticky=sec.querySelector('.reveal-sticky');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||!window.gsap||!window.ScrollTrigger){sec.classList.add('is-static');return}
+  var FX=+img.dataset.fx||.5, FY=+img.dataset.fy||.5;
+  function cl(v){return v<0?0:v>1?1:v}
+  function ease(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function apply(p){
+    var W=sticky.clientWidth,H=sticky.clientHeight,mob=W<768,
+        e=ease(cl(p/.72)),
+        sw=mob?W*.46:Math.max(W*.16,200), sh=mob?H*.2:Math.max(H*.22,150),
+        ins=mob?10:18,
+        w=sw+(W-2*ins-sw)*e, h=sh+(H-2*ins-sh)*e,
+        t=(H-h)/2, l=(W-w)/2, r=20+4*e, gap=mob?18:28;
+    media.style.clipPath='inset('+t+'px '+l+'px '+t+'px '+l+'px round '+r+'px)';
+    /* keep the face centred in the small frame: focal point starts at the viewport centre, then settles back */
+    var nw=img.naturalWidth||1000, nh=img.naturalHeight||1000, k=Math.max(W/nw,H/nh), rw=nw*k, rh=nh*k,
+        fx=(W-rw)*.5+FX*rw, fy=(H-rh)*.35+FY*rh, dx=(W/2-fx)*(1-e), dy=(H/2-fy)*(1-e);
+    img.style.transformOrigin=fx+'px '+fy+'px';
+    img.style.transform='translate('+dx+'px,'+dy+'px) scale('+(1.12-.12*e)+')';
+    if(mob){w1.style.transform='translate(-50%,calc(-100% - '+(h/2+gap)+'px))';w2.style.transform='translate(-50%,'+(h/2+gap)+'px)'}
+    else{w1.style.transform='translate(calc(-100% - '+(w/2+gap)+'px),-50%)';w2.style.transform='translate('+(w/2+gap)+'px,-50%)'}
+    var wo=1-cl((e-.35)/.4); w1.style.opacity=w2.style.opacity=wo; hint.style.opacity=1-cl(p/.12);
+    var c=cl((p-.62)/.22); copy.style.opacity=c; copy.style.transform='translateY('+(1.5*(1-c))+'rem)';
+  }
+  gsap.registerPlugin(ScrollTrigger);
+  var st={p:0}; apply(0); if(!img.complete) img.addEventListener('load',function(){apply(st.p)});
+  gsap.to(st,{p:1,ease:'none',onUpdate:function(){apply(st.p)},scrollTrigger:{trigger:sec,start:'top top',end:'bottom bottom',scrub:.6,invalidateOnRefresh:true,onRefresh:function(){apply(st.p)}}});
+  addEventListener('resize',function(){apply(st.p)});
 })();
 </script>
