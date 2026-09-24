@@ -39,6 +39,12 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | **`13_外部AI資源評估與採用紀錄.md`** | 外部 skill／框架的評估結論（SML 不採用、Webflow 官方 skill 的採用邊界） | **要引入任何外部 AI 工具前** |
 | **`14_Webflow_Agent_Instructions同步規範.md`** ⭐ | 站上那兩份會被 MCP 自動載入的規則、逐條差異對照、同步程序、寫回紀錄 | **每次動工前**（尤其是只連 MCP、沒有 clone repo 的 session） |
 | **`15_設計權威分層與頁面選擇矩陣.md`** | Tier A/B/C 用哪個、Hero 怎麼選、各類頁面的 Section Flow、影像來源優先序 | **規劃新頁面／Landing Page 時** |
+| **`18_載入效能稽核_2026-09-22.md`** | 線上實測的載入效能稽核：CMS 封面圖 background-image 造成的圖片爆量、Slater `no-store`、字體實際沒生效、render-blocking 清單 | **動效能、圖片、字體、head/footer 自訂程式碼前** |
+| **`19_news封面圖改用Image元素_變更紀錄.md`** | `/news` 卡片封面由 background-image 改為 Image 元素的變更、回滾步驟與實測 | **動新聞卡片結構前** |
+| **`20_IX2轉IX3遷移盤點與計畫.md`** | IX2 → IX3 的能力差異、試點陷阱（hover 只播一次、wf:class 全站選取）。數字已由 22 修正 | **寫任何 IX3 互動前** |
+| **`21_Jubo動效準則_IX3.md`** | 動效 token、情境對照、payload 範本、禁止事項、8 項上線驗證清單 | **設計或驗收動效前** |
+| **`22_IX2全站逐頁清查_2026-09-23.md`** | 384 個 IX2 觸發器逐頁比對：149 個在用、235 個孤兒；導覽列三重驅動問題 | **規劃 IX2 遷移或刪除前** |
+| **`23_智齡數位子品牌改版草稿_2026-09-24.md`** | 智齡數位（B2G 客製軟體子品牌）改版方向、草稿頁樣式變更、共用 class 邊界、待確認事項 | **動智齡數位頁面前** |
 | `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---

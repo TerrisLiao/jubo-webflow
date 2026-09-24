@@ -14,6 +14,7 @@ Jubo 日本市場兩個頁面（`/jp/overview`、`/jp/about-us`）的規範與�
 任何工作都必須遵守：
 
 - **AI 不得自行 Publish**（含 staging）；發布時機與範圍由 Terris 決定。兩頁 `draft: false` 是 Terris 刻意設定，不是待修的異常。
+  - 例外（2026-09-23 Terris 授權）：全站 IX2 → IX3／CSS 遷移專案期間，AI 可為驗證目的發布 **staging**（`publishToWebflowSubdomain: true`、不帶 customDomains），日本頁會隨之更新。**正式站發布仍須另行明確授權。** 見 `Jubo官網AI開發規範/21_Jubo動效準則_IX3.md`。
 - 不直接 rename 或修改全站共用 component、utility、variable。
 - 不以「看起來沒用」為理由刪 class；先查全站使用與 Slater selector。
 - Webflow 即時結構優先於 repository 快照；文件若與 Designer 衝突，先讀回確認再更新文件。
