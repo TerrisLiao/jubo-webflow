@@ -22,7 +22,7 @@
     .aeo-faq details {
       overflow: hidden;
       margin: 0;
-      border: 0;
+      border: 1px solid color-mix(in srgb, var(--neutral--black) 8%, transparent);
       border-radius: 2rem;
       background: var(--neutral--white);
       box-shadow: none;
@@ -51,8 +51,7 @@
       flex: 0 0 2rem;
       width: 2rem;
       height: 2rem;
-      border-radius: 999px;
-      background: var(--gradient--announce-bar-purple);
+      background: transparent;
     }
 
     .aeo-faq__icon::before,
@@ -60,10 +59,10 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      width: 0.75rem;
-      height: 2px;
+      width: 1.5rem;
+      height: 2.5px;
       border-radius: 999px;
-      background: var(--neutral--black);
+      background: var(--primary--accent);
       content: "";
       transform: translate(-50%, -50%);
       transition: transform 240ms ease;
