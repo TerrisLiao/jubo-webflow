@@ -1,0 +1,270 @@
+<!--
+  感染管制 B16 文章 FAQ（3 題），由 news-faq-accordion.html 通用版產生。
+  卡片外觀對齊首頁底部 FAQ：白底、2rem 圓角、無外框、無陰影。
+  JavaScript 會同時處理展開與收合動畫；prefers-reduced-motion 使用者會直接切換。
+  注意：Webflow Designer 的靜態快照不會執行 Code Embed JavaScript，正式發布後仍需實際點擊驗證。
+-->
+<div class="aeo-faq">
+  <style>
+    .aeo-faq,
+    .aeo-faq *,
+    .aeo-faq *::before,
+    .aeo-faq *::after {
+      box-sizing: border-box;
+    }
+
+    .aeo-faq {
+      display: grid;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .aeo-faq details {
+      overflow: hidden;
+      margin: 0;
+      border: 0;
+      border-radius: 2rem;
+      background: var(--neutral--white);
+      box-shadow: none;
+    }
+
+    .aeo-faq summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: 2rem;
+      color: var(--neutral--black);
+      font-size: 1.125rem;
+      font-weight: 400;
+      line-height: 1.5;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .aeo-faq summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .aeo-faq__icon {
+      position: relative;
+      flex: 0 0 2rem;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 999px;
+      background: var(--gradient--announce-bar-purple);
+    }
+
+    .aeo-faq__icon::before,
+    .aeo-faq__icon::after {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0.75rem;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--neutral--black);
+      content: "";
+      transform: translate(-50%, -50%);
+      transition: transform 240ms ease;
+    }
+
+    .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .aeo-faq details[open] .aeo-faq__icon::after {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    .aeo-faq__answer {
+      overflow: hidden;
+      height: 0;
+    }
+
+    .aeo-faq__answer-inner {
+      padding: 0 2rem 2rem;
+      color: var(--neutral--black);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .aeo-faq__answer-inner > :first-child {
+      margin-top: 0;
+    }
+
+    .aeo-faq__answer-inner > :last-child {
+      margin-bottom: 0;
+    }
+
+    @media (max-width: 767px) {
+      .aeo-faq summary {
+        gap: 1rem;
+        padding: 1.5rem;
+        font-size: 1rem;
+      }
+
+      .aeo-faq__answer-inner {
+        padding: 0 1.5rem 1.5rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .aeo-faq__icon::before,
+      .aeo-faq__icon::after {
+        transition: none;
+      }
+    }
+  </style>
+
+  <details>
+    <summary>
+      <span>長照機構評鑑指標 B16 在評鑑什麼？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>B16 的全名是「服務對象感染預防、處理及監測情形」，評鑑會檢視四件事：</p>
+        <ol>
+          <li>感染評估與監測流程是否確實執行</li>
+          <li>監測與分析紀錄是否完整</li>
+          <li>疥瘡、呼吸道、腸道傳染病及不明原因發燒等疑似個案與群聚事件，有沒有處理流程、原因分析與改善</li>
+          <li>住民轉出入是否有感染資訊交接紀錄，可參考疾管署的「機構間感染管制轉介單」</li>
+        </ol>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>住民感染要怎麼判定是「機構內感染」？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <p>以入住當天為第 1 天，第 3 天（含）以後發生的感染，才列為機構內感染（參照疾管署醫院版定義）。收案有三原則：症狀必須是新發生或急速惡化；先排除非感染原因，例如軟便劑造成的腹瀉、心衰竭造成的喘；不能只憑單一證據，疑似個案要確定後才正式收案。</p>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>
+      <span>感染發生率與發生密度怎麼計算？</span>
+      <span class="aeo-faq__icon" aria-hidden="true"></span>
+    </summary>
+    <div class="aeo-faq__answer">
+      <div class="aeo-faq__answer-inner">
+        <ul>
+          <li>發生率（%）＝ 當月某事件新發生的住民人數 ÷ 當月住民總人數 × 100%</li>
+          <li>發生密度（‰）＝ 當月某事件發生的人次 ÷ 當月住民總人日數 × 1000‰</li>
+        </ul>
+        <p>總人日數是當月每天住民人數的加總。例如某月感染 7 人次、總人日數 300，發生密度約為 23.3‰。計算尿管相關感染時，分母要換成尿管使用人日數。</p>
+      </div>
+    </div>
+  </details>
+
+  <script>
+    (function () {
+      var scriptEl = document.currentScript;
+      var root = scriptEl.closest(".aeo-faq");
+      if (!root) return;
+
+      var reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      root.querySelectorAll("details").forEach(function (item) {
+        var summary = item.querySelector("summary");
+        var answer = item.querySelector(".aeo-faq__answer");
+        if (!summary || !answer) return;
+
+        var animation = null;
+        var isClosing = false;
+        var isExpanding = false;
+
+        summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+        answer.style.height = item.open ? "auto" : "0px";
+
+        summary.addEventListener("click", function (event) {
+          event.preventDefault();
+
+          if (reduceMotion) {
+            item.open = !item.open;
+            answer.style.height = item.open ? "auto" : "0px";
+            summary.setAttribute("aria-expanded", item.open ? "true" : "false");
+            return;
+          }
+
+          if (isClosing || !item.open) {
+            openItem();
+          } else if (isExpanding || item.open) {
+            closeItem();
+          }
+        });
+
+        function closeItem() {
+          isClosing = true;
+          isExpanding = false;
+          summary.setAttribute("aria-expanded", "false");
+
+          if (animation) animation.cancel();
+
+          var startHeight = item.offsetHeight + "px";
+          var endHeight = summary.offsetHeight + "px";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 320, easing: "cubic-bezier(0.4, 0, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.open = false;
+            answer.style.height = "0px";
+            item.style.height = "";
+            item.style.overflow = "";
+            isClosing = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isClosing = false;
+          };
+
+          item.style.overflow = "hidden";
+        }
+
+        function openItem() {
+          isExpanding = true;
+          isClosing = false;
+          item.open = true;
+          summary.setAttribute("aria-expanded", "true");
+          answer.style.height = "auto";
+
+          if (animation) animation.cancel();
+
+          var startHeight = summary.offsetHeight + "px";
+          var endHeight = item.offsetHeight + "px";
+          item.style.height = startHeight;
+          item.style.overflow = "hidden";
+
+          animation = item.animate(
+            { height: [startHeight, endHeight] },
+            { duration: 360, easing: "cubic-bezier(0.2, 0.8, 0.2, 1)" }
+          );
+
+          animation.onfinish = function () {
+            item.style.height = "";
+            item.style.overflow = "";
+            answer.style.height = "auto";
+            isExpanding = false;
+            animation = null;
+          };
+
+          animation.oncancel = function () {
+            isExpanding = false;
+          };
+        }
+      });
+    })();
+  </script>
+</div>
