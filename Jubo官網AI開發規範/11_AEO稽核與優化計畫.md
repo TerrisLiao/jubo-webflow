@@ -786,3 +786,157 @@ P0-B B7 已指出報告落地頁與 PDF 失效；這不應只被視為修 404，
 ## P2-D ── 社群與第三方提及的使用原則
 
 Reddit、論壇與社群不是可任意投放的媒體。先確認目標問題的 AI 回答是否真的常引用該平台；若值得投入，必須由具名、熟悉產品的人長期且透明地提供專業協助。禁止偽裝用戶、硬推銷與製造不實口碑，因為這會損害品牌並降低長期信任。
+
+---
+
+# 影片補充（2026-10-01）──《The Answer Engine Ep. 7》Aleyda Solis × Guy Yalif
+
+> 來源：Webflow 2026-09-29 Webinar「The technical truth about AI visibility」（YouTube `VZJMzsm4WqU`，43:15）。
+> 方法：以 yt-dlp 取 YouTube 自動字幕得到完整逐字稿（逐字稿不進 repo），對照 Terris 提供的 ChatGPT 摘要；
+> 再以 **線上 HTML（curl）＋ Webflow MCP `query_pages_schema_markup`** 複驗 Jubo 現況。複驗日 2026-10-01。
+> 本次只做稽核與文件，**沒有修改 Webflow 任何設定，沒有 Publish。**
+
+## 影片本身真正講了什麼（與 ChatGPT 摘要的差異）
+
+ChatGPT 摘要裡的「Accessible → … → Transactable 十層框架」、「Official Fact Sheet」、「第三方引用佔 84–93%」、
+「30–50 題 Prompt Library」**不是影片內容**，而是 Aleyda 在影片最後推薦的那份 checklist（9/26 更新）的內容。
+方向沒錯，但引用時要標清楚出處。影片逐字稿實際的重點：
+
+| 影片論點 | 時間點 | 對 Jubo 的意義 |
+|---|---|---|
+| ChatGPT／Claude／Gemini 的爬蟲**不執行 JavaScript**；結構化資料也不要靠 JS 注入 | 03:00–06:00 | Jubo 是 SSR，正文沒問題；但首頁 FAQPage 是 JS 產生（見 N3） |
+| Google 文件寫明 HTML **只讀前 2MB**；AI 爬蟲更偏重頁面**開頭**的內容 | 08:00–10:00 | **Jubo 三個 solutions 頁原始 HTML 2.6MB**（見 N1） |
+| 不要另做平行版本（llms.txt、Markdown 版、cats.txt），把資源放回主站 | 11:00–14:00 | 與本計畫「不擴寫 llms.txt」一致 |
+| schema 與頁面內容的落差「我不會說它被允許」；短期鑽漏洞會在下次模型更新反噬 | 29:00–34:00 | 支持 A2 移除假評分、P2-B 把 FAQ 搬上頁面 |
+| 先量 → 立假設 → 依 impact/effort 排序 → 實作 → 再量 | 16:00–21:00、28:00 | 支持 P1-F 月度閉環 |
+| 多語系：超過 50% 的引用已來自**當地語言**的生態系，且持續上升 | 35:00–38:00 | `/jp` 不能只是翻譯（見 N2） |
+| llms.txt：沒有資料顯示 LLM 在用，Webflow 也只當 future-proofing | 38:00 | 維持現狀，不投入 |
+
+## ChatGPT 摘要對 Jubo 現況的判讀：哪些對、哪些要修正
+
+| ChatGPT 的說法 | 複驗結果 |
+|---|---|
+| 首頁 `numberOfEmployees: 330000`、`reviewCount: 2700` 是 P0 | ✅ 正確，且**與 8/20 稽核 A1/A2 相同，6 週後仍未修**（Webflow 設定與線上 HTML 皆同） |
+| 首頁問題只有這兩個 | ⚠️ 不完整。首頁仍有 `url:"/"` 相對路徑、無 `@id`、`sameAs: []`、`member` 5 個無名 Person（A3–A6 全部未修） |
+| 居服頁「最完整，可以當基準」 | ⚠️ 只對 `/products/home-care`（有 `UnitPriceSpecification`、`featureList`、`screenshot`）。**`/solutions/home-care` 是另一頁**，schema 只有 824 字元、無價格、無 FAQ，且掛著假的 `4.75 / 100` 評分 |
+| 日照／住宿要重新檢查 rating 與價格單位 | ✅ 正確，實測更嚴重：`/products/residential-care` 掛 `5 / 700` 評分、價格 `125` 無單位且有 `InStock`；`/products/day-care` 用 5 則精選推薦算出 `5 / 5`（見 N5） |
+| `/security` 是 draft、沒有 JSON-LD | ✅ 正確（2026-09-23 最後編輯，draft） |
+| llms.txt 列 P3，不要投入 | ✅ 同意；但 Jubo **早就有** llms.txt（1,964 bytes、13 條連結全通），結論是「維持＋改 www」，不是「要不要做」 |
+| FAQ rich result 已於 2026-05 停止 | ✅ 已查證：Google 2026-05-07 在 FAQ 結構化資料文件加上停用公告，6 月起移除測試支援；**schema 本身仍有效、不需移除** |
+
+## 這次複驗新發現的問題（8/20 稽核沒有的）
+
+### N1. 三個 solutions 頁被一張 2.3MB 的內嵌圖撐破 Google 的 2MB 上限（新 P0）
+
+`/solutions/residential-care`、`/solutions/day-care`、`/solutions/home-care` 的原始 HTML 各約 **2.6MB**。
+原因是頁面中段一個 `icon-embed-super-2xlarge w-embed` 裡放了 **2.33MB 的 SVG，SVG 裡再包 base64 PNG**。
+
+| 頁面 | 該 SVG 位置（byte） | 2MB 之後的可見文字 | 2MB 之後被截掉的內容 |
+|---|---|---|---|
+| residential-care | 138,882 → 2,470,770 | 1,152 字（約全頁 1/3） | 客戶活動、Jubo AI、三三分享會、**客戶成功故事**、CTA |
+| day-care | 133,109 → 2,464,997 | 1,063 字 | 同上 |
+| home-care | 約同位置 | 940 字 | 同上 |
+
+被截掉的正好是**第三方佐證**（具名機構的導入故事）——在 Aleyda 的框架裡屬於 Corroborated／Credible 層，
+是 AI 判斷「別人怎麼說 Jubo」的頁內證據。對照：首頁 547KB、`/ai/amy` 169KB、三個 `/products/*` 約 170KB，都沒有這個問題。
+
+**修法（待 Terris 授權，需 Designer）**：把該 Embed 換成 Webflow 原生 Image（上傳到 Assets，WebP/AVIF），
+不要用 base64。**不要改 `icon-embed-super-2xlarge` 這個 utility class 本身**，只換該元素的內容。
+修完以 `curl -s URL | wc -c` 確認 < 500KB。若該圖是 Component，先查全站實例。
+
+### N2. `/jp/overview`、`/jp/about-us` 已上線，但 `<html lang="zh-TW">`、零 hreflang
+
+兩頁都是 HTTP 200、在 sitemap 裡、有自我 canonical，但宣告自己是繁體中文。
+影片的多語系段落正是在說：AI 引用越來越偏向**當地語言生態系**，語言訊號錯誤等於把這兩頁推出日文檢索池。
+Webflow 的 `lang` 是站台層級，單頁改不了；可選方案：（a）啟用 Webflow Localization 建 `ja` locale（成本最高、最正確）；
+（b）暫時在兩頁 `<head>` custom code 補 `hreflang` 互指與 JSON-LD `inLanguage: "ja"`，`lang` 錯誤先登記為已知限制。
+**交 `JP日本市場頁面改版/05_待辦與待確認.md` 決策**，本文件不擅自定案。
+
+### N3. FAQPage 有三種不同的錯誤寫法
+
+| 頁面 | 問題 |
+|---|---|
+| `/solutions/day-care` | FAQPage 的兩個 `Question` 是「以前常遇到的狀況」「使用智齡後的改善」——**不是問題**，是段落標題 |
+| `/solutions/residential-care` | 4 組問答寫得好，但**頁面上看不到**（P2-B，仍未修） |
+| `/`（首頁） | FAQPage 由頁內 `<script>` 的 `generateFAQSchema()` 從 `.solutions-basic-model_accordion` 讀 DOM 後**用 JS 注入**。可見 FAQ 本身是 SSR（8 題），AI 讀得到；但 JSON-LD 只有執行 JS 的爬蟲看得到 |
+
+FAQ rich result 停用後，FAQPage schema 的 Google 顯示價值歸零，但 AI 抽取仍可能參考。
+**新規則：可見 FAQ 是本體，FAQPage schema 是附屬品；schema 只能描述頁面上看得到的問答，寧可不加也不要加錯。**
+首頁那段 JS 不急著拆（`.solutions-basic-model_accordion` 與 `data-faq-*` 需先查 `custom-code/slater-selectors.md`），
+但之後新頁一律用頁面設定的原生 `jsonLdSchema` 欄位，不再用 JS 產生。
+
+### N4. 同一個產品在 `/solutions` 與 `/products` 用不同名字
+
+| 產品 | `/solutions/*` schema | `/products/*` schema |
+|---|---|---|
+| 居服 | 智齡居服照護系統 | Jubo 居服照護管理平台（alternateName：智齡居服系統） |
+| 日照 | 智齡日照系統（`BusinessApplication`） | Jubo 日照型照護管理平台（`HealthApplication`） |
+
+同一產品 2–3 個名字、2 種 `applicationCategory`，彼此也沒有 `@id` 互指。這正是 ChatGPT 摘要說的
+「產品名稱前後不一致」，但它沒發現就發生在 Jubo 自己的兩層頁面之間。
+**修法**：由 Fact Sheet 定一個正式產品名＋一組 alternateName，兩層頁面共用同一個 `@id`
+（例：`https://www.jubo-health.com/products/day-care#software`），`/solutions` 頁以 `about: {"@id": …}` 引用，不再重寫一份。
+
+### N5. 價格「單位」在頁面上就不清楚，schema 只是照抄這個模糊
+
+| 頁面 | 可見價格 | schema |
+|---|---|---|
+| `/products/residential-care` | `$125 起（含稅）`——**沒寫「每什麼」** | `price: 125`、無單位、`InStock`、假評分 `5 / 700` |
+| `/products/day-care` | `$185 /人（含稅）（依立案數級距調整）`——「人」是個案還是員工？ | `price: 185`、無單位；`aggregateRating 5 / 5` 由 5 則精選推薦算出 |
+| `/products/home-care` | i照護 `$100 /人（未稅）`；Jubo `$125 /人（含稅）（最低 10 個帳號）` | 有 `UnitPriceSpecification`（每「工作人員」）✅，但沒寫含稅／未稅與最低帳號數 |
+
+AI 被問「Jubo 怎麼收費」時，三頁會給出三種計價基礎、兩種稅別，且無法分辨。**先修頁面文字，再修 schema。**
+`/products/day-care` 的 5 則 `Review` 是真實具名推薦、可以保留；但用它們算出的 `aggregateRating` 屬於業者自選評價，**一併移除**（與 A2 同原則）。
+
+### N6. `/security` 發布前的建議
+
+頁面目前 draft，SEO 文案已寫好。發布前建議：
+
+1. 結構採「**問題 → Jubo 做法 → 適用範圍 → 可驗證證據**」，每個 H2 用買方真實問句
+   （例：「照護資料存在哪裡？」「AI 功能會不會把個案資料送出去？」「誰可以看到哪些資料？」）。
+2. 證據只寫**可查證**的東西：認證名稱與編號、稽核年份、資料存放區域、加密方式；
+   沒有文件可佐證的形容詞（「最高規格」）不寫——`/privacy` 現行 SEO description 就有「最高規格的防護」，同步檢查。
+3. 內部連結：`/ai/amy` 的「個案資料會外流嗎？」與 FAQ CMS 第 7 題，答案末尾連到 `/security` 對應段落。
+4. 不必先做 JSON-LD；先把可見內容做對（與 ChatGPT 判斷一致）。
+
+### 8/20 稽核項目的進度（10/1 線上複驗）
+
+| 項目 | 狀態 |
+|---|---|
+| A1 `numberOfEmployees` | ❌ 未修 |
+| A2 假評分（首頁、solutions 三頁、products 兩頁） | ❌ 未修 |
+| A3–A6 首頁空殼 member、相對 URL、無 `@id`、`sameAs: []` | ❌ 未修 |
+| A7 robots.txt 只有一行 | ❌ 未修（48 bytes） |
+| P2-B residential FAQ 不可見 | ❌ 未修 |
+| P3-A `/jptest` 被索引 | ✅ 已 404 |
+| P3-B sitemap 無 `lastmod` | ✅ 已修（137 個 URL 全有 `lastmod`） |
+| P3-B sitemap 收錄 `/demo/*` | ❌ 仍收錄 6 個 |
+| P3-B `llms.txt` 非 www 連結 | ❌ 未修 |
+
+## 對 ChatGPT 建議的取捨
+
+| ChatGPT 建議 | 判斷 |
+|---|---|
+| **Official Fact Sheet** | ✅ 採用，並與「優化清單 #3 統一官方數字」、P1-E「事實台帳」**合併成同一份**，不要做第三份。每個數字必須有「**定義＋統計日期＋負責人**」三欄——B1 已證明 Jubo 的問題不是缺數字，是 8 個版本的數字沒有定義。產品正式名稱（N4）與計價單位（N5）也放進去 |
+| **FAQ CMS 2.0（加 10 個欄位）** | ⚠️ 先別加。這個 collection 只有 7 筆，**而且沒有任何可索引的頁面在顯示它**（`/chang-jian-wen-ti` template 仍 404）。先決定 FAQ 要在哪些頁面可見，再只加 3 個欄位：`last-reviewed`（日期）、`applies-to`（多重參照產品）、`source-url`。`schema-plain-text` 改當「40–80 字短答案」用即可，不需另開 Answer Summary |
+| **Decision-support content** | ✅ 採用。與 P1-D 問題庫一致；`/news` 目前以活動公告為主，週稿選題改從業務／客服問題庫出（見 `12_AEO文章寫作指南.md`） |
+| **Prompt Library 30–50 題** | ✅ 採用，從 P1-F 的 20–30 題擴充，每題加標籤：機構類型 × 角色 × 階段 × 市場。Brand 類 prompt 只佔少數 |
+| **第三方證據層** | ✅ 已在 P0-B（B3 LinkedIn 總部在加拿大、B4 無 Wikidata、B7 數據報告 404）。影片的提醒是**依 impact/effort 選平台**，不是去 Reddit 發文 |
+| **llms.txt** | 維持現狀，只把 13 條連結改 www |
+
+## 更新後的優先順序（2026-10-01）
+
+| 序 | 項目 | 來源 | 成本 |
+|---|---|---|---|
+| 1 | **solutions 三頁的 2.3MB 內嵌圖換成 Assets 圖片** | N1 | 低（Designer 換一個元素） |
+| 2 | 移除全部 `aggregateRating`（首頁、solutions ×3、products/residential、products/day-care） | A2、N5 | 極低 |
+| 3 | 首頁 Organization 重寫：刪 `numberOfEmployees`／`member`，補 `@id`、絕對 URL、`sameAs`、`areaServed` | A1、A3–A6 | 低 |
+| 4 | Fact Sheet（含數字定義、產品正式名、計價單位） | B1、N4、N5 | 低（需 Terris 決策） |
+| 5 | 修 `/solutions/day-care` 的假 Question；residential 的 4 組問答搬上頁面 | N3、P2-B | 中 |
+| 6 | products 三頁的價格單位與稅別寫清楚，再同步 schema | N5 | 低 |
+| 7 | `/jp` 兩頁的語言訊號方案決策 | N2 | 待決策 |
+| 8 | `/security` 依 N6 結構完成後發布 | N6 | 中 |
+| 9 | robots.txt 顯性 Allow、sitemap 移除 `/demo/*`、llms.txt 改 www | A7、P3-B | 極低 |
+| 10 | Prompt Library baseline（30–50 題、帶標籤） | P1-F | 低 |
+
+1–3、6、9 都是**不改版面**的修正，可以同一批做；全部要 Terris 確認後才 Publish，並在 Publish 後用 curl 複驗線上 HTML。
