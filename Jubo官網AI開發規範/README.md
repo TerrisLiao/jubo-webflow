@@ -39,7 +39,7 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | **`13_外部AI資源評估與採用紀錄.md`** | 外部 skill／框架的評估結論（SML 不採用、Webflow 官方 skill 的採用邊界） | **要引入任何外部 AI 工具前** |
 | **`14_Webflow_Agent_Instructions同步規範.md`** ⭐ | 站上那兩份會被 MCP 自動載入的規則、逐條差異對照、同步程序、寫回紀錄 | **每次動工前**（尤其是只連 MCP、沒有 clone repo 的 session） |
 | **`15_設計權威分層與頁面選擇矩陣.md`** | Tier A/B/C 用哪個、Hero 怎麼選、各類頁面的 Section Flow、影像來源優先序 | **規劃新頁面／Landing Page 時** |
-| `18_新聞頁客戶故事入口按鈕.md` | `/news` 篩選列上方新增「客戶成功故事」玻璃入口卡：結構、`news-story-link_*`、第一版擠壞篩選列的教訓 | 動新聞頁篩選列前 |
+| `18_新聞頁客戶故事入口按鈕.md` | `/news` 篩選列上方「客戶成功故事」玻璃入口卡：真實頭像、`news-story-link_*`、兩個 IX3、前兩版的教訓 | 動新聞頁篩選列前 |
 | `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---
