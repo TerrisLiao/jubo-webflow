@@ -58,6 +58,10 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 `.news-category_list`　`.news-category_list-wrap`　`.news-category_item`
 `.category-radio_field.is-mobile`　`.category-radio_arrow`　`.category-radio_text`
 
+> ⚠️ Slater JS 會對 `.news-filter_form` 裡**每一個** `.cta-button.is-filter` 切換 `is-active`，
+> Slater CSS 也會在 ≤991px 把 `.news-filter_form > .cta-button.is-filter` 藏起來。
+> 要在篩選列放「不是篩選」的按鈕（例如 2026-10-01 的客戶故事入口），**不可掛 `is-filter`**。見 `Jubo官網AI開發規範/18_新聞頁客戶故事入口按鈕.md`。
+
 ### 客戶案例
 `.single-customer-story_wrap`　`.customer-story_image-wrap`　`.customer-story_headline-wrap`　`.customer-story_pagination`
 
