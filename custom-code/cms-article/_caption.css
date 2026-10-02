@@ -1,0 +1,38 @@
+/* ---------- 5. 圖片說明：圖上毛玻璃條（只在 story 模板） ---------- */
+/* 只對 Webflow 內建的圖片說明欄（figcaption）生效。
+   本節不會選到 img，所以不會影響後台編輯器顯示圖片。 */
+.richtext figure.w-richtext-figure-type-image { position: relative !important; }
+.richtext figure.w-richtext-figure-type-image figcaption {
+  position: absolute !important;
+  left: 1.25rem !important;
+  right: 1.25rem !important;
+  bottom: 1.5rem !important;
+  margin: 0 !important;
+  padding: 1.25rem 1.5rem !important;
+  text-align: left !important;
+  background: rgba(255, 255, 255, .72) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
+          backdrop-filter: blur(20px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, .55) !important;
+  border-radius: 1rem !important;
+  color: var(--neutral--black) !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.7 !important;
+  box-shadow: 0 8px 28px rgba(21, 23, 23, .12) !important;
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    background: rgba(255, 255, 255, .93) !important;
+  }
+}
+@media screen and (max-width: 767px) {
+  .richtext figure.w-richtext-figure-type-image figcaption {
+    left: .75rem !important;
+    right: .75rem !important;
+    bottom: 1rem !important;
+    padding: 1rem 1.125rem !important;
+    font-size: 1rem !important;
+    line-height: 1.65 !important;
+    border-radius: .75rem !important;
+  }
+}

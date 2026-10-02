@@ -1,0 +1,227 @@
+<style>
+/* ============================================================
+   CMS 文章樣式（/news 模板）
+   2026-09-22 v8　決議者：Terris
+   原始碼在 repo：custom-code/cms-article/
+   詳見 Jubo官網AI開發規範/18、12。
+   ============================================================ */
+
+/* ---------- 1. 表格 ---------- */
+.richtext div:has(> table) {
+  background: transparent !important;
+  border: 1px solid rgba(21, 23, 23, .10) !important;
+  border-radius: 1rem !important;
+  overflow-x: auto !important;
+  margin: 2rem 0 !important;
+}
+.richtext table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+}
+.richtext table th,
+.richtext table td {
+  text-align: left !important;
+  padding: 1rem 1.5rem !important;
+  vertical-align: top !important;
+  border-bottom: 1px solid rgba(21, 23, 23, .08) !important;
+  color: var(--neutral--black) !important;
+}
+.richtext table th *,
+.richtext table td * { color: inherit !important; }
+.richtext table th {
+  background: rgba(0, 178, 192, .09) !important;
+  font-weight: 600 !important;
+  font-size: .875rem !important;
+  letter-spacing: .03em !important;
+  border-bottom: 1px solid rgba(0, 178, 192, .22) !important;
+}
+.richtext table th:last-child { background: rgba(0, 178, 192, .16) !important; }
+.richtext table td:last-child {
+  background: rgba(0, 178, 192, .06) !important;
+  font-weight: 600 !important;
+}
+.richtext table tbody tr:last-child td { border-bottom: 0 !important; }
+
+/* ---------- 2. 引言／重點卡片 ---------- */
+.richtext blockquote {
+  background-color: var(--neutral--white) !important;
+  background-image:
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E"),
+    radial-gradient(55% 120% at 4% 112%, rgba(177, 93, 255, .30) 0%, rgba(177, 93, 255, 0) 62%),
+    radial-gradient(52% 115% at 22% 118%, rgba(0, 178, 192, .34) 0%, rgba(0, 178, 192, 0) 64%),
+    radial-gradient(45% 110% at 44% 122%, rgba(107, 143, 240, .22) 0%, rgba(107, 143, 240, 0) 66%) !important;
+  border: none !important;
+  border-radius: 1.5rem !important;
+  padding: 2rem 2.25rem !important;
+  margin: 2.5rem 0 !important;
+  font-size: 1.0625rem !important;
+  line-height: 1.85 !important;
+  color: var(--neutral--black) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 6px 30px rgba(21, 23, 23, .07) !important;
+}
+
+/* ---------- 3. FAQ 手風琴 ---------- */
+.richtext details {
+  background: var(--neutral--white) !important;
+  border: 1px solid rgba(21, 23, 23, .09) !important;
+  border-radius: 1rem !important;
+  overflow: hidden !important;
+}
+.richtext details summary { padding: 1.5rem 1.75rem !important; }
+.richtext .aeo-faq__answer-inner,
+.richtext #jubo-research-faq__list p { padding: 0 1.75rem 1.5rem !important; }
+.richtext details .jb-faq__panel { overflow: hidden !important; }
+.richtext #jubo-research-faq details summary[aria-expanded="false"]::after {
+  transform: rotate(45deg) translateY(-0.2rem) !important;
+}
+.richtext .aeo-faq summary[aria-expanded="false"] .aeo-faq__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg) !important;
+}
+
+/* ---------- 4. 手機 ---------- */
+/* 手機上寬表格可以左右捲，但要讓人看得出來還有內容。
+   用 Komarov 的 scroll-shadow 技法：兩層「遮罩」跟著內容捲動
+   （background-attachment: local），兩層陰影固定在容器邊緣（scroll）。
+   捲到底時遮罩會蓋住陰影，所以陰影會自動出現／消失，不需 JS。 */
+@media screen and (max-width: 767px) {
+  .richtext div:has(> table) {
+    background-image:
+      linear-gradient(to right, var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      linear-gradient(to left,  var(--neutral--white) 30%, rgba(255, 255, 255, 0)),
+      radial-gradient(farthest-side at 0 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)),
+      radial-gradient(farthest-side at 100% 50%, rgba(21, 23, 23, .14), rgba(21, 23, 23, 0)) !important;
+    background-position: left center, right center, left center, right center !important;
+    background-repeat: no-repeat !important;
+    background-size: 2.5rem 100%, 2.5rem 100%, .875rem 100%, .875rem 100% !important;
+    background-attachment: local, local, scroll, scroll !important;
+  }
+  /* 不給最小寬度的話，三欄表格會被壓成每行兩三個字（實測中間欄
+     變成「全年／累計／入住／日數」）。寧可讓它保持可讀寬度、左右捲，
+     上面的捲動陰影就是為了讓人知道右邊還有內容。 */
+  .richtext table {
+    font-size: .9375rem !important;
+    min-width: 34rem !important;
+  }
+  .richtext table th,
+  .richtext table td { padding: .75rem 1rem !important; }
+  .richtext blockquote { padding: 1.5rem 1.25rem !important; }
+  .richtext details summary { padding: 1.25rem !important; }
+  .richtext .aeo-faq__answer-inner,
+  .richtext #jubo-research-faq__list p { padding: 0 1.25rem 1.25rem !important; }
+}
+</style>
+<script>
+/* ============================================================
+   CMS 文章 FAQ 手風琴：平滑展開動畫
+   2026-09-22 v2　Jubo 官網
+   參數 400ms / ease 取自首頁 FAQ 的 Webflow IX2 設定。
+   同時接管純 <details> 與舊版 .aeo-faq 兩種寫法，不改 CMS 內容。
+   ============================================================ */
+(function () {
+  var DUR = 400;
+  var EASE = 'ease';
+
+  function reduced() {
+    return window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+
+  function panelOf(d) {
+    var legacy = d.querySelector('.aeo-faq__answer');
+    if (legacy) {
+      legacy.style.transition = '';
+      legacy.style.opacity = '';
+      return legacy;
+    }
+    var existing = d.querySelector('.jb-faq__panel');
+    if (existing && existing.parentNode === d) return existing;
+    var panel = document.createElement('div');
+    panel.className = 'jb-faq__panel';
+    var move = [];
+    for (var i = 0; i < d.children.length; i++) {
+      if (d.children[i].tagName !== 'SUMMARY') move.push(d.children[i]);
+    }
+    for (var j = 0; j < move.length; j++) panel.appendChild(move[j]);
+    d.appendChild(panel);
+    return panel;
+  }
+
+  function bind(d) {
+    if (d.getAttribute('data-jb-faq') === '1') return;
+
+    var old = d.querySelector('summary');
+    if (!old) return;
+
+    var summary = old.cloneNode(true);
+    old.parentNode.replaceChild(summary, old);
+
+    var panel = panelOf(d);
+    d.setAttribute('data-jb-faq', '1');
+    summary.setAttribute('aria-expanded', d.open ? 'true' : 'false');
+    panel.style.height = d.open ? 'auto' : '0px';
+
+    summary.addEventListener('click', function (e) {
+      e.preventDefault();
+      if (d.dataset.jbAnimating === '1') return;
+
+      if (reduced()) {
+        d.open = !d.open;
+        panel.style.height = d.open ? 'auto' : '0px';
+        summary.setAttribute('aria-expanded', d.open ? 'true' : 'false');
+        return;
+      }
+
+      d.dataset.jbAnimating = '1';
+      panel.style.transition = 'height ' + DUR + 'ms ' + EASE;
+
+      if (!d.open) {
+        d.open = true;
+        summary.setAttribute('aria-expanded', 'true');
+        panel.style.height = '0px';
+        var target = panel.scrollHeight;
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { panel.style.height = target + 'px'; });
+        });
+        var onOpen = function (ev) {
+          if (ev.propertyName !== 'height') return;
+          panel.removeEventListener('transitionend', onOpen);
+          panel.style.height = 'auto';
+          panel.style.transition = '';
+          delete d.dataset.jbAnimating;
+        };
+        panel.addEventListener('transitionend', onOpen);
+      } else {
+        summary.setAttribute('aria-expanded', 'false');
+        panel.style.height = panel.scrollHeight + 'px';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () { panel.style.height = '0px'; });
+        });
+        var onClose = function (ev) {
+          if (ev.propertyName !== 'height') return;
+          panel.removeEventListener('transitionend', onClose);
+          d.open = false;
+          panel.style.transition = '';
+          delete d.dataset.jbAnimating;
+        };
+        panel.addEventListener('transitionend', onClose);
+      }
+    });
+  }
+
+  function run() {
+    var list = document.querySelectorAll('.richtext details');
+    for (var i = 0; i < list.length; i++) bind(list[i]);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', run);
+  } else {
+    run();
+  }
+})();
+</script>

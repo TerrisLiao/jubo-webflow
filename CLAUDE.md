@@ -9,8 +9,9 @@
 3. `Jubo官網AI開發規範/14_Webflow_Agent_Instructions同步規範.md`（站上另有兩份會被 MCP 自動載入的規則，與本 repo 有差異）
 4. 若規劃新頁面／Landing Page：`Jubo官網AI開發規範/15_設計權威分層與頁面選擇矩陣.md`
 5. 若動 class：`custom-code/slater-selectors.md`
-6. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
-7. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
+6. 若動 CMS 文章版面：`Jubo官網AI開發規範/18_CMS文章閱讀表面_news與customer-stories.md`
+7. 若處理日本頁：`JP日本市場頁面改版/README.md`、`02_頁面現況規格.md`、`05_待辦與待確認.md`、`11_2026-08-20_樣式與結構稽核.md`
+8. 若撰寫 `/news` 文章（AEO 週稿）：`Jubo官網AI開發規範/12_AEO文章寫作指南.md`（不需要讀完整份 AEO 稽核報告）
 
 ## 核心原則
 

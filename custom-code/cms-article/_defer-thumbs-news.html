@@ -1,0 +1,24 @@
+<!-- 相關文章縮圖延後載入（只在 /news 模板）。完整理由見規範 18 §29。
+     摘要：那 5 張卡片的圖是 CSS background-image，沒有 lazy 可用，
+     也沒有響應式變體（實測一張 695KB），在畫面外卻跟封面圖搶頻寬。
+     JS 沒跑就不會加 class，等於完全不改變原本行為。 -->
+<script>
+(function () {
+  var root = document.documentElement, done = false;
+  root.classList.add('jb-defer-thumbs');
+  function release() { if (done) return; done = true; root.classList.remove('jb-defer-thumbs'); }
+  addEventListener('load', release);
+  if ('IntersectionObserver' in window) {
+    document.addEventListener('DOMContentLoaded', function () {
+      var s = document.querySelector('.section_related-news');
+      if (!s) return release();
+      new IntersectionObserver(function (e, o) {
+        if (e[0].isIntersecting) { o.disconnect(); release(); }
+      }, { rootMargin: '800px' }).observe(s);
+    });
+  }
+})();
+</script>
+<style>
+.jb-defer-thumbs .section_related-news .single-news_cover-img { background-image: none !important; }
+</style>

@@ -1,0 +1,67 @@
+<style>
+/* ---------- 7. 內文圖片比例（自動產生，請用 tools/gen-img-aspect.py 重跑） ---------- */
+/* Webflow 存的是 width="auto"，發布時當成無效值拿掉，等於完全沒有尺寸。
+   選擇器限定 figure 底下，不用泛用的 .richtext img，避免重演 2026-09-21
+   後台編輯器看不到圖片的問題（規範 18 §19）。
+   key 一定要用完整 24 碼資產 ID：同批上傳的圖前 12 碼相同，截短會讓一條
+   規則選到多張比例不同的圖，把圖片拉變形。 */
+.richtext figure img[src*="6a75457ee950886e38406e6c"] { aspect-ratio: 649 / 511; }
+.richtext figure img[src*="6a75457ee950886e38406e66"] { aspect-ratio: 645 / 465; }
+.richtext figure img[src*="6a75457ee950886e38406e69"] { aspect-ratio: 651 / 433; }
+.richtext figure img[src*="6a75457ee950886e38406e6f"] { aspect-ratio: 648 / 486; }
+.richtext figure img[src*="6a75457ee950886e38406e78"] { aspect-ratio: 655 / 481; }
+.richtext figure img[src*="6a75457ee950886e38406e72"] { aspect-ratio: 655 / 457; }
+.richtext figure img[src*="6a7d15e5d53dc85465f86836"] { aspect-ratio: 1538 / 1118; }
+.richtext figure img[src*="6a3e3dfae07c1d01a59b6e53"] { aspect-ratio: 2285 / 3000; }
+.richtext figure img[src*="6a3e3e2d56d46bbe084a5a01"] { aspect-ratio: 3000 / 2154; }
+.richtext figure img[src*="6a3e3e514305c313c6103a6f"] { aspect-ratio: 1280 / 719; }
+.richtext figure img[src*="6a3e3e79ac02d229df8a6cd8"] { aspect-ratio: 3000 / 2000; }
+.richtext figure img[src*="6a3e3eab4c6735b04b414844"] { aspect-ratio: 3000 / 2010; }
+.richtext figure img[src*="6a3e3ecc8a0dc2b6cda49add"] { aspect-ratio: 3000 / 1940; }
+.richtext figure img[src*="6a11227ab1112b07708e5a49"] { aspect-ratio: 1862 / 2560; }
+.richtext figure img[src*="6a1122698dabce041e2c0a94"],
+.richtext figure img[src*="6a1122698dabce041e2c0a99"],
+.richtext figure img[src*="6a1122698dabce041e2c0a9c"],
+.richtext figure img[src*="6a1122698dabce041e2c0aa0"],
+.richtext figure img[src*="6a1122698dabce041e2c0aa4"],
+.richtext figure img[src*="6a1122698dabce041e2c0aa8"],
+.richtext figure img[src*="6a11226ef0a6cff8625ee684"],
+.richtext figure img[src*="6a11226ef0a6cff8625ee688"],
+.richtext figure img[src*="6a11226ff0a6cff8625ee690"],
+.richtext figure img[src*="6a11226ff0a6cff8625ee698"],
+.richtext figure img[src*="6a112277040c1ecee9aa19be"],
+.richtext figure img[src*="6a112277040c1ecee9aa19c2"],
+.richtext figure img[src*="6a112277040c1ecee9aa19c7"],
+.richtext figure img[src*="6a112277040c1ecee9aa19cb"],
+.richtext figure img[src*="6a112277040c1ecee9aa19cf"],
+.richtext figure img[src*="6a11227ab1112b07708e5a40"],
+.richtext figure img[src*="6a11227ab1112b07708e5a45"],
+.richtext figure img[src*="6a11227ab1112b07708e5a4d"] { aspect-ratio: 2560 / 1707; }
+.richtext figure img[src*="6a11227ab1112b07708e5a3c"] { aspect-ratio: 2560 / 1858; }
+.richtext figure img[src*="6a11227bb1112b07708e5a51"] { aspect-ratio: 2560 / 1939; }
+.richtext figure img[src*="6a112277040c1ecee9aa19ba"] { aspect-ratio: 1707 / 2560; }
+.richtext figure img[src*="6a11226ef0a6cff8625ee68c"] { aspect-ratio: 1920 / 2560; }
+.richtext figure img[src*="6a11226ff0a6cff8625ee694"] { aspect-ratio: 2560 / 1896; }
+.richtext figure img[src*="6a112264e2fdace27701e9a4"] { aspect-ratio: 762 / 878; }
+.richtext figure img[src*="6a3a2291a6bc30633db72ab5"] { aspect-ratio: 1055 / 1491; }
+.richtext figure img[src*="6a112259da34fb47321d382d"] { aspect-ratio: 352 / 382; }
+.richtext figure img[src*="6a3a1fdad0ee905a9b7c7f3d"] { aspect-ratio: 986 / 1596; }
+.richtext figure img[src*="6a3a1e76f498168e101e9e03"] { aspect-ratio: 941 / 1672; }
+.richtext figure img[src*="6a3a28483f8238fbc78392a8"] { aspect-ratio: 1034 / 1520; }
+.richtext figure img[src*="6a1122411837367567b03110"] { aspect-ratio: 861 / 574; }
+.richtext figure img[src*="6a1122411837367567b03120"] { aspect-ratio: 891 / 594; }
+.richtext figure img[src*="6a1122411837367567b0310a"] { aspect-ratio: 894 / 596; }
+.richtext figure img[src*="6a1122411837367567b03102"] { aspect-ratio: 883 / 589; }
+.richtext figure img[src*="6a1122411837367567b03106"] { aspect-ratio: 874 / 583; }
+.richtext figure img[src*="6a11218cd6d952f141e1735b"] { aspect-ratio: 902 / 602; }
+.richtext figure img[src*="6a11218cd6d952f141e17358"] { aspect-ratio: 1079 / 720; }
+.richtext figure img[src*="6a1121895b4e7aeea2c52ee1"] { aspect-ratio: 849 / 499; }
+.richtext figure img[src*="6a1121895b4e7aeea2c52ed9"],
+.richtext figure img[src*="6a1121895b4e7aeea2c52edd"] { aspect-ratio: 1480 / 988; }
+.richtext figure img[src*="6a112186bd9cebc7209ce300"] { aspect-ratio: 1146 / 692; }
+.richtext figure img[src*="6a112186bd9cebc7209ce303"] { aspect-ratio: 1228 / 614; }
+.richtext figure img[src*="6a112186bd9cebc7209ce306"] { aspect-ratio: 1248 / 634; }
+.richtext figure img[src*="6a11218104965e45942d186a"] { aspect-ratio: 1238 / 812; }
+.richtext figure img[src*="6a11218104965e45942d1873"] { aspect-ratio: 1290 / 646; }
+.richtext figure img[src*="6a11218104965e45942d187e"] { aspect-ratio: 1248 / 626; }
+</style>
