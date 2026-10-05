@@ -268,6 +268,7 @@ Breakpoints、Typography、Containers 與 Section、Hero 選擇、Cards 與 Glas
 | 4 | 舊那份內文自稱「1.0（2026-07-22）」與 `version: 2` 不同步 | ⏳ **未做**。修它要重送完整 body（見 §3 的說明），風險大於收益，等下次有實質內容要改時一併處理 |
 | 5 | 驗證 Component ID 後回流進 `05` | ✅ **2026-08-27 完成** → 全站 35 個 component 的 ID 與實例數重新讀回並寫入 `05` |
 | 6 | `15` §2 的 Tier 分層 class 名稱尚未逐項比對站上實際 class；`15` §3／§5 的數值是 2026-07-22 快照 | ⏳ **未做**。`15` 文末已標示驗證狀態 |
+| 7 | 2026-10-05 repo 新增規則，站上兩份 Agent Instruction 尚未反映：①新動畫一律優先用 IX3（`09` §0-4、§13）②新增 Variable `neutral/line`、站上實有 43 個 Variable（`04`）③Lucide 為唯一核准的外部圖示來源（`13` §三）。站上 AI 依舊規則可能會寫頁面層 GSAP 或手打邊框色 | ⏳ **未寫回**。寫回需 Terris 明確授權；以 repo 為準 |
 
 ---
 

@@ -12,6 +12,8 @@
    新動畫一律寫在**頁面層 custom code**，不要去動 Slater。
 2. **重構不可以改到設計**（見 `00_AI工作守則.md` §6-8）。加動畫是「新增」，不是「順手改版面」。
 3. **命名照 Client-First**。動畫用的 class 一樣要符合 `folder_element` / `is-` 規則。
+4. **2026-10 起，新頁面動畫一律優先用 IX3（Webflow 原生互動）**，見 [§13](#13-ix3webflow-原生互動2026-10-起新動畫的預設做法)。
+   本文 §3–§10 的頁面層 GSAP 程式碼只在 IX3 做不到時才用（例如狀態機、即時資料、Three.js）。
 
 ---
 
@@ -686,3 +688,54 @@ router 裡有一句寫得很好，直接納入本規範：
 - [`custom-code/slater-selectors.md`](../custom-code/slater-selectors.md) — Slater 鎖住的 class，**不可改名**
 - [`03_全域工具類清單.md`](03_全域工具類清單.md) — 現有 utility
 - [`04_設計變數與色彩.md`](04_設計變數與色彩.md) — Variables
+
+---
+
+## 13. IX3（Webflow 原生互動）— 2026-10 起新動畫的預設做法
+
+> 2026-10-05 Terris 指示「你需要都使用 IX3」。/security 第六輪把手寫 GSAP 迴圈全部拿掉，改成 16 個 IX3 interaction。
+> IX3 底層就是站上的 GSAP 3.15＋ScrollTrigger＋SplitText，所以效果不打折，但**可以在 Designer 的 Interactions 面板看到、調整、交接**。
+
+### 13-1. 站上既有的動態語彙（照抄這組數值，不要自己發明）
+
+從站上既有 18 個 IX3 interaction 讀回整理（News、Jubo Digital、Mobile Menu 等）：
+
+| 用途 | ease（`timing.ease` 索引） | duration | 位移 | 其他 |
+|---|---|---|---|---|
+| 一般進場 | `5`（power2.out） | 0.5–0.7s | y 10–16px（區塊標題可到 40px） | stagger 0.035–0.12 |
+| 卡片／裝置進場 | `8`（power3.out） | 0.6–0.9s | scale 0.92–0.94 → 1 ＋ opacity | Aeline 的 card-reveal 手法 |
+| 小元件彈出（鎖頭、徽章、長條） | `14`（back.out） | 0.45–0.5s | scale 0.5–0.9 → 1 | 只用在小元件，不要用在整張卡 |
+| 進度條、線條填滿 | `6`（power2.inOut） | 0.9s | `scaleX 0→1`＋`transformOrigin: 0% 50%` | 不要動 width |
+| 背景沉降 | `26`（expo.out） | 1.2–1.8s | scale 1.06 → 1 | Hero 背景、框線圖 |
+| 環境動態（漂浮、跑馬燈） | `30`（sine.inOut）／`0`（linear） | 6–60s | 很小（漂浮 10px）或 xPercent −50 循環 | `repeat:-1`，跑馬燈要接 scroll 的 leave/pause |
+| Hover 抬升 | `5` | 0.25s | y −3～−4 | multiTimeline＋`wf:trigger-only` |
+
+**conditionalPlayback 一律加：**
+- 進場類：`prefers-reduced-motion` → `skip-to-end`（直接顯示最終狀態，內容不會消失）
+- 循環／環境類與 hover：`prefers-reduced-motion` → `dont-animate`
+- scroll-scrub：手機（`small`、`tiny`）→ `skip-to-end`
+
+### 13-2. 觸發位置
+
+- 進場用 `wf:scroll`，`start: "top 85%"`（卡片 `top 80%`），`enter: "play"`、其餘 `none`。**不要用 `top bottom`**，動畫會在畫面最底下跑完，沒人看到。
+- 跑馬燈：`start: "top bottom"`、`end: "bottom top"`，`enter/enterBack: "play"`、`leave/leaveBack: "pause"`。出畫面就停，不浪費效能。
+- scrub：`scrub: 0.6`，`end` 要留足捲動距離（例：`top 80%` → `bottom 50%`）。
+
+### 13-3. MCP 寫入的坑（實測）
+
+| 坑 | 正確做法 |
+|---|---|
+| `timing.ease` 給字串（`"power2.out"`）會被拒 | 用索引數字，對照表見 `data_interactions_tool` 的 guide |
+| `duration: 400` 是 400 秒 | 用 `0.4` 或 `"400ms"` |
+| `[from, to]` 配 `tt: 0` 會被拒 | 有兩端就用 `tt: 2`，或省略讓它推斷 |
+| 目標用 `wf:class` 會打到**頁面上所有**同 class 元素 | 只想動某一區時改用 `wf:inst`，或先確認那個 class 沒有在別段出現 |
+| 同一元素被兩個 interaction 同時動 `y` | 一個動 `y`、另一個只動 `scale`／`opacity`（例：Hero 裝置的 reveal 用 scale、漂浮用 y） |
+| 漸層字（`gradient-headline`）配 `splitText` | 不要拆字；整塊 y＋opacity 進場。拆字會破壞 `background-clip: text` |
+| Initial Appearance 無法用 API 設 | 進場一律給 from 值（`opacity: ["0%","100%"]`） |
+| 建立成功 ≠ 有播放 | 必須在 Designer Preview 或 staging 實測，否則標示驗證限制 |
+
+### 13-4. 不要再做的事（第五輪被退的原因）
+
+- 每 1.5 秒插一筆的假 log、亂碼跳動、角色輪播 —— 這類**持續變化的資訊動畫**看起來粗糙、搶注意力。
+  改成「捲到時建構一次」：列表依序滑入、線條填滿、小元件彈出，然後靜止。
+- 每張卡都在循環 —— 整頁最多一兩處環境動態（Hero 漂浮、跑馬燈），其餘都是一次性。
