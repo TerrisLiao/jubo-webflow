@@ -41,6 +41,7 @@ Jubo Webflow 官網（`jubo-health.com`）的設計系統完整清單與 AI 工�
 | **`15_設計權威分層與頁面選擇矩陣.md`** | Tier A/B/C 用哪個、Hero 怎麼選、各類頁面的 Section Flow、影像來源優先序 | **規劃新頁面／Landing Page 時** |
 | `18_新聞頁客戶故事入口按鈕.md` | `/news` 篩選列上方「客戶成功故事」玻璃入口卡：真實頭像、`news-story-link_*`、兩個 IX3、前兩版的教訓 | 動新聞頁篩選列前 |
 | `19_新聞分類整理紀錄.md` | `/news` CMS 分類 7 → 4（最新消息／活動講座／長照觀點／媒體報導）、改掛清單、待設的 301 轉址 | 新增文章或動新聞分類前 |
+| `20_產品頁FAQ_設計比較與題庫草稿.md` | 首頁 FAQ 實際結構與數值、產品頁該一致或不同、資料來源三方案、三個產品頁 8 題題庫草稿、待確認清單 | 動任何頁面的 FAQ 區塊或 FAQ CMS 前 |
 | `../custom-code/slater-selectors.md` | Slater 外部 CSS/JS 鎖住的 class（**不可改名**） | 改任何 class 名之前 |
 
 ---
