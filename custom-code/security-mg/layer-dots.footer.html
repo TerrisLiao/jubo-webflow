@@ -1,0 +1,43 @@
+<script>
+/* /security 多層防護：手機版左右滑動的頁碼圓點（紀錄見 repo 18 §12-13） */
+(function () {
+  function init() {
+    var lay = document.querySelector('.security-sticky_layout');
+    var dots = [].slice.call(document.querySelectorAll('.security-layer_dot'));
+    if (!lay || !dots.length) return;
+    var pages = [].slice.call(lay.querySelectorAll('.security-sticky_visual'));
+    if (pages.length !== dots.length) return;
+    function offset(i) {
+      var max = lay.scrollWidth - lay.clientWidth;
+      return Math.min(pages[i].offsetLeft - pages[0].offsetLeft, max);
+    }
+    function sync() {
+      raf = 0;
+      var cur = 0, best = Infinity;
+      pages.forEach(function (p, i) {
+        var d = Math.abs(offset(i) - lay.scrollLeft);
+        if (d < best) { best = d; cur = i; }
+      });
+      dots.forEach(function (d, i) {
+        d.classList.toggle('is-current', i === cur);
+        d.setAttribute('aria-current', i === cur ? 'true' : 'false');
+      });
+    }
+    function go(i) {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      lay.scrollTo({ left: offset(i), behavior: reduce ? 'auto' : 'smooth' });
+    }
+    var raf = 0;
+    lay.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(sync); }, { passive: true });
+    dots.forEach(function (d, i) {
+      d.addEventListener('click', function (e) { e.preventDefault(); go(i); });
+      d.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(i); }
+      });
+    });
+    sync();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>
