@@ -14,6 +14,8 @@ Webflow 上的元素、class、IX3 interaction 都是從這裡產生的。要修
 | `ids.txt` | `data-mg` 鍵 → Webflow element id 對照表（2026-10-08 讀回） |
 | `floors.json` | 寫入 Webflow 後追加的最小字級（`max(Nem, 8px)`／字卡 `max(1em, 11px)`） |
 | `audit.js` | 跑版稽核：每 100ms 檢查文字溢出卡片、溢出舞台、白卡互相重疊。`W=350 node audit.js` 指定面板寬 |
+| `layer-dots.footer.html` | 手機版頁碼圓點的同步 script，與 /security 頁面 Footer Code 內容相同（改這裡就要一起改站上） |
+| `swipe_check.js`／`dots_check.js` | 手機版左右滑動與圓點同步的本地驗證 |
 | `gsap_check.js` | 用真正的 GSAP 跑三個循環，逐元素比對 `preview.html` 的取樣器，確認 IX3 迴圈不漂移 |
 
 `gsap_check.js` 的 GSAP 只用於本地驗證，不進網站（IX3 本身就是 GSAP runtime）。
