@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>N.Copilot 星芒 rig</title>
+<!--
+  v3。前兩版是平面圖形動畫（貼紙星星＋白色光條），這版改成光學動畫。
+
+  進場：specular 光點 → 沿 −20.1° 軸拉成 anamorphic 光條 → 兩翼在光後面沿軸生長
+        → specular 亮帶掃過表面 → 純光冷卻成 Aurora → 站定 → 12 格靜止 → 呼吸。
+
+  三個實作上的硬事實（都是實測出來的，不是查來的）
+  1. Chromium 不會在 <mask> 裡的元素被 transform 之後重繪遮罩。
+     所以生長不能用遮罩擦出來，改成兩翼自己在軸向 scale（Terris 已授權改幾何）。
+     同一個原因，「幾何呼吸」那個選項做不出來，這版拿掉了。
+  2. 方向性模糊要動 feGaussianBlur 的 stdDeviation **屬性**，屬性變更會觸發重繪，可行。
+  3. 軸向縮放用 <g rotate(-20.1)> → <g 縮放> → <g rotate(+20.1)> 三層，
+     svgOrigin 設在星芒中心（旋轉的不動點），所以兩個座標系都對得起來。
+
+  ?t=1.25 這種網址參數會把 timeline 停在那個秒數，方便逐格檢查。
+
+  素材：custom-code/brand/n-copilot/n-copilot-mark.svg（向量取自原稿 .ai）
+  Aurora 停點取樣自原稿色票（brand/n-copilot/README.md §3）
+-->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<style>
+  :root{--teal-air:#20EDF1;--teal:#00B2C0;--grey:#373A36;
+    --bg:#f8f8f8;--line:rgba(55,58,54,.13);--muted:rgba(55,58,54,.6)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--grey);line-height:1.6;
+    font-family:"Poppins","PingFang TC","Noto Sans TC",system-ui,sans-serif;
+    padding:2.5rem 1.5rem 5rem}
+  .page{max-width:62rem;margin:0 auto;display:grid;gap:1.25rem}
+  header{max-width:46rem}
+  h1{font-size:1.75rem;font-weight:600;letter-spacing:-.01em;margin-bottom:.5rem}
+  header p{color:var(--muted);font-size:.9375rem}
+  code{background:rgba(55,58,54,.06);padding:.1em .4em;border-radius:.25rem;font-size:.9em}
+
+  .stage-wrap{border:1px solid var(--line);border-radius:1.5rem;overflow:hidden;background:#fff}
+  .stage{position:relative;height:27rem;display:grid;place-items:center;transition:background .5s}
+  .stage[data-bg="white"]{background:#fff}
+  .stage[data-bg="teal"]{background:var(--teal)}
+  .stage[data-bg="aurora"]{background:linear-gradient(135deg,#20EDF1,#00B2C0 38%,#AED353 78%,#D3D730)}
+  .stage[data-bg="grey"]{background:var(--grey)}
+  .stage svg{width:min(32rem,84%);height:auto;overflow:visible}
+  .stage[data-bg="white"] .wing{fill:url(#aurora)}
+  .stage:not([data-bg="white"]) .wing{fill:#fff}
+  /* 光在亮底上不能加亮（screen 白光＝白），改用飽和色＋正常混合 */
+  .lightfx{mix-blend-mode:normal}
+  .stage:not([data-bg="white"]) .lightfx{mix-blend-mode:screen}
+  .stage[data-bg="white"] #hotspot{fill:url(#hotLight)}
+  .stage[data-bg="white"] #streak,.stage[data-bg="white"] #notchGlow{fill:#20EDF1}
+  .stage:not([data-bg="white"]) #hotspot{fill:url(#hotDark)}
+  .stage:not([data-bg="white"]) #streak,.stage:not([data-bg="white"]) #notchGlow{fill:#9DF8FF}
+
+  .bg-switch{position:absolute;top:1rem;right:1rem;display:flex;gap:.375rem;z-index:3}
+  .sw{width:1.5rem;height:1.5rem;border-radius:50%;cursor:pointer;padding:0;
+    border:1px solid rgba(55,58,54,.25);transition:transform .2s,box-shadow .2s}
+  .sw:hover{transform:scale(1.12)}
+  .sw[aria-pressed="true"]{box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--teal)}
+  .sw.white{background:#fff}.sw.teal{background:var(--teal)}
+  .sw.aurora{background:linear-gradient(135deg,#20EDF1,#00B2C0 38%,#AED353 78%,#D3D730)}
+  .sw.grey{background:var(--grey)}
+
+  .bar{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;
+    padding:1rem 1.25rem;border-top:1px solid var(--line);background:#fff}
+  button.ctl{font:inherit;font-size:.875rem;cursor:pointer;padding:.5rem 1rem;border-radius:999px;
+    border:1px solid var(--line);background:#fff;color:var(--grey);transition:.18s}
+  button.ctl:hover{border-color:var(--teal);color:var(--teal)}
+  button.ctl[aria-pressed="true"]{background:var(--grey);border-color:var(--grey);color:#fff}
+  .sep{width:1px;height:1.5rem;background:var(--line);margin:0 .375rem}
+  .bar label{font-size:.8125rem;color:var(--muted);letter-spacing:.04em}
+
+  .panel{border:1px solid var(--line);border-radius:1.25rem;background:#fff;padding:1.5rem 1.75rem}
+  .panel h2{font-size:1.0625rem;font-weight:600;margin-bottom:.25rem}
+  .panel>p{color:var(--muted);font-size:.9375rem;margin-bottom:1rem}
+  .sheet{width:100%;border-collapse:collapse;font-size:.875rem}
+  .sheet th{text-align:left;font-weight:600;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);padding:.5rem .75rem .5rem 0;border-bottom:1px solid var(--line);white-space:nowrap}
+  .sheet td{padding:.5rem .75rem .5rem 0;border-bottom:1px solid rgba(55,58,54,.06);vertical-align:top}
+  .sheet td:first-child{font-variant-numeric:tabular-nums;color:var(--teal);white-space:nowrap}
+  .sheet tr.beat td{color:var(--muted);font-style:italic}
+  .yes{color:#0a7d4a;font-weight:600}.no{color:#b4560a;font-weight:600}.half{color:var(--muted);font-weight:600}
+  .scroll-x{overflow-x:auto}
+  .notes{font-size:.9375rem;color:var(--muted)}
+  .notes b{color:var(--grey)}
+  .notes ul{margin:.5rem 0 0 1.125rem;display:grid;gap:.4rem}
+  @media (max-width:640px){.stage{height:19rem}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+  <h1>N.Copilot 星芒 rig</h1>
+  <p>光點 → 拉成 anamorphic 光條 → 兩翼在光後面沿軸生長 → 亮帶掃過 → 純光冷卻成 Aurora → 靜止 → 呼吸。
+     放到 0.25× 看每一段的 easing；網址加 <code>?t=1.2</code> 可以停在指定秒數。</p>
+</header>
+
+<div class="stage-wrap">
+  <div class="stage" id="stage" data-bg="white">
+    <div class="bg-switch" role="group" aria-label="背景">
+      <button class="sw white"  data-bg="white"  aria-pressed="true"  title="白底"></button>
+      <button class="sw teal"   data-bg="teal"   aria-pressed="false" title="Jubo Teal"></button>
+      <button class="sw aurora" data-bg="aurora" aria-pressed="false" title="Aurora"></button>
+      <button class="sw grey"   data-bg="grey"   aria-pressed="false" title="Jubo Grey"></button>
+    </div>
+
+    <svg viewBox="-45 -45 338 210" id="rig" aria-label="N.Copilot 標誌動態">
+      <defs>
+        <linearGradient id="aurora" x1="0" y1="0" x2="1" y2="1">
+          <stop id="s0" offset="0"   stop-color="#20EDF1"/>
+          <stop id="s1" offset=".38" stop-color="#20EDF1"/>
+          <stop id="s2" offset=".74" stop-color="#20EDF1"/>
+          <stop id="s3" offset="1"   stop-color="#20EDF1"/>
+        </linearGradient>
+        <radialGradient id="hotDark">
+          <stop offset="0"   stop-color="#fff"    stop-opacity="1"/>
+          <stop offset=".45" stop-color="#9DF8FF" stop-opacity=".7"/>
+          <stop offset="1"   stop-color="#20EDF1" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="hotLight">
+          <stop offset="0"   stop-color="#20EDF1" stop-opacity="1"/>
+          <stop offset=".45" stop-color="#20EDF1" stop-opacity=".55"/>
+          <stop offset="1"   stop-color="#20EDF1" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"   stop-color="#fff" stop-opacity="0"/>
+          <stop offset=".45" stop-color="#fff" stop-opacity=".9"/>
+          <stop offset=".55" stop-color="#fff" stop-opacity=".9"/>
+          <stop offset="1"   stop-color="#fff" stop-opacity="0"/>
+        </linearGradient>
+
+        <!-- 方向性動態模糊：只動 stdDeviation 屬性，屬性變更會觸發重繪 -->
+        <filter id="dirBlur" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur id="dirBlurNode" stdDeviation="0 0"/>
+        </filter>
+        <filter id="glowSm" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="2.6"/>
+        </filter>
+        <filter id="glowLg" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+
+        <!-- 亮帶掃過用。clipPath 的內容是靜態的，只有被裁的矩形在動 -->
+        <clipPath id="wingClip" clipPathUnits="userSpaceOnUse">
+          <path d="M112.3 59.74L112.39 59.68C115.63 57.55 117.38 53.76 116.91 49.91L115.29 36.45L122.76 47.77C124.89 51.01 128.68 52.76 132.53 52.29L133.13 52.22C139.85 50.18 215.56 22.27 246.79 10.78C247.84 10.4 247.37 8.82 246.27 9.07C134.64 33.84 110.15 21.11 107.2 0.15C107.18 0.04 107.04 0 106.97 0.09L30.19 90.05C30.93 89.57 111.58 60.66 112.07 59.87C112.15 59.83 112.22 59.79 112.3 59.74"/>
+          <path d="M135.54 59.95L135.45 60.01C132.21 62.14 130.46 65.93 130.92 69.78L132.55 83.24L125.08 71.92C122.94 68.68 119.16 66.93 115.31 67.4L114.7 67.47C107.99 69.51 32.28 97.42 1.05 108.91C0 109.29 0.47 110.86 1.56 110.62C113.2 85.85 137.68 98.58 140.64 119.54C140.66 119.65 140.79 119.69 140.87 119.6L217.64 29.64C216.91 30.12 136.26 59.03 135.77 59.82C135.69 59.86 135.61 59.9 135.54 59.95"/>
+        </clipPath>
+      </defs>
+
+      <!-- 三層旋轉框：外層轉到軸向、中層縮放、內層轉回來，所以縮放沿 −20.1° 發生 -->
+      <g transform="rotate(-20.1 123.9 59.8)">
+        <g id="grow" filter="url(#dirBlur)">
+          <g transform="rotate(20.1 123.9 59.8)">
+            <path id="wingA" class="wing" d="M112.3 59.74L112.39 59.68C115.63 57.55 117.38 53.76 116.91 49.91L115.29 36.45L122.76 47.77C124.89 51.01 128.68 52.76 132.53 52.29L133.13 52.22C139.85 50.18 215.56 22.27 246.79 10.78C247.84 10.4 247.37 8.82 246.27 9.07C134.64 33.84 110.15 21.11 107.2 0.15C107.18 0.04 107.04 0 106.97 0.09L30.19 90.05C30.93 89.57 111.58 60.66 112.07 59.87C112.15 59.83 112.22 59.79 112.3 59.74"/>
+            <path id="wingB" class="wing" d="M135.54 59.95L135.45 60.01C132.21 62.14 130.46 65.93 130.92 69.78L132.55 83.24L125.08 71.92C122.94 68.68 119.16 66.93 115.31 67.4L114.7 67.47C107.99 69.51 32.28 97.42 1.05 108.91C0 109.29 0.47 110.86 1.56 110.62C113.2 85.85 137.68 98.58 140.64 119.54C140.66 119.65 140.79 119.69 140.87 119.6L217.64 29.64C216.91 30.12 136.26 59.03 135.77 59.82C135.69 59.86 135.61 59.9 135.54 59.95"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- 表面 specular 亮帶 -->
+      <g class="lightfx" clip-path="url(#wingClip)">
+        <rect id="sweep" x="-130" y="-60" width="90" height="240" fill="url(#sweepGrad)"
+              transform="rotate(-20.1 123.9 59.8)" opacity="0"/>
+      </g>
+
+      <!-- 光：全部 screen 疊加 -->
+      <g class="lightfx" transform="translate(123.9 59.8) rotate(-20.1)">
+        <ellipse id="streak" rx="9" ry="2.4" fill="#9DF8FF" filter="url(#glowSm)" opacity="0"/>
+        <circle  id="hotspot" r="9" fill="url(#hotDark)" opacity="0"/>
+        <path id="notchGlow" filter="url(#glowLg)" fill="#9DF8FF" opacity="0"
+          d="M0 -16C0 -2.6 8 0 38 0C8 0 0 2.6 0 16C0 2.6 -8 0 -38 0C-8 0 0 -2.6 0 -16Z"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="bar">
+    <button class="ctl" id="replay">重播進場</button>
+    <span class="sep"></span>
+    <label>狀態</label>
+    <button class="ctl state" data-state="idle"     aria-pressed="true">idle</button>
+    <button class="ctl state" data-state="thinking" aria-pressed="false">thinking</button>
+    <button class="ctl state" data-state="success"  aria-pressed="false">success</button>
+    <span class="sep"></span>
+    <label>速度</label>
+    <button class="ctl spd" data-spd=".25" aria-pressed="false">0.25×</button>
+    <button class="ctl spd" data-spd=".5"  aria-pressed="false">0.5×</button>
+    <button class="ctl spd" data-spd="1"   aria-pressed="true">1×</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Timing sheet — 進場 74 格 @ 30fps（2.47s）</h2>
+  <p>格數是主，秒數是換算。<code>&lt;</code> 表示接在前一段結束。</p>
+  <div class="scroll-x">
+  <table class="sheet">
+    <thead><tr><th>f</th><th>秒</th><th>元素</th><th>變化</th><th>長度</th><th>Easing</th><th>為什麼</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>0.00</td><td>光點</td><td>scale .25→1 · α 0→1</td><td>8f</td><td><code>expo.out</code></td><td>先只有一點光，還看不出是什麼</td></tr>
+      <tr><td>6</td><td>0.20</td><td>光條</td><td>scaleX 1→17 · α 0→.95</td><td>14f</td><td><code>expo.out</code></td><td>anamorphic 拉伸，這是 style guide 的 star flare 語彙</td></tr>
+      <tr><td>8</td><td>0.27</td><td>光點</td><td>scale →.5 · α →0</td><td>12f</td><td><code>power2.in</code></td><td>光條接手，點退場</td></tr>
+      <tr><td>14</td><td>0.47</td><td>兩翼</td><td>α 0→1</td><td>3f</td><td><code>none</code></td><td><b>藏在光條後面出現</b>，蓋掉早期那幾格醜的細片</td></tr>
+      <tr><td>14</td><td>0.47</td><td>兩翼</td><td>scaleX .18→1 · scaleY .55→1</td><td>38f</td><td><code>power3.inOut</code></td><td>沿 −20.1° 軸生長，X 比 Y 慢＝展開不是放大</td></tr>
+      <tr><td>14</td><td>0.47</td><td>兩翼</td><td>模糊 8→0（軸向）</td><td>30f</td><td><code>power2.out</code></td><td>動態模糊。少了這個就是圖形在移動，不是光在走</td></tr>
+      <tr><td>20</td><td>0.67</td><td>光條</td><td>scaleX →26 · α →0</td><td>24f</td><td><code>power2.inOut</code></td><td>跟著生長前緣散開</td></tr>
+      <tr><td>38</td><td>1.27</td><td>亮帶</td><td>x −130→300</td><td>20f</td><td><code>power2.inOut</code></td><td>specular 掃過表面，screen 疊加。這是「材質感」的來源</td></tr>
+      <tr><td>42</td><td>1.40</td><td>漸層</td><td>全 Teal Air → Aurora 四停點</td><td>26f</td><td><code>power2.out</code></td><td>stagger 2f，從近端往遠端冷卻</td></tr>
+      <tr><td>52</td><td>1.73</td><td>整體</td><td>scale .985→1</td><td>24f</td><td><code>elastic.out(1,.6)</code></td><td>全片唯一一次彈，而且很小</td></tr>
+      <tr><td>56</td><td>1.87</td><td>凹口柔光</td><td>α 0→.34</td><td>14f</td><td><code>power2.out</code></td><td>星芒的光最後才進來</td></tr>
+      <tr class="beat"><td>62</td><td>2.07</td><td>—</td><td>完全靜止 12 格</td><td>12f</td><td>—</td><td>留白。這 12 格是質感的一部分</td></tr>
+      <tr><td>74</td><td>2.47</td><td>凹口柔光</td><td>進入呼吸</td><td>∞</td><td><code>sine.inOut</code></td><td>見下表</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>三個狀態</h2>
+  <p>同一組 rig 只換參數。狀態是純 JS 物件（<code>09_GSAP動畫與互動規範.md</code> §10-0-2）。</p>
+  <div class="scroll-x">
+  <table class="sheet">
+    <thead><tr><th>狀態</th><th>週期</th><th>凹口柔光 α</th><th>縮放</th><th>亮帶</th></tr></thead>
+    <tbody>
+      <tr><td>idle</td><td>3.2s</td><td>.26 ↔ .40</td><td>1 ↔ 1.06</td><td>每 7s 掃一次</td></tr>
+      <tr><td>thinking</td><td>0.9s</td><td>.38 ↔ .85</td><td>.94 ↔ 1.16</td><td>每 1.8s 掃一次</td></tr>
+      <tr><td>success</td><td>單次</td><td>→1→.26</td><td>→1.35→1</td><td>立刻掃一次</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>在 Webflow 上怎麼落地</h2>
+  <div class="scroll-x">
+  <table class="sheet">
+    <thead><tr><th>這一段</th><th>IX3</th><th>怎麼做</th></tr></thead>
+    <tbody>
+      <tr><td>凹口柔光呼吸、縮放、淡入淡出</td><td class="yes">可以</td><td>IX3 transform ＋ opacity</td></tr>
+      <tr><td>光點、光條的縮放與淡出</td><td class="yes">可以</td><td>IX3 transform ＋ opacity</td></tr>
+      <tr><td>亮帶掃過</td><td class="half">勉強</td><td>位移可以，但要被 SVG clipPath 裁住，IX3 設不了 clip-path</td></tr>
+      <tr><td><b>軸向生長</b></td><td class="no">不行</td><td>要在巢狀旋轉框裡設 <code>svgOrigin</code>，IX3 碰不到 SVG 內部座標系</td></tr>
+      <tr><td><b>方向性動態模糊</b></td><td class="no">不行</td><td>要 tween <code>feGaussianBlur</code> 的 stdDeviation 屬性</td></tr>
+      <tr><td><b>漸層停點變色</b></td><td class="no">不行</td><td>要 tween <code>stop-color</code> 屬性</td></tr>
+      <tr><td>idle／thinking／success</td><td class="no">不行</td><td>IX3 沒有狀態機</td></tr>
+      <tr><td>捲動觸發、hover、click</td><td class="yes">可以</td><td>IX3 的強項</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p style="margin-top:1rem;color:var(--muted);font-size:.9375rem">
+    <b>結論</b>：這支主體走<b>頁面層 GSAP</b>（<code>09</code> §3 本來就這樣規定），IX3 負責周邊捲動與 hover。
+    同頁開 IX3 會多載一份 Webflow 的 GSAP，跟站台 head 那份重複 —— 這是 <code>/ai-lab</code> 要量的事。
+  </p>
+</div>
+
+<div class="panel notes">
+  <h2 style="margin-bottom:.5rem;color:var(--grey)">實作上踩到的三件事</h2>
+  <ul>
+    <li><b>Chromium 不會在 <code>&lt;mask&gt;</code> 裡的元素被 transform 之後重繪遮罩。</b>最小案例實測確認。所以生長不是用遮罩擦出來的，是兩翼自己在軸向縮放。</li>
+    <li><b>「幾何呼吸」那個選項因此拿掉了。</b>原本要用 mask 把星挖成洞讓它脹縮，同一個 bug 讓它不會動。要做的話得改畫一顆背景色實心星疊上去，但在 Aurora 漸層底上會穿幫。</li>
+    <li><b>方向性模糊改動屬性而非 transform</b>（<code>stdDeviation</code>），屬性變更會觸發重繪，這條路通。</li>
+  </ul>
+  <p style="margin-top:.75rem"><b>星形幾何</b>：從原稿量出負空間兩個尖端 —— 上 <code>(115.29, 36.45)</code>、下 <code>(132.55, 83.24)</code> ——
+     得到中心 <code>(123.9, 59.8)</code>、短軸 25、主軸 −20.1°。凹口柔光用的是縮小版（短軸 16、長軸 38），只在凹口那一小塊發光，不是一顆大白星壓在標誌上。</p>
+</div>
+
+</div>
+
+<script>
+(function(){
+  var g=window.gsap; if(!g) return;
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var AURORA=['#20EDF1','#00B2C0','#AED353','#D3D730'], STOPS=['#s0','#s1','#s2','#s3'];
+  var F=function(n){return n/30;};                       /* 格 → 秒 */
+
+  var STATES={
+    idle:     {cycle:3.2, a0:.26, a1:.40, s1:1.06, sweep:7},
+    thinking: {cycle:.90, a0:.38, a1:.85, s1:1.16, sweep:1.8},
+    success:  {cycle:0,   a0:.26, a1:1,   s1:1.35, sweep:0}
+  };
+  var current='idle', subs=[];
+  function onState(f){subs.push(f); f(STATES[current],current);}
+  function setState(n){ if(!STATES[n])return; current=n; subs.forEach(function(f){f(STATES[n],n);}); }
+
+  var wings=['#wingA','#wingB'], stage=document.getElementById('stage');
+  g.set('#grow',{svgOrigin:'123.9 59.8'});
+  g.set(['#notchGlow','#streak','#hotspot'],{transformOrigin:'50% 50%'});
+
+  var breath=null, sweepLoop=null;
+  function runSweep(dur){
+    return g.fromTo('#sweep',{x:0,opacity:0},
+      {x:430,opacity:1,duration:dur,ease:'power2.inOut',
+       onComplete:function(){ g.set('#sweep',{opacity:0}); }});
+  }
+  function loop(s){
+    if(breath){breath.kill();breath=null;}
+    if(sweepLoop){sweepLoop.kill();sweepLoop=null;}
+    if(!s.cycle || reduce){ g.set('#notchGlow',{opacity:s.a0,scale:1}); return; }
+    breath=g.timeline({repeat:-1,yoyo:true,defaults:{duration:s.cycle,ease:'sine.inOut'}})
+      .to('#notchGlow',{opacity:s.a1,scale:s.s1},0);
+    if(s.sweep){
+      sweepLoop=g.timeline({repeat:-1,repeatDelay:s.sweep})
+        .add(runSweep(.9));
+    }
+  }
+  onState(function(s,name){
+    if(name==='success'){
+      if(breath){breath.kill();breath=null;}
+      if(sweepLoop){sweepLoop.kill();sweepLoop=null;}
+      g.timeline({onComplete:function(){ setState('idle'); }})
+        .to('#notchGlow',{opacity:1,scale:s.s1,duration:F(6),ease:'back.out(2.4)'},0)
+        .add(runSweep(.55),0)
+        .to('#notchGlow',{opacity:STATES.idle.a0,scale:1,duration:F(18),ease:'elastic.out(1,.6)'},F(8));
+      return;
+    }
+    loop(s);
+  });
+
+  function intro(){
+    if(breath){breath.kill();breath=null;}
+    if(sweepLoop){sweepLoop.kill();sweepLoop=null;}
+    var s=STATES[current];
+
+    g.set('#grow',{scaleX:1,scaleY:1});
+    g.set(wings,{opacity:1});
+    g.set('#dirBlurNode',{attr:{stdDeviation:'0 0'}});
+    g.set('#sweep',{opacity:0,x:0});
+    STOPS.forEach(function(id,i){ g.set(id,{attr:{'stop-color':AURORA[i]}}); });
+
+    if(reduce){ g.set('#notchGlow',{opacity:s.a0}); g.set(['#streak','#hotspot'],{opacity:0}); return; }
+
+    g.set('#grow',{scaleX:.18,scaleY:.55});
+    g.set(wings,{opacity:0});
+    g.set('#hotspot',{scale:.25,opacity:0});
+    g.set('#streak',{scaleX:1,scaleY:1,opacity:0});
+    g.set('#notchGlow',{opacity:0,scale:1});
+    g.set('#dirBlurNode',{attr:{stdDeviation:'8 1.6'}});
+    STOPS.forEach(function(id){ g.set(id,{attr:{'stop-color':'#20EDF1'}}); });
+
+    var tl=g.timeline({onComplete:function(){ loop(STATES[current]); }});
+
+    tl.to('#hotspot',{scale:1,opacity:1,duration:F(8),ease:'expo.out'},0)
+      .to('#streak',{scaleX:17,opacity:.95,duration:F(14),ease:'expo.out'},F(6))
+      .to('#hotspot',{scale:.5,opacity:0,duration:F(12),ease:'power2.in'},F(8))
+      .to(wings,{opacity:1,duration:F(3),ease:'none'},F(14))
+      .to('#grow',{scaleX:1,scaleY:1,duration:F(38),ease:'power3.inOut'},F(14))
+      .to('#dirBlurNode',{attr:{stdDeviation:'0 0'},duration:F(30),ease:'power2.out'},F(14))
+      .to('#streak',{scaleX:26,opacity:0,duration:F(24),ease:'power2.inOut'},F(20))
+      .add(runSweep(F(20)),F(38))
+      .to('#s0',{attr:{'stop-color':AURORA[0]},duration:F(26),ease:'power2.out'},F(42))
+      .to('#s1',{attr:{'stop-color':AURORA[1]},duration:F(26),ease:'power2.out'},F(44))
+      .to('#s2',{attr:{'stop-color':AURORA[2]},duration:F(26),ease:'power2.out'},F(46))
+      .to('#s3',{attr:{'stop-color':AURORA[3]},duration:F(26),ease:'power2.out'},F(48))
+      .fromTo('#grow',{scale:.985},{scale:1,duration:F(24),ease:'elastic.out(1,.6)'},F(52))
+      .to('#notchGlow',{opacity:s.a0,duration:F(14),ease:'power2.out'},F(56))
+      .to({},{duration:F(12)},F(62));
+    return tl;
+  }
+
+  function press(sel,el){ document.querySelectorAll(sel).forEach(function(b){
+    b.setAttribute('aria-pressed', b===el?'true':'false'); }); }
+  document.getElementById('replay').addEventListener('click',intro);
+  document.querySelectorAll('.state').forEach(function(b){
+    b.addEventListener('click',function(){ press('.state',b); setState(b.dataset.state); }); });
+  document.querySelectorAll('.spd').forEach(function(b){
+    b.addEventListener('click',function(){ press('.spd',b); g.globalTimeline.timeScale(+b.dataset.spd); }); });
+  document.querySelectorAll('.sw').forEach(function(b){
+    b.addEventListener('click',function(){ press('.sw',b); stage.dataset.bg=b.dataset.bg; }); });
+
+  intro();
+
+  /* ?t=秒數 → 停在那一格，方便逐格檢查 */
+  var m=location.search.match(/[?&]t=([\d.]+)/);
+  if(m){ g.globalTimeline.pause(); g.globalTimeline.time(parseFloat(m[1])); }
+})();
+</script>
+</body>
+</html>

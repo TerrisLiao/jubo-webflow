@@ -5,6 +5,10 @@
   視覺規則：
   - 沿用官網 glass button 的視覺語言，但不直接掛 .glass-button（該 class 被 Slater 外部程式綁定）。
   - 不使用黑色或灰色外框；玻璃感由半透明漸層、inset highlight、陰影與 backdrop-filter 組成。
+  - ⚠️ 高光是 background 的第二層，不要改回 ::before + z-index:-1 的寫法。
+    ::before{z-index:-1} 搭配 isolation:isolate、overflow:hidden 與 backdrop-filter，
+    在 Chrome 會讓模糊後的背景以「矩形」合成，圓角吃不到，按鈕周圍出現方形殘影。
+    2026-09-17 以 headless Chromium 實測確認並修正。
   - 文字使用 --neutral--black，字重 400。
 
   連結規則：
@@ -37,19 +41,23 @@
 
     .aeo-toc a {
       position: relative;
-      isolation: isolate;
-      overflow: hidden;
       display: inline-flex;
       align-items: center;
       min-height: 3.25rem;
       padding: 0.7rem 1.5rem 0.75rem;
       border: 0;
       border-radius: 900px;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.72),
-        rgba(255, 255, 255, 0.28)
-      );
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.45),
+          rgba(255, 255, 255, 0) 58%
+        ),
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.72),
+          rgba(255, 255, 255, 0.28)
+        );
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.9),
         inset 0 -1px 1px rgba(21, 23, 23, 0.08),
@@ -67,27 +75,20 @@
         box-shadow 180ms ease;
     }
 
-    .aeo-toc a::before {
-      position: absolute;
-      z-index: -1;
-      inset: 1px;
-      border-radius: inherit;
-      background: linear-gradient(
-        145deg,
-        rgba(255, 255, 255, 0.45),
-        rgba(255, 255, 255, 0) 58%
-      );
-      content: "";
-      pointer-events: none;
-    }
 
     .aeo-toc a:hover {
       transform: translateY(-2px);
-      background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.82),
-        rgba(255, 255, 255, 0.38)
-      );
+      background:
+        linear-gradient(
+          145deg,
+          rgba(255, 255, 255, 0.45),
+          rgba(255, 255, 255, 0) 58%
+        ),
+        linear-gradient(
+          135deg,
+          rgba(255, 255, 255, 0.82),
+          rgba(255, 255, 255, 0.38)
+        );
       box-shadow:
         inset 0 1px 1px rgba(255, 255, 255, 0.95),
         inset 0 -1px 1px rgba(21, 23, 23, 0.06),

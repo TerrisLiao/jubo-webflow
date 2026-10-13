@@ -40,7 +40,7 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 
 另外在 Designer 上，兩個模板的封面 Image 元素各加了兩個自訂屬性
 `loading="eager"` 與 `fetchpriority="high"`（首屏的 LCP 元素不該是 lazy）。
-這是這次唯一動到 Designer 的地方，元素 ID 記在規範 18 §29-3。
+這是這次唯一動到 Designer 的地方，元素 ID 記在`docs/projects/cms-article/history/CMS文章閱讀表面_news與customer-stories.md` §29-3。
 
 會拆開是因為全部塞進 embed 會到 23KB，超過工具單次寫入上限（約 13KB）。
 
@@ -82,14 +82,14 @@ story 的 embed 另有第 5 節「圖片說明玻璃條」（`_caption.css`）�
 產生器裡有 assert 會擋下來。
 
 為什麼用 `aspect-ratio` 而不是 `width`/`height` 屬性、
-為什麼只修封面反而更糟：見 `Jubo官網AI開發規範/18` §27。
+為什麼只修封面反而更糟：見 `docs/projects/cms-article/history/CMS文章閱讀表面_news與customer-stories.md` §27。
 
 ## 改動後要做的事
 
 1. 改這裡的檔案。
 2. embed 改動 → 把 `embed-news.html` 整段貼回對應的 HtmlEmbed。
    比例對照表改動 → `bash build.sh` 後貼回頁面自訂程式碼。
-3. 發布 staging，確認線上內容與這裡逐字相同再收工。
+3. 取得明確發布授權後發布 staging，確認線上內容與這裡逐字相同再收工。
    （Webflow 發布後 CDN 約需 20–60 秒才會更新，太早比對會拿到舊版。）
 
 ## 已知未涵蓋

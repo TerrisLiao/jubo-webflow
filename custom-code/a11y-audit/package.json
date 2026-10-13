@@ -1,0 +1,20 @@
+{
+  "name": "jubo-a11y-audit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "jubo-health.com 無障礙稽核腳本。只讀線上已發布的 HTML，不會碰 Webflow API。",
+  "scripts": {
+    "fetch": "bash fetch-pages.sh _work",
+    "audit": "cd _work && node ../audit.mjs && node ../report.mjs",
+    "alt": "cd _work && node ../alt-classify.mjs",
+    "axe": "cd _work && node ../axe-run.mjs && node ../axe-report.mjs",
+    "score": "cd _work && node ../score.mjs"
+  },
+  "dependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "axe-core": "^4.13.0",
+    "cheerio": "^1.2.0",
+    "playwright": "^1.63.0"
+  }
+}

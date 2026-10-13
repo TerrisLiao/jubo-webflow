@@ -41,7 +41,7 @@ done
    內容以 `skills/*/SKILL.md` 本身為準。
 
 評估過程與判斷理由記錄於
-[`Jubo官網AI開發規範/09_GSAP動畫與互動規範.md`](../../Jubo官網AI開發規範/09_GSAP動畫與互動規範.md) §11-1。
+[`docs/standards/GSAP動畫與互動規範.md`](../../docs/standards/GSAP動畫與互動規範.md) §11-1。
 
 ---
 
@@ -57,4 +57,4 @@ UMD 而非 ES module、Slater 不可動、效能預算、狀態機留在程式�
 ## 沒有採用的資源
 
 `scottstts/Threejs-Awesome-Graphics-Agent-Skills` — 評估後不採用。
-理由（規格過大、無效能預算、路由邏輯誘導堆效果）見 `09_GSAP動畫與互動規範.md` §11-2。
+理由（規格過大、無效能預算、路由邏輯誘導堆效果）見 `docs/standards/GSAP動畫與互動規範.md` §11-2。

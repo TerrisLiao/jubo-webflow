@@ -39,6 +39,18 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 `.gradient-icon.is-1`　`.gradient-icon.is-2`　`.gradient-icon.is-news-1`　`.gradient-icon.is-news-2`
 `.icon-embed-medium`
 
+> **箭頭滑入滑出是 Slater CSS，不是 IX2。** `60294.css` 用 `!important` 鎖住兩顆箭頭的 transform：
+> `.gradient-icon.is-1` 常態 `translateX(0%) scale(1)`、`.glass-button:hover` 時 `translateX(150%) scale(0.5)`；
+> `.is-2` 反向（`-150%` → `0%`）。因此：
+>
+> 1. **箭頭自己的 `transform` 不能在 Webflow 裡改**，會被 `!important` 蓋掉。要改方向就旋轉外層膠囊
+>    （站上 `.glass-element.is-icon` 是 `rotate(-45deg)`；`/jp/about-us` 的回到頁首鈕是新 combo
+>    `.glass-element.is-to-top` 的 `rotate(-90deg)`）。
+> 2. 只要沿用 `.glass-button` ＋ `.gradient-icon.is-1` / `.is-2` 這組 class，手刻的按鈕**也會有**這個動畫
+>    （選擇器是 class，不需要 `data-w-id`）。文字逐字動畫才需要 Slater JS 讀 `data-button-animate-chars`。
+> 3. `.glass-button`／`.gradient-icon.is-1`／`.is-2` 一律不可改名，`.gradient-icon.is-2` 的 `left: 5px`
+>    也不要改值（那是為 `1.75rem` 膠囊算的）；放進較大的容器時新增 combo 覆寫 `left`。
+
 ### 導覽
 `.nav-link`　`.nav-icon`　`.nav-icon.is-mobile`
 `.mega-menu_wrapper`　`.mega-menu_inner-wrapper`　`.mega-menu_close`　`.mm-is-open`　`.mm-single-text_wrapper`
@@ -60,7 +72,7 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 
 > ⚠️ Slater JS 會對 `.news-filter_form` 裡**每一個** `.cta-button.is-filter` 切換 `is-active`，
 > Slater CSS 也會在 ≤991px 把 `.news-filter_form > .cta-button.is-filter` 藏起來。
-> 非篩選用的元素（例如 2026-10-01 的客戶故事入口）**不要放進 `.news-filter_form`**，也不可掛 `is-filter`；放在 form 外面。見 `Jubo官網AI開發規範/18_新聞頁客戶故事入口按鈕.md`。
+> 非篩選用的元素（例如 2026-10-01 的客戶故事入口）**不要放進 `.news-filter_form`**，也不可掛 `is-filter`；放在 form 外面。見 `docs/projects/news/history/新聞頁客戶故事入口按鈕.md`。
 
 ### 客戶案例
 `.single-customer-story_wrap`　`.customer-story_image-wrap`　`.customer-story_headline-wrap`　`.customer-story_pagination`
@@ -88,10 +100,24 @@ Slater 屬於「整個網站的背景設施」，**不在一般改版的討論�
 
 Site Settings → Custom Code → Head 有一段 Jubo 自家的 GA4 事件程式碼，它會讀：
 
-`.single-sales_wrap`　`.category-tag`　`.sales-contact_wrap p`　`.w-form`　`.w-form-done`
+`.single-sales_wrap`　`.sales-contact_wrap p`　`.w-form`　`.w-form-done`
 
-> `.category-tag` 被用來**推斷業務負責區域**（比對文字判斷「基隆新北桃園」等）。
-> 改掉這個 class 名 → 業務來源分析會靜默失效，且**不會有任何錯誤訊息**。
+> **業務卡的區域判斷靠的是 LINE 網址，不是 `.category-tag` 的文字**（實測日：2026-09-10）。
+> 現行 head 程式的 `annotateSalesCards()` 是拿卡片內 `a[href*="line.me/"]` 比對一張硬寫的
+> `salesByLineUrl` 對照表（5 組），取得 `rep_00x` 與 region；對不到就直接 return。
+> 也就是說：**換掉某位業務的 LINE 連結，或新增一張業務卡而沒更新那張對照表，區域分析會靜默失效**。
+>
+> `.category-tag` 依然不可改名 —— 它是全站共用的樣式 class（見 `docs/inventories/全域工具類清單.md`），
+> 而且 Slater 的外部 CSS 讀不到，無法確認它有沒有被引用。
+>
+> （本段原本寫「`.category-tag` 被用來推斷業務負責區域（比對文字判斷基隆新北桃園等）」，
+> 與 2026-09-10 讀回的 head 程式不符，已更正。）
+
+`.single-sales_wrap` 還有一個容易踩到的副作用：
+那段程式會把卡片內 `.sales-contact_wrap p` 裡看起來像電話的段落**自動包成 `tel:` 連結**，
+並對卡片內 line.me／tel 的點擊送 `sales_contact_click`（`solution_interest` 預設 `residential_day_care`）。
+**所以非業務的聯絡卡不要沿用這兩個 class**，否則會污染業務來源分析。
+居服窗口卡因此另開 `homecare-contact_*` 系列（見 `docs/projects/contact/reference/README.md`）。
 
 ---
 

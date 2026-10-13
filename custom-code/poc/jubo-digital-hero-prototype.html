@@ -1,0 +1,393 @@
+<title>智齡數位頁首動畫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F8F8F8;
+  --ink:#151717;
+  --ink-soft:#4A5260;
+  --unlit:#AEB8C6;
+  --teal:#00B2C0;
+  --teal-ink:#00808A;
+  --line:#DCE3EE;
+  --panel:#FFFFFF;
+  --veil:rgba(10,22,34,.58);
+  --radius:32px;
+  --gutter:clamp(16px,4.4vw,64px);
+  --sans:"JuboFont","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.page-bg{position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 18% 12%,rgba(205,222,255,.75),transparent 70%),
+    radial-gradient(50% 45% at 88% 30%,rgba(214,206,255,.55),transparent 70%),
+    radial-gradient(70% 60% at 50% 100%,rgba(200,236,240,.6),transparent 70%),
+    var(--ground)}
+
+/* ---------- switcher ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;
+  padding:10px var(--gutter);
+  background:rgba(248,248,248,.82);backdrop-filter:saturate(1.4) blur(14px);-webkit-backdrop-filter:saturate(1.4) blur(14px);
+  border-bottom:1px solid var(--line)}
+.bar-title{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--ink-soft);text-transform:uppercase}
+.bar-title b{color:var(--ink);font-weight:500}
+.seg{display:inline-flex;padding:4px;gap:4px;border-radius:999px;background:#EAEEF4;border:1px solid var(--line)}
+.seg button{appearance:none;border:0;cursor:pointer;font:500 14px/1 var(--sans);color:var(--ink-soft);
+  padding:10px 16px;border-radius:999px;background:transparent;transition:background-color .2s,color .2s}
+.seg button[aria-pressed="true"]{background:var(--panel);color:var(--ink);box-shadow:0 1px 3px rgba(21,23,23,.12)}
+.seg button:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+.seg .k{font-family:var(--mono);color:var(--teal-ink);margin-right:6px}
+
+/* ---------- shared hero ---------- */
+.wrap{padding-inline:var(--gutter)}
+.hero-top{display:grid;grid-template-columns:1.1fr 1fr;gap:24px 48px;align-items:center;padding-block:clamp(40px,8vh,96px) clamp(28px,5vh,56px);max-width:1312px;margin-inline:auto}
+.hero-top h1{margin:0;font-weight:300;font-size:clamp(38px,5.6vw,80px);line-height:1.2;letter-spacing:.01em;text-wrap:balance}
+.hero-top p{margin:0;font-size:clamp(15px,1.25vw,18px);color:var(--ink);max-width:36em}
+.ph{position:relative;overflow:hidden;border-radius:var(--radius);aspect-ratio:3/4;background:#DDE5F0}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.eyebrow{display:inline-block;font-size:14px;padding:6px 16px;border-radius:999px;background:var(--panel);box-shadow:0 1px 2px rgba(21,23,23,.06)}
+.next{padding-block:clamp(56px,10vh,120px) clamp(80px,14vh,160px);text-align:center;max-width:980px;margin-inline:auto;display:grid;justify-items:center;gap:20px}
+.next p{margin:0;font-size:clamp(15px,1.25vw,18px);color:var(--ink-soft);max-width:48em}
+
+/* ---------- B ---------- */
+.b-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1312px;margin-inline:auto}
+.b-statement{position:relative;height:230vh}
+.b-sticky{position:sticky;top:0;height:100vh;display:grid;place-items:center;padding-inline:var(--gutter)}
+.b-tagline{margin:0;max-width:17em;text-align:center;font-weight:500;font-size:clamp(28px,4.6vw,64px);line-height:1.35;letter-spacing:.02em;color:var(--ink);text-wrap:balance}
+.js .b-tagline .c{color:var(--unlit)}
+.b-progress{position:absolute;left:50%;bottom:clamp(24px,6vh,56px);translate:-50% 0;width:min(240px,50vw);height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.b-progress i{position:absolute;inset:0;background:var(--teal);transform-origin:0 50%;transform:scaleX(0)}
+
+/* ---------- B+ (photos orbit the tagline) ---------- */
+.c-scene{position:relative}
+.c-sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(24px,4vh,48px);padding-block:clamp(56px,9vh,96px) 0;overflow:hidden}
+.c-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1312px;width:100%;margin-inline:auto;position:relative;z-index:1}
+.c-tagline{margin:0 auto;max-width:20em;text-align:center;font-weight:500;font-size:clamp(26px,3.4vw,48px);line-height:1.4;letter-spacing:.02em;color:var(--ink);text-wrap:balance;position:relative;z-index:2}
+.js .c-tagline .c{color:var(--unlit)}
+.seg-l{display:block;text-wrap:balance}
+.b-tagline .seg-l+.seg-l,.c-tagline .seg-l+.seg-l{margin-top:.15em}
+.c-spacer{height:230vh}
+.c-progress{position:absolute;left:50%;bottom:clamp(24px,5vh,48px);translate:-50% 0;width:min(240px,50vw);height:2px;background:var(--line);border-radius:2px;overflow:hidden;z-index:2}
+.c-progress i{position:absolute;inset:0;background:var(--teal);transform-origin:0 50%;transform:scaleX(0)}
+.c-gallery .ph{box-shadow:0 18px 40px -18px rgba(21,40,70,.35)}
+.js .c-tagline{position:absolute;left:var(--gutter);right:var(--gutter);top:100%}
+.c-scene .c-sticky{perspective:1400px}
+.c-blob{position:absolute;border-radius:50%;pointer-events:none;opacity:0;filter:blur(40px);z-index:0}
+.c-blob.b1{width:58vw;aspect-ratio:1;left:-14vw;top:-22vh;background:radial-gradient(closest-side,rgba(177,93,255,.42),rgba(124,140,255,.18) 60%,transparent)}
+.c-blob.b2{width:62vw;aspect-ratio:1;right:-18vw;bottom:-30vh;background:radial-gradient(closest-side,rgba(0,178,192,.45),rgba(90,200,220,.16) 60%,transparent)}
+.c-ghost{position:absolute;z-index:0;pointer-events:none;opacity:0;border-radius:22px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),0 30px 60px -30px rgba(40,60,120,.35);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.c-ghost.g1{background:linear-gradient(170deg,rgba(0,178,192,.55),rgba(124,140,255,.45) 55%,rgba(255,190,230,.35))}
+.c-ghost.g2{background:linear-gradient(190deg,rgba(255,196,150,.5),rgba(240,170,230,.45) 50%,rgba(124,140,255,.45))}
+.c-ghost.g3{background:linear-gradient(180deg,rgba(124,140,255,.6),rgba(177,93,255,.35) 55%,rgba(255,200,235,.45))}
+.shp{position:absolute;z-index:0;pointer-events:none;opacity:0}
+.shp.quarter{border-radius:0 100% 0 0;background:linear-gradient(135deg,#6EF3C0,#6FA8FF 70%,#7C8CFF)}
+.shp.square{background:linear-gradient(135deg,#7EE7FF,#3B55E0 60%,#6B3FD8)}
+.shp.tri{clip-path:polygon(50% 0,100% 100%,0 100%);background:linear-gradient(180deg,#169AA8,#6FE0E8 60%,rgba(255,255,255,.9))}
+.shp.circle{border-radius:50%;background:linear-gradient(200deg,#5DE0F0,#8FA0FF 55%,#F3E2FF)}
+.shp.squircle{background:linear-gradient(160deg,#3B55E0,#8E7BF0 50%,#F4D6FF);
+  -webkit-mask:radial-gradient(circle at 0 0,transparent 36%,#000 36.5%) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,transparent 36%,#000 36.5%) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,transparent 36%,#000 36.5%) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,transparent 36%,#000 36.5%) 100% 100%/51% 51% no-repeat;
+          mask:radial-gradient(circle at 0 0,transparent 36%,#000 36.5%) 0 0/51% 51% no-repeat,radial-gradient(circle at 100% 0,transparent 36%,#000 36.5%) 100% 0/51% 51% no-repeat,radial-gradient(circle at 0 100%,transparent 36%,#000 36.5%) 0 100%/51% 51% no-repeat,radial-gradient(circle at 100% 100%,transparent 36%,#000 36.5%) 100% 100%/51% 51% no-repeat}
+.c-streak{position:absolute;z-index:0;left:0;top:0;height:22px;width:34vw;border-radius:999px;pointer-events:none;opacity:0;filter:blur(1.5px);transform-origin:100% 50%}
+.c-streak.s1{background:linear-gradient(90deg,transparent,rgba(0,178,192,.25) 40%,#00B2C0)}
+.c-streak.s2{background:linear-gradient(90deg,transparent,rgba(124,100,255,.25) 40%,#7C64FF);height:16px}
+.ph .tint{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:soft-light;
+  background:linear-gradient(165deg,rgba(0,178,192,.75),rgba(124,140,255,.45) 50%,rgba(177,93,255,.7))}
+.ph .sheen{position:absolute;inset:0;pointer-events:none;opacity:0;border-radius:inherit;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6);
+  background:linear-gradient(115deg,rgba(255,255,255,.35),rgba(255,255,255,0) 35%)}
+.c-river{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.c-river .body{fill:none;stroke:url(#c-wg);stroke-width:18;opacity:.28;filter:url(#c-blur)}
+.c-river .core{fill:none;stroke:url(#c-wg);stroke-width:3.5;stroke-linecap:round}
+.c-river .shine{fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-dasharray:3 26;opacity:.85;animation:c-current 2.2s linear infinite}
+.c-river .shine.s2{stroke-width:1.2;stroke-dasharray:1 17;opacity:.6;animation-duration:3.4s;transform:translateY(5px)}
+@keyframes c-current{to{stroke-dashoffset:-58}}
+.c-drop{position:absolute;left:0;top:0;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;z-index:1;pointer-events:none;opacity:0;
+  background:radial-gradient(circle,#fff 0 30%,rgba(0,178,192,.9) 55%,rgba(0,178,192,0) 72%);box-shadow:0 0 12px rgba(0,178,192,.8);
+  offset-rotate:0deg;animation:c-drift var(--d,7s) linear infinite;animation-delay:var(--dl,0s)}
+@keyframes c-drift{from{offset-distance:0%}to{offset-distance:100%}}
+.chip{position:absolute;z-index:3;display:grid;gap:2px;padding:12px 18px 14px 16px;border-radius:16px;white-space:nowrap;overflow:hidden;isolation:isolate;
+  background:#fff url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27160%27%20height%3D%27160%27%3E%3Cfilter%20id%3D%27n%27%3E%3CfeTurbulence%20type%3D%27fractalNoise%27%20baseFrequency%3D%270.62%27%20numOctaves%3D%274%27%20stitchTiles%3D%27stitch%27%2F%3E%3CfeColorMatrix%20type%3D%27saturate%27%20values%3D%270%27%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%27100%25%27%20height%3D%27100%25%27%20filter%3D%27url%28%2523n%29%27%20opacity%3D%270.045%27%2F%3E%3C%2Fsvg%3E");box-shadow:0 6px 30px rgba(21,23,23,.07);color:var(--ink);opacity:0;pointer-events:none}
+.chip .g{position:absolute;inset:0;z-index:-1;transform-origin:0% 100%;opacity:0;
+  background:
+    radial-gradient(55% 120% at 4% 112%,rgba(177,93,255,.30),rgba(177,93,255,0) 62%),
+    radial-gradient(52% 115% at 22% 118%,rgba(0,178,192,.34),rgba(0,178,192,0) 64%),
+    radial-gradient(45% 110% at 44% 122%,rgba(107,143,240,.22),rgba(107,143,240,0) 66%)}
+.chip .n{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--teal-ink)}
+.chip .t{font-size:15px;font-weight:500;line-height:1.35}
+
+/* ---------- notes ---------- */
+.notes{max-width:1100px;margin:0 auto clamp(48px,8vh,96px);display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.note{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px 22px;display:grid;gap:8px;align-content:start}
+.note h3{margin:0;font-family:var(--mono);font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-ink)}
+.note ul{margin:0;padding-left:1.1em;display:grid;gap:6px;font-size:15px;color:var(--ink)}
+.rm-note{margin:12px auto 0;max-width:1312px;font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+
+@media (max-width:767px){
+  .hero-top{grid-template-columns:1fr}
+  :root{--radius:24px}
+  .b-gallery{grid-template-columns:repeat(2,1fr);gap:12px}
+  .c-gallery{grid-template-columns:repeat(2,1fr);gap:12px;max-width:340px}
+  .chip{padding:8px 12px 9px 11px;border-radius:12px}
+  .chip .t{font-size:12px}
+  .chip .n{font-size:10px}
+  .c-sticky{gap:20px;padding-block:24px 0}
+  .notes{grid-template-columns:1fr}
+  .seg button{padding:9px 12px;font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  .js .b-tagline .c{color:var(--ink)}
+  .b-statement{height:auto}
+  .b-sticky{position:static;height:auto;padding-block:clamp(56px,10vh,120px)}
+  .b-progress{display:none}
+  .c-sticky{position:static;height:auto;padding-block:clamp(40px,8vh,80px)}
+  .c-spacer,.c-progress,.chip,.c-blob,.c-ghost,.shp,.c-streak,.c-river,.c-drop,.ph .tint,.ph .sheen{display:none}
+  .js .c-tagline{position:static}
+  .js .c-tagline .c{color:var(--ink)}
+}
+</style>
+
+<div class="page-bg" aria-hidden="true"></div>
+
+<header class="bar">
+  <div class="bar-title"><b>智齡數位頁首</b>・動畫比較・往下捲動</div>
+  <div class="seg" role="group" aria-label="選擇版本">
+    <button type="button" id="btn-c" data-v="c" aria-pressed="true"><span class="k">B+</span>照片環繞標語</button>
+    <button type="button" id="btn-b" data-v="b" aria-pressed="false"><span class="k">B</span>原版</button>
+  </div>
+</header>
+
+<main>
+  <!-- ===== Version B+ ===== -->
+  <section id="v-c">
+    <div class="c-scene">
+      <div class="wrap"><div class="hero-top">
+        <h1>大健康產業的<br>數位工程領航者</h1>
+        <p>智齡數位科技為智齡科技 (Jubo) 全資子公司，2022 年由母公司公共事業核心團隊獨立成軍，誕生於台灣長照產業轉型最前線，承襲母公司頂尖研發基因，三年來深度專注於政府補助案、大型委託案與醫護集團之數位轉型合作。</p>
+      </div></div>
+      <div class="c-sticky wrap">
+        <div class="c-gallery">
+          <div class="ph"><img src="{{P1}}" alt=""><i class="tint"></i><i class="sheen"></i></div>
+          <div class="ph"><img src="{{P2}}" alt=""><i class="tint"></i><i class="sheen"></i></div>
+          <div class="ph"><img src="{{P3}}" alt="穿白色護士服、微笑並側身站立在明亮醫療環境中的年輕女性護士。"><i class="tint"></i><i class="sheen"></i></div>
+          <div class="ph"><img src="{{P4}}" alt=""><i class="tint"></i><i class="sheen"></i></div>
+        </div>
+        <div class="c-deco" aria-hidden="true">
+          <i class="c-blob b1"></i><i class="c-blob b2"></i>
+          <i class="c-ghost g1" data-x=".44" data-y=".30" data-h=".24" data-r="14"></i><i class="c-ghost g2" data-x=".57" data-y=".27" data-h=".18" data-r="-10"></i><i class="c-ghost g3" data-x="1.0" data-y=".42" data-h=".66" data-r="-42"></i>
+          <i class="shp quarter" data-x=".05" data-y=".10" data-s="110"></i><i class="shp square" data-x=".50" data-y=".07" data-s="30"></i><i class="shp tri" data-x=".60" data-y=".10" data-s="34"></i>
+          <i class="shp circle" data-x=".96" data-y=".10" data-s="40"></i><i class="shp squircle" data-x=".975" data-y=".93" data-s="46"></i><i class="shp circle" data-x=".03" data-y=".66" data-s="30"></i>
+          <i class="c-streak s1"></i><i class="c-streak s2"></i>
+        </div>
+        <svg class="c-river" aria-hidden="true"><defs>
+          <linearGradient id="c-wg" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#00B2C0"/><stop offset=".35" stop-color="#5BC8F0"/><stop offset=".65" stop-color="#7C8CFF"/><stop offset="1" stop-color="#B15DFF"/></linearGradient>
+          <filter id="c-blur" x="-10%" y="-200%" width="120%" height="500%"><feGaussianBlur stdDeviation="6"/></filter>
+          <mask id="c-rmask" maskUnits="userSpaceOnUse"><path class="rev" fill="none" stroke="#fff" stroke-width="70" stroke-linecap="round"/></mask>
+        </defs><g mask="url(#c-rmask)"><path class="body"/><path class="core"/><path class="shine"/><path class="shine s2"/></g></svg>
+        <i class="c-drop" style="--d:7s;--dl:0s"></i><i class="c-drop" style="--d:9s;--dl:-3s"></i><i class="c-drop" style="--d:8s;--dl:-5.5s"></i><i class="c-drop" style="--d:10s;--dl:-7s"></i>
+        <div class="chip" data-p="1" aria-hidden="true"><i class="g"></i><span class="n">01</span><span class="t">政策與補助案</span></div>
+        <div class="chip" data-p="0" aria-hidden="true"><i class="g"></i><span class="n">02</span><span class="t">需求訪談</span></div>
+        <div class="chip" data-p="3" aria-hidden="true"><i class="g"></i><span class="n">03</span><span class="t">AI 系統整合</span></div>
+        <div class="chip" data-p="2" aria-hidden="true"><i class="g"></i><span class="n">04</span><span class="t">場域落地</span></div>
+        <p class="c-tagline"><span class="seg-l">縮短 AI 技術與場域實踐的最後一哩路</span><span class="seg-l">做你最值得信賴的科技夥伴</span></p>
+        <div class="c-progress" aria-hidden="true"><i></i></div>
+      </div>
+      <div class="c-spacer" aria-hidden="true"></div>
+    </div>
+    <div class="wrap"><div class="next"><span class="eyebrow">服務項目</span><p>不只懂科技技術，更懂政策語言，智齡數位透過專業的「技術場域化」轉譯能力，位政府機關、大型企業與醫護集團提供高效、穩健且具擴充性的系統整合方案，讓 AI 真正落地，在第一線發揮潛力。</p></div></div>
+    <div class="wrap"><div class="notes">
+      <div class="note"><h3>這一版的做法</h3><ul><li>照片和標語在同一個固定區塊（和現在智齡數位頁的 sticky 結構相同）</li><li>聚攏：照片變成帶透視角度的立體面板，排成走廊（參考 I&amp;H）；後方浮現漸層玻璃面板、柔焦光團與幾何小圖形，兩道拖尾斜飛而過</li><li>串聯：一條水流從左到右蜿蜒流過畫面下方，流到哪一站、那一站的卡片（Quote 樣式）就浮現</li><li>點亮：標語逐字變深</li><li>散開：面板轉開淡出，只留下標語</li></ul></div>
+      <div class="note"><h3>優點</h3><ul><li>照片和標語連成一個完整的故事，不會捲過照片就斷掉</li><li>標語一直看得到；關閉動態時是「照片一排、標語在下」的靜止排版</li><li>連線是水平／垂直細線（IX3 scaleX／scaleY），數據流動是 CSS 循環動畫，全部 IX3＋CSS 做得到</li><li>節點標籤只寫業務流程，不放數字</li></ul></div>
+      <div class="note"><h3>要注意</h3><ul><li>照片落點在 IX3 裡是固定數值：桌機／平板一組、手機一組</li><li>捲動距離約 2.3 個螢幕高，比原版長一些</li></ul></div>
+    </div></div>
+  </section>
+
+  <!-- ===== Version B ===== -->
+  <section id="v-b" hidden>
+    <div class="wrap"><div class="hero-top">
+      <h1>大健康產業的<br>數位工程領航者</h1>
+      <p>智齡數位科技為智齡科技 (Jubo) 全資子公司，2022 年由母公司公共事業核心團隊獨立成軍，誕生於台灣長照產業轉型最前線，承襲母公司頂尖研發基因，三年來深度專注於政府補助案、大型委託案與醫護集團之數位轉型合作。</p>
+    </div></div>
+    <div class="wrap"><div class="b-gallery">
+      <div class="ph"><img src="{{P1}}" alt=""></div>
+      <div class="ph"><img src="{{P2}}" alt=""></div>
+      <div class="ph"><img src="{{P3}}" alt="穿白色護士服、微笑並側身站立在明亮醫療環境中的年輕女性護士。"></div>
+      <div class="ph"><img src="{{P4}}" alt=""></div>
+    </div></div>
+    <div class="b-statement">
+      <div class="b-sticky">
+        <p class="b-tagline"><span class="seg-l">縮短 AI 技術與場域實踐的最後一哩路</span><span class="seg-l">做你最值得信賴的科技夥伴</span></p>
+        <div class="b-progress" aria-hidden="true"><i></i></div>
+      </div>
+    </div>
+    <div class="wrap"><div class="next"><span class="eyebrow">服務項目</span><p>不只懂科技技術，更懂政策語言，智齡數位透過專業的「技術場域化」轉譯能力，位政府機關、大型企業與醫護集團提供高效、穩健且具擴充性的系統整合方案，讓 AI 真正落地，在第一線發揮潛力。</p></div></div>
+    <div class="wrap"><div class="notes">
+      <div class="note"><h3>這一版的做法</h3><ul><li>四張照片以不同速度上移，產生前後景深</li><li>照片在框內緩慢放大</li><li>標語固定在畫面中央，隨捲動從淺灰逐字變深</li></ul></div>
+      <div class="note"><h3>優點</h3><ul><li>標語永遠看得到，只是顏色變化，慢網路或關閉動態也不會缺字</li><li>一套數值通吃桌機、平板、手機</li><li>IX3 的逐字拆分（splitText）直接做得到</li></ul></div>
+      <div class="note"><h3>要注意</h3><ul><li>捲動前標語是淺灰色，對比較低</li><li>標語固定在畫面上約 1.3 個螢幕高，捲動距離比 A 短</li></ul></div>
+    </div></div>
+  </section>
+  <p class="rm-note wrap" id="rm-note" hidden>你的裝置開啟了「減少動態」，這裡顯示的是靜止版本。</p>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasGsap = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+  var motion = hasGsap && !reduce;
+  if (reduce) { document.getElementById('rm-note').hidden = false; }
+  if (motion) { document.documentElement.classList.add('js'); gsap.registerPlugin(ScrollTrigger); }
+
+  // split B tagline into characters (what IX3 splitText "chars" produces)
+  function splitChars(el){
+    el.innerHTML = Array.from(el.textContent).map(function(ch){
+      return ch === ' ' ? ' ' : '<span class="c">' + ch + '</span>';
+    }).join('');
+  }
+  if (motion) {
+    document.querySelectorAll('.b-tagline .seg-l,.c-tagline .seg-l,.chip .t').forEach(splitChars);
+  }
+
+  var ctx = null;
+
+  function buildB(){
+    return gsap.context(function(){
+      var phs = gsap.utils.toArray('#v-b .ph');
+      var speeds = [-8, -26, -14, -34];
+      var tl = gsap.timeline({ scrollTrigger:{ trigger:'#v-b .b-gallery', start:'top 85%', end:'bottom top', scrub:0.6 } });
+      phs.forEach(function(ph, i){
+        tl.to(ph, { yPercent:speeds[i], ease:'none' }, 0);
+        tl.to(ph.querySelector('img'), { scale:1.12, ease:'none' }, 0);
+      });
+      var chars = gsap.utils.toArray('#v-b .b-tagline .c');
+      gsap.timeline({ scrollTrigger:{ trigger:'#v-b .b-statement', start:'top top', end:'bottom bottom', scrub:0.4 } })
+        .to(chars, { color:getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#151717', ease:'none', stagger:{ each:0.04 }, duration:0.3 }, 0)
+        .to('#v-b .b-progress i', { scaleX:1, ease:'none', duration:chars.length * 0.04 + 0.3 }, 0);
+    });
+  }
+
+  function buildC(){
+    return gsap.context(function(){
+      var stage = document.querySelector('#v-c .c-sticky');
+      var phs = gsap.utils.toArray('#v-c .c-gallery .ph');
+      var tagEl = document.querySelector('#v-c .c-tagline');
+      var chips = gsap.utils.toArray('#v-c .chip');
+      var ghosts = gsap.utils.toArray('#v-c .c-ghost');
+      var shapes = gsap.utils.toArray('#v-c .shp');
+      var streaks = gsap.utils.toArray('#v-c .c-streak');
+      var drops = gsap.utils.toArray('#v-c .c-drop');
+      var river = document.querySelector('#v-c .c-river');
+      var rev = river.querySelector('.rev'), rpaths = river.querySelectorAll('.body,.core,.shine');
+      // photo index: 0 顧問女士 / 1 西裝男士 / 2 護理師 / 3 拿平板的 Jubo 同仁 ; left→right = 01 02 03 04
+      var PANEL = {
+        wide:   [ {x:.31,y:.24,h:.28,ry:20}, {x:.095,y:.56,h:.40,ry:32}, {x:.905,y:.56,h:.40,ry:-32}, {x:.69,y:.24,h:.28,ry:-20} ],
+        narrow: [ {x:.33,y:.21,h:.17,ry:18}, {x:.15,y:.69,h:.21,ry:26}, {x:.85,y:.69,h:.21,ry:-26}, {x:.67,y:.21,h:.17,ry:-18} ]
+      };
+      var NODES = [ .13, .37, .63, .87 ];   // stream milestones (x fraction), chips in order 01..04
+      var geo, L = 1;
+      function streamPath(W, H, narrow){
+        var y0 = H * (narrow ? .91 : .86), amp = H * (narrow ? .012 : .02);
+        var pts = [[-W*.04, y0 + amp]];
+        NODES.forEach(function(x, i){ pts.push([W*x, y0 + (i % 2 ? -amp : amp)]); });
+        pts.push([W*1.04, y0 - amp]);
+        var d = 'M' + pts[0][0] + ' ' + pts[0][1];
+        for (var i = 0; i < pts.length - 1; i++){
+          var p0 = pts[Math.max(0,i-1)], p1 = pts[i], p2 = pts[i+1], p3 = pts[Math.min(pts.length-1,i+2)];
+          var c1x = p1[0] + (p2[0]-p0[0])/6, c1y = p1[1] + (p2[1]-p0[1])/6, c2x = p2[0] - (p3[0]-p1[0])/6, c2y = p2[1] - (p3[1]-p1[1])/6;
+          d += ' C' + c1x.toFixed(1) + ' ' + c1y.toFixed(1) + ',' + c2x.toFixed(1) + ' ' + c2y.toFixed(1) + ',' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+        }
+        return { d:d, y0:y0 };
+      }
+      function measure(){
+        gsap.set(phs.concat([tagEl]), { clearProps:'transform' });
+        var s = stage.getBoundingClientRect(), t = tagEl.getBoundingClientRect();
+        var W = s.width, H = s.height, narrow = W < 768, spots = narrow ? PANEL.narrow : PANEL.wide;
+        var sp = streamPath(W, H, narrow);
+        rev.setAttribute('d', sp.d); rpaths.forEach(function(p){ p.setAttribute('d', sp.d); });
+        L = rev.getTotalLength();
+        gsap.set(rev, { attr:{ 'stroke-dasharray': L, 'stroke-dashoffset': L } });
+        drops.forEach(function(dr){ dr.style.offsetPath = "path('" + sp.d + "')"; });
+        chips.forEach(function(ch, i){
+          var x = W * NODES[i], w = ch.offsetWidth, h = ch.offsetHeight;
+          gsap.set(ch, { left: Math.min(Math.max(6, x - w/2), W - w - 6), top: sp.y0 - h - (narrow ? 12 : 18), right:'auto', bottom:'auto' });
+        });
+        ghosts.forEach(function(g){ var gh = H * +g.dataset.h; gsap.set(g, { width: gh*0.5, height: gh, left: W * +g.dataset.x - gh*0.25, top: H * +g.dataset.y - gh/2 }); });
+        shapes.forEach(function(e){ var z = +e.dataset.s * (narrow ? .7 : 1); gsap.set(e, { width:z, height:z, left: W * +e.dataset.x - z/2, top: H * +e.dataset.y - z/2 }); });
+        geo = { W:W, H:H, tagY:(s.top + H/2) - (t.top + t.height/2),
+          ph: phs.map(function(ph, i){
+            var r = ph.getBoundingClientRect(), p = spots[i];
+            return { k:(H * p.h) / r.height, dx:(s.left + W*p.x) - (r.left + r.width/2), dy:(s.top + H*p.y) - (r.top + r.height/2), ry:p.ry };
+          }) };
+      }
+      measure();
+      var chars = gsap.utils.toArray('#v-c .c-tagline .c');
+      var tl = gsap.timeline({ defaults:{ ease:'none' }, scrollTrigger:{ trigger:'#v-c .c-scene', start:function(){ return stage.offsetTop > 0 ? 'top+=' + stage.offsetTop + ' top' : 'top top'; }, end:'bottom bottom', scrub:0.6, invalidateOnRefresh:true, onRefreshInit:measure } });
+      // 1. gather into 3D panels
+      phs.forEach(function(ph, i){
+        tl.to(ph, { x:function(){ return geo.ph[i].dx; }, y:function(){ return geo.ph[i].dy; }, scale:function(){ return geo.ph[i].k; }, rotationY:function(){ return geo.ph[i].ry; }, transformPerspective:1200, ease:'power2.inOut', duration:0.34 }, i * 0.02);
+        tl.to(ph.querySelector('img'), { scale:1.12, duration:0.9 }, 0);
+        tl.to(ph.querySelectorAll('.tint,.sheen'), { opacity:1, duration:0.2 }, 0.14);
+        // gentle drift while pinned
+        tl.to(ph, { y:function(){ return geo.ph[i].dy - geo.H * (i % 2 ? .025 : .04); }, duration:0.44 }, 0.36);
+      });
+      tl.to(tagEl, { y:function(){ return geo.tagY; }, ease:'power3.out', duration:0.3 }, 0.08);
+      tl.to('#v-c .c-blob', { opacity:1, duration:0.3, stagger:0.06 }, 0.06);
+      ghosts.forEach(function(g, i){
+        tl.fromTo(g, { opacity:0, rotationY:+g.dataset.r * 1.8, transformPerspective:1200, yPercent:18 }, { opacity:1, rotationY:+g.dataset.r, yPercent:0, ease:'power2.out', duration:0.26 }, 0.12 + i * 0.04);
+        tl.to(g, { yPercent: i % 2 ? -8 : -14, duration:0.44 }, 0.38);
+      });
+      shapes.forEach(function(e, i){
+        tl.fromTo(e, { opacity:0, scale:0.4, rotation:-30 }, { opacity:1, scale:1, rotation:0, ease:'back.out(1.6)', duration:0.1 }, 0.22 + i * 0.025);
+        tl.to(e, { y:function(){ return -geo.H * (0.03 + (i % 3) * 0.025); }, rotation: i % 2 ? 18 : -14, duration:0.5 }, 0.32);
+      });
+      streaks.forEach(function(st, i){
+        tl.fromTo(st, { x:function(){ return -geo.W * .45; }, y:function(){ return geo.H * (.95 - i * .12); }, rotation:-24, opacity:0 },
+          { keyframes:{ opacity:[0, .9, .9, 0] }, x:function(){ return geo.W * 1.1; }, y:function(){ return geo.H * (.15 - i * .08); }, ease:'power1.inOut', duration:0.26 }, 0.03 + i * 0.07);
+      });
+      // 2. the stream flows left → right; each milestone card appears as the water reaches it
+      tl.to(rev, { attr:{ 'stroke-dashoffset':0 }, duration:0.3, ease:'none' }, 0.36);
+      chips.forEach(function(ch, i){
+        var at = 0.36 + 0.3 * (0.04 + NODES[i]) / 1.08;
+        tl.fromTo(ch, { opacity:0, y:10, scale:0.96 }, { opacity:1, y:0, scale:1, ease:'power2.out', duration:0.04 }, at);
+        tl.fromTo(ch.querySelector('.g'), { opacity:0, scale:0.6 }, { opacity:1, scale:1, ease:'power2.out', duration:0.06 }, at + 0.02);
+        tl.fromTo(ch.querySelectorAll('.t .c'), { opacity:0 }, { opacity:1, stagger:{ each:0.006 }, duration:0.01 }, at + 0.01);
+      });
+      tl.fromTo(drops, { opacity:0 }, { opacity:1, duration:0.06, stagger:0.02 }, 0.62);
+      // 3. light up the tagline
+      tl.to(chars, { color:'#151717', stagger:{ each:0.008 }, duration:0.06 }, 0.38);
+      // 4. disperse
+      phs.forEach(function(ph, i){
+        tl.to(ph, { x:function(){ return geo.ph[i].dx + (i === 1 || i === 0 ? -1 : 1) * geo.W * .14; }, rotationY:function(){ return geo.ph[i].ry * 1.8; }, opacity:0, ease:'power1.in', duration:0.18 }, 0.8 + i * 0.015);
+      });
+      tl.to(chips, { opacity:0, y:-8, duration:0.1, stagger:0.01 }, 0.8)
+        .to([river].concat(drops), { opacity:0, duration:0.12 }, 0.8)
+        .to(ghosts.concat(shapes), { opacity:0, duration:0.14, stagger:0.01 }, 0.8)
+        .to('#v-c .c-blob', { opacity:0, duration:0.18 }, 0.82)
+        .to('#v-c .c-progress i', { scaleX:1, duration:1 }, 0);
+    });
+  }
+
+  function show(v){
+    if (ctx) { ctx.revert(); ctx = null; }
+    document.getElementById('v-c').hidden = v !== 'c';
+    document.getElementById('v-b').hidden = v !== 'b';
+    document.querySelectorAll('.seg button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.v === v)); });
+    window.scrollTo(0, 0);
+    if (motion) { ctx = v === 'c' ? buildC() : buildB(); ScrollTrigger.refresh(); }
+    try { localStorage.setItem('jd-hero-v2', v); } catch(e){}
+  }
+  document.querySelectorAll('.seg button').forEach(function(b){ b.addEventListener('click', function(){ show(b.dataset.v); }); });
+  var start = 'c';
+  try { start = localStorage.getItem('jd-hero-v2') || 'c'; } catch(e){}
+  if (start !== 'c' && start !== 'b') start = 'c';
+  window.addEventListener('load', function(){ if (motion) ScrollTrigger.refresh(); });
+  show(start);
+})();
+</script>

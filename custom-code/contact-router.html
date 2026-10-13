@@ -1,0 +1,220 @@
+<!-- ============================================================
+     /contact 分流面板：展開／切換動畫
+     來源：custom-code/contact-router.html（repo 為準，改這裡前先改 repo）
+     鐵律 4 的例外，2026-09-10 經 Terris 明確要求後採用。
+
+     ⚠️ 狀態與過場都定義在 Webflow 的 class 上，這支 code 只負責時序：
+        .contact-router_stage          → overflow hidden、height 0、height 過場 800ms
+        .contact-router_panel          → display none、opacity 0、opacity 過場 900ms delay 150ms
+        .contact-router_panel.is-open  → display block、opacity 1
+     原因：Webflow 的 Designer 與 Preview 都不執行 page custom code。
+     狀態放在 class 才能保證「沒按按鈕時是隱藏的」在 canvas、Preview、發布後三處一致。
+
+     為什麼要有 stage 這一層（2026-09-10 修）：
+     切換時如果把舊面板的高度直接歸零、再讓新面板從 0 長起來，
+     頁面總高度會先瞬間掉一千多 px 再長回來。整頁漸層（.gradient-bg 是
+     position:absolute; inset:0）會跟著猛地重算，畫面上就看到一道
+     區塊邊界閃過。改成由 stage 擁有高度：高度從「舊面板的高度」連續動到
+     「新面板的高度」，中間不歸零，頁面高度全程連續。
+
+     切換時序：
+       舊卡片淡出（stage 高度鎖住，版面不動）
+       → 舊卡片 display:none、新卡片 display:block（仍透明）
+       → stage 高度從舊高度動到新高度 ＋ 新卡片淡入 ＋ 由上往下滑入
+     ============================================================ -->
+<style>
+  /* 新卡片進場：從上方滑下來就位。起始值由 JS 寫成 inline，
+     否則元素剛從 display:none 變出來的那一格，transition 不會跑。 */
+  [data-router-panel] > * {
+    transition: transform .9s cubic-bezier(.22,.61,.36,1) .15s;
+  }
+  /* 舊卡片淡出：比進場快，讓交接俐落 */
+  [data-router-panel].is-fading {
+    opacity: 0 !important;
+    transition: opacity .3s ease !important;
+  }
+  [data-router-target] { cursor: pointer; }
+
+  /* 入口卡的箭頭交棒動畫（2026-09-11）：游標移入時舊箭頭往右滑出、
+     新的從左邊滑進來。照 navbar .glass-button 裡兩顆 .gradient-icon
+     （is-1 / is-2）的同一套做法；徽章有 overflow: clip 當遮罩。
+
+     為什麼寫在這裡而不是 Webflow class：這是「父層 hover 影響子層」，
+     Webflow 的樣式面板只能寫元素自己的 hover，MCP 也一樣，表達不出來。
+     位置與尺寸仍然在 class 上（.contact-choice_arrow-icon.is-1 / .is-2），
+     這裡只負責位移與時序。 */
+  .contact-choice_arrow-icon {
+    transition: transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .contact-choice_arrow-icon.is-2 { transform: translateX(-170%); }
+
+  /* 選中的卡片是實心 teal，service icon 的圓底跟卡片同色會「消失」，
+     只剩淺色圖形浮著。所以把兩個 fill 都改成吃 CSS variable
+     （預設值就是 /login 原本的 #00B2C0 / #F0FEFF，靜止時完全一樣），
+     選中時對調成白底 teal 圖形，跟同一張卡上的白色箭頭徽章一致。 */
+  .contact-choice_item.is-active {
+    --cc-icon-bg: #ffffff;
+    --cc-icon-fg: #00b2c0;
+  }
+  .contact-choice_item.is-active .contact-choice_service-icon {
+    filter: drop-shadow(0 8px 12px rgba(8, 72, 78, .22));
+  }
+  .contact-choice_item:hover .contact-choice_arrow-icon.is-1 { transform: translateX(170%); }
+  .contact-choice_item:hover .contact-choice_arrow-icon.is-2 { transform: translateX(0); }
+  @media (prefers-reduced-motion: reduce) {
+    [data-router-panel], [data-router-panel] > *, [data-router="stage"],
+    .contact-choice_arrow-icon {
+      transition: none !important;
+    }
+  }
+</style>
+<noscript>
+  <style>
+    [data-router="stage"] { height: auto !important; overflow: visible !important; }
+    [data-router-panel] { display: block !important; opacity: 1 !important; }
+    [data-router-panel] > * { transform: none !important; }
+  </style>
+</noscript>
+<script>
+  (function () {
+    var EXPAND = 800;      // 必須等於 .contact-router_stage 的 height transition-duration
+    var FADE_OUT = 300;    // 必須等於上面 .is-fading 的 opacity transition-duration
+    var SLIDE = '-1.5rem'; // 新卡片內容的進場位移
+    var SCROLL = 1.4;      // 秒，交給 Lenis
+
+    function ready(fn) {
+      if (document.readyState !== 'loading') fn();
+      else document.addEventListener('DOMContentLoaded', fn);
+    }
+
+    ready(function () {
+      var wrapper = document.querySelector('[data-router="wrapper"]');
+      var stage = document.querySelector('[data-router="stage"]');
+      if (!wrapper || !stage) return;
+      var items = [].slice.call(wrapper.querySelectorAll('[data-router-target]'));
+      var panels = [].slice.call(stage.querySelectorAll('[data-router-panel]'));
+      if (!items.length || !panels.length) return;
+      var settle = null;
+
+      function panelFor(key) {
+        for (var i = 0; i < panels.length; i++) {
+          if (panels[i].getAttribute('data-router-panel') === key) return panels[i];
+        }
+        return null;
+      }
+
+      function openPanel() {
+        for (var i = 0; i < panels.length; i++) {
+          if (panels[i].classList.contains('is-open')) return panels[i];
+        }
+        return null;
+      }
+
+      function kids(panel) {
+        return [].slice.call(panel.children);
+      }
+
+      // 把 stage 目前的高度寫成 inline，之後才能從這個值過場
+      function lockStage() {
+        stage.style.height = stage.offsetHeight + 'px';
+        void stage.offsetHeight;
+      }
+
+      function animateStageTo(px) {
+        if (settle) { window.clearTimeout(settle); settle = null; }
+        requestAnimationFrame(function () {
+          stage.style.height = px + 'px';
+        });
+        settle = window.setTimeout(function () {
+          settle = null;
+          // 開著的時候交還給 auto，內容日後變高（CMS、換行）也不會被切
+          if (openPanel()) stage.style.height = 'auto';
+        }, EXPAND + 40);
+      }
+
+      // 讓面板出現：先 display 出來但保持透明與位移，下一格才放行，
+      // 這樣 opacity / transform 的 transition 才會真的跑。
+      function reveal(panel) {
+        panel.classList.add('is-open');
+        panel.style.opacity = '0';
+        kids(panel).forEach(function (k) { k.style.transform = 'translateY(' + SLIDE + ')'; });
+        var target = panel.offsetHeight;   // 量高度，同時觸發 reflow
+        requestAnimationFrame(function () {
+          panel.style.opacity = '';        // 交還給 class 的 opacity:1 → 淡入
+          kids(panel).forEach(function (k) { k.style.transform = ''; });
+        });
+        return target;
+      }
+
+      function hide(panel) {
+        panel.classList.remove('is-open');
+        panel.classList.remove('is-fading');
+        panel.style.opacity = '';
+        kids(panel).forEach(function (k) { k.style.transform = ''; });
+      }
+
+      // 捲到分流入口本身（入口卡在 Hero 裡），入口卡會停在 navbar 下方，
+      // 剛展開的面板正好在它底下。站上的 Slater JS 有 window.lenis，
+      // 優先交給它，直接用原生 scrollIntoView 會跟 Lenis 的 RAF 迴圈互相干擾。
+      function bringIntoView() {
+        var nav = document.querySelector('[class*="navbar"], nav, header');
+        var clearance = (nav ? nav.getBoundingClientRect().height : 0) + 24;
+        if (window.lenis && typeof window.lenis.scrollTo === 'function') {
+          window.lenis.scrollTo(wrapper, { offset: -clearance, duration: SCROLL });
+        } else {
+          // 不要用 scrollIntoView({block:'start'})：它會把 wrapper 頂到視窗 0，
+          // 剛好躲到固定 navbar 後面。自己算 clearance，兩條路徑落點才一致。
+          window.scrollTo({
+            top: wrapper.getBoundingClientRect().top + window.pageYOffset - clearance,
+            behavior: 'smooth'
+          });
+        }
+      }
+
+      items.forEach(function (item) {
+        item.addEventListener('click', function (event) {
+          // 保留 href 讓站台 head 的 GA4 事件抓得到（它以 capture 監聽 a[href]，
+          // 會在這裡之前就送出），但不要讓瀏覽器跳 anchor。
+          // stopPropagation 擋掉 Webflow 自己與 Lenis 掛在 document bubble 階段的
+          // 捲動處理；真正要的捲動由 bringIntoView() 控制。
+          event.preventDefault();
+          event.stopPropagation();
+
+          var wasActive = item.classList.contains('is-active');
+          var target = panelFor(item.getAttribute('data-router-target'));
+          if (!target) return;
+          items.forEach(function (el) { el.classList.remove('is-active'); });
+
+          lockStage();
+
+          if (wasActive) {                    // 點同一顆 → 收起來
+            var closing = target;
+            closing.classList.add('is-fading');
+            animateStageTo(0);
+            window.setTimeout(function () { hide(closing); }, EXPAND);
+            return;
+          }
+
+          item.classList.add('is-active');
+          var current = openPanel();
+
+          if (current && current !== target) { // 切換 → 舊的淡出，再換新的
+            current.classList.add('is-fading');
+            window.setTimeout(function () {
+              hide(current);
+              animateStageTo(reveal(target));
+              bringIntoView();
+            }, FADE_OUT);
+          } else {                             // 第一次打開
+            animateStageTo(reveal(target));
+            bringIntoView();
+          }
+        });
+      });
+
+      window.addEventListener('resize', function () {
+        if (openPanel()) stage.style.height = 'auto';
+      });
+    });
+  })();
+</script>
