@@ -2,6 +2,7 @@
 
 這個目錄保存 Webflow 頁面層設定與回退資料，不是頁面要載入的 JavaScript。
 
+- [2026-10-13-polish.json](2026-10-13-polish.json)：第五輪視覺細修、右側單一 hover、動畫屬性分工與 NEW 循環銜接；保存實際前後設定與驗證限制。
 - [2026-10-13-hover-continuity.json](2026-10-13-hover-continuity.json)：目前採用的同色系配色、邊緣位置及單一 hover 加減速；保存第四輪前／後設定及使用者 Preview 結果。
 - [2026-10-13-pill-fill.json](2026-10-13-pill-fill.json)：卡片裁切與六個填色底層 ID；保存第三輪前／後設定，其配色與雙 timeline hover 已取代。
 - [2026-10-13-motion-refinement.json](2026-10-13-motion-refinement.json)：柔焦白底卡片與右側慢速分層動效；保存第二輪前／後設定，允許 tag 超出顯示的做法已取代。

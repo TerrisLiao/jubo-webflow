@@ -1,5 +1,12 @@
 # 部署紀錄
 
+## 2026-10-13 第五輪：細修已寫入 Designer
+
+- Designer：九組樣式及五個 IX3 已寫入並讀回；整頁結構／內容及三個左側 hover 保留。詳見 [細修紀錄](history/2026-10-13-polish.md)。
+- 驗證：六寬度本機 Chromium／GSAP 核心檢查通過；原生 Preview、實際字體／素材及 reduced-motion 仍待驗，已詢問使用者。
+- Git：續作 [PR #21](https://github.com/TerrisLiao/jubo-webflow/pull/21)，[第五輪快照](../../../custom-code/community/2026-10-13-polish.json) 保存前後設定；未合併。
+- staging／production：未 Publish；本輪未改發布 metadata。
+
 ## 2026-10-13 第四輪：連續 hover 與乾淨配色
 
 - Designer：六組填色、六個背景色團及標籤左右偏移更新；三個 hover 為單 trigger／單 timeline／10 actions，.7 秒 power3.inOut、togglePlayReverse，卡片本體固定。
