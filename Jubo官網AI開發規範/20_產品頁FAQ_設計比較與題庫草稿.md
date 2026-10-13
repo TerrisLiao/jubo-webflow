@@ -705,12 +705,19 @@ Terris 提供的 i照護官方常見問題、操作手冊，讀者是**已採購
 與首頁 FAQ 的刻意差異：
 1. 首頁是 CMS Collection List（`w-dyn-list`）；產品頁為靜態元素（本次不新增 Collection，三頁題目少且各頁不同）。若日後要集中維護，再評估 Collection ＋ 頁面篩選。
 2. 首頁 `faq5_icon-wrapper` 內有兩個 `icon-embed-small`（第二個為備援）；本頁依 `/security` 先例只放一個，視覺相同。
-3. SVG 漸層 id 每題唯一（`res-faq-grad-1`～`10`）。Webflow 匯入 HTML 時會把 `mask-type:alpha` 變成自動 class `inline-mask-*`；該 mask 是整張 32×32 的全覆蓋遮罩，無視覺作用，已移除 mask 並刪掉這 10 個多餘 class（讀回確認站上已無 `inline-mask-*`）。
+3. **圖示改用 HTML Embed**（2026-10-13 修正）：第一版用 whtml 匯入 inline SVG，Webflow 把 `linearGradient` 標籤轉成小寫（`lineargradient`），漸層失效，右側漸層加號整個不顯示（`fill=url(#…)` 找不到漸層就不上色）。已改成 10 個 `HtmlEmbed` 元素（沿用 `icon-embed-small`），程式碼為原樣的 `<svg>`（大小寫正確）。漸層 id 每題唯一（`res-faq-grad-1`～`10`）。移除了無視覺作用的全覆蓋 mask，也刪掉匯入時自動產生的 10 個 `inline-mask-*` class（讀回確認站上已無）。**教訓：含漸層／大小寫敏感標籤的 SVG 一律用 HtmlEmbed，不要用 whtml 匯入。**
 4. 答案區塊為普通 Block ＋ `richtext` class ＋ 段落，而非 Rich Text 元素；`.richtext p` 為後代選擇器，樣式一致。
 
 ### 10-3. 頁面 JSON-LD
 
-原本只有一個 `SoftwareApplication`。已合併為 `@graph: [SoftwareApplication（原樣不動）, FAQPage（10 題）]`；FAQPage 的問答文字與頁面可見文字逐字一致（由同一份文案產生）。讀回確認已寫入。
+原本只有一個 `SoftwareApplication`。現為 `@graph: [SoftwareApplication, FAQPage（10 題）]`，讀回確認已寫入。FAQPage 的問答文字與頁面可見文字逐字一致（同一份文案）。
+
+2026-10-13 修正（Terris 要求修正 LD／schema）：
+- `url`、`offers.url` 由相對路徑改為完整網址 `https://jubo-health.com/products/residential-care`；`provider` 補 `url`。
+- 兩個節點加 `@id`（`…#software`、`…#faq`），FAQPage 以 `about` 指回產品節點。
+- **移除 `aggregateRating`（5 分／700 則）**：頁面上的「700+」是機構數，不是評論數，沒有可驗證的評論來源；自我宣稱的評分違反 Google 結構化資料準則，且有被手動處置的風險。若日後有真實、可驗證的評價來源再加回。
+- `featureList` 保留原 7 項（與 CMS「功能介紹」住宿型／身障類別項目一致），另加 4 項取自已審核 FAQ 的功能（AI 智慧交班、藍牙量測自動上傳、排班出勤倉儲、個案帳務）。
+- `offers.price 125` 與頁面「$125 起（含稅）」一致，保留；但頁面未註明計價單位（每床？每月？），schema 也就沒有寫單位，待確認後可補 `priceSpecification`。
 
 ### 10-4. 驗證與限制
 
@@ -723,5 +730,5 @@ Terris 提供的 i照護官方常見問題、操作手冊，讀者是**已採購
 
 1. **Q9 題目與答案不對應**：題目問「舊系統或紙本的資料能轉進來嗎？」，核准答案只講導入教學，沒回答資料轉入。已**逐字照核准版上線**；建議補一句資料轉入的實際做法，或把題目縮成「導入要怎麼進行？」。
 2. Q7「Jubo VitalLink系統」中間缺空格（沿用核准版）；另 VitalLink 是否等同住宿型頁面所講的系統，請顧問確認。
-3. 該頁既有 JSON-LD 的 `aggregateRating`（reviewCount 700）、`offers.price 125`、`featureList`（內容像日照／社區型功能）與頁面內容不符，與本次 FAQ 無關，**未更動**，建議另案稽核。
+3. `offers.price 125` 的計價單位（每床／每月／其他）頁面沒寫，請確認後我補進 schema 的 `priceSpecification`。
 4. 是否 Publish、何時 Publish：等 Terris 明確指示。
