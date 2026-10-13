@@ -28,6 +28,7 @@
 - `Jubo官網AI開發規範/`：全站設計系統與稽核基準。
 - `JP日本市場頁面改版/`：日本市場頁面現況、決策、文案與待辦。
 - `custom-code/`：外部 script selector、Embed 依賴與 POC。
+- `社群追蹤頁/`：`/community` 社群追蹤頁（banner 導流）的結構、IX3 與待辦。
 - `.claude/skills/`：Three.js 專用 skills；不代表目前 Webflow 頁面一定使用 Three.js。
 
 ## 安全
