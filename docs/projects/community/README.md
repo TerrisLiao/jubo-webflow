@@ -4,6 +4,8 @@
 
 ## 詳細來源
 
+- [2026-10-13 漸層、透明標籤與動效更新](history/2026-10-13-card-motion.md)
+- [設定與回退資料](../../../custom-code/community/README.md)
 - [README.md](reference/README.md)
 
 ## 來源分支（固定版本）
