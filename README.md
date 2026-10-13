@@ -22,7 +22,7 @@ Jubo Webflow 官網的規範、專案交接與客製程式維護庫。網站本�
 
 ## 整理與既有工作
 
-- [34 個遠端分支盤點](docs/workflows/branch-inventory.md)：含固定 head、ahead／behind、保留／清理判斷。
+- [分支盤點與清理紀錄](docs/workflows/branch-inventory.md)：含固定 head、ahead／behind、保留／清理判斷。
 - [匯入清單](docs/workflows/import-manifest.json)：22 個分支內容與舊新路徑對照。
 - [社群追蹤頁](docs/projects/community/README.md)：既有分支 `claude/confident-curie-6r3n6b`；不是待建立分支。
 - 舊中文目錄僅保留導引；新內容寫入 docs。
