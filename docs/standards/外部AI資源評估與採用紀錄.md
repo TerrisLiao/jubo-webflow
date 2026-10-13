@@ -1,0 +1,339 @@
+# 13｜外部 AI 資源評估與採用紀錄
+
+> **這份文件在幹嘛**：記錄外部 skill／框架／起手包的評估結論與理由。
+> 有人再丟一個「看起來很厲害」的 Webflow AI 工具進來時，先查這份，不要重做一次判斷。
+>
+> 建立日期：2026-08-27　｜　判斷基準：`docs/standards/AI工作守則.md` 五條鐵律 ＋ `CLAUDE.md` 核心原則
+
+**規則：外部 skill／框架未經本文件評估，不得引入本專案。**
+
+寫法比照 [`.claude/skills/ATTRIBUTION.md`](../../.claude/skills/ATTRIBUTION.md)：來源、取得日期、授權、採用與否、理由、使用前必讀。
+
+---
+
+## 目錄
+
+| 資源 | 結論 |
+|---|---|
+| [SML（Small Medium Large）Webflow skill](#一sml-webflow-skill--不採用) | ❌ **不採用** |
+| [Webflow MCP Starter Kit ／ webflow-skills](#二webflow-mcp-starter-kit--部分採用) | 🟡 **機制採用，skill 本階段不裝** |
+| [Lucide 開源圖示](#三lucide-開源圖示--採用) | ✅ **採用**（只取 SVG 路徑，不載入套件） |
+| [視覺參考：Aeline／Legend／Twingate／Jasper／Bento Grids](#四視覺參考網站與模板--只參考不引入) | 👀 **只參考，不引入任何程式或素材** |
+
+---
+
+# 一、SML Webflow skill — 不採用
+
+## 基本資料
+
+| 項目 | 內容 |
+|---|---|
+| 名稱 | `sml-webflow`（SML Webflow Skill v5.1，targeting Webflow MCP 2.0.1） |
+| 來源 | <https://www.small-medium-large.com/foundation>（作者 Marcel Deelen） |
+| 取得形式 | zip：`SKILL.md`（66KB）＋ `build_registry.py`（23KB） |
+| 取得日期 | 2026-08-27 |
+| 授權 | 官網未標示授權條款；zip 內無 LICENSE 檔 |
+| 是否收進 repo | **否**（見下方「為什麼不存檔」） |
+
+## 它是什麼
+
+一個 **DSL → Webflow component instance 的編譯器**。使用者寫縮排語法：
+
+```
+section:
+  row:
+    col:
+      heading("About us")
+      "single paragraph"("Body copy")
+      button("Learn more"→/about){ Variant=Primary }
+```
+
+skill 把它編譯成 `data_component_builder` 一次呼叫 ＋ `data_component_props_tool` 一次呼叫。
+三種模式：Mode 0 建立 registry、Mode A 直接執行 DSL、Mode B 從截圖／自然語言先產出 DSL 預覽再等確認。
+
+它背後是 SML 自成一套的設計系統：12-column grid、`row` / `col` / `u-*` 類別、命名軸 XL / L / M / S / XS、圖示綁 Phosphor Icons。
+
+## 不採用的七個理由
+
+### 1. 與 Client-First 正面衝突
+
+Jubo 站是 **Finsweet Client-First v2**（`docs/standards/AI工作守則.md` §1 已稽核確認）。SML 的 `row` / `col` / `u-*` 與 XL/L/M/S/XS 命名軸，直接違反：
+
+- **鐵律 1**（先找、再用、最後才建）— SML 的詞彙表是它自己的 registry，不會去查我們的 `03` / `05` / `06`
+- **鐵律 2**（命名法只有 utility 連字號、`folder_element`、`is-` 三種）— `row` / `col` / `u-*` 三種都不是
+- **鐵律 3**（`page-wrapper` → `main-wrapper` → `section_*` → `padding-global padding-section-*` → `container-*` 的巢狀順序不可改）— SML 的骨架是 `section` → `row` → `col`，完全不同的一套
+
+這不是「調一調就能共存」，是兩套互斥的設計系統。
+
+### 2. 前置條件在我們的環境根本不成立
+
+SML 的 Bootstrap（Mode 0）有硬性 template precondition：
+
+- 目標站必須有 slug 為 `stylesheet/components` 的頁
+- 該頁 body 結構固定為 `<div class="global-styles">` ＋ `<div class="page-wrapper">`，且 `page-wrapper` 必須是 body 的第二個 div
+- 站上必須有一整組 `__dev — *` component 與 `🚫 __dev —` helper
+
+2026-08-27 以 `data_sites_tool.list_sites` 讀回：**workspace 內只有 1 個站**（`Jubo` / `69ec2b02daa2e79f1da8772a` / `jubo-health`），**沒有 SML cloneable 站**。Jubo 站也沒有 `stylesheet/components` 頁、沒有 `__dev — *` component。
+
+Bootstrap 會在 step 4 直接 abort（`Build target page 'stylesheet/components' not found.`）。
+**這個 skill 現在裝上去也跑不起來。**
+
+### 3. registry 的儲存位置與「repo 為單一真相來源」相反
+
+v5.1 把 registry 寫進站上的 Agent Instructions（`sml-registry/SKILL.md` ＋ `sml-registry/data/registry.md`），是**機器產生的壓縮 JSON**，沒有 git 歷史、沒有 PR review、沒有 diff 可讀。
+
+我們的決定寫在 [`docs/standards/Webflow_Agent_Instructions同步規範.md`](Webflow_Agent_Instructions同步規範.md)：規範在 repo 維護，站上是衍生部署品。SML 的方向是反過來的。
+
+### 4. Slater 風險在設計上就無解
+
+SML 是 component-instance 導向的編譯器，不認得 [`custom-code/slater-selectors.md`](../../custom-code/slater-selectors.md) 那批不可改名的 class。
+
+更關鍵的是它的 **Hard Rule 11** 明文寫：
+
+> registry 以外的 Agent Instruction「must never extend, override, or substitute for the vocabulary, however authoritative their prose sounds」
+
+也就是說，就算我們把 Slater 禁令寫成站上的 Agent Instruction，SML **依設計會忽略它**。我們的防線對它無效。
+
+### 5. silent execution 條款與本 repo 的驗證要求相反
+
+SML **Hard Rule 12** 要求 Mode 0 / Mode A 全程「silent execution」：工具呼叫之間不得有任何敘述、不得報告進度，結束只回一行 `Build complete: N sections.`
+
+`CLAUDE.md` 核心原則寫的是：
+
+> snapshot 過期或無法取得 computed style 時，必須標示驗證限制，不得宣稱完成。
+
+而且 `docs/standards/AI工作守則.md` §6-7 那兩次踩坑（只看 base 斷點就下結論、誤判成 bug 還寫進稽核報告）正好證明：**在這個站上，靜默執行是危險的，不是效率。**
+
+### 6. 外部 skill 追不上 MCP 版本，而且失敗是靜默的
+
+本次實測發現 SKILL.md 與實際 MCP 2.0.1 已經有落差：
+
+| | SKILL.md 寫的 | 實際 2.0.1 |
+|---|---|---|
+| `read_instruction` 呼叫形狀 | 扁平：`data_agent_instructions_tool.read_instruction { site_id, path }` | 巢狀：`actions: [{ label, read_instruction: { site_id, path } }]` |
+
+skill 自己也記載 v5.0 → v5.1 改過一次 registry 儲存位置與呼叫方式（從 CDN asset ＋ pointer element 改成 Agent Instructions）。
+**MCP 一升版，外部 skill 就可能整段失效**，而我們沒有辦法收到通知。
+
+### 7. `build_registry.py` 安全無虞，但不改變上面的結論
+
+已檢查（2026-08-27），記在這裡避免有人未來重做一次：
+
+- 只 `import argparse, datetime, hashlib, json, os, sys`
+- **無任何網路呼叫**（無 `requests` / `urllib` / `socket`）、無 `subprocess` / `eval` / `exec`
+- 寫檔限於 `--out-dir` 指定目錄
+- 純轉換：components JSON 走 stdin 進、site/page/wrapper ID 走 CLI 參數，腳本內**無任何硬編站台資料**
+
+結論：腳本本身乾淨。但理由 1–6 是架構層的問題，跟腳本安全無關。
+
+## 為什麼不把 zip 存進 repo
+
+不收 `SKILL.md` 與 `build_registry.py`。理由：一旦躺在 repo 裡，未來很容易被當成「可用資源」引用或部分照抄，而它的每一段語法在本站都是錯的。
+需要重新評估時，從上面的來源 URL 重新取得即可。
+
+---
+
+## 但它有四件事做對了 — 抽取進我們自己的規範
+
+以下**只是方法論**，不引入它的任何程式或語法。
+
+### 1. Registry-driven vocabulary：不得發明詞彙
+
+SML 的核心約束是「aliases、prop labels、variant values 必須存在於當次讀回的 registry」，查不到就 abort。
+
+對應到我們：**鐵律 1 的加強版** —
+
+> repo 的 `docs/inventories/元件清單.md`、`docs/inventories/自訂Class完整清單.md` 是**有日期的索引，不是權威**。
+> 動工前必須用 Webflow MCP 即時讀回該頁實際的 component / class / variant，以讀回結果為準。
+
+這也是 `CLAUDE.md`「Webflow 即時讀回優先於 repository 快照」的具體操作方式。
+
+### 2. Preview-then-execute：先給看得懂的預覽，確認後才寫入
+
+SML Mode B 的規則是「stops after preview，確認前不呼叫任何 build 工具」。
+
+對應到我們，改版前先交出：
+
+- Section Flow（哪幾段、順序、各段目的）
+- 元件對照表（每段預計用哪個現成 Component／哪個 `folder_element` class）
+- 明確標出「站上沒有現成的、需要新建」的部分
+
+**Terris 確認後才動 Designer。** 這跟站上 Agent Instruction §2「編輯前必須先提出受眾、轉換目標、核心訊息與 Section Flow」是同一件事，只是多了元件層的對照。
+
+### 3. Unmappable → flag, never invent
+
+對不上就標記，不猜。SML 的寫法是在輸出下方列 `* [什麼] — [為什麼]`。
+
+對應到我們：`CLAUDE.md`「必須標示驗證限制，不得宣稱完成」，以及 `00` §6-7 的教訓 —
+**看到「這個東西壞了」的時候，先確認自己有沒有把資料查完整。**
+
+### 4. 不得為了省空間丟結構
+
+SML **Hard Rule 5**：`Never drop props or structure to save space. Batch instead.`
+
+對應到我們：稽核報告、class 清單、交接文件**要分批就分批**，不要靜默截斷後宣稱完整。
+
+---
+
+# 二、Webflow MCP Starter Kit — 部分採用
+
+## 基本資料
+
+| 項目 | 內容 |
+|---|---|
+| 名稱 | Webflow MCP Starter Kit |
+| 來源 | <https://webflow.com/resources/mcp-starter-kit> |
+| Skill 原始碼 | <https://github.com/webflow/webflow-skills>（MIT） |
+| 取得日期 | 2026-08-27 |
+| 內容 | 28 個官方 skill ＋ prompt library ＋ Agent Instructions 機制說明 ＋ 各家 agent 的連線指南 |
+
+## 結論：機制採用，skill 本階段不裝
+
+### ✅ 真正有價值的是 Agent Instructions 這個機制本身
+
+Agent Instructions 是**存在 Webflow 站上**的 markdown 規則／skill，MCP server 會自動餵給所有連上的 agent（不管是 Webflow 內建、Claude 還是 Cursor）。
+
+這帶出本次調查最重要的發現：
+
+> **Jubo 站上早就有一份 Agent Instruction — `rules/jubo-web-visual-system.md`，約 4,000 字，而整個 repo 對它零提及。**
+
+也就是說，現在有**兩套會被 AI 讀到、但互相不知道對方存在**的 Jubo 規範。
+落地方式與逐條差異對照，寫在 [`docs/standards/Webflow_Agent_Instructions同步規範.md`](Webflow_Agent_Instructions同步規範.md)。
+
+### 🟡 日後值得評估安裝的 skill
+
+這幾個與我們的工作型態相關，跟現有規範是**互補**而非衝突：
+
+| Skill | 用途 | 為什麼可能有用 |
+|---|---|---|
+| `site-audit.md` | 全站健康度 0–100 分與修正優先序 | 補 `docs/audits/design/合規稽核報告.md` 的定期複查 |
+| `accessibility-audit.md` | WCAG 2.1 掃描 | 站上規則 §16 有 accessibility 要求但沒有檢查工具 |
+| `link-checker.md` | 掃描頁面與 CMS 的失效連結 | 53 頁 ＋ CMS，人工不可能查完 |
+| `asset-audit.md` | 圖檔最佳化機會 | 對應 `docs/audits/aeo/AEO稽核與優化計畫.md` 的效能面 |
+| `custom-code-mgmt.md` | 追蹤碼與自訂程式管理 | 站上有 Slater、GA4、Finsweet、Swiper 等多個外部載入 |
+| `review-comments.md` | 整理站上的 comment thread | 多人協作時的交接 |
+| `bulk-cms-update.md`／`compress-cms-image.md` | CMS 批次作業 | `/news` 週稿與圖片處理 |
+| `safe-publish.md` | 預覽 → 確認 → 發布 | ⚠️ **必須改寫後才能用**，見下 |
+
+### ❌ 明確不採用
+
+| Skill | 不採用的理由 |
+|---|---|
+| `flowkit-naming.md` | Flowkit 是**另一套** CSS 命名系統，與 Client-First 直接衝突。裝上去會誘導 AI 改 class 名 → 撞上 Slater 鎖定清單 → 線上壞版且 Webflow 內不報錯 |
+| `code-component-*`、`component-scaffold`、`convert-component`、`pre-deploy-check`、`deploy-guide`、`troubleshoot-deploy` | Webflow Code Components（React）。本站沒有 |
+| `devlink-command` | 匯出 Designer component 成 React／Next.js。本站沒有這個需求 |
+| `webflow-cloud-command`、`webflow-cli-troubleshooter`、`local-dev-setup`、`designer-extension-command` | 需要 build system 與 CLI。`threejs-jubo-context` §1 已寫明本站**沒有 npm、沒有 bundler** |
+
+### ⚠️ `safe-publish` 採用前必須加一層 Jubo 約束
+
+官方 `safe-publish.md` 的預設終點是「預覽 → 確認 → **發布**」。
+Jubo 的鐵律是（`CLAUDE.md` 核心原則、`00` §5 檢查清單、站上規則 §17）：
+
+> **未取得明確授權不得 Publish。**
+
+要裝的話，必須比照 [`threejs-jubo-context`](../../.claude/skills/threejs-jubo-context/SKILL.md) 的做法，先寫一層蓋掉通用假設的 Jubo 約束 skill，把終點改成「產出發布前檢查報告，交給 Terris」。
+
+**本階段（2026-08-27）決定不裝任何 skill**，只把評估結論與邊界記在這裡。要裝的時候回來讀這一節。
+
+---
+
+# 三、Lucide 開源圖示 — 採用
+
+## 基本資料
+
+| 項目 | 內容 |
+|---|---|
+| 名稱 | Lucide（`lucide-static`） |
+| 來源 | <https://lucide.dev>／npm `lucide-static@1.52.0`（經 unpkg 取得單檔 SVG） |
+| 取得日期 | 2026-10-05 |
+| 授權 | **ISC**（每個檔案標頭：`@license lucide-static v1.52.0 - ISC`），可商用、可修改，無需在頁面標示 |
+| 是否收進 repo | **否**。只把需要的 `<path>` 直接寫進 Webflow 元素（inline SVG → Webflow DOM 元素） |
+| 使用頁面 | `/security`（第六輪） |
+
+## 為什麼採用
+
+- 1.5px 細線、24 格網、圓角端點，跟「細線框＋白卡」的版面一致，比站上既有的 PNG 圖示乾淨。
+- 以 inline SVG 寫入，顏色走 `currentColor` → 綁 `--primary--accent` 等 Variables，不會出現寫死色碼。
+- **不載入 Lucide 的 JS 或 icon font**，零外部依賴、零 Slater 衝突。
+
+## 使用規則
+
+- `stroke-width` 統一 `1.6`；尺寸用 class（`security-icon` 1.25rem、`.is-small` 0.95rem）。
+- 一律 `aria-hidden="true"`；意義要由旁邊的文字承擔。
+- 不得用 Lucide 拼湊成「看起來像 Jubo 產品介面」的畫面（15 §5）。
+
+---
+
+# 四、視覺參考網站與模板 — 只參考，不引入
+
+2026-10-05 第六輪 Terris 提供／指定的參考。**只取版面與動態的原則，不複製程式碼、素材或付費模板內容。**
+
+| 參考 | 取了什麼 | 沒有取什麼 |
+|---|---|---|
+| Aeline（Webflow 付費模板，aeline.webflow.io） | 動態配方：card-reveal（scale 0.92＋fade 0.55s power3.out）、內層依序滑入、進度條填滿、長條 back.out 長出、標題 fade-up 40px；全部用 IX3 重做 | 模板的 HTML／CSS／圖片／自寫 GSAP 腳本（付費授權，不可複製） |
+| Legend（Mobbin） | Hero 三欄：大標分兩側、中間真實產品畫面、右側玻璃清單、細線格線 | 岩石／草地攝影（改為自繪的品牌色四層玻璃圓環） |
+| Twingate（Mobbin） | 等寬字 chip 牆、已驗證者帶勾、邊緣淡出、緩慢跑馬燈 → 四層防護段頂部 | 深色主題、紫色 |
+| Jasper（Mobbin） | 階梯狀方格外框包住置中標題 → 結尾「需要更完整的資安文件？」 | 綠藍配色、襯線字 |
+| Bento Grids／Bindplane／WorkOS／Hookdeck 等 | 白卡＋細線＋每卡一張示意小圖的密度 | 任何產品介面截圖 |
+
+> 想看 Aeline 實際畫面時，本機 headless 瀏覽器無法通過代理憑證；建立本機鏡像的做法被安全規則擋下，**不要繞過**。需要時請 Terris 直接截圖提供。
+
+---
+
+## 修訂紀錄
+
+| 日期 | 內容 |
+|---|---|
+| 2026-08-27 | 建立。評估 SML skill（不採用）與 Webflow MCP Starter Kit（機制採用、skill 不裝） |
+| 2026-10-05 | 新增 Lucide（採用）與第六輪視覺參考（只參考） |
+
+
+# Mobbin MCP — 採用（限定為版面研究）
+
+## 基本資料
+
+| 項目 | 內容 |
+|---|---|
+| 名稱 | Mobbin MCP server |
+| 來源 | <https://mobbin.com>（MCP server 由 Mobbin 官方提供） |
+| 取得日期 | 2026-09-14 |
+| 提供的工具 | `search_sections`（網站區塊）、`search_screens`（App／Web 畫面）、`search_flows`（多步驟流程） |
+| 回傳內容 | 真實產品的**截圖**＋ `mobbin_url`、`site_name` 等中繼資料。沒有 HTML、沒有 CSS、沒有 class 名稱 |
+| 是否收進 repo | 不需要（它是遠端服務，不是要 clone 的檔案） |
+
+## 結論：採用，但只能當「版面與資訊層級」的參考
+
+Mobbin 與 [SML skill](#一sml-webflow-skill--不採用) 是**完全不同性質**的東西，不要拿同一套標準判斷：
+
+| | SML skill | Mobbin MCP |
+|---|---|---|
+| 產出 | DSL → 直接呼叫 `data_component_builder` 寫進 Webflow | 截圖與連結 |
+| 是否帶自己的命名系統 | 是（`row` / `col` / `u-*`，與 Client-First 互斥） | 否 |
+| 是否會繞過 Slater 禁令 | 會（Hard Rule 11 明文忽略其他 Agent Instruction） | 不會，它不寫入任何東西 |
+| 是否會靜默執行 | 會（Hard Rule 12） | 不會，它是唯讀查詢 |
+
+Mobbin **不寫入 Webflow、不產生 class、不引入第二套設計系統**，所以五條鐵律沒有一條會被它違反。
+它填的是本 repo 一直缺的那一塊：`02`–`06` 說站上有什麼、`15` 說該選哪個，但**「這種頁面在業界長什麼樣才算好」沒有任何文件回答**。
+
+## 使用邊界（違反等於誤用）
+
+1. **只用 `search_sections`。**
+   `search_screens` 與 `search_flows` 是 App／產品 UI 導向，對 Webflow 行銷頁沒有可轉譯的東西。
+2. **只抄資訊層級，不抄視覺。**
+   可以抄的：區塊順序、一個區塊裡放幾件事、標題與數字的主從關係、CTA 的數量與位置。
+   **不可以抄的**：配色、字級、間距、圓角、陰影、動效 —— 這些一律回到 `docs/inventories/設計變數與色彩.md` 與既有 utility。
+3. **Mobbin 的結果不能當成新建 class 的理由。**
+   看到一個很好的排版 → 先回頭查 `03` / `05` / `06` 有沒有現成的做得到（鐵律 1）。查不到才依鐵律 2 命名新建。
+4. **不得把 Mobbin 截圖裡的文案、數據、Logo、客戶名帶進 Jubo 頁面。**
+   對應 `docs/standards/設計權威分層與頁面選擇矩陣.md` §5 的「禁止虛構」。
+5. **交件時要留下引用。**
+   哪一段參考了哪個 Mobbin section，寫進該次的決策紀錄（本次見 `docs/projects/jubo-digital/history/智齡數位頁面改版_設計決策與交接.md`），讓下一個人知道版面來源，不用重猜。
+6. **它仍然在 preview-then-execute 之前。**
+   Mobbin 研究屬於「提 Section Flow」階段的材料，不是動 Designer 的授權。順序不變：七項策略 → Section Flow ＋ 元件對照表 → Terris 確認 → 才進 Designer。
+
+## 已知限制
+
+- 回傳的是**圖片**，會吃掉不少 context。一次查詢建議 `limit` 3–5，不要一次拉 30 張。
+- 語意搜尋，同樣的 query 不保證回傳同樣的結果；要重現某個參考，記 `mobbin_url` 而不是記 query。
+- 資料庫以歐美 SaaS 與消費性產品為主，**沒有台灣長照／醫療、也沒有 B2G 公部門標案型網站的樣本**。
+  這類頁面（例如智齡數位）只能借它的骨架，內容策略仍要回到 `15` §4 的 Section Flow 矩陣。

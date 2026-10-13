@@ -1,0 +1,114 @@
+/*
+ * Jubo motion CSS — 部署位置：Webflow Site Settings → Custom Code → Footer（<style id="jubo-motion">）
+ * 本檔是正本；站上那份是衍生部署品。兩邊不一致時以本檔為準。
+ *
+ * 取代的 IX2：
+ *   - Glass Btn Hover In / Out（29 個觸發器，12+13 份重複 action list）
+ *     其中 4 個不在 .glass-button 上，而是首頁「解決方案」輪播卡片裡的 .home-solutions_icon-link：
+ *     Slater（60292.js「CASCADING SLIDER — delegate hover to inner arrow」）在卡片 hover 時
+ *     對箭頭送假的 mouseover 來觸發 IX2。改成 CSS 後由 .cascading-slider_content-wrap:hover 直接驅動，
+ *     Slater 那段送出的事件變成無害的空操作。
+ *   - Preferences Checkbox [CHECK] / [UNCHECK]（Finsweet Cookie 偏好設定開關）
+ *   - FAQ 5 accordion [Open]/[Close]（18 個觸發器：1 組 class 觸發＋8 個綁錯元素的殘骸）
+ *     開關狀態由 custom-code/jubo-faq.js 切換 .is-faq-open；動畫全由下方 CSS 負責
+ *     · grid-template-rows 0fr↔1fr 做 height:auto 的過渡，不必用 JS 量高度
+ *     · 答案內的 .margin-bottom 外距改為內層 padding，否則收合後殘留 16px
+ *     · height:auto!important 蓋掉 IX2 烘焙的 inline height:0（IX2 刪除後可移除 !important）
+ *   - Stats Color Hover In / Out（34 個觸發器，13+13 份重複 action list）
+ *     卡片 hover → 背景照片 .big-numbers-stats-bg 淡入、數字／標題／說明由黑轉白
+ *     · 只作用在「有背景照片」的卡片（:has(.big-numbers-stats-bg)）；沒照片的卡片轉白會白底白字
+ *     · 靜止時照片隱藏靠 class 本身的 opacity:0，不依賴 JS
+ *     · 手機點擊原本就沒有效果，維持（只在 hover:hover 裝置生效）
+ *     · 日本頁 /jp/overview 3 張有照片的卡片原本沒有 hover（沒綁 IX2），2026-09-23 Terris 決定一併加上
+ *   - CTA 67 image top / bottom [Loop]（6 個觸發器；智齡照顧網、Jubo 健康 APP、長照專業成長 的頁首照片牆）
+ *     兩排照片 50 秒橫向無限捲動 → CSS @keyframes
+ *     · 每排是兩份相同的 .product-hero-3_image-list，中間 column-gap 16px；位移 50% + 8px 才是剛好一份的距離，
+ *       原本 IX2 只移 50%，每圈接縫處會跳 8px，這裡順便修掉
+ *     · keyframes 必須寫 from：沒寫的話起點會吃到 IX2 殘留的 inline transform
+ *     · 滑鼠停在照片牆上暫停（WCAG 2.2.2：自動移動超過 5 秒的內容要能暫停）；reduced-motion 完全不動
+ *   - timeline_progress_bar（1 個 class 觸發器；三個解決方案頁、智齡安心寶、IoT 設備列表 的「導入流程」時間軸）
+ *     捲動時漸層進度條從 0 填到 400%（= 四個步驟的總寬）→ CSS scroll-driven animation（animation-timeline: view()）
+ *     · 範圍 cover 0%→50%：與 IX2 的 keyframe 0→50 相同（進度條從畫面底部進入 → 到畫面中間時填滿）
+ *     · 不支援 view() 的瀏覽器（舊版 Safari、Firefox）與 reduced-motion：直接顯示填滿的進度條，不會缺內容
+ *     · 動畫值優先於 inline style，IX2 刪除前兩者並存也不會打架
+ *   - Product Item [Scroll]（7 個觸發器；照護推車、照護助理 APP、招募、智齡照顧網、Jubo 健康 APP 的
+ *     .product-scroll-card_item，智齡安心寶、HI居服 APP 的 .product-scroll-card-2-col_item；全站 19 張卡片都有綁）
+ *     原本：捲入時 scale .9→1、透明→不透明（cover 0→20%），捲出時再縮小淡出（cover 70→90%）
+ *     現在：只保留進場，scale 改為 .95（較輕）；拿掉退場 —— 使用者還在讀的卡片不該淡掉
+ *     · 包在 @supports + prefers-reduced-motion:no-preference 裡：不支援或關閉動態時卡片直接顯示，
+ *       任何情況下都不會「靜止時是隱藏的」
+ *
+ * 為什麼用 CSS 而不是 IX3：
+ *   - Glass 按鈕的箭頭是按鈕的「子元素」，且全站 282 顆；IX3 沒有「觸發元素的子元素」這種目標
+ *   - 開關改讀 :checked，狀態由 checkbox 本身決定，不會跟實際勾選脫鉤
+ *   - 不需要 JS：webflow.js 載入失敗或很慢時照樣正確
+ *
+ * 設計：
+ *   - 箭頭 easing / 時長與 Slater 的文字逐字翻滾相同（0.5s cubic-bezier(.625,.05,0,1)），兩者同步
+ *   - ≤991px 時 .gradient-icon.is-2 本來就 display:none，所以只在桌機＋可 hover 裝置生效
+ *   - .glass-element.is-cta 限定範圍，排除「回到頂部」(.is-to-top)
+ *   - 未勾選的開關底色改為 #ccc（原本初始是品牌青色，看起來像已開啟）
+ */
+@media (hover:hover) and (min-width:992px){
+  .glass-element.is-cta .gradient-icon.is-1,
+  .glass-element.is-cta .gradient-icon.is-2,
+  .home-solutions_icon-link .gradient-icon.is-1,
+  .home-solutions_icon-link .gradient-icon.is-2{transition:transform .5s cubic-bezier(.625,.05,0,1)}
+  .glass-element.is-cta .gradient-icon.is-2,
+  .home-solutions_icon-link .gradient-icon.is-2{transform:translateX(-150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-1,
+  .cascading-slider_content-wrap:hover .home-solutions_icon-link .gradient-icon.is-1{transform:translateX(150%)}
+  .glass-button:hover .glass-element.is-cta .gradient-icon.is-2,
+  .cascading-slider_content-wrap:hover .home-solutions_icon-link .gradient-icon.is-2{transform:translateX(0)}
+}
+.single-stats_wrapper .big-numbers-stats-bg{transition:opacity .3s ease}
+.single-stats_wrapper .stats-unit_wrapper,
+.single-stats_wrapper .stats-h3,
+.single-stats_wrapper .stats-headline_wrap{transition:color .3s ease}
+@media (hover:hover){
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .big-numbers-stats-bg{opacity:1}
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-unit_wrapper,
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-h3,
+  .single-stats_wrapper:has(.big-numbers-stats-bg):hover .stats-headline_wrap{color:var(--neutral--white,#fff)}
+}
+.fs-cc-prefs_checkbox-field{background-color:#ccc;transition:background-color .2s ease}
+.fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:checked){background-color:var(--primary--accent,#00b2c0)}
+.fs-cc-prefs_checkbox-field:has(.fs-cc-prefs_checkbox:focus-visible){outline:2px solid var(--primary--accent,#00b2c0);outline-offset:2px}
+.fs-cc-prefs_toggle{transition:transform .25s ease}
+.fs-cc-prefs_checkbox:checked ~ .fs-cc-prefs_toggle{transform:translateX(20px)}
+/* FAQ accordion */
+.solutions-basic-model_accordion > .faq5_answer{display:grid;grid-template-rows:0fr;height:auto!important;overflow:hidden;transition:grid-template-rows .4s ease}
+.solutions-basic-model_accordion > .faq5_answer > *{min-height:0;overflow:hidden}
+.solutions-basic-model_accordion > .faq5_answer > .margin-bottom{margin-bottom:0}
+.solutions-basic-model_accordion > .faq5_answer > .margin-bottom > *{padding-bottom:1rem}
+.solutions-basic-model_accordion.is-faq-open > .faq5_answer{grid-template-rows:1fr}
+.faq5_icon-wrapper{transition:transform .2s ease}
+.solutions-basic-model_accordion.is-faq-open > .faq5_question .faq5_icon-wrapper{transform:rotate(45deg)}
+.faq5_question{cursor:pointer}
+.faq5_question:focus-visible{outline:2px solid var(--primary--accent,#00b2c0);outline-offset:4px;border-radius:4px}
+/* CTA 67 image marquee */
+@keyframes jubo-marquee-l{from{transform:translateX(0)}to{transform:translateX(calc(-50% - 8px))}}
+@keyframes jubo-marquee-r{from{transform:translateX(0)}to{transform:translateX(calc(50% + 8px))}}
+.product-hero-3_image-list-top{animation:jubo-marquee-l 50s linear infinite}
+.product-hero-3_image-list-bottom{animation:jubo-marquee-r 50s linear infinite}
+@media (hover:hover){.product-hero-3_images-layout:hover > *{animation-play-state:paused}}
+/* Process timeline progress bar */
+@keyframes jubo-timeline-fill{from{width:0%}to{width:400%}}
+@supports (animation-timeline:view()){
+  .timeline15_progress-bar{animation:jubo-timeline-fill linear both;animation-timeline:view();animation-range:cover 0% cover 50%}
+}
+@supports not (animation-timeline:view()){.timeline15_progress-bar{width:400%}}
+/* Product scroll cards: scroll-linked entrance only */
+@keyframes jubo-card-in{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:none}}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .product-scroll-card_item,.product-scroll-card-2-col_item{animation:jubo-card-in linear both;animation-timeline:view();animation-range:cover 0% cover 20%}
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .solutions-basic-model_accordion > .faq5_answer,.faq5_icon-wrapper,
+  .glass-element.is-cta .gradient-icon,.home-solutions_icon-link .gradient-icon,.fs-cc-prefs_checkbox-field,.fs-cc-prefs_toggle,
+  .single-stats_wrapper .big-numbers-stats-bg,.single-stats_wrapper .stats-unit_wrapper,.single-stats_wrapper .stats-h3,.single-stats_wrapper .stats-headline_wrap{transition:none}
+  .product-hero-3_image-list-top,.product-hero-3_image-list-bottom{animation:none}
+  .timeline15_progress-bar{animation:none;width:400%}
+}

@@ -1,0 +1,105 @@
+<style>
+/* /security 多層防護：手機版點動畫全螢幕橫放（紀錄見 repo 18 §12-51） */
+.jubo-mgzoom_hint{display:none}
+@media (max-width:767px){
+  .security-sticky_visual[data-zoom]{cursor:zoom-in}
+  .jubo-mgzoom_hint{display:flex;position:absolute;right:.6rem;bottom:.6rem;z-index:5;align-items:center;gap:.3rem;padding:.3rem .6rem .3rem .5rem;border-radius:999px;background:rgba(255,255,255,.88);box-shadow:0 2px 10px rgba(0,15,71,.12);color:#1b1b1b;font-size:.75rem;line-height:1;pointer-events:none}
+  .jubo-mgzoom_hint svg{width:.85rem;height:.85rem}
+}
+.jubo-mgzoom{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(6,18,38,.82);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity .25s ease}
+.jubo-mgzoom.is-open{opacity:1}
+.jubo-mgzoom_frame{position:relative;flex:none;aspect-ratio:16/10;container-type:inline-size;isolation:isolate;display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:1.25rem;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.jubo-mgzoom_close{position:fixed;top:max(.9rem,env(safe-area-inset-top));right:.9rem;z-index:2;width:2.75rem;height:2.75rem;border:0;border-radius:50%;background:rgba(255,255,255,.95);color:#1b1b1b;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.jubo-mgzoom_close svg{width:1.25rem;height:1.25rem}
+@media (prefers-reduced-motion:reduce){.jubo-mgzoom{transition:none}}
+</style>
+<script>
+(function () {
+  var MQ = window.matchMedia('(max-width: 767px)');
+  var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+  var EXP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>';
+  function init() {
+    var vis = [].slice.call(document.querySelectorAll('.security-sticky_layout .security-sticky_visual'));
+    if (!vis.length) return;
+    var dots = document.querySelectorAll('.security-layer_dot');
+    var open = null;
+
+    vis.forEach(function (v, i) {
+      var name = dots[i] && dots[i].getAttribute('aria-label') || ('第 ' + (i + 1) + ' 層');
+      v.setAttribute('data-zoom', '');
+      v.setAttribute('data-zoom-label', '放大檢視動畫：' + name);
+      var h = document.createElement('span');
+      h.className = 'jubo-mgzoom_hint';
+      h.setAttribute('aria-hidden', 'true');
+      h.innerHTML = EXP + '點擊放大';
+      v.appendChild(h);
+      v.addEventListener('click', function () { if (MQ.matches) show(v, name); });
+      v.addEventListener('keydown', function (e) {
+        if (MQ.matches && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); show(v, name); }
+      });
+    });
+    function a11y() {
+      vis.forEach(function (v) {
+        if (MQ.matches) { v.setAttribute('role', 'button'); v.setAttribute('tabindex', '0'); v.setAttribute('aria-label', v.getAttribute('data-zoom-label')); }
+        else { v.removeAttribute('role'); v.removeAttribute('tabindex'); v.removeAttribute('aria-label'); }
+      });
+      if (!MQ.matches && open) hide();
+    }
+    MQ.addEventListener ? MQ.addEventListener('change', a11y) : MQ.addListener(a11y);
+    a11y();
+
+    function fit(frame) {
+      var w = window.innerWidth, h = window.innerHeight, pad = 24;
+      var portrait = h > w;
+      var long = portrait ? h - pad * 2 - 56 : w - pad * 2;
+      var short = portrait ? w - pad * 2 : h - pad * 2 - 56;
+      var width = Math.min(long, short * 1.6);
+      frame.style.width = Math.floor(width) + 'px';
+      frame.style.transform = portrait ? 'rotate(90deg)' : 'none';
+    }
+    function show(v, name) {
+      if (open) return;
+      var o = document.createElement('div');
+      o.className = 'jubo-mgzoom';
+      o.setAttribute('role', 'dialog');
+      o.setAttribute('aria-modal', 'true');
+      o.setAttribute('aria-label', name);
+      var frame = document.createElement('div');
+      frame.className = 'jubo-mgzoom_frame';
+      var kids = [].slice.call(v.children).filter(function (c) { return !c.classList.contains('jubo-mgzoom_hint'); });
+      kids.forEach(function (c) { frame.appendChild(c); });
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'jubo-mgzoom_close';
+      btn.setAttribute('aria-label', '關閉');
+      btn.innerHTML = X;
+      o.appendChild(frame);
+      o.appendChild(btn);
+      document.body.appendChild(o);
+      fit(frame);
+      open = { o: o, v: v, kids: kids, frame: frame, y: window.scrollY };
+      document.documentElement.style.overflow = 'hidden';
+      if (window.lenis && window.lenis.stop) window.lenis.stop();
+      o.addEventListener('click', function (e) { if (!frame.contains(e.target)) hide(); });
+      btn.addEventListener('click', hide);
+      requestAnimationFrame(function () { o.classList.add('is-open'); });
+      btn.focus();
+    }
+    function hide() {
+      if (!open) return;
+      var s = open;
+      open = null;
+      var hint = s.v.querySelector('.jubo-mgzoom_hint');
+      s.kids.forEach(function (c) { s.v.insertBefore(c, hint); });
+      s.o.remove();
+      document.documentElement.style.overflow = '';
+      if (window.lenis && window.lenis.start) window.lenis.start();
+      s.v.focus({ preventScroll: true });
+    }
+    window.addEventListener('resize', function () { if (open) fit(open.frame); });
+    document.addEventListener('keydown', function (e) { if (open && e.key === 'Escape') hide(); });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+</script>

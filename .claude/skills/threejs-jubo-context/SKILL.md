@@ -108,7 +108,7 @@ onState(s => { U.uDisp.value = s.disp; U.uGlow.value = s.glow; });
 | 圖示、loading、插畫 | Lottie |
 | — | **Rive 先不導入**（`.riv` 是二進位，Agent 無法產生或修改） |
 
-完整比較與實測記錄見 [`Jubo官網AI開發規範/09_GSAP動畫與互動規範.md`](../../../Jubo官網AI開發規範/09_GSAP動畫與互動規範.md) §10-0-1。
+完整比較與實測記錄見 [`docs/standards/GSAP動畫與互動規範.md`](../../../docs/standards/GSAP動畫與互動規範.md) §10-0-1。
 
 ---
 

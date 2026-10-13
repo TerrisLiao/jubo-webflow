@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>感染管制表格</title>
+<!--
+  本機預覽用：Webflow 站上 Variables 會自動編譯成下列 CSS 變數，
+  寫進 CMS `Content` 欄位時「不要」帶這段 <style>，只複製下方 BEGIN／END 之間的表格區塊。
+  樣板來源：Jubo官網AI開發規範/12_AEO文章寫作指南.md「已驗證的表格樣板」
+-->
+<style>
+  :root {
+    --neutral--white: white;
+    --neutral--bg-grey: #f8f8f8;
+    --neutral--black: #151717;
+    --neutral--black-60: hsla(180, 4.55%, 8.63%, 0.6);
+  }
+  body { margin: 0; padding: 2rem 1rem; background: var(--neutral--bg-grey); color: var(--neutral--black); font-family: system-ui, sans-serif; }
+  main { max-width: 56rem; margin: 0 auto; }
+</style>
+</head>
+<body>
+<main>
+
+<!-- ===== BEGIN 表格 1：感染類別收案條件 ===== -->
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:42rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;white-space:nowrap;">感染類別</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">收案條件（摘要）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">一般感冒／咽喉炎</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">流鼻水、鼻塞、喉嚨痛、乾咳、頸部淋巴腫大，新發生且符合 2 項</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">類流感</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">突然發燒 ≥38°C 加呼吸道症狀，並有肌肉痠痛、頭痛或極度倦怠</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">肺炎</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">X 光新浸潤，加上咳嗽、膿痰、發燒、囉音、呼吸困難等其中 2 項</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">泌尿道感染</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">有導尿管符合 2 項、無導尿管符合 3 項（發燒、腰痛、尿液改變、意識狀態變差等）</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">腸胃炎</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">24 小時內水便或嘔吐 2 次以上，或糞便培養陽性加腸胃症狀</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;white-space:nowrap;">皮膚感染</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">傷口有膿，或紅、腫、熱、痛等 4 項以上；疥瘡需醫師診斷或檢驗確認</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- ===== END 表格 1 ===== -->
+
+<!-- ===== BEGIN 表格 2：感染管制教育訓練每年時數 ===== -->
+<div style="overflow-x:auto;margin:1.5rem 0;border:0;border-radius:2rem;background:var(--neutral--white);">
+  <table style="width:100%;min-width:32rem;border-collapse:separate;border-spacing:0;font-size:1rem;line-height:1.5;color:var(--neutral--black);">
+    <thead>
+      <tr>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;white-space:nowrap;">對象</th>
+        <th style="text-align:left;padding:1rem 1.5rem;background:var(--neutral--bg-grey);color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);font-weight:600;">每年時數</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">新進人員</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">到職 1 個月內至少 4 小時</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">在職人員</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">至少 4 小時</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);white-space:nowrap;">管理階層</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:1px solid var(--neutral--black-60);">至少 6 小時（含中階或高階 4 小時）</td>
+      </tr>
+      <tr>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;white-space:nowrap;">感染管制專責人員</td>
+        <td style="padding:1rem 1.5rem;color:var(--neutral--black);border-bottom:0;">至少 10 小時（含中階或高階 6 小時）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- ===== END 表格 2 ===== -->
+
+</main>
+</body>
+</html>
