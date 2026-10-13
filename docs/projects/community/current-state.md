@@ -18,4 +18,4 @@
 
 左側目前採用 [同色系配色與連續 hover](history/2026-10-13-hover-continuity.md)，沿用 [第三輪填色底層](history/2026-10-13-pill-fill.md)；右側以 [第五輪細修](history/2026-10-13-polish.md) 為最新，保留 [第二輪](history/2026-10-13-motion-refinement.md) 的慢速節奏。較早輪次的 mixed-hue、兩條 hover 時間軸與 card 抬升已取代。詳細歷史與數值見 [專案入口](README.md)，先即時讀回再更新，不從舊段落復原網站。
 
-第五輪本機六寬度亦通過裁切／可讀性幾何與 hover 端點測試，NEW 在首輪與後續兩輪邊界 scale 均為 0。這是 GSAP 核心取樣、非原生連續播放。最新原生 Preview 已詢問使用者，尚待回覆；此前 all done 僅涵蓋第四輪左側。
+第五輪本機六寬度亦通過裁切／可讀性幾何與 hover 端點測試，NEW 在首輪與後續兩輪邊界 scale 均為 0。這是 GSAP 核心取樣、非原生連續播放。使用者在第五輪原生 Preview 詢問後回覆「Looks smooth」，確認右側卡片／專家 hover 進退與快速回位平順；此前 all done 涵蓋第四輪左側。完整 32 秒循環、實際字體／素材、keyboard focus 與 reduced-motion 尚未明確確認。
