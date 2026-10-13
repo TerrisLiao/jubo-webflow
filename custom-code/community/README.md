@@ -2,7 +2,8 @@
 
 這個目錄保存 Webflow 頁面層設定與回退資料，不是頁面要載入的 JavaScript。
 
-- [2026-10-13-pill-fill.json](2026-10-13-pill-fill.json)：左側目前採用的卡片裁切、大標籤六種 hover 漸層與底層 ID；保存第三輪前／後設定。
+- [2026-10-13-hover-continuity.json](2026-10-13-hover-continuity.json)：目前採用的同色系配色、邊緣位置及單一 hover 加減速；保存第四輪前／後設定及使用者 Preview 結果。
+- [2026-10-13-pill-fill.json](2026-10-13-pill-fill.json)：卡片裁切與六個填色底層 ID；保存第三輪前／後設定，其配色與雙 timeline hover 已取代。
 - [2026-10-13-motion-refinement.json](2026-10-13-motion-refinement.json)：柔焦白底卡片與右側慢速分層動效；保存第二輪前／後設定，允許 tag 超出顯示的做法已取代。
 - [2026-10-13-card-motion.json](2026-10-13-card-motion.json)：本輪修改前／後的樣式、IX3、新增標籤 ID、來源新聞與驗證限制。
 - [Community 專案](../../docs/projects/community/README.md)：現況、待辦與部署。

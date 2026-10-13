@@ -2,7 +2,9 @@
 
 更新日期：2026-10-13；已讀回 Webflow 元素、四斷點樣式與 IX3。
 
-左側目前為三張白底場景卡，青藍／暖紅 lime／綠 teal 色團只留在上方，blur 20px，向下 fade 到白色文字區。六個 pill 維持 desktop 24px／mobile 22px 與左右錯位，但卡片 overflow hidden，超出卡片的部分不顯示。靜止為透明外框；hover 時每張卡的兩個 pill 依序填上不同主題漸層：Facebook 藍青／淺天空藍、YouTube 珊瑚紅橘／蜜桃 lime、LINE 綠 mint／teal cyan。填色位於文字下方，文字維持 community/ink。分層輕浮、柔焦色團漂移、logo 與箭頭動作沿用，沒有 clutch。Mobile 卡高 15rem，保留上方色彩與下方白底的分區。
+左側目前為三張白底場景卡，Facebook 藍／冰藍、YouTube 珊瑚紅／淡玫瑰、LINE 綠／薄荷的同色系色團只留在上方，blur 20px，向下 fade 到白色文字區。六個 pill 維持 desktop 24px／mobile 22px；群組左右偏移 desktop −24px／mobile −20px，超出部分由 card overflow hidden 裁切。靜止透明；hover 同色系兩種深淺漸層填色，標籤先 x +28／−28 向內收，再 y −6／−5 微翹、rotation −3／+3。文字維持 community/ink。卡片本體不再抬升，hover 命中範圍固定；Mobile 卡高 15rem、下方文字白底。
+
+左側目前為單一 hover trigger、單一 10-action timeline：`control: togglePlayReverse`、`multiTimeline: false`，沒有 eventMode／groupId。總長 .7 秒、ease 9（power3.inOut），進退皆加速後緩停。兩個 trigger 指向同一 group 的 play／reverse 試作雖被 API 接受，但使用者 Preview 回報不會回位，已取代，不能照抄。最後使用者重新 Preview 回覆「all done」，完成本輪左側確認。
 
 右側 LINE 新文章已改為官網感染管制 B16、115 年住宿式機構補助、Amy 透鏡三篇的短文案，首尾重複維持輪播銜接。YouTube 直播卡為薄荷青綠到淺天空藍，專家頭像 hover 依序展開、抬升、回位；手機 ping glow 已隱藏且兩個循環動作已移除。
 
@@ -10,8 +12,8 @@
 
 頁面 metadata 為 `draft: false`、`shouldPublish: true`，與舊交接 Draft 快照不同。本輪未 Publish，也未改變該狀態；不能由 Git 或 metadata 推定本輪已上線。
 
-第三輪三個頻道 hover（各 9＋9 actions）、六個漸層底層、卡片裁切與元素已讀回，整頁文字與連結未變。本機樣式重建在 1440／991／767／390 無水平溢出；卡片裁切、填色靜止透明／hover 目標滿色、文字白底通過。本機未載入圖片與 JuboFont、未執行 Webflow IX3 runtime；先前 Designer 快照回 Invalid Base64 string，本輪未取得可用快照，實際觀感仍待 Preview。
+第四輪三個 hover 與 14 組樣式更新已讀回，另六個 IX3 定義逐項未變。以 GSAP 3.15 核心重建於 1440／1024／991／767／390／320 無水平溢出，快速方向切換沒有瞬間跳值，desktop／mobile 完整進出重播能回到靜止狀態。這是本機核心測試，沒有執行 Webflow 觸發綁定、沒有圖片／JuboFont；左側原生 Preview 確認來自使用者「all done」回覆。右側完整播放與 reduced-motion 尚待另驗。
 
 頁面範圍：`/community`。
 
-左側目前採用 [標籤裁切與頻道漸層填色](history/2026-10-13-pill-fill.md)；右側沿用 [慢速動效細調](history/2026-10-13-motion-refinement.md)。第二輪允許標籤顯示在卡片外的做法已取代；第一輪滿版漸層／小 pill clutch 只供追溯。詳細歷史與數值見 [專案入口](README.md)，發生差異時先即時讀回再更新，不從舊段落復原網站。
+左側目前採用 [同色系配色與連續 hover](history/2026-10-13-hover-continuity.md)，沿用 [第三輪填色底層](history/2026-10-13-pill-fill.md)；右側沿用 [慢速動效細調](history/2026-10-13-motion-refinement.md)。較早輪次的 mixed-hue、兩條 hover 時間軸與 card 抬升已取代。詳細歷史與數值見 [專案入口](README.md)，先即時讀回再更新，不從舊段落復原網站。

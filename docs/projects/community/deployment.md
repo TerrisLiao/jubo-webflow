@@ -1,5 +1,13 @@
 # 部署紀錄
 
+## 2026-10-13 第四輪：連續 hover 與乾淨配色
+
+- Designer：六組填色、六個背景色團及標籤左右偏移更新；三個 hover 為單 trigger／單 timeline／10 actions，.7 秒 power3.inOut、togglePlayReverse，卡片本體固定。
+- 原生 Preview：使用者在修正後回覆「all done」，記錄為本輪左側確認。先前兩 trigger 的 play／reverse 試作不會回位，未採用。
+- 本機：GSAP 3.15 核心模型六寬度裁切檢查、快速方向切換及 desktop／mobile 兩次完整重播通過；不是 Webflow 觸發器自動化測試。
+- Git：續作 [PR #21](https://github.com/TerrisLiao/jubo-webflow/pull/21)，尚未合併；設定與回退見 [第四輪快照](../../../custom-code/community/2026-10-13-hover-continuity.json)。
+- staging／production：本輪未 Publish，發布站點未驗證；右側播放／reduced-motion 未由本輪左側確認推定。
+
 ## 2026-10-13 第三輪：標籤裁切與漸層填色
 
 - Designer：card overflow hidden、tag 本身裁切與隔離；新增六個原生漸層裝飾底層，三個頻道 hover 為各 9＋9 actions，進／出填色 .75／.65 秒。

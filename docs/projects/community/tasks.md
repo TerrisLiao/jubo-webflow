@@ -1,6 +1,7 @@
 # 待辦
 
-- [ ] Designer Preview 驗收柔焦白底卡片、大 tag 被卡片裁切、每卡兩種漸層 hover 進／出及右側 32 秒循環；包含人物／圖示／實際字體、數字淡出回位、重複 hover、reduced-motion
+- [x] 左側重選同色系配色、更靠邊裁切、向內聚攏後上翹、單一 hover 加減速與回位；使用者 Preview 回覆 all done
+- [ ] Designer Preview 驗收右側 32 秒循環、人物／圖示／實際字體、數字淡出回位與 reduced-motion；本輪左側確認不升格成整頁驗收
 - [x] 六個大 tag 的超出部分裁切，加入六種不同的頻道主題漸層底層，hover 填色／離開透明已寫入並讀回
 - [x] 左側改上方柔焦色團、往下淡出到白色文字區；六個透明大 pill，取消 clutch，新的 hover 已寫入並讀回
 - [x] 右側進場、漂浮、pulse、滑鼠視差、通知／計數／文章、直播表情與專家 hover 節奏放慢，九個 IX3 已讀回
