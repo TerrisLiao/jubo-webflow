@@ -29,3 +29,10 @@ CMS template 的 schema 用到 `{{wf {&quot;path&quot;:…\} }}` 這種動態欄
 - 新聞：作者改為智齡科技（`@id` 串首頁），新增 `mainEntityOfPage`。
 - 客戶案例：作者由空白的 `Person` 改為 `Organization`「智齡科技客戶成功團隊」。拿掉受訪者 Person 與 `about.name`，因為 9 篇沒有填，會輸出空字串。
 - 功能介紹：麵包屑改為絕對網址，`isPartOf` 加 `@id` `#website`，`about` 加 provider。
+
+## 2026-10-13 staging 驗證後修正
+
+- 新聞 template 拿掉 `articleBody`，原因有兩個：
+  - `schema-plain-text` 欄位內容含換行時，Webflow 不會跳脫換行，整份 JSON 會壞掉（`/news/ai-transformation-culture`、`/news/amy-lense-intro-2026` 實測解析失敗）。
+  - 其餘 49 篇這個欄位是空的。
+- 請重新貼一次 `news-template.jsonld.html`。
