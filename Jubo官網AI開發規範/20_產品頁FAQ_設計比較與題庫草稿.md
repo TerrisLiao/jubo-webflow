@@ -668,3 +668,60 @@ Terris 提供的 i照護官方常見問題、操作手冊，讀者是**已採購
 | 8 | 住宿型 $125 起與日照「／人」的單位 | 三頁 Q8 | 行銷（Fact Sheet） |
 | 9 | 多語系：知識庫寫「中、英、印尼、越南」，需確認是否同樣適用於 VitalLink 智慧量測 App（資料為 needs review） | 住宿 Q7 | 產品 |
 | 10 | 核銷、評鑑表單（試用版）、薪資等功能現況（2024–2025 手冊日期偏舊） | 居服 Q3–Q7 | CS |
+
+
+---
+
+## 10. 住宿型頁 FAQ 建置紀錄（2026-10-13）
+
+> 住宿型 10 題已通過顧問審查（文案由 Terris 提供，**逐字**使用）。本節只記錄住宿型頁；日照／居服頁尚未動工。
+
+### 10-1. 定稿題目（頁面顯示順序）
+
+| # | 題目 |
+|---|---|
+| Q1 | 護理人員的交接班與紀錄，系統能幫上什麼忙？ |
+| Q2 | 除了護理紀錄，排班、倉儲與帳務也能一起管理嗎？ |
+| Q3 | 量血壓、體溫的紀錄還要手抄嗎？ |
+| Q4 | 同仁不在機構、或夜班遇到問題時，怎麼使用與求助？ |
+| Q5 | 住宿型系統可以先試用嗎？ |
+| Q6 | AI 會取代照護人員嗎？ |
+| Q7 | 外籍照服員也能使用系統嗎？ |
+| Q8 | 系統費用怎麼計算？ |
+| Q9 | 導入要怎麼進行？舊系統或紙本的資料能轉進來嗎？ |
+| Q10 | 智齡有資訊安全與備份的保障嗎？ |
+
+定稿與 §9-4 草稿的差異：Q1 改為「AI 智慧交班」（彙整外診／用藥／生理異常／焦點護理紀錄，詞庫＋語音轉換，整合醫囑／營養／社工 ISP）；Q7 以 Jubo VitalLink 作答、四語系；Q8、Q9 縮短。**以本節與頁面為準，§9-4 保留為歷史草稿。**
+
+### 10-2. 位置與結構（Webflow Draft，**未 Publish**）
+
+- 頁面：`/products/residential-care`（page id `6a029fcea88ff7b9b69bceec`）。
+- 位置：`all-sections-wrapper` 內，`section_product-prices` 之後、`CTA Section #1` 之前。新 section element id：`ab0c1c01-672f-16ae-fedc-0fb3eee6b685`。
+- 結構與首頁底部 FAQ 相同，全部沿用既有 class，**未新增任何 class**：
+  `section_faq` > `padding-global padding-section-large` > `container-small` > `faq_component` > [`section-header_wrapper`（`section_tag` > `text-size-tiny`「FAQ」＋ `h2-graident-wrap` > `h2.text-align-center` > `gradient-headline`「住宿型機構常問的問題」）＋ `solutions-basic-model_wrap` > `solutions-basic-model_list` > 10 ×（`solutions-basic-model_accordion` > `faq5_question`［`text-size-large` ＋ `faq5_icon-wrapper` > `icon-embed-small`］＋ `faq5_answer` > `margin-bottom margin-small` > `max-width-large` > `richtext` > p）]。
+- 展開／收合不需任何新程式：沿用站內 global custom code（`.faq5_answer` 以 `grid-template-rows 0fr→1fr`，JS 切換 `is-faq-open`，補 role／tabindex／aria）。已確認住宿型頁 live HTML 有載入這段 global code。
+- **不使用** `faq-schema-item`（首頁專用的 schema script 會抓它）；FAQPage 另以頁面 JSON-LD 提供（見 10-3）。
+
+與首頁 FAQ 的刻意差異：
+1. 首頁是 CMS Collection List（`w-dyn-list`）；產品頁為靜態元素（本次不新增 Collection，三頁題目少且各頁不同）。若日後要集中維護，再評估 Collection ＋ 頁面篩選。
+2. 首頁 `faq5_icon-wrapper` 內有兩個 `icon-embed-small`（第二個為備援）；本頁依 `/security` 先例只放一個，視覺相同。
+3. SVG 漸層 id 每題唯一（`res-faq-grad-1`～`10`）。Webflow 匯入 HTML 時會把 `mask-type:alpha` 變成自動 class `inline-mask-*`；該 mask 是整張 32×32 的全覆蓋遮罩，無視覺作用，已移除 mask 並刪掉這 10 個多餘 class（讀回確認站上已無 `inline-mask-*`）。
+4. 答案區塊為普通 Block ＋ `richtext` class ＋ 段落，而非 Rich Text 元素；`.richtext p` 為後代選擇器，樣式一致。
+
+### 10-3. 頁面 JSON-LD
+
+原本只有一個 `SoftwareApplication`。已合併為 `@graph: [SoftwareApplication（原樣不動）, FAQPage（10 題）]`；FAQPage 的問答文字與頁面可見文字逐字一致（由同一份文案產生）。讀回確認已寫入。
+
+### 10-4. 驗證與限制
+
+- 本機以站上 CSS（`jubo-health.webflow.shared…css`）＋ live global JS 重建同一份 markup（Playwright，離線）：10 題、`role=listitem`、`tabindex=0`、`aria-expanded=false`；點擊後加上 `is-faq-open`、答案列高 0→171px、加號旋轉 45°；桌機 1280 與手機 390 截圖版面正常。
+- Webflow 讀回：結構、class、順序（prices → FAQ → CTA）、10 個 accordion 皆正確。
+- **限制**：未在 Designer 目視（Designer canvas 對 inline SVG 漸層可能顯示不同）；Draft 內容在站上 Publish 前看不到實際頁面，Publish 後需再做 live 驗證（HTML 大小也要量，行銷曾回報 solutions 類頁面約 2.6MB，Google 只讀前 2MB）。
+- 該頁在 Webflow 上已是 live 頁，**下一次任何人 Publish 站台時，這段 FAQ 與 JSON-LD 會一併上線**。
+
+### 10-5. 待 Terris／顧問確認
+
+1. **Q9 題目與答案不對應**：題目問「舊系統或紙本的資料能轉進來嗎？」，核准答案只講導入教學，沒回答資料轉入。已**逐字照核准版上線**；建議補一句資料轉入的實際做法，或把題目縮成「導入要怎麼進行？」。
+2. Q7「Jubo VitalLink系統」中間缺空格（沿用核准版）；另 VitalLink 是否等同住宿型頁面所講的系統，請顧問確認。
+3. 該頁既有 JSON-LD 的 `aggregateRating`（reviewCount 700）、`offers.price 125`、`featureList`（內容像日照／社區型功能）與頁面內容不符，與本次 FAQ 無關，**未更動**，建議另案稽核。
+4. 是否 Publish、何時 Publish：等 Terris 明確指示。
