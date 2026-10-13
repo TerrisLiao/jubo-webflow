@@ -1,7 +1,8 @@
 # 待辦
 
-- [ ] Designer Preview 驗收漸層、tag clutch、頭像 hover、LINE 輪播銜接；包含紅點、人物／圖示與實際字體
-- [x] 左側漸層加強與六個背景透明 pill、相對應 IX3 hover 已寫入並讀回
+- [ ] Designer Preview 驗收柔焦白底卡片、大 tag 出格與輕浮 hover、右側分層進場及 32 秒循環；包含人物／圖示／實際字體、數字淡出回位、重複 hover、reduced-motion
+- [x] 左側改上方柔焦色團、往下淡出到白色文字區；六個透明大 pill，取消 clutch，新的 hover 已寫入並讀回
+- [x] 右側進場、漂浮、pulse、滑鼠視差、通知／計數／文章、直播表情與專家 hover 節奏放慢，九個 IX3 已讀回
 - [x] LINE 文章輪播以官網三篇已發布新聞取代範例，八處文字讀回一致
 - [x] YouTube 直播卡改非紫色漸層；專家頭像 hover 已新增並讀回
 - [x] 手機 ping 隱藏、兩個 ping 迴圈移除，其餘既有動作保持一致

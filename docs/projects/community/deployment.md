@@ -1,5 +1,13 @@
 # 部署紀錄
 
+## 2026-10-13 第二輪：白底卡片與慢速動效
+
+- Designer：左側柔焦漸層只佔上方、文字白底，大型透明 tag 出格與輕浮 hover；九個 IX3 修改已讀回，新增反應表情時間軸 `t-3b83476f`，通知敘事 32 秒。
+- Git：續作 `codex/community-card-motion`、[PR #21](https://github.com/TerrisLiao/jubo-webflow/pull/21)，保存前／後設定與交接；尚未合併。
+- staging／production：本輪均未 Publish；不能由 Designer 或 Git 推定已上線。
+- 驗證：九個 IX3 與預期設定一致；本機四斷點白底、非滿版漸層、透明大 tag 的靜止／hover 邊界通過。Designer snapshot 回 Invalid Base64 string，未驗收原生播放、圖片與字體。
+- 設定與回退：[第二輪快照](../../../custom-code/community/2026-10-13-motion-refinement.json)。兩輪都要回退時，先還原第二輪，再依第一輪快照處理；不可刪整頁。
+
 ## 2026-10-13 卡片與動效修改
 
 - Designer：本輪已寫入並讀回六個透明 tag、漸層、八處文章文案與 IX3 修改；新增專家 hover `i-f5df8ee0`。

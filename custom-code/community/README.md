@@ -2,6 +2,7 @@
 
 這個目錄保存 Webflow 頁面層設定與回退資料，不是頁面要載入的 JavaScript。
 
+- [2026-10-13-motion-refinement.json](2026-10-13-motion-refinement.json)：目前採用的柔焦白底卡片、大標籤輕浮及右側慢速分層動效；保存第二輪前／後設定。
 - [2026-10-13-card-motion.json](2026-10-13-card-motion.json)：本輪修改前／後的樣式、IX3、新增標籤 ID、來源新聞與驗證限制。
 - [Community 專案](../../docs/projects/community/README.md)：現況、待辦與部署。
 
