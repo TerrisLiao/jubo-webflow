@@ -4,7 +4,8 @@
 
 ## 詳細來源
 
-- [2026-10-13 柔焦卡片、大標籤與慢速動效細調（目前採用）](history/2026-10-13-motion-refinement.md)
+- [2026-10-13 標籤裁切與頻道漸層填色（左側目前採用）](history/2026-10-13-pill-fill.md)
+- [2026-10-13 柔焦卡片、大標籤與慢速動效細調（右側目前採用）](history/2026-10-13-motion-refinement.md)
 - [2026-10-13 漸層、透明標籤與動效更新](history/2026-10-13-card-motion.md)
 - [設定與回退資料](../../../custom-code/community/README.md)
 - [README.md](reference/README.md)

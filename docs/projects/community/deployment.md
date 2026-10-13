@@ -1,5 +1,13 @@
 # 部署紀錄
 
+## 2026-10-13 第三輪：標籤裁切與漸層填色
+
+- Designer：card overflow hidden、tag 本身裁切與隔離；新增六個原生漸層裝飾底層，三個頻道 hover 為各 9＋9 actions，進／出填色 .75／.65 秒。
+- Git：續作 [PR #21](https://github.com/TerrisLiao/jubo-webflow/pull/21)，保存第三輪前／後設定與六個底層 ID；尚未合併。
+- staging／production：本輪未 Publish，未驗證本輪發布站點。
+- 驗證：三個 hover 與六個底層讀回，整頁文字／連結保持一致；四斷點本機裁切／透明／填色檢查通過。未執行 Webflow IX3 runtime，Designer Preview 待驗。
+- 設定與回退：[第三輪快照](../../../custom-code/community/2026-10-13-pill-fill.json)。全部回退需依第三輪 → 第二輪 → 第一輪順序。
+
 ## 2026-10-13 第二輪：白底卡片與慢速動效
 
 - Designer：左側柔焦漸層只佔上方、文字白底，大型透明 tag 出格與輕浮 hover；九個 IX3 修改已讀回，新增反應表情時間軸 `t-3b83476f`，通知敘事 32 秒。
