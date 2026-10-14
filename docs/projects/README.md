@@ -5,6 +5,7 @@
 - [日本市場頁面](jp/README.md)
 - [聯絡頁導流](contact/README.md)
 - [iBee 照管小幫手](ibee/README.md)
+- [Jubo AI 頁改版](jubo-ai/README.md)
 - [智齡數位子品牌](jubo-digital/README.md)
 - [產品頁 FAQ](product-faq/README.md)
 - [CMS 文章閱讀表面](cms-article/README.md)
