@@ -1,6 +1,6 @@
 # Jubo AI 頁改版（資料 → AI 產品）
 
-狀態：**v3（N.Copilot 沉浸式敘事）已製作，待 Terris 視覺審閱與真機驗證**（2026-10-14）。尚未動 Webflow、尚未部署。
+狀態：**v3（N.Copilot 沉浸式敘事）已製作，待 Terris 視覺審閱與真機驗證**（2026-10-14）。後續已依 Terris 要求新建隔離原型 Draft；尚未發布。
 
 - 工作分支：`claude/jubo-ai-agentic-redesign`（基底 `origin/master` `6b84235`）
 - 前次研究：[AI 頁面競品研究](../../research/AI頁面競品研究.md)（2026-08-26，來源分支 `claude/jupo-ai-redesign-evpg2c`）
@@ -9,6 +9,7 @@
 - 文案：[初稿 v1](reference/文案初稿_2026-10-14.md)；原型：[規格](reference/原型規格_2026-10-14.md)
 - **Codex 從這裡開工：[v3 交接](reference/codex-v3-交接.md)**
 - **現行審閱原型 v3**：`custom-code/poc/jubo-ai-agentic-v3.html`；[驗收紀錄](reference/原型v3驗收_2026-10-14.md)、[Lattice 實際觀察](reference/lattice-觀察.md)。
+- **Webflow 新 Draft 預覽**：[開啟 Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)；[來源讀回與顯示限制](reference/Webflow原型預覽草稿_2026-10-14.md)。
 - **v2 基底保留未改**：`custom-code/poc/jubo-ai-agentic-v2.html`；說明：[v2 結構與文案](reference/原型v2結構與文案_2026-10-14.md)（v1 已被取代，保留比較）
 
 ## 本輪目標（使用者 2026-10-14 需求）

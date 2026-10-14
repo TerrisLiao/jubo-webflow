@@ -1,8 +1,10 @@
 # 現況
 
 - 文件更新日期：2026-10-14（Asia/Taipei）
-- 本輪範圍：**本機原型與 repo 文件**；未呼叫 Webflow 工具、未修改 Designer、未發布 staging／production。
-- 前次 Webflow 驗證：2026-10-14 Claude 以 MCP `list_pages` 唯讀讀回；本輪未重新驗證線上元素樹，不能將本機驗收視為 Designer 驗收。
+- v3 製作階段：本機原型與 repo 文件，當時未動 Webflow。
+- 後續授權：Terris 要求新開 Draft 預覽，已新增 `/jubo-ai-v3-preview`（Page ID `6acf60696126abae97656a6b`，**Draft**），放入隔離原型 iframe，未發布。
+- 新草稿：[Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)；[承載方式與驗證限制](reference/Webflow原型預覽草稿_2026-10-14.md)。完整來源已讀回一致；iframe 在 Designer 內的動態顯示待 Terris 端確認。
+- 前次正式頁 Webflow 驗證：2026-10-14 Claude 以 MCP `list_pages` 唯讀讀回；本輪未重新驗證線上元素樹，不能將本機驗收視為 Designer 驗收。
 - 改版目標：`/ai/jubo-ai-v2`（Page ID `6a8e58aec01bc6cda7004324`，前次讀回為 Draft）；現行 `/ai/jubo-ai`（`6a0d6565a5b081c97a4822d0`）不動。
 - 前次 `/ai/` 資料夾（parent `6a029bcb22a894d8fb8f219f`）讀回：`jubo-ai` 已發布、`jubo-ai-v2` Draft、`amy` 已發布（`6a7d2bb3988626e4f0d4c693`）、`ibee` Draft（`6ab07c0ec3085ed21f37ebe2`）。`/amy-banner` Draft 在根目錄。
 - 現行審閱版本：`custom-code/poc/jubo-ai-agentic-v3.html`。從指定分支 head `6de00335809156a090d77635845ba353eb932955` 的 v2 複製；**v2 未改**。v1 只供歷史比較。

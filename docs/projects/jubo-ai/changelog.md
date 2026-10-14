@@ -19,3 +19,10 @@
 - 手機七節點交錯排列；modal 支援 Esc、焦點圈限與回到原按鈕；reduced-motion 停用循環繪製與 pin，保留可讀內容與互動。
 - 執行交接 §8 捲動截圖／拼圖與互動驗證；工具支援本機 HTTP／系統 Chromium，新增可重跑的互動檢查。細節與限制見 `reference/原型v3驗收_2026-10-14.md`。
 - 同步更新 README、current-state、tasks、decisions、deployment。Webflow 未操作，staging／production 未發布。
+
+## 2026-10-14 — 後續授權新建 Webflow 原型 Draft
+
+- 新增「N.Copilot｜Jubo AI v3 原型預覽（Draft）」；Page ID `6acf60696126abae97656a6b`、slug `/jubo-ai-v3-preview`。
+- 保留既有 Global Style instance，插入單一隔離 iframe，完整來源屬性讀回一致；Designer 已切到新頁。
+- 新增可重跑的匯出工具與草稿承載紀錄。Designer snapshot 無法驗證隔離 iframe 畫面、managed Chromium 封鎖 data URL，已列為目視驗證限制並請 Terris 確認。
+- 本次無 Publish；site／production `lastPublished` 未變。正式頁、v2 原型與共用資產未改。
