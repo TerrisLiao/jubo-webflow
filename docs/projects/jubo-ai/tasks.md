@@ -10,7 +10,7 @@
 | P1 | 文案初稿（繁中，jubo-write 語氣） | Claude | 只用可公開宣稱；數字附口徑與日期 | v1 完成：`reference/文案初稿_2026-10-14.md`；**待 Terris 審閱＋7 項待確認** |
 | P1 | 本機原型 `custom-code/poc/jubo-ai-agentic.html` | Claude | 依 `reference/原型規格_2026-10-14.md` 驗收 | v1 完成 2026-10-14：Playwright 1440／991／767／375 無水平捲動、無 console error；reduced-motion 顯示靜態全文。**未做**：真機 FPS、4× CPU throttle、Lighthouse a11y（待 Terris／Codex） |
 | P1 | 原型 v2 `custom-code/poc/jubo-ai-agentic-v2.html` | Claude | 置中、捲動驅動、互動 | 完成 2026-10-14：Playwright 1440／375 捲動逐格截圖、無 JS 錯誤、無水平捲動、7 熱點可點、示範 4 情境可跑。**未做**：真機效能、Lighthouse |
-| P0 | **原型 v3：N.Copilot 沉浸式動態敘事**（精緻化 Hero live mode 與對話框、參考 lattice.hr） | **Codex** | 依 `reference/codex-v3-交接.md` §8 驗收清單 | 交接完成 2026-10-14，待 Codex 開工 |
+| P0 | **原型 v3：N.Copilot 沉浸式動態敘事**（精緻化 Hero live mode 與對話框、參考 lattice.hr） | **Codex** | 依 `reference/codex-v3-交接.md` §8 驗收清單 | Codex 已接手 2026-10-14：以遠端 `6de0033` 的 v2 為基底；依 §8 驗收，§9 更新文件；不動 Webflow、不發布 |
 | P1 | 決定 Teal Air `#20EDF1` 是否新增 Webflow Variable、是否載入 Gibson | Terris | 寫入 decisions | 待決定 |
 | P1 | 收集真實產品截圖（智慧交班、Amy、iBee 等） | Terris | 不用生成假 UI | 待辦 |
 | P2 | Webflow 實作（Draft） | 未認領 | Designer 讀回；未授權不 Publish | 待原型確認 |
