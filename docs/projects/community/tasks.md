@@ -1,7 +1,25 @@
 # 待辦
 
-- [ ] Designer Preview 驗收紅點、照片裁切、玻璃 CTA、feed loop 與 hover
-- [ ] 確認範例活動／文章文案、數字 3→6 與專家頭像授權
+2026-10-14 結案：本頁目前版本已上線並驗收。以下未勾選項目為後續改善，不阻擋結案。
+
+- [ ] 1366×768 加上 Navbar 後頻道卡底部超出第一屏 31px：可考慮縮短卡片高度或 Hero 上下間距（需設計確認）
+- [ ] 確認 `/community` 是否也要放回 Footer 與 Announce Bar（目前只放回 Navbar）
+- [x] 第六輪：推薦組合標籤文案＋AI 漸層框（刷上去框）、固定更新承諾、LINE 電腦版掃碼、通知開關卡；已寫入並讀回，本機九寬度模擬通過（1024 例外見下）
+- [x] 正式站 runtime 驗收第六輪（2026-10-14 發布後，取代 Designer Preview）：三卡 hover 光掃與去框、LINE 覆蓋按鈕的 hover 是否與原本一致（timeline role metadata 已被 API 移除）、QR 開啟／關閉與重複點擊、32 秒開關節奏與循環銜接、reduced-motion
+- [x] 使用者 2026-10-14 回覆 done 並發布，承諾文案視為確認（日後經營節奏改變時需同步改卡片文字）
+- [ ] 992–1100px 窄桌機版面：卡片約 129px，6 字標籤滑入後仍超出、YT 承諾換行、通知卡標籤換行（改版前即存在，需另案處理）
+- [ ] GA4 `social_click` 加 `method`（qr／link）；覆蓋按鈕與 QR 面板連結已帶 `data-platform`／`data-method`
+- [x] 第五輪 polish only：可讀性、圖示、陰影、柔焦、右側正倒播與 NEW 循環端點；已套用並讀回，六寬度本機檢查通過
+- [x] 第五輪 Designer Preview：右側卡片／專家 hover 進退與快速回位；使用者回覆「Looks smooth」
+- [x] 左側重選同色系配色、更靠邊裁切、向內聚攏後上翹、單一 hover 加減速與回位；使用者 Preview 回覆 all done
+- [ ] Designer Preview 驗收右側 32 秒完整循環、人物／圖示／實際字體、數字淡出回位、keyboard focus 與 reduced-motion；左右 hover 確認不升格成整頁驗收
+- [x] 六個大 tag 的超出部分裁切，加入六種不同的頻道主題漸層底層，hover 填色／離開透明已寫入並讀回
+- [x] 左側改上方柔焦色團、往下淡出到白色文字區；六個透明大 pill，取消 clutch，新的 hover 已寫入並讀回
+- [x] 右側進場、漂浮、pulse、滑鼠視差、通知／計數／文章、直播表情與專家 hover 節奏放慢，九個 IX3 已讀回
+- [x] LINE 文章輪播以官網三篇已發布新聞取代範例，八處文字讀回一致
+- [x] YouTube 直播卡改非紫色漸層；專家頭像 hover 已新增並讀回
+- [x] 手機 ping 隱藏、兩個 ping 迴圈移除，其餘既有動作保持一致
+- [ ] 確認剩餘活動範例文案、數字 3→6 與專家頭像授權
 - [ ] 補 GA4 social_click、UTM；刪除未使用素材仍需明確授權
 
 詳細來源內其他待辦仍保留；執行前核對日期與後續結案證據。

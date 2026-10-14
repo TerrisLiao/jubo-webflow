@@ -1,0 +1,728 @@
+{
+  "round": "2026-10-14 第六輪：AI 漸層框標籤、固定更新承諾、LINE 掃碼、通知開關卡",
+  "site": "69ec2b02daa2e79f1da8772a",
+  "page": "6acde90ba4c1734c0e94b297",
+  "path": "/community",
+  "authorization": "使用者 2026-10-14 回覆：推薦組合＋AI 漸層框，漸層刷上時去掉框線；FB 寫每週更新；計數卡由 agent 選（選 1 通知開關）。未授權 Publish。",
+  "before": {
+    "readAt": "2026-10-14，Data API 即時讀回（Designer App 未連線，未使用 Designer）",
+    "texts": {
+      "tags": {
+        "99202e99-7988-6bdd-b2db-c8a03797ef6f": "活動報名",
+        "6aabd279-75bf-c9c1-55a6-60736f573391": "現場花絮",
+        "e502d8ff-23e9-5a91-946c-2060cbcab8b7": "三三分享會",
+        "9546885b-b880-28e7-44d6-222ebba647b4": "專家觀點",
+        "de15b611-46cd-ff6b-ca63-6f7e0c1cb0c0": "照護新知",
+        "311956c4-7f73-0084-d0f3-a9db0048fb37": "文章推播"
+      },
+      "descParagraphs": {
+        "038a7c40-b65b-8068-033f-b63fcf89e6cb": "活動報名、現場花絮第一手。",
+        "e1eef104-938b-47ef-e851-d56c3d3bd180": "每月專家直播與客戶故事。",
+        "48d99acf-5242-b5df-e4cf-798fd86d9852": "最新文章直接送到手機。"
+      },
+      "countLabel": {
+        "element": "f0357029-467e-66de-efe3-86ce487ac407",
+        "children": [
+          "String 這週的",
+          "LineBreak f0357029-467e-66de-efe3-86ce487ac405",
+          "String 新消息"
+        ]
+      }
+    },
+    "styles": {
+      "community-hero_channel-tag": {
+        "main": {
+          "position": "relative",
+          "display": "inline-flex",
+          "overflow": "hidden",
+          "padding": "0.625rem 0.875rem",
+          "align-items": "center",
+          "border": "1px solid community/ink (variable-5832dce2-ead8-d4ec-4bbd-61b5d47a56de) on all four sides",
+          "border-radius": "99rem",
+          "background-color": "transparent",
+          "color": "community/ink",
+          "font-size": "1.5rem",
+          "line-height": "1.1",
+          "font-weight": "500",
+          "letter-spacing": "-0.025em",
+          "white-space": "nowrap",
+          "isolation": "isolate"
+        },
+        "small": {
+          "padding": "0.5rem 0.875rem",
+          "font-size": "1.375rem"
+        }
+      },
+      "community-hero_channel-tag-fill combos (background-image, main only)": {
+        "is-facebook-primary": "linear-gradient(135deg, #78AEFF 0%, #B8D4FF 100%)",
+        "is-facebook-secondary": "linear-gradient(135deg, #CDE5FF 0%, #ECF5FF 100%)",
+        "is-youtube-primary": "linear-gradient(135deg, #FF7A87 0%, #FFABB5 100%)",
+        "is-youtube-secondary": "linear-gradient(135deg, #FFDCE1 0%, #FFF0F2 100%)",
+        "is-line-primary": "linear-gradient(135deg, #42D77F 0%, #8CEAAF 100%)",
+        "is-line-secondary": "linear-gradient(135deg, #D2F6DF 0%, #F0FFF6 100%)"
+      },
+      "community-hero_channel-desc": {
+        "main": {
+          "min-height": "3.1em",
+          "margin-top": "0.5rem",
+          "margin-bottom": "0rem",
+          "color": "variable-cc3afea0-4fe9-47d3-3e2a-1a8b9094b216",
+          "font-size": ".8125rem",
+          "line-height": "1.55"
+        }
+      },
+      "community-hero_channel-cards": {
+        "main": {
+          "display": "grid",
+          "margin-top": "2rem",
+          "gap": "1.125rem",
+          "grid-template-columns": "1fr 1fr 1fr"
+        },
+        "small": {
+          "margin-top": "2rem",
+          "grid-row-gap": "1.75rem",
+          "grid-template-columns": "1fr"
+        }
+      },
+      "community-hero_count-label": {
+        "main": {
+          "font-size": "0.875rem",
+          "line-height": "1.4",
+          "font-weight": "500"
+        },
+        "small": {
+          "font-size": "0.625rem"
+        }
+      },
+      "community-hero_count-row": {
+        "main": {
+          "display": "flex",
+          "justify-content": "space-between",
+          "align-items": "flex-end"
+        }
+      },
+      "community-hero_count-number": {
+        "main": {
+          "font-size": "3.5rem",
+          "line-height": "1",
+          "font-weight": "600"
+        },
+        "small": {
+          "font-size": "2rem"
+        }
+      },
+      "community-hero_count-icons": {
+        "main": {
+          "display": "flex",
+          "padding-bottom": "0.25rem",
+          "grid-column-gap": "0.25rem"
+        },
+        "small": {
+          "padding-bottom": "0.125rem",
+          "grid-column-gap": "0.125rem"
+        }
+      },
+      "community-hero_odometer": {
+        "main": {
+          "overflow": "hidden",
+          "height": "3.5rem"
+        },
+        "small": {
+          "height": "2rem"
+        }
+      },
+      "community-hero_odometer-track": {
+        "main": {
+          "display": "block"
+        }
+      },
+      "community-hero_plus": {
+        "main": {
+          "position": "absolute",
+          "top": "0.8rem",
+          "right": "0.875rem",
+          "padding": "0.15rem 0.45rem",
+          "border-radius": "1rem",
+          "opacity": "0",
+          "color": "neutral/white (variable-987d0d75-243e-bfa4-e9a9-ba07d0ce8290)",
+          "font-size": "0.75rem",
+          "line-height": "1.3",
+          "font-weight": "700"
+        },
+        "small": {
+          "top": "0.5rem",
+          "right": "0.5rem",
+          "font-size": "0.5rem"
+        }
+      },
+      "community-hero_plus combos": {
+        "is-facebook": "background-color variable-b746c05c-c994-27b8-724d-04ea4e43782f",
+        "is-youtube": "background-color variable-0e7eca8d-b3b4-f68e-cf53-9260d9fa76a6",
+        "is-line": "background-color variable-1e562951-bd5e-63ed-7468-951c3bd6a832"
+      }
+    },
+    "countCardChildrenRemoved": {
+      "community-hero_count-row f0357029-467e-66de-efe3-86ce487ac411": {
+        "community-hero_odometer 1bdd4b45-03ab-1974-9126-4793dc7a6a12": {
+          "community-hero_odometer-track 1bdd4b45-03ab-1974-9126-4793dc7a6a11": [
+            "community-hero_count-number 1bdd4b45-03ab-1974-9126-4793dc7a6a0a: 3",
+            "community-hero_count-number 1bdd4b45-03ab-1974-9126-4793dc7a6a0c: 4",
+            "community-hero_count-number 1bdd4b45-03ab-1974-9126-4793dc7a6a0e: 5",
+            "community-hero_count-number 1bdd4b45-03ab-1974-9126-4793dc7a6a10: 6"
+          ]
+        },
+        "community-hero_count-icons f0357029-467e-66de-efe3-86ce487ac410": [
+          "Image community-hero_source-icon a201d7fa-48a4-c4df-5d6a-d58407937b4e asset 6acde95fdaa2c2462312dee0 (facebook)",
+          "Image community-hero_source-icon 1c6071d9-ab64-1d89-9551-d7589d61f5ac asset 6acde95f4726a0720e3302aa (youtube)",
+          "Image community-hero_source-icon ebae5fcf-b034-a4fb-9be9-5d6489a253c3 asset 6acdf536e432f3f956865afe (line)"
+        ]
+      },
+      "unclassed Block aria-hidden=true 8d30c14f-cb61-4370-1a33-483b1352e063": [
+        "community-hero_plus is-facebook 8d30c14f-cb61-4370-1a33-483b1352e05e: +1",
+        "community-hero_plus is-youtube 8d30c14f-cb61-4370-1a33-483b1352e060: +1",
+        "community-hero_plus is-line 8d30c14f-cb61-4370-1a33-483b1352e062: +1"
+      ]
+    },
+    "interactions": {
+      "i-74f97dba LINE channel card hover": {
+        "version": 6,
+        "triggerTarget": [
+          "6acde90ba4c1734c0e94b297",
+          "48d99acf-5242-b5df-e4cf-798fd86d9857"
+        ],
+        "timeline": "t-26c386a6，10 actions：logo、go、tag-first-inward、tag-first-tip、tag-second-inward、tag-second-tip、gradient-drift-0-0、gradient-drift-1-0、pill-fill-0-0、pill-fill-1-0（本輪只追加 sheen 動作，原 10 個動作不改）"
+      },
+      "i-0aad7a13 / i-422da1c0 Facebook／YouTube hover": "version 6；原 10 個動作不改，本輪只追加兩個 sheen 動作",
+      "i-a0ad8508 intro action count-number (removed/retargeted)": {
+        "id": "count-number",
+        "name": "Count number bounce",
+        "targets": [
+          {
+            "extensionKey": "wf:class",
+            "value": [
+              "8aecde53-4a8a-cecb-840f-23ea3e6aa8a5"
+            ]
+          }
+        ],
+        "timing": {
+          "duration": 1.4,
+          "position": 3.1,
+          "ease": 8
+        },
+        "tt": 2,
+        "properties": {
+          "wf:transform": {
+            "opacity": [
+              "0%",
+              "100%"
+            ],
+            "scale": [
+              0.88,
+              1
+            ],
+            "transformOrigin": "0% 100%"
+          }
+        }
+      },
+      "i-ef730dca timeline t-2874c5d2 removed actions (version 4)": [
+        {
+          "id": "tri-fb-up",
+          "target": "a201d7fa-48a4-c4df-5d6a-d58407937b4e",
+          "timing": {
+            "duration": 0.65,
+            "position": 6.1,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1.22
+              ]
+            }
+          }
+        },
+        {
+          "id": "tri-fb-down",
+          "target": "a201d7fa-48a4-c4df-5d6a-d58407937b4e",
+          "timing": {
+            "duration": 1.6,
+            "position": 6.75,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-fb-in",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e05e",
+          "timing": {
+            "duration": 0.9,
+            "position": 6.15,
+            "ease": 8
+          },
+          "tt": 2,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                "0%",
+                "100%"
+              ],
+              "scale": [
+                0.85,
+                1
+              ],
+              "yPercent": [
+                28,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-fb-out",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e05e",
+          "timing": {
+            "duration": 0.9,
+            "position": 9.2,
+            "ease": 6
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                null,
+                "0%"
+              ],
+              "yPercent": [
+                null,
+                -45
+              ]
+            }
+          }
+        },
+        {
+          "id": "odo-1",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a11",
+          "timing": {
+            "duration": 1.45,
+            "position": 6.1,
+            "ease": 9
+          },
+          "tt": 2,
+          "properties": {
+            "wf:transform": {
+              "yPercent": [
+                0,
+                -25
+              ]
+            }
+          }
+        },
+        {
+          "id": "tri-yt-up",
+          "target": "1c6071d9-ab64-1d89-9551-d7589d61f5ac",
+          "timing": {
+            "duration": 0.65,
+            "position": 14.5,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1.22
+              ]
+            }
+          }
+        },
+        {
+          "id": "tri-yt-down",
+          "target": "1c6071d9-ab64-1d89-9551-d7589d61f5ac",
+          "timing": {
+            "duration": 1.6,
+            "position": 15.15,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-yt-in",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e060",
+          "timing": {
+            "duration": 0.9,
+            "position": 14.55,
+            "ease": 8
+          },
+          "tt": 2,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                "0%",
+                "100%"
+              ],
+              "scale": [
+                0.85,
+                1
+              ],
+              "yPercent": [
+                28,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-yt-out",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e060",
+          "timing": {
+            "duration": 0.9,
+            "position": 17.6,
+            "ease": 6
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                null,
+                "0%"
+              ],
+              "yPercent": [
+                null,
+                -45
+              ]
+            }
+          }
+        },
+        {
+          "id": "odo-2",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a11",
+          "timing": {
+            "duration": 1.45,
+            "position": 14.5,
+            "ease": 9
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "yPercent": [
+                null,
+                -50
+              ]
+            }
+          }
+        },
+        {
+          "id": "tri-line-up",
+          "target": "ebae5fcf-b034-a4fb-9be9-5d6489a253c3",
+          "timing": {
+            "duration": 0.65,
+            "position": 22.9,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1.22
+              ]
+            }
+          }
+        },
+        {
+          "id": "tri-line-down",
+          "target": "ebae5fcf-b034-a4fb-9be9-5d6489a253c3",
+          "timing": {
+            "duration": 1.6,
+            "position": 23.55,
+            "ease": 8
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "scale": [
+                null,
+                1
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-line-in",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e062",
+          "timing": {
+            "duration": 0.9,
+            "position": 22.95,
+            "ease": 8
+          },
+          "tt": 2,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                "0%",
+                "100%"
+              ],
+              "scale": [
+                0.85,
+                1
+              ],
+              "yPercent": [
+                28,
+                0
+              ]
+            }
+          }
+        },
+        {
+          "id": "plus-line-out",
+          "target": "8d30c14f-cb61-4370-1a33-483b1352e062",
+          "timing": {
+            "duration": 0.9,
+            "position": 26,
+            "ease": 6
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                null,
+                "0%"
+              ],
+              "yPercent": [
+                null,
+                -45
+              ]
+            }
+          }
+        },
+        {
+          "id": "odo-3",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a11",
+          "timing": {
+            "duration": 1.45,
+            "position": 22.9,
+            "ease": 9
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "yPercent": [
+                null,
+                -75
+              ]
+            }
+          }
+        },
+        {
+          "id": "odo-reset",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a12",
+          "timing": {
+            "duration": 0.8,
+            "position": 30.5,
+            "ease": 6
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                null,
+                "0%"
+              ]
+            }
+          }
+        },
+        {
+          "id": "odo-rewind",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a11",
+          "timing": {
+            "duration": 0,
+            "position": 31.35,
+            "ease": 0
+          },
+          "tt": 3,
+          "properties": {
+            "wf:transform": {
+              "yPercent": 0
+            }
+          }
+        },
+        {
+          "id": "odo-restore",
+          "target": "1bdd4b45-03ab-1974-9126-4793dc7a6a12",
+          "timing": {
+            "duration": 0.65,
+            "position": 31.35,
+            "ease": 6
+          },
+          "tt": 0,
+          "properties": {
+            "wf:transform": {
+              "opacity": [
+                null,
+                "100%"
+              ]
+            }
+          }
+        }
+      ],
+      "i-ef730dca kept actions": "new-badge-cycle-rest、toast-fb/yt/line in/out、event-tick-1~3、article-tick-1~3、dot-in/out、new-in/out；t-7fb53654 與 t-3b83476f 不變"
+    }
+  },
+  "after": {
+    "readBackAt": "2026-10-14，Data API 讀回",
+    "texts": {
+      "tags": {
+        "FB": [
+          "活動搶先報名",
+          "每週更新"
+        ],
+        "YT": [
+          "三三分享會",
+          "每月直播"
+        ],
+        "LINE": [
+          "補助評鑑整理",
+          "新文章推播"
+        ]
+      },
+      "cadence (new TextBlocks)": {
+        "85bd118c-de17-38da-c529-83425f7f53ef": "每週更新",
+        "f5ebe06d-5054-d74a-350f-4deb59948a27": "每月第三個週三 12:00",
+        "03a1c36a-211b-9cec-e46d-cd775ad913a9": "新文章上架當天"
+      },
+      "descParagraphs": {
+        "038a7c40-b65b-8068-033f-b63fcf89e6cb": "見面會與活動花絮",
+        "e1eef104-938b-47ef-e851-d56c3d3bd180": "三三分享會專家直播",
+        "48d99acf-5242-b5df-e4cf-798fd86d9852": "推播到你的手機"
+      },
+      "countLabel": "通知設定（移除 LineBreak f0357029-...ac405 與 String ac406）"
+    },
+    "styles": {
+      "community-hero_channel-tag": {
+        "main": {
+          "border": "removed (all 12 border-* props)",
+          "padding": "0.6875rem 0.9375rem",
+          "background-image": "linear-gradient(90deg, #00B2C0 0%, #B15DFF 100%)",
+          "font-size": "min(1.5rem, 1.7vw)"
+        },
+        "medium": {
+          "font-size": "1.5rem"
+        },
+        "small": {
+          "padding": "0.5625rem 0.9375rem",
+          "font-size": "1.375rem (unchanged)"
+        }
+      },
+      "community-hero_channel-tag-fill six combos": "background-image linear-gradient(90deg, #C7EEF1 0%, #ECD8FF 100%)",
+      "community-hero_channel-desc": {
+        "main": {
+          "min-height": "removed",
+          "margin-top": "0rem"
+        }
+      },
+      "community-hero_channel-cards": {
+        "main": {
+          "position": "relative"
+        }
+      },
+      "new classes": [
+        "community-hero_channel-cadence",
+        "community-hero_channel-tag-inner",
+        "community-hero_channel-tag-sheen",
+        "community-hero_line-qr-trigger (small: display none; focus-visible ring)",
+        "community-hero_line-qr-hint (small: none)",
+        "community-hero_line-qr (display none, width max(calc((100% - 2.25rem) / 3), 12.5rem), small: none)",
+        "community-hero_line-qr-head",
+        "community-hero_line-qr-logo",
+        "community-hero_line-qr-title",
+        "community-hero_line-qr-close (focus-visible ring)",
+        "community-hero_line-qr-code",
+        "community-hero_line-qr-lead",
+        "community-hero_line-qr-text",
+        "community-hero_line-qr-link",
+        "community-hero_notify-list",
+        "community-hero_notify-row",
+        "community-hero_notify-icon",
+        "community-hero_notify-bar",
+        "community-hero_notify-switch",
+        "community-hero_notify-on (+ is-facebook / is-youtube / is-line)",
+        "community-hero_notify-knob",
+        "community-hero_notify-done"
+      ],
+      "removed classes": [
+        "community-hero_count-row",
+        "community-hero_count-number",
+        "community-hero_count-icons",
+        "community-hero_odometer",
+        "community-hero_odometer-track",
+        "community-hero_plus (+ is-facebook / is-youtube / is-line)"
+      ]
+    },
+    "newElements": {
+      "tag inner (6)": [
+        "9bb0f7db-d523-8612-c618-d5555fd2e577",
+        "9fd7efb9-14d0-ce1a-005b-fc32019ee555",
+        "09dec71a-4704-aa45-f9e4-7798f2f922ee",
+        "46517644-0640-3a87-2390-65e8270ba8c6",
+        "ec4c033a-8575-0e5d-0791-1ddaf4f2be12",
+        "ac366163-b6f5-0527-6003-fe0d4ff6f6aa"
+      ],
+      "tag sheen (6)": [
+        "5c0002ad-c0f3-c97f-2c42-bd3c4172e742",
+        "5eaef659-a800-3c2b-c5b8-226febf937ef",
+        "1da9d62f-7c1e-9a16-17af-7e0dd9bca22b",
+        "2f810bbb-420b-8406-0e95-219c835406b6",
+        "6e4fd075-eb7b-5978-7ec1-69d6d71d38ca",
+        "ef88b080-8544-5021-d370-2b4770ee546a"
+      ],
+      "line hint": "42b6561e-bc6e-d7e4-1369-6db85e4ee0ec（掃碼）",
+      "qr trigger button": "5f222e09-ca3e-2925-dc26-430a29dfb131",
+      "qr panel": "975f4e05-0b18-8933-0d8f-81096fc1f57f（close button e5fe9543-4c1e-3b57-ee4a-effb30190224；QR image a13d9fc8-441a-1d69-8b14-3951ab423a78；link 1cc84652-899d-f377-05d2-57a43f8f305b）",
+      "notify list": "005156da-86b7-d09c-db1e-ea79085b8f46",
+      "notify knobs": [
+        "2c383dee-9d8f-ee40-673d-ae9519e7b64f",
+        "b8c3d293-4117-7b40-e10d-8d8e8e845872",
+        "893ec4d8-3771-539e-4f33-8c1ff0ffc1cc"
+      ],
+      "notify on-layers": [
+        "54ca645d-1097-f045-7700-b7a158ea21ce",
+        "99bb93ad-5d78-9421-7b32-75dfdf1fa8f4",
+        "585597af-aa85-9bbe-90da-89510b51ca73"
+      ],
+      "notify done badge": "0b61749f-bff3-8c2d-555f-0030421145ee"
+    },
+    "asset": {
+      "id": "6acf1f5a750cff32e1dab768",
+      "file": "community-line-qr.svg",
+      "encodes": "https://lin.ee/Clf7lXr（jsQR 解碼確認）"
+    },
+    "interactions": {
+      "i-0aad7a13 / i-422da1c0 / i-74f97dba": "各加 pill-sheen-0（.14s）與 pill-sheen-1（.20s），xPercent [0,300]、.5s、ease 9；原 10 動作不變",
+      "i-74f97dba trigger": "改指向 5f222e09-ca3e-2925-dc26-430a29dfb131；timeline triggerMetadata role 被 API 要求移除",
+      "i-17fa7c24": "LINE QR open：click restart → Set display flex＋opacity 0→100%、scale .94→1（.45s ease 9）；reduced-motion skip-to-end",
+      "i-f1d7e120": "LINE QR close：click restart → opacity→0、scale→.96（.3s ease 6）＋.3s Set display none；reduced-motion skip-to-end",
+      "i-ef730dca t-2874c5d2": "移除 before 列出的 18 動作；新增 notify-knobs-rest、notify-tracks-rest、notify-done-rest（0s Set）、notify-fb/yt/line-knob＋track（5.6／14／22.4s）、notify-done-in（23.4s）、notify-done-out（31.2s）、notify-knobs-off、notify-tracks-off（31.4–32s）",
+      "i-a0ad8508": "count-number 動作改為 notify-list-in（目標 005156da…，opacity 0→100%、yPercent 12→0，1.4s @3.1s）"
+    },
+    "verification": "見 docs/projects/community/history/2026-10-14-ai-frame-qr-notify.md；本機模擬非 IX3 runtime，Designer Preview 未驗收",
+    "publish": "未 Publish（staging／production 皆未發布）"
+  }
+}

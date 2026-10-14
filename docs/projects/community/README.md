@@ -4,6 +4,13 @@
 
 ## 詳細來源
 
+- [2026-10-14 AI 漸層框、固定更新承諾、LINE 掃碼、通知開關（最新）](history/2026-10-14-ai-frame-qr-notify.md)
+- [2026-10-13 視覺與動效細修](history/2026-10-13-polish.md)
+- [2026-10-13 同色系配色與連續 hover（左側目前採用）](history/2026-10-13-hover-continuity.md)
+- [2026-10-13 標籤裁切與頻道漸層填色（底層結構沿用）](history/2026-10-13-pill-fill.md)
+- [2026-10-13 柔焦卡片、大標籤與慢速動效細調（右側目前採用）](history/2026-10-13-motion-refinement.md)
+- [2026-10-13 漸層、透明標籤與動效更新](history/2026-10-13-card-motion.md)
+- [設定與回退資料](../../../custom-code/community/README.md)
 - [README.md](reference/README.md)
 
 ## 來源分支（固定版本）
