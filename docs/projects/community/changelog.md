@@ -1,5 +1,6 @@
 # 變更歷程
 
+- 2026-10-14（結案）：使用者全站發布；正式站內容比對與 IX3 runtime 驗收通過，專案結案，剩餘改善列於待辦。
 - 2026-10-14（追加）：Navbar 放回 `/community`，Hero 高度與主視覺尺寸扣除導覽列高度；Footer「其他」欄新增「官方社群」連結。未 Publish。
 - 2026-10-14（第六輪）：依使用者核准的提案，標籤改推薦組合文案與青→紫漸層框（hover 填滿去框＋光掃）、說明上方加固定更新承諾、LINE 電腦版點擊顯示 QR、「這週的新消息」換成三個依序打開的通知開關；刪除 odometer／+1 相關元素與 class。讀回與本機九寬度模擬通過，QR 解碼正確；未 Publish，Designer Preview 待驗。詳見 [第六輪紀錄](history/2026-10-14-ai-frame-qr-notify.md)。
 - 2026-10-13（第五輪）：依 polish only 授權，保留版型；提高左卡說明可讀性、柔化陰影與色團、整理圖示與手機 padding，右側 hover 改單一正倒播、分離 intro 屬性，修正 NEW 循環端點。讀回與六寬度本機檢查通過，使用者原生 Preview 回覆「Looks smooth」確認右側 hover；完整循環與 reduced-motion 等仍待驗，未 Publish。詳見 [細修紀錄](history/2026-10-13-polish.md)。

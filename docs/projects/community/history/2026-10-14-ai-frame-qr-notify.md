@@ -44,6 +44,10 @@ Git：`claude/gallant-einstein-3tvafg`（以 `codex/community-card-motion` @ `83
 - **限制**：模擬沒有 JuboFont、沒有跑 Webflow IX3 runtime。Designer App 未連線，沒有 Designer snapshot／Preview。hover 光掃、QR 開關、32 秒開關節奏與 reduced-motion 需在 Designer Preview 驗收。
 - **1024 寬（992–1100px）**：卡片只有約 129px，兩個 6 字標籤滑入後仍超出約 10px，YT 承諾換兩行。這是改版前就存在的窄桌機問題（原 4 字標籤在 1024 超出 49px），列為待辦，未在本輪擴大處理。
 
+## 正式站驗收（2026-10-14 發布後）
+
+使用者於 06:47:55 UTC 全站發布。以 Playwright 在 `www.jubo-health.com/community` 跑實際 IX3：三卡 hover 填色蓋掉漸層框並有光掃、離開倒播回原狀；LINE 經覆蓋按鈕的 hover 與 FB／YT 一致（timeline role metadata 移除未影響）；QR 開／關／重開正常；通知開關依 5.6／14／22.4 秒打開、23.4 秒徽章、32 秒歸零並進入下一輪；reduced-motion 顯示全開靜態且 QR 可用；手機隱藏 QR 並直連 lin.ee；無 console 錯誤。字體為實際 JuboFont 載入環境以外的瀏覽器預設，視覺細節以使用者「done」確認為準。
+
 ## 回退
 
 [設定快照](../../../../custom-code/community/2026-10-14-ai-frame-qr-notify.json) 保存修改前文字、樣式、被刪元素結構與被移除的 IX3 動作。回退前先讀回即時狀態；新增的元素、class 與兩個 QR 互動可直接刪除，被刪的計數卡元素需依快照重建。

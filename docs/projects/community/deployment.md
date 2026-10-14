@@ -1,5 +1,12 @@
 # 部署紀錄
 
+## 2026-10-14 結案：已發布並於正式站驗收
+
+- 發布：使用者 2026-10-14 06:47:55 UTC 全站發布（含 `www.jubo-health.com`、`jubo-health.com`）；非 agent 執行。
+- 內容比對（curl）：`/community` 含新標籤、三段承諾、`community-hero_line-qr-trigger`、QR 素材 `6acf1f5a750cff32e1dab768`、「通知設定」「都開好了」與 `section_nav`，不再含「這週的」；首頁 Footer 有「官方社群」`href="/community"`。發布 CSS `jubo-health.webflow.shared.35b136fe7.min.css` 含新的 hero min-height、visual max-width 與標籤樣式。
+- Runtime（Playwright＋正式站實際 IX3）：FB hover 填色 opacity 1、sheen 移至 300%、標籤位移 (28,−6)＋−3°，離開回 0；LINE 由覆蓋按鈕觸發同樣結果；QR 開啟 display flex／opacity 1、關閉 display none、可重開；開關 t3 全關、t7 FB 開、t15.5 FB+YT、t25 全開＋徽章、t33.5 下一輪歸零；reduced-motion 靜態全開、QR 仍可開；390px 無水平溢出、QR 觸發與提示隱藏、LINE 卡直連 lin.ee、Navbar 68px；console 無錯誤。
+- 已知限制：1366×768 頻道卡底部 799px，超出第一屏 31px；992–1100px 窄桌機標籤超出（皆列於待辦）。
+
 ## 2026-10-14 追加：Navbar 放回、Footer 入口
 
 - Designer：`/community` 插入 Navbar instance `9736c483-5d48-8e9d-7219-c03395d12a2f`；`section_community-hero` min-height（main `calc(100svh - 7.25rem)`、medium `calc(100svh - 4.25rem)`，原 `100svh`）與 `community-hero_visual` max-width（原 `min(38.75rem, calc((100svh - 6rem) * 0.8))`）已更新並讀回。Footer 新增「官方社群」見 [導覽部署紀錄](../navigation/deployment.md)。
