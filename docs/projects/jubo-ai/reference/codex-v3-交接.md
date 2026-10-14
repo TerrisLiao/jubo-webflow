@@ -1,6 +1,6 @@
 # Codex 交接：Jubo AI 頁原型 v3（N.Copilot 沉浸式動態敘事）
 
-> 歷史 v3 紀錄。現行英文漸層版本與同一 Draft 的更新，請讀 [v4 架構與驗收](原型v4架構與驗收_2026-10-14.md)。
+> 歷史 v3 紀錄。現行置中捲動／英文漸層版本與同一 Draft 的更新，請讀 [v5 架構與驗收](原型v5置中捲動與互動驗收_2026-10-15.md)。
 撰寫：Claude，2026-10-14。交接對象：Codex。決策者：Terris。
 分支：繼續用 `claude/jubo-ai-agentic-redesign`（同一個 PR 範圍）。開工前 `git pull`，確認 head 至少到本檔所在的提交。
 **不要動 Webflow、不要 Publish**；本輪只做本機原型＋文件。

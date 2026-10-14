@@ -1,22 +1,27 @@
 #!/usr/bin/env python3
-"""Pack the English gradient prototype for the existing isolated Draft iframe.
+"""Pack an English prototype for the existing isolated Draft iframe.
 
-Usage: python tools/pack-jubo-ai-preview.py [output-directory]
+Usage: python tools/pack-jubo-ai-preview.py [output-directory] [--version 4|5]
 Canonical code stays readable in the repository. Gzip is transport only.
 This tool does not write to Webflow or publish any site.
 """
 import base64
+import argparse
 import gzip
 import hashlib
 import html
 import json
 from pathlib import Path
 import re
-import sys
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "custom-code/poc/jubo-ai-agentic-v4.html"
-OUT = Path(sys.argv[1] if len(sys.argv) > 1 else "/tmp/v4-draft-preview")
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("output_directory", nargs="?")
+parser.add_argument("--version", choices=[4, 5], type=int, default=4,
+                    help="Keep v4 as the compatible default; select v5 explicitly.")
+args = parser.parse_args()
+SOURCE = ROOT / f"custom-code/poc/jubo-ai-agentic-v{args.version}.html"
+OUT = Path(args.output_directory or f"/tmp/v{args.version}-draft-preview")
 OUT.mkdir(parents=True, exist_ok=True)
 content = SOURCE.read_text()
 content = re.sub(
@@ -33,7 +38,10 @@ loader += """),c=>c.charCodeAt(0));const stream=new Blob([bytes]).stream().pipeT
 </script></body></html>"""
 src = "data:text/html;base64," + base64.b64encode(loader.encode()).decode()
 attrs = [
-    {"name": "title", "value": "Jubo AI — English gradient prototype v4"},
+    {"name": "title", "value": (
+        "Jubo AI — English gradient prototype v4" if args.version == 4
+        else "Jubo AI — Centered immersive prototype v5"
+    )},
     {"name": "sandbox", "value": "allow-scripts allow-popups allow-popups-to-escape-sandbox"},
     {"name": "class", "value": "jubo-ai-preview_frame"},
     {"name": "style", "value": "display:block;width:100%;height:100vh;border:0"},
@@ -43,7 +51,7 @@ attrs = [
 (OUT / "iframe-src.txt").write_text(src)
 # Local srcdoc fixture verifies the exported content and sandbox interactions.
 # It does not prove that the data URL rendered in the live Designer.
-frame = '<iframe title="Jubo AI v4" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" style="display:block;width:100%;height:100vh;border:0" srcdoc="'
+frame = f'<iframe title="Jubo AI v{args.version}" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox" style="display:block;width:100%;height:100vh;border:0" srcdoc="'
 frame += html.escape(loader, quote=True) + '"></iframe>'
 (OUT / "preview.html").write_text('<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0">' + frame + "</body></html>")
 manifest = {

@@ -39,3 +39,14 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 四寬度、資料映射、三種對話、三個鍵盤彈窗、快速取消、暫停、reduced-motion、DPR／resize／fallback 與隔離 fixture 通過。
 - 同一 Draft iframe 更新 v4 來源及英文 title；38,442 字元 src 完整一致，元素結構及發布時間不變。
 - [完整架構與驗收](reference/原型v4架構與驗收_2026-10-14.md)。
+
+
+## 2026-10-15｜v5 置中捲動與互動球體
+
+- Terris 未採用 v4 制式介紹版型，要求回到 v3 置中、慢速揭露的氛圍，保留 v4 玻璃／漸層材質。
+- 新增 v5：連續 sticky 舞台逐幕顯示五類資料、五種能力、三個應用與三個構想；桌機長段停留，手機／矮視窗／reduced-motion 自然文件流。
+- 球體獨立呈現；零粒子、沒有環繞卡片。滑鼠回應牽引、高光與內部色帶，觸控有短脈動。實際讀取現行 CTA 的色系與七層 Glass Button 結構並用於隔離原型。
+- 四寬度、完整互動、pointer／touch、reduced-motion、DPR／fallback 通過；修正模式切換的 inert 狀態，並讓停止捲動後的位置收斂、中段保持穩定。
+- sandbox 1440／375 實際點擊對話／review 通過。同一 Draft 的 41,434 字元 src 與屬性完整一致，原六個元素結構及 Site／domain 發布時間未變。Designer MCP 斷線，無法自動切頁或目視 v5，未推定使用者已看見。
+- 保留 v2／v3／v4、N.Copilot 原稿幾何；不動共用資產、不 Publish。同步六份現行文件及同一 Draft PR #24。
+- [架構、驗收、限制與重跑方式](reference/原型v5置中捲動與互動驗收_2026-10-15.md)。
