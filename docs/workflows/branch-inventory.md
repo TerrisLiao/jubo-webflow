@@ -1,6 +1,8 @@
 # 分支盤點與整合狀態
 
-> 最新清理結果（2026-10-13）：使用者已從 Mac 終端機批次刪除 11 個已合併分支；GitHub 重新讀回共 24 個遠端分支，含 master。下方 ahead／behind 為合併前快照。
+> 最新清理結果（2026-10-14）：社群追蹤頁結案後，使用者刪除 `claude/confident-curie-6r3n6b`、`codex/community-card-motion`、`claude/gallant-einstein-3tvafg`；GitHub 讀回共 23 個遠端分支，含 master。詳見文末。
+>
+> 前次清理（2026-10-13）：使用者已從 Mac 終端機批次刪除 11 個已合併分支；GitHub 重新讀回共 24 個遠端分支，含 master。下方 ahead／behind 為合併前快照。
 
 檢查日期：2026-10-13（Asia/Taipei）。基準 master `c1a898d393e6ec2c285ffb497c9a326e55f6e717`。34 個遠端分支：11 個工作分支當時已完整包含在 master，22 個有獨有提交。
 
@@ -13,7 +15,7 @@
 | `claude/beautiful-lovelace-x8dv2l` | `3d0349043aba552c71c5f00bb20fdc70e722f421` | 106／74 | 內容已盤點／匯入或保存來源版本；保留分支 |
 | `claude/brave-hopper-6j5awf` | `e58465456f16afb985e473f78cc922b700356c81` | 14／74 | 內容已盤點／匯入或保存來源版本；保留分支 |
 | `claude/cms-news-schema-planning-ae6bwp` | `18a06aa28fda0271643bed9e830873535f4d8c1d` | 1／97 | 內容已盤點／匯入或保存來源版本；保留分支 |
-| `claude/confident-curie-6r3n6b` | `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e` | 3／0 | community 已匯入；使用者指定，保留並可接續 |
+| `claude/confident-curie-6r3n6b` | `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e` | 3／0 | community 已匯入；2026-10-14 結案後刪除 |
 | `claude/confident-euler-xqs5ar` | `15acfcd50ca65e92c0e29c68c213d49e69df039e` | 1／74 | 內容已盤點／匯入或保存來源版本；保留分支 |
 | `claude/contact-page-business-card-17ysv8` | `33a38d6bc5a7905d6922d789f3caf7885414496c` | 22／87 | 內容已盤點／匯入或保存來源版本；保留分支 |
 | `claude/dreamy-meitner-6b0x2y` | `10cd0c84c1f25fee67839eae60857a7467763e17` | 0／49 | 2026-10-13 已刪除；提交保留於 master |
@@ -71,3 +73,17 @@
 - GitHub 獨立讀回：以上 11 個分支均已不存在；共 24 個遠端分支（master、22 個原工作分支及已合併的整理分支）。
 - `claude/confident-curie-6r3n6b` 保留，head `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`。
 - 其餘 22 個原工作分支與整理分支本次未刪除；PR #12、#16、#18、#19 未因本次清理而合併或關閉。
+
+## 清理完成紀錄（2026-10-14）
+
+社群追蹤頁結案（PR #22 以 merge commit 合併，master `b584e022688a14dc29bd90ce41d9bfcea2353deb`；PR #21 隨之標為已合併）後刪除：
+
+| 分支 | 刪除前 head | 刪除依據 |
+|---|---|---|
+| `claude/gallant-einstein-3tvafg` | `eeb7d45d412a59bbd922bd1d0968890d7c7dc632` | 為 master 祖先 |
+| `codex/community-card-motion` | `8313c55db7bf1a7ee0913847861819529f986ac8` | 為 master 祖先 |
+| `claude/confident-curie-6r3n6b` | `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e` | 非祖先；唯一新增檔 `社群追蹤頁/README.md` 與 master `docs/projects/community/reference/README.md` 逐字相同，CLAUDE.md 一行索引已由新結構取代，匯入清單保存 SHA |
+
+- 刪除方式：agent 環境的 Git 代理拒絕刪除遠端分支（HTTP 403），由使用者在 Mac 以暫存空 repo 執行 `git push <repo URL> --delete …`，三個分支均回傳 deleted。
+- GitHub 讀回：三個分支均不存在，遠端共 23 個分支。
+- `claude/gallant-einstein-3tvafg` 之後若因平台指定再出現，為新的短期工作分支，與上表刪除的版本無關。

@@ -13,8 +13,10 @@
 - [設定與回退資料](../../../custom-code/community/README.md)
 - [README.md](reference/README.md)
 
-## 來源分支（固定版本）
+## 來源分支（固定版本，已刪除）
 
-- `claude/confident-curie-6r3n6b` @ `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`
+- `claude/confident-curie-6r3n6b` @ `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`（第一～六輪 Hero 原始交接）
+- `codex/community-card-motion` @ `8313c55db7bf1a7ee0913847861819529f986ac8`（PR #21）
+- `claude/gallant-einstein-3tvafg` @ `eeb7d45d412a59bbd922bd1d0968890d7c7dc632`（PR #22）
 
-固定版本僅供追溯；繼續既有工作先重新確認 head，遵循 [Git 流程](../../workflows/git-workflow.md)。
+三個分支於 2026-10-14 結案後刪除，內容均已在 master；SHA 僅供追溯。後續改善另開新分支，遵循 [Git 流程](../../workflows/git-workflow.md)。
