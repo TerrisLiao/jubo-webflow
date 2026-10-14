@@ -6,9 +6,9 @@
 |---|---|---|---|---|
 | P0 | SharePoint／Teams AI 策略、AI 功能、Amy／iBee 研究 | Claude | 事實附出處；分可公開／需核准 | 完成：`reference/研究彙整_2026-10-14.md` |
 | P0 | Mobbin 參考 | Claude | 每項附連結與用途 | 完成（收藏連結待 Terris 提供） |
-| P0 | 設計方向與 Section Flow | Claude | 七項定義＋段落表 | 提案完成，**待 Terris 裁決 7 題** |
-| P1 | 文案初稿（繁中，jubo-write 語氣） | 未認領 | 只用可公開宣稱；數字附口徑與日期 | 待裁決後開始 |
-| P1 | 本機原型 `custom-code/poc/jubo-ai-agentic.html` | 未認領 | 亮底、四斷點、reduced-motion、一個 canvas 以內 | 待裁決後開始 |
+| P0 | 設計方向與 Section Flow | Claude | 七項定義＋段落表 | 完成；7 題已裁決（2026-10-14，見 decisions） |
+| P1 | 文案初稿（繁中，jubo-write 語氣） | Claude | 只用可公開宣稱；數字附口徑與日期 | v1 完成：`reference/文案初稿_2026-10-14.md`；**待 Terris 審閱＋7 項待確認** |
+| P1 | 本機原型 `custom-code/poc/jubo-ai-agentic.html` | **Codex（建議）** | 依 `reference/原型規格_2026-10-14.md` 驗收 | 規格完成，可開工 |
 | P1 | 收集真實產品截圖（智慧交班、Amy、iBee 等） | Terris | 不用生成假 UI | 待辦 |
 | P2 | Webflow 實作（Draft） | 未認領 | Designer 讀回；未授權不 Publish | 待原型確認 |
 | P2 | 移除 `/ai/jubo-ai` JSON-LD 假評分、影片加暫停 | 未認領 | 見 Schema、無障礙稽核 | 待辦 |
