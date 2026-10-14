@@ -6,4 +6,5 @@
 - 採用版本與範圍：無；研究階段
 - 來源分支、提交、文件：`claude/jubo-ai-agentic-redesign`；研究資料見 tasks
 - 已驗證：無
-- 未驗證／被取代／待審：設計方向待 Terris 確認（見 decisions）
+- 研究完成：`reference/研究彙整_2026-10-14.md`；設計提案：`reference/設計方向提案_2026-10-14.md`
+- 未驗證／待審：設計方向 7 題待 Terris 裁決；Webflow 未讀回

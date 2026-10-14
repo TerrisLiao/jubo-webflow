@@ -5,6 +5,7 @@
 - 工作分支：`claude/jubo-ai-agentic-redesign`（基底 `origin/master` `6b84235`）
 - 前次研究：[AI 頁面競品研究](../../research/AI頁面競品研究.md)（2026-08-26，來源分支 `claude/jupo-ai-redesign-evpg2c`）
 - 協作：Claude 與 Codex 共用本資料夾交接；接手前先讀 [AGENTS.md](../../../AGENTS.md)，再讀 current-state → tasks → decisions。
+- 研究：[研究彙整](reference/研究彙整_2026-10-14.md)；提案：[設計方向](reference/設計方向提案_2026-10-14.md)
 
 ## 本輪目標（使用者 2026-10-14 需求）
 
