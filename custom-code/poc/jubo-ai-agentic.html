@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jubo AI 改版原型｜照護資料，正在思考</title>
+<!--
+  Jubo AI 頁改版本機原型（/ai/jubo-ai-v2 用）
+  規格：docs/projects/jubo-ai/reference/原型規格_2026-10-14.md
+  文案：docs/projects/jubo-ai/reference/文案初稿_2026-10-14.md（[待確認] 以黃底標示）
+  限制：亮底、一個 WebGL canvas、無後製、無 counter／視差／pin；截圖為佔位，不生成假 UI。
+  這是原型，不是 Webflow 實作。
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --primary--accent:#00b2c0;
+  --primary--ocean:#175e5e;
+  --neutral--black:#151717;
+  --neutral--black-60:hsla(180,4.55%,8.63%,.6);
+  --neutral--white:#fff;
+  --neutral--white-50:hsla(0,0%,100%,.5);
+  --neutral--white-92:hsla(0,0%,100%,.92);
+  --neutral--bg-grey:#f8f8f8;
+  --neutral--line:hsla(180,4.55%,8.63%,.08);
+  --gradient--teal:hsla(184.4,100%,37.65%,.14);
+  --gradient--light-teal:#9df8ff;
+  --gradient--blue:rgba(59,88,255,.5);
+  --gradient--purple:hsla(270.9,100%,54.71%,.5);
+  --gradient--yellow:hsla(60,100%,64.12%,.14);
+  --radius:1.25rem;
+  --container:76rem;
+  --font:"Poppins","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--font);font-size:1.125rem;line-height:1.5;color:var(--neutral--black);background:var(--neutral--bg-grey);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{margin:0;font-weight:300;letter-spacing:-.01em}
+h1{font-size:clamp(2rem,4vw,3.25rem);line-height:1.2}
+h1 .line{display:inline-block}
+h2{font-size:clamp(1.75rem,3.2vw,2.625rem);line-height:1.2}
+h3{font-size:1.25rem;font-weight:700;line-height:1.35}
+p{margin:0}
+.container{width:100%;max-width:var(--container);margin:0 auto;padding:0 2.5rem}
+.section{padding:7rem 0;position:relative}
+.section.is-white{background:var(--neutral--white)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.tbc{background:#fff4a8;border-radius:.25rem;padding:0 .25rem;font-size:.8em;font-weight:400;color:#6b5b00;white-space:nowrap}
+.text-secondary{color:var(--neutral--black-60)}
+
+/* 思考步驟標籤 */
+.step{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.8125rem;letter-spacing:.06em;color:var(--neutral--black-60);margin-bottom:1rem}
+.step::before{content:"";width:.5rem;height:.5rem;border-radius:.125rem;background:var(--primary--accent)}
+.step b{color:var(--primary--accent);font-weight:700}
+.section-head{max-width:46rem;margin-bottom:3.5rem}
+.section-head p{margin-top:1.25rem;color:var(--neutral--black-60)}
+
+/* 按鈕 */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 1.6rem;border-radius:999px;font-weight:700;font-size:1rem;text-decoration:none;transition:background-color .2s,color .2s,box-shadow .2s;border:1px solid transparent}
+.btn-primary{background:var(--primary--accent);color:var(--neutral--white)}
+.btn-primary:hover{box-shadow:0 .5rem 1.5rem var(--gradient--teal)}
+.btn-ghost{color:var(--neutral--black);border-color:var(--neutral--line);background:var(--neutral--white-50)}
+.btn-ghost:hover{border-color:var(--primary--accent);color:var(--primary--accent)}
+.btn:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:2px solid var(--primary--accent);outline-offset:3px}
+
+/* 導覽（佔位） */
+.nav{position:sticky;top:0;z-index:20;background:var(--neutral--white-92);backdrop-filter:blur(12px);border-bottom:1px solid var(--neutral--line)}
+.nav .container{display:flex;align-items:center;justify-content:space-between;height:4.25rem}
+.nav-logo{font-weight:700;letter-spacing:.02em}
+.nav-logo span{color:var(--primary--accent)}
+.nav-links{display:flex;gap:2rem;font-size:.9375rem;color:var(--neutral--black-60)}
+.nav-links a{text-decoration:none}
+.nav-links a[aria-current]{color:var(--neutral--black);font-weight:700}
+
+/* 1 Hero */
+.hero{position:relative;overflow:hidden;padding:6rem 0 5rem;background:
+  radial-gradient(40rem 28rem at 78% 40%,var(--gradient--teal),transparent 70%),
+  radial-gradient(30rem 22rem at 95% 85%,hsla(229,100%,62%,.08),transparent 70%),
+  radial-gradient(26rem 20rem at 10% 10%,var(--gradient--yellow),transparent 70%),
+  var(--neutral--bg-grey)}
+.hero-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero.no-webgl .hero-canvas{display:none}
+.hero.no-webgl::after{content:"";position:absolute;right:-6rem;top:50%;width:34rem;height:34rem;transform:translateY(-50%);border-radius:50%;
+  background:radial-gradient(circle at 40% 40%,var(--neutral--white) 0 2px,transparent 3px) 0 0/18px 18px,radial-gradient(circle,var(--gradient--teal),transparent 65%);
+  -webkit-mask:radial-gradient(circle,#000 45%,transparent 70%);mask:radial-gradient(circle,#000 45%,transparent 70%);opacity:.9;pointer-events:none}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:.85fr 1fr;gap:4rem;align-items:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem .9rem;border-radius:999px;background:var(--neutral--white-50);border:1px solid var(--neutral--white-92);font-size:.875rem;font-weight:700;color:var(--primary--accent);margin-bottom:1.5rem}
+.hero-eyebrow i{width:.5rem;height:.5rem;border-radius:50%;background:var(--primary--accent);box-shadow:0 0 0 .25rem var(--gradient--teal)}
+.hero h1 em{font-style:normal;color:var(--primary--accent)}
+.hero-sub{margin-top:1.5rem;font-size:1.1875rem;color:var(--neutral--black-60);max-width:32rem}
+.hero-cta{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2.25rem}
+
+/* 思考列 */
+.think{background:var(--neutral--white-50);border:1px solid var(--neutral--white-92);border-radius:var(--radius);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 1.5rem 4rem hsla(184,60%,30%,.12);padding:1.5rem 1.5rem 1.25rem;max-width:34rem;justify-self:end;width:100%}
+.think-head{display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:.8125rem;color:var(--neutral--black-60);padding-bottom:1rem;border-bottom:1px solid var(--neutral--line);margin-bottom:1rem}
+.think-head .live{display:inline-flex;align-items:center;gap:.5rem}
+.think-head .live i{width:.5rem;height:.5rem;border-radius:50%;background:var(--primary--accent);animation:pulse 1.6s ease-in-out infinite}
+.think-tabs{display:flex;gap:.375rem}
+.think-tabs span{width:1.5rem;height:.25rem;border-radius:999px;background:var(--neutral--line);transition:background-color .3s}
+.think-tabs span.is-on{background:var(--primary--accent)}
+.think-lines{list-style:none;margin:0;padding:0;min-height:10.5rem}
+.think-line{display:grid;grid-template-columns:1.25rem 3.25rem 1fr;gap:.625rem;align-items:start;padding:.55rem 0;font-size:1rem;opacity:0;transform:translateY(.25rem);transition:opacity .3s,transform .3s}
+.think-line.is-on{opacity:1;transform:none}
+.think-line .status{width:1rem;height:1rem;margin-top:.2rem;border-radius:50%;border:2px solid var(--gradient--light-teal);border-top-color:var(--primary--accent);animation:spin .8s linear infinite}
+.think-line.is-done .status{animation:none;border:0;background:var(--primary--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.think-line .verb{font-family:var(--mono);font-size:.8125rem;color:var(--primary--accent);font-weight:700;padding-top:.15rem}
+.think-line .txt{min-height:1.5em}
+.think-line.is-output .txt{font-weight:700}
+.think-line .caret{display:inline-block;width:.5ch;height:1.05em;margin-left:1px;vertical-align:-.15em;background:var(--primary--accent);animation:blink 1s steps(1) infinite}
+.think-foot{margin-top:.75rem;padding-top:.875rem;border-top:1px solid var(--neutral--line);font-size:.8125rem;color:var(--neutral--black-60);display:flex;gap:.5rem;align-items:center}
+.think-foot svg{flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes pulse{50%{box-shadow:0 0 0 .35rem var(--gradient--teal)}}
+
+/* 2 規模帶 */
+.stats{position:relative;z-index:1;margin-top:4.5rem;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--neutral--line)}
+.stat{padding:1.75rem 1.5rem 0 0}
+.stat+.stat{padding-left:1.5rem;border-left:1px solid var(--neutral--line)}
+.stat-num{font-size:clamp(2rem,3.6vw,3rem);font-weight:300;line-height:1.1;letter-spacing:-.02em}
+.stat-num small{font-size:.5em;margin-left:.25rem}
+.stat-label{margin-top:.5rem;color:var(--neutral--black-60);font-size:1rem}
+.stats-note{position:relative;z-index:1;margin-top:1.25rem;font-size:.8125rem;color:var(--neutral--black-60)}
+
+/* 3 資料地圖 */
+.map{position:relative}
+.map-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;position:relative;z-index:1}
+.map-col{background:var(--neutral--bg-grey);border:1px solid var(--neutral--line);border-radius:var(--radius);padding:1.5rem}
+.map-col h3{font-size:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.map-col h3 small{font-family:var(--mono);font-weight:400;color:var(--neutral--black-60);font-size:.75rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem}
+.chip{font:inherit;font-size:.9375rem;padding:.5rem .875rem;border-radius:999px;border:1px solid var(--neutral--line);background:var(--neutral--white);color:var(--neutral--black);cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
+.chip:hover{border-color:var(--primary--accent)}
+.chip[aria-pressed="true"]{background:var(--primary--accent);border-color:var(--primary--accent);color:var(--neutral--white)}
+.map-gap{height:7rem}
+.map-nodes{position:relative;z-index:1;display:grid;grid-template-columns:repeat(7,1fr);gap:.75rem}
+.node{border:1px solid var(--neutral--line);background:var(--neutral--white);border-radius:1rem;padding:1rem .75rem;text-align:center;font-size:.9375rem;font-weight:700;transition:border-color .3s,box-shadow .3s,transform .3s;color:var(--neutral--black-60)}
+.node small{display:block;font-weight:400;font-size:.75rem;margin-top:.25rem}
+.node.is-linked{border-color:var(--primary--accent);color:var(--neutral--black);box-shadow:0 .75rem 2rem var(--gradient--teal);transform:translateY(-.25rem)}
+.node.is-new::after{content:"NEW";display:block;margin:.375rem auto 0;width:max-content;font-family:var(--mono);font-size:.625rem;letter-spacing:.08em;padding:.1rem .4rem;border-radius:.25rem;background:var(--gradient--teal);color:var(--primary--ocean)}
+.map-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.map-svg path{fill:none;stroke:var(--primary--accent);stroke-width:1.5;stroke-linecap:round;opacity:.9}
+.map-svg path.draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw .6s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.map-output{margin-top:2rem;padding:1rem 1.25rem;border-radius:1rem;background:var(--neutral--bg-grey);border:1px dashed var(--neutral--line);font-size:1rem;display:flex;gap:.75rem;flex-wrap:wrap;align-items:baseline}
+.map-output .mono{font-family:var(--mono);font-size:.8125rem;color:var(--primary--accent);font-weight:700}
+
+/* 4 AI 卡片 */
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:1.5rem}
+.card{grid-column:span 2}
+.card:nth-child(n+4){grid-column:span 3}
+.card:nth-child(n+4) .card-shot{aspect-ratio:16/8}
+.card{background:var(--neutral--white);border:1px solid var(--neutral--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.card-shot{aspect-ratio:16/10;background:repeating-linear-gradient(135deg,var(--neutral--bg-grey) 0 12px,hsla(0,0%,93%,1) 12px 13px);display:grid;place-items:center;color:var(--neutral--black-60);font-size:.875rem;border-bottom:1px solid var(--neutral--line)}
+.card-shot span{background:var(--neutral--white);padding:.35rem .75rem;border-radius:999px;border:1px solid var(--neutral--line)}
+.card-body{padding:1.5rem;display:flex;flex-direction:column;gap:.875rem;flex:1}
+.card-body p{font-size:1rem;color:var(--neutral--black-60)}
+.tags{display:flex;flex-wrap:wrap;gap:.375rem;margin-top:auto}
+.tag{font-size:.75rem;padding:.25rem .625rem;border-radius:999px;background:var(--gradient--teal);color:var(--primary--ocean)}
+.tag.is-place{background:var(--neutral--bg-grey);color:var(--neutral--black-60);border:1px solid var(--neutral--line)}
+.card-metric{font-size:.875rem;color:var(--neutral--black)}
+.card-metric b{color:var(--primary--accent)}
+
+/* 5 Amy／iBee */
+.launch{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.launch-card{background:var(--neutral--white);border:1px solid var(--neutral--line);border-radius:var(--radius);padding:2rem;display:flex;flex-direction:column;gap:1.25rem}
+.launch-card h3{font-size:1.5rem;font-weight:300}
+.launch-card h3 b{font-weight:700}
+.launch-card .place{font-family:var(--mono);font-size:.75rem;color:var(--neutral--black-60);letter-spacing:.04em}
+.report{list-style:none;margin:0;padding:1rem;border-radius:1rem;background:var(--neutral--bg-grey);counter-reset:r}
+.report li{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.6rem .25rem;border-bottom:1px solid var(--neutral--line);font-size:.9375rem;counter-increment:r;opacity:0;transform:translateX(-.75rem);transition:opacity .45s,transform .45s}
+.report li:last-child{border-bottom:0}
+.report li::before{content:counter(r,decimal-leading-zero);font-family:var(--mono);font-size:.75rem;color:var(--primary--accent);margin-right:.5rem}
+.report li span{flex:1}
+.report li small{font-size:.6875rem;color:var(--neutral--black-60);white-space:nowrap}
+.report.is-in li{opacity:1;transform:none}
+.bound{font-size:.875rem;color:var(--neutral--black-60);padding-left:.875rem;border-left:2px solid var(--primary--accent)}
+.timeline{position:relative;display:grid;grid-template-columns:1fr 1fr;padding-top:1.25rem;margin-top:.25rem}
+.timeline::before{content:"";position:absolute;left:.3rem;right:.3rem;top:.3rem;height:2px;background:linear-gradient(90deg,var(--gradient--light-teal),var(--primary--accent))}
+.tl-item{position:relative;padding-right:1rem;font-size:.875rem}
+.tl-item::before{content:"";position:absolute;top:-1.25rem;left:0;width:.65rem;height:.65rem;border-radius:50%;background:var(--neutral--white);border:2px solid var(--primary--accent)}
+.tl-item:last-child::before{background:var(--primary--accent)}
+.tl-item b{display:block;font-family:var(--mono);font-size:.8125rem;color:var(--primary--accent)}
+.launch-link{margin-top:auto;font-weight:700;color:var(--primary--accent);text-decoration:none;font-size:1rem}
+.launch-link:hover{text-decoration:underline}
+.launch-link.is-disabled{color:var(--neutral--black-60);font-weight:400}
+
+/* 6 三層 */
+.layers{display:grid;gap:1rem;max-width:56rem}
+.layer{display:grid;grid-template-columns:4rem 1fr;gap:1.5rem;align-items:center;background:var(--neutral--white);border:1px solid var(--neutral--line);border-radius:var(--radius);padding:1.5rem 2rem}
+.layer .n{font-family:var(--mono);font-size:2rem;font-weight:300;color:var(--gradient--light-teal);-webkit-text-stroke:1px var(--primary--accent)}
+.layer h3{margin-bottom:.375rem}
+.layer p{font-size:1rem;color:var(--neutral--black-60)}
+.layer.is-human{border:2px solid var(--primary--accent);box-shadow:0 1rem 3rem var(--gradient--teal)}
+.layer.is-human .n{color:var(--primary--accent)}
+.quote{margin-top:2.5rem;font-size:1.25rem;font-weight:300;max-width:46rem}
+
+/* 7 資安 */
+.trust{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+.trust-item svg{width:2rem;height:2rem;color:var(--primary--accent);margin-bottom:1rem}
+.trust-item h3{font-size:1.0625rem;margin-bottom:.5rem}
+.trust-item p{font-size:.9375rem;color:var(--neutral--black-60)}
+.trust-link{display:inline-block;margin-top:2.5rem;font-weight:700;color:var(--primary--accent);text-decoration:none}
+
+/* 8 FAQ */
+.faq{max-width:52rem}
+.faq details{border-bottom:1px solid var(--neutral--line)}
+.faq summary{list-style:none;cursor:pointer;padding:1.5rem 3rem 1.5rem 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"";position:absolute;right:.5rem;top:50%;width:.75rem;height:.75rem;border-right:2px solid var(--primary--accent);border-bottom:2px solid var(--primary--accent);transform:translateY(-70%) rotate(45deg);transition:transform .25s}
+.faq details[open] summary::after{transform:translateY(-30%) rotate(-135deg)}
+.faq details p{padding:0 3rem 1.5rem 0;color:var(--neutral--black-60);font-size:1rem}
+
+/* 9 CTA */
+.cta{text-align:center;background:radial-gradient(36rem 20rem at 50% 100%,var(--gradient--teal),transparent 70%),var(--neutral--white)}
+.cta p{margin:1.25rem auto 0;max-width:34rem;color:var(--neutral--black-60)}
+.cta .hero-cta{justify-content:center}
+
+footer{background:var(--primary--ocean);color:var(--neutral--white);padding:3rem 0;font-size:.875rem}
+footer .container{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;opacity:.85}
+
+/* RWD */
+@media (max-width:991px){
+  .container{padding:0 2rem}
+  .section{padding:5.5rem 0}
+  .hero-grid{grid-template-columns:1fr;gap:3rem}
+  .think{justify-self:start}
+  .cards{grid-template-columns:1fr 1fr}
+  .card,.card:nth-child(n+4){grid-column:auto}
+  .card:nth-child(n+4) .card-shot{aspect-ratio:16/10}
+  .map-nodes{grid-template-columns:repeat(4,1fr)}
+  .trust{grid-template-columns:1fr 1fr}
+  .launch{grid-template-columns:1fr}
+  .nav-links{display:none}
+}
+@media (max-width:767px){
+  .container{padding:0 1.25rem}
+  body{font-size:1rem}
+  .hero{padding:4rem 0 3.5rem}
+  .stats{grid-template-columns:1fr;margin-top:3rem}
+  .stat,.stat+.stat{padding:1.25rem 0;border-left:0;border-bottom:1px solid var(--neutral--line)}
+  .map-cols{grid-template-columns:1fr}
+  .map-gap{height:1.5rem}
+  .map-svg{display:none}
+  .map-nodes{grid-template-columns:1fr 1fr}
+  .cards{grid-template-columns:1fr}
+  .launch-card{padding:1.5rem}
+  .layer{grid-template-columns:1fr;gap:.5rem;padding:1.25rem 1.5rem}
+  .trust{grid-template-columns:1fr}
+  .faq summary{padding-right:2.5rem}
+  .faq details p{padding-right:0}
+}
+@media (max-width:479px){
+  .think-line{grid-template-columns:1rem 2.75rem 1fr;gap:.5rem;font-size:.9375rem}
+  .hero-cta .btn{width:100%;justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .think-line .status{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container">
+    <div class="nav-logo">Jubo<span>.</span></div>
+    <nav class="nav-links" aria-label="主要導覽（原型佔位）">
+      <a href="#">解決方案</a><a href="#">產品</a><a href="#" aria-current="page">Jubo AI</a><a href="#">資源</a><a href="#">公司</a>
+    </nav>
+    <a class="btn btn-primary" href="#cta" style="padding:.6rem 1.2rem;font-size:.9375rem">預約導覽</a>
+  </div>
+</header>
+
+<main>
+<!-- 1 Hero ＋ 2 規模帶 -->
+<section class="hero" id="hero" aria-labelledby="hero-title">
+  <canvas class="hero-canvas" aria-hidden="true"></canvas>
+  <div class="container">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow"><i></i>Jubo AI</div>
+        <h1 id="hero-title"><span class="line">30 億筆照護紀錄，</span><br><span class="line">正在長成<em>下一個 AI</em></span></h1>
+        <p class="hero-sub">Jubo 把 2,800+ 家機構每天留下的照護資料，整理成照護現場用得上的 AI。AI 負責整理與提醒，判斷交給照護團隊。</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary" href="#cta">預約導覽</a>
+          <a class="btn btn-ghost" href="#data">看 AI 怎麼做出來 ↓</a>
+        </div>
+      </div>
+
+      <div class="think" aria-labelledby="think-title">
+        <div class="think-head">
+          <span class="live" id="think-title"><i></i>Jubo AI 思考中</span>
+          <span class="think-tabs" aria-hidden="true"><span></span><span></span><span></span></span>
+        </div>
+        <ol class="think-lines" aria-hidden="true"></ol>
+        <p class="sr-only" aria-live="polite" id="think-live"></p>
+        <div class="think-foot">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          每一個 AI 產出，最後都交給人確認
+        </div>
+      </div>
+    </div>
+
+    <div class="stats" role="list">
+      <div class="stat" role="listitem"><div class="stat-num">2,800<small>+</small></div><div class="stat-label">家長照機構使用 Jubo</div></div>
+      <div class="stat" role="listitem"><div class="stat-num">約 33<small>萬</small></div><div class="stat-label">名專業照護使用者</div></div>
+      <div class="stat" role="listitem"><div class="stat-num">30<small>億+</small></div><div class="stat-label">筆累積照護資料</div></div>
+    </div>
+    <p class="stats-note">數據截至 2026 年 <span class="tbc">[待確認：月份]</span>，涵蓋住宿型、日照與居家服務。</p>
+  </div>
+</section>
+
+<!-- 3 資料地圖 -->
+<section class="section is-white" id="data" aria-labelledby="data-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="step"><b>01</b> 讀取</div>
+      <h2 id="data-title">AI 的起點，是每天的照護現場</h2>
+      <p>照服員量的一次血壓、護理師寫的一段交班、督導打的一通電訪——這些日常紀錄在 Jubo 系統裡累積了很多年。它們本來是為了照護和評鑑而寫，現在也成了 AI 最需要的養分：真實、連續、而且來自照護現場。</p>
+    </div>
+
+    <div class="map" id="map">
+      <svg class="map-svg" aria-hidden="true"></svg>
+      <div class="map-cols">
+        <div class="map-col"><h3>住宿型機構 <small>RESIDENTIAL</small></h3><div class="chips" data-group="住宿型機構"></div></div>
+        <div class="map-col"><h3>日間照顧 <small>DAY CARE</small></h3><div class="chips" data-group="日間照顧"></div></div>
+        <div class="map-col"><h3>居家服務 <small>HOME CARE</small></h3><div class="chips" data-group="居家服務"></div></div>
+      </div>
+      <div class="map-gap"></div>
+      <div class="map-nodes" id="map-nodes"></div>
+    </div>
+    <p class="map-output" aria-live="polite"><span class="mono">點一筆資料</span><span id="map-output-text">看看它餵養了哪些 AI 功能</span></p>
+  </div>
+</section>
+
+<!-- 4 已上線 AI -->
+<section class="section" id="features" aria-labelledby="features-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="step"><b>02</b> 找出關聯 → <b>03</b> 長出功能</div>
+      <h2 id="features-title">同一份資料，長出不同的幫手</h2>
+      <p>我們不重新蒐集資料，而是在既有的照護紀錄上，架一層聚焦的 AI。每一個功能都只解決一件具體的事。</p>
+    </div>
+    <div class="cards">
+      <article class="card" id="f-handover">
+        <div class="card-shot"><span>截圖待補｜AI 智慧交班</span></div>
+        <div class="card-body">
+          <h3>AI 智慧交班</h3>
+          <p>自動彙整個案當日的外診、用藥、生理數值異常與焦點護理紀錄，優先呈現發燒、跌倒、血糖異常等重點，協助交班更快掌握狀況。</p>
+          <div class="tags"><span class="tag">生命徵象</span><span class="tag">外診與用藥</span><span class="tag">護理紀錄</span><span class="tag is-place">住宿型</span></div>
+        </div>
+      </article>
+      <article class="card" id="f-vital">
+        <div class="card-shot"><span>截圖待補｜生命徵象預警</span></div>
+        <div class="card-body">
+          <h3>生命徵象異常預警</h3>
+          <p>量測數值一上傳就比對個人趨勢，出現異常時提醒照護人員留意。<span class="tbc">[待確認：產品經理核對]</span></p>
+          <div class="tags"><span class="tag">生命徵象量測</span><span class="tag is-place">住宿型</span></div>
+        </div>
+      </article>
+      <article class="card" id="f-wound">
+        <div class="card-shot"><span>截圖待補｜AI 傷口辨識</span></div>
+        <div class="card-body">
+          <h3>AI 傷口辨識</h3>
+          <p>以傷口照片協助評估與紀錄，讓追蹤變化更一致。<span class="tbc">[待確認：產品經理核對]</span></p>
+          <div class="tags"><span class="tag">傷口照片與評估</span><span class="tag is-place">住宿型</span></div>
+        </div>
+      </article>
+      <article class="card" id="f-family">
+        <div class="card-shot"><span>截圖待補｜AI 家庭聯絡簿</span></div>
+        <div class="card-body">
+          <h3>AI 家庭聯絡簿</h3>
+          <p>照服員拍照、點選關鍵字，AI 產生一段給家屬的短文；照服員確認後再送出。</p>
+          <p class="card-metric">手寫約 <b>2 小時</b>，縮短到約 <b>10 分鐘</b> <span class="tbc">[待確認：統計口徑]</span></p>
+          <div class="tags"><span class="tag">活動照片</span><span class="tag">每日照護紀錄</span><span class="tag is-place">日照</span></div>
+        </div>
+      </article>
+      <article class="card" id="f-quality">
+        <div class="card-shot"><span>截圖待補｜品監 AI 潤飾</span></div>
+        <div class="card-body">
+          <h3>品監 AI 潤飾 <span class="tbc">[待確認：正式名稱]</span></h3>
+          <p>協助把品質監測紀錄改寫得更清楚、一致。</p>
+          <div class="tags"><span class="tag">品監紀錄</span><span class="tag is-place">住宿型</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 5 Amy／iBee -->
+<section class="section is-white" id="launch" aria-labelledby="launch-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="step"><b>03</b> 上線</div>
+      <h2 id="launch-title">從現場的一個需求，<br>到上線，只花幾個月</h2>
+      <p>資料和流程都已經在系統裡，新的 AI 功能就不必從零開始。今年我們推出了兩個新幫手。</p>
+    </div>
+    <div class="launch">
+      <article class="launch-card">
+        <span class="place">居家服務｜NEW 2026</span>
+        <h3><b>Amy</b> 全人脈絡透鏡</h3>
+        <p>家訪前，把服務紀錄、督導電訪與日常表單整理成一頁近況報告。</p>
+        <ol class="report" id="amy-report" aria-label="Amy 報告的五個段落">
+          <li><span>個案輪廓與能力</span><small>ADL／IADL</small></li>
+          <li><span>照顧計畫與服務目標</span><small>核定照顧計畫</small></li>
+          <li><span>最近的訪視與紀錄</span><small>家訪、電訪</small></li>
+          <li><span>近三個月的異常與居服員回報</span><small>服務紀錄</small></li>
+          <li><span>建議追蹤重點</span><small>標明資料來源</small></li>
+        </ol>
+        <p class="bound">內容由 AI 依既有資料整理，僅供參考，由督導判讀。</p>
+        <div class="timeline">
+          <div class="tl-item"><b>2026 春</b>家訪 AI 紀錄需求提出 <span class="tbc">[待確認：可否公開]</span></div>
+          <div class="tl-item"><b>2026.08</b>正式上線</div>
+        </div>
+        <a class="launch-link" href="/ai/amy">了解 Amy 透鏡 →</a>
+      </article>
+      <article class="launch-card">
+        <span class="place">日照・居服｜NEW 2026</span>
+        <h3><b>iBee</b> 照管小幫手</h3>
+        <p>Jubo 第一個上線的 AI Agent，自動比對照管額度與服務項目次數，一鍵匯入照顧計畫。</p>
+        <ol class="report" aria-label="iBee 做的兩件事" style="counter-reset:r">
+          <li><span>照管額度與服務項目次數比對</span><small>照管平台</small></li>
+          <li><span>照顧計畫一鍵匯入</span><small>核定照顧計畫</small></li>
+        </ol>
+        <p class="bound">iBee 協助比對與匯入，不會自動送出申報；最後確認仍由人員完成。</p>
+        <div class="timeline">
+          <div class="tl-item"><b>2026.06</b>i照護上線</div>
+          <div class="tl-item"><b>2026.07</b>Jubo 日照、居服上線 <span class="tbc">[待確認：對外日期]</span></div>
+        </div>
+        <span class="launch-link is-disabled">iBee 介紹頁即將推出</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 6 三層 -->
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="container">
+    <div class="section-head">
+      <div class="step"><b>04</b> 交給照護者</div>
+      <h2 id="how-title">AI 支持，人來判斷</h2>
+      <p>Jubo AI 有三層。每一層都有清楚的分工，最後一層永遠是人。</p>
+    </div>
+    <div class="layers">
+      <div class="layer"><div class="n">01</div><div><h3>資料層：完整的照護紀錄</h3><p>每天在系統裡留下的量測、紀錄與計畫，是一切的基礎。</p></div></div>
+      <div class="layer"><div class="n">02</div><div><h3>智慧層：AI 整理與提醒</h3><p>AI 把分散的紀錄整理成摘要、找出需要注意的變化、提出提醒。</p></div></div>
+      <div class="layer is-human"><div class="n">03</div><div><h3>決策層：照護者的專業判斷</h3><p>AI 的產出都要經過照護人員確認，照護決策由專業團隊做主。</p></div></div>
+    </div>
+    <p class="quote">最好的 AI，應該安靜、可靠，在你需要的時候剛好出現。 <span class="tbc">[待確認：是否引用 CEO 原句並署名]</span></p>
+  </div>
+</section>
+
+<!-- 7 資安 -->
+<section class="section is-white" id="trust" aria-labelledby="trust-title">
+  <div class="container">
+    <div class="section-head"><h2 id="trust-title">照護資料，留在該在的地方</h2></div>
+    <div class="trust">
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>
+        <h3>台灣境內存放</h3><p>雲端主機與資料儲存設備設置於台灣境內，每日備份。</p>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+        <h3>國際驗證</h3><p>通過 ISO/IEC 27001 資訊安全與 ISO/IEC 27701 隱私資訊管理驗證。</p>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <h3>加密與存取控管</h3><p>傳輸全程加密，權限分級管理。</p>
+      </div>
+      <div class="trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="m8 11 2 2 4-4"/></svg>
+        <h3>定期檢測</h3><p>定期接受第三方滲透測試。</p>
+      </div>
+    </div>
+    <a class="trust-link" href="/security">看 Jubo 資安與隱私 →</a>
+  </div>
+</section>
+
+<!-- 8 FAQ -->
+<section class="section" id="faq" aria-labelledby="faq-title">
+  <div class="container">
+    <div class="section-head"><h2 id="faq-title">常見問題</h2></div>
+    <div class="faq">
+      <details><summary>Jubo AI 是一個獨立產品嗎？</summary><p>不是。Jubo AI 是內建在住宿型、日照與居服系統裡的一組 AI 功能，例如智慧交班、家庭聯絡簿、Amy 透鏡與 iBee。使用 Jubo 系統的機構，在對應的流程裡就會用到。</p></details>
+      <details><summary>AI 會取代照護人員嗎？</summary><p>不會。AI 負責整理、提醒與草擬，照護判斷與決策仍由照護團隊做主。所有 AI 產出都需要人員確認。</p></details>
+      <details><summary>AI 用的是哪些資料？</summary><p>用的是機構在 Jubo 系統裡本來就會記錄的資料，例如生命徵象、護理與服務紀錄、照顧計畫。不需要另外蒐集新資料。</p></details>
+      <details><summary>AI 產出的內容如果有錯怎麼辦？</summary><p>每個 AI 功能都設計成「先給人看、再生效」。例如 Amy 報告會標明資料來源，家庭聯絡簿要照服員確認後才送出。</p></details>
+      <details><summary>資料存放在哪裡？安全嗎？</summary><p>雲端主機與資料儲存設備設置於台灣境內，並通過 ISO/IEC 27001 與 27701 驗證。詳見資安與隱私頁。</p></details>
+      <details><summary>要另外付費嗎？</summary><p>依功能與方案而定，歡迎洽詢。 <span class="tbc">[待確認：付費說法]</span></p></details>
+      <details><summary>我們機構可以開始用嗎？</summary><p>已使用 Jubo 的機構，多數 AI 功能在系統更新後即可使用；尚未使用 Jubo 的機構，歡迎預約導覽，了解哪些功能適合你的場域。</p></details>
+      <details><summary>Jubo 為什麼能這麼快推出新的 AI 功能？</summary><p>因為資料與流程早就在系統裡。新功能不必從零開始蒐集資料，團隊可以專注在把一件具體的事做好，再交給現場驗證。</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 9 CTA -->
+<section class="section cta" id="cta" aria-labelledby="cta-title">
+  <div class="container">
+    <h2 id="cta-title">想知道你的照護資料<br>可以長成什麼？</h2>
+    <p>和我們聊聊你的場域與流程，我們帶你看 Jubo AI 實際怎麼運作。</p>
+    <div class="hero-cta"><a class="btn btn-primary" href="/contact">預約導覽</a><a class="btn btn-ghost" href="/ai/amy">先看 Amy 透鏡</a></div>
+  </div>
+</section>
+</main>
+
+<footer><div class="container"><span>© 2026 Jubo 智齡科技｜原型，非正式頁面</span><span>We Connect Care.</span></div></footer>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Jubo AI 是一個獨立產品嗎？","acceptedAnswer":{"@type":"Answer","text":"不是。Jubo AI 是內建在住宿型、日照與居服系統裡的一組 AI 功能，例如智慧交班、家庭聯絡簿、Amy 透鏡與 iBee。使用 Jubo 系統的機構，在對應的流程裡就會用到。"}},
+{"@type":"Question","name":"AI 會取代照護人員嗎？","acceptedAnswer":{"@type":"Answer","text":"不會。AI 負責整理、提醒與草擬，照護判斷與決策仍由照護團隊做主。所有 AI 產出都需要人員確認。"}},
+{"@type":"Question","name":"AI 用的是哪些資料？","acceptedAnswer":{"@type":"Answer","text":"用的是機構在 Jubo 系統裡本來就會記錄的資料，例如生命徵象、護理與服務紀錄、照顧計畫。不需要另外蒐集新資料。"}},
+{"@type":"Question","name":"AI 產出的內容如果有錯怎麼辦？","acceptedAnswer":{"@type":"Answer","text":"每個 AI 功能都設計成「先給人看、再生效」。例如 Amy 報告會標明資料來源，家庭聯絡簿要照服員確認後才送出。"}},
+{"@type":"Question","name":"資料存放在哪裡？安全嗎？","acceptedAnswer":{"@type":"Answer","text":"雲端主機與資料儲存設備設置於台灣境內，並通過 ISO/IEC 27001 與 27701 驗證。"}},
+{"@type":"Question","name":"我們機構可以開始用嗎？","acceptedAnswer":{"@type":"Answer","text":"已使用 Jubo 的機構，多數 AI 功能在系統更新後即可使用；尚未使用 Jubo 的機構，歡迎預約導覽，了解哪些功能適合你的場域。"}},
+{"@type":"Question","name":"Jubo 為什麼能這麼快推出新的 AI 功能？","acceptedAnswer":{"@type":"Answer","text":"因為資料與流程早就在系統裡。新功能不必從零開始蒐集資料，團隊可以專注在把一件具體的事做好，再交給現場驗證。"}}
+]}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script>
+(() => {
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- 狀態機（純 JS，算繪器訂閱） ---------- */
+  const STATES = {
+    idle:       { disp: .06, speed: .5 },
+    reading:    { disp: .16, speed: 1.0 },
+    thinking:   { disp: .11, speed: 1.4 },
+    generating: { disp: .05, speed: 2.0 }
+  };
+  let current = 'idle'; const subs = [];
+  const onState = fn => (subs.push(fn), fn(STATES[current], current));
+  const setState = n => { current = n; subs.forEach(fn => fn(STATES[n], n)); };
+
+  /* ---------- 1 思考列 ---------- */
+  const SETS = [
+    [['讀取','今日生命徵象、外診與用藥紀錄','reading'],['比對','發燒、跌倒、血糖異常優先','thinking'],['產出','智慧交班摘要 → 交給護理師確認','generating']],
+    [['讀取','近三個月服務紀錄、電訪與家訪','reading'],['整理','個案輪廓、照顧計畫、異常回報','thinking'],['產出','Amy 家訪前近況報告 → 交給督導判讀','generating']],
+    [['讀取','今天的活動照片與關鍵字','reading'],['撰寫','給家屬的一段話','thinking'],['產出','家庭聯絡簿草稿 → 照服員確認後送出','generating']]
+  ];
+  const list = document.querySelector('.think-lines');
+  const live = document.getElementById('think-live');
+  const tabs = [...document.querySelectorAll('.think-tabs span')];
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  const CPS = 20;
+
+  function lineEl([verb, text], i, set) {
+    const li = document.createElement('li');
+    li.className = 'think-line' + (i === set.length - 1 ? ' is-output' : '');
+    li.innerHTML = '<span class="status"></span><span class="verb">' + verb + '</span><span class="txt"></span>';
+    return li;
+  }
+  function renderStatic(set) {
+    list.innerHTML = '';
+    set.forEach((l, i) => { const li = lineEl(l, i, set); li.classList.add('is-on', 'is-done'); li.querySelector('.txt').textContent = l[1]; list.appendChild(li); });
+    live.textContent = set.map(l => l[0] + '：' + l[1]).join('。');
+    tabs[0].classList.add('is-on');
+  }
+  async function loop() {
+    let s = 0;
+    for (;;) {
+      if (document.hidden) { await wait(500); continue; }
+      const set = SETS[s];
+      tabs.forEach((t, i) => t.classList.toggle('is-on', i === s));
+      list.innerHTML = '';
+      for (let i = 0; i < set.length; i++) {
+        const [verb, text, st] = set[i];
+        const li = lineEl(set[i], i, set); list.appendChild(li);
+        await wait(30); li.classList.add('is-on'); setState(st);
+        const txt = li.querySelector('.txt'); const caret = document.createElement('span'); caret.className = 'caret';
+        for (let c = 1; c <= text.length; c++) { txt.textContent = text.slice(0, c); txt.appendChild(caret); await wait(1000 / CPS); }
+        caret.remove(); await wait(450); li.classList.add('is-done');
+        live.textContent = verb + '：' + text;
+      }
+      setState('idle'); await wait(2500);
+      s = (s + 1) % SETS.length;
+    }
+  }
+  reduced ? renderStatic(SETS[0]) : loop();
+
+  /* ---------- 1 Hero 資料點陣（Three.js，一個 canvas） ---------- */
+  const hero = document.getElementById('hero');
+  const canvas = hero.querySelector('.hero-canvas');
+  let gl = null;
+  try { gl = window.THREE && innerWidth >= 768 && (canvas.getContext('webgl2') || canvas.getContext('webgl')); } catch (e) { gl = null; }
+  if (!gl) { hero.classList.add('no-webgl'); }
+  else {
+    const renderer = new THREE.WebGLRenderer({ canvas, context: gl, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(35, 1, .1, 50);
+    camera.position.z = 7;
+
+    const N = 1200;
+    const target = new Float32Array(N * 3), scatter = new Float32Array(N * 3), tone = new Float32Array(N), seed = new Float32Array(N);
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    for (let i = 0; i < N; i++) {
+      const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), th = golden * i;
+      target.set([Math.cos(th) * r * 1.55, y * 1.55, Math.sin(th) * r * 1.55], i * 3);
+      scatter.set([(Math.random() - .5) * 11, (Math.random() - .5) * 6, (Math.random() - .5) * 4], i * 3);
+      tone[i] = Math.random(); seed[i] = Math.random() * 6.283;
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(target, 3));
+    geo.setAttribute('aScatter', new THREE.BufferAttribute(scatter, 3));
+    geo.setAttribute('aTone', new THREE.BufferAttribute(tone, 1));
+    geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
+
+    const U = {
+      uTime: { value: 0 }, uMix: { value: reduced ? 1 : 0 }, uDisp: { value: .06 },
+      uSize: { value: 30 * Math.min(devicePixelRatio, 2) },
+      uA: { value: new THREE.Color('#00b2c0') }, uB: { value: new THREE.Color('#9df8ff') }, uC: { value: new THREE.Color('#3b58ff') }
+    };
+    const mat = new THREE.ShaderMaterial({
+      uniforms: U, transparent: true, depthWrite: false,
+      vertexShader: `
+        attribute vec3 aScatter; attribute float aTone; attribute float aSeed;
+        uniform float uTime, uMix, uDisp, uSize; varying float vTone; varying float vFade;
+        float n3(vec3 p){ return sin(p.x*2.1+uTime*.9)*sin(p.y*2.7+uTime*.7+aSeed*.15)*sin(p.z*2.3+uTime*1.1); }
+        void main(){
+          vec3 n = normalize(position);
+          float d = n3(position)*.7 + n3(position*2.6)*.3;
+          vec3 onSphere = position + n * d * uDisp * 4.0;
+          float m = smoothstep(0., 1., clamp(uMix*1.25 - aSeed/6.283*.25, 0., 1.));
+          vec3 p = mix(aScatter, onSphere, m);
+          vec4 mv = modelViewMatrix * vec4(p, 1.);
+          gl_Position = projectionMatrix * mv;
+          gl_PointSize = uSize * (.55 + .45*aTone) / -mv.z;
+          vTone = aTone; vFade = mix(.45, 1., m);
+        }`,
+      fragmentShader: `
+        uniform vec3 uA, uB, uC; varying float vTone; varying float vFade;
+        void main(){
+          float r = length(gl_PointCoord - .5);
+          if (r > .5) discard;
+          vec3 c = vTone < .55 ? uA : (vTone < .9 ? mix(uA, uB, .6) : mix(uA, uC, .55));
+          gl_FragColor = vec4(c, smoothstep(.5, .2, r) * .85 * vFade);
+        }`
+    });
+    const pts = new THREE.Points(geo, mat);
+    scene.add(pts);
+
+    let speed = .5, targetDisp = .06;
+    onState(s => { targetDisp = s.disp; speed = s.speed; });
+
+    function layout() {
+      const w = hero.clientWidth, h = hero.clientHeight;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h; camera.updateProjectionMatrix();
+      pts.position.x = w > 991 ? 1.9 : 1.2;
+      pts.position.y = w > 991 ? .55 : -.2;
+      pts.scale.setScalar(w > 991 ? .95 : .8);
+    }
+    layout(); addEventListener('resize', layout);
+
+    const clock = new THREE.Clock(); let raf = 0, t = 0;
+    const k = reduced ? .05 : 1;
+    function frame() {
+      const dt = Math.min(clock.getDelta(), .05);
+      t += dt * speed * k;
+      U.uTime.value = t;
+      U.uDisp.value += (targetDisp - U.uDisp.value) * .04;
+      if (U.uMix.value < 1) U.uMix.value = Math.min(1, U.uMix.value + dt * .45);
+      pts.rotation.y += dt * .08 * k; pts.rotation.x = Math.sin(t * .2) * .12;
+      renderer.render(scene, camera);
+      raf = requestAnimationFrame(frame);
+    }
+    frame();
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(raf); else { clock.getDelta(); raf = requestAnimationFrame(frame); }
+    });
+  }
+
+  /* ---------- 3 資料地圖 ---------- */
+  const NODES = [
+    ['handover','AI 智慧交班','住宿型'],['vital','生命徵象預警','住宿型'],['wound','AI 傷口辨識','住宿型'],
+    ['quality','品監 AI 潤飾','住宿型'],['family','AI 家庭聯絡簿','日照'],['amy','Amy 透鏡','居服',true],['ibee','iBee','日照・居服',true]
+  ];
+  const DATA = {
+    '住宿型機構': [['生命徵象量測',['vital','handover']],['護理評估與護理紀錄',['handover']],['給藥與外診紀錄',['handover']],['交班紀錄',['handover']],['傷口照片與評估',['wound']],['品質監測紀錄',['quality']]],
+    '日間照顧':   [['每日照護紀錄',['family']],['活動參與與照片',['family']],['生理量測',['vital']],['家庭聯絡內容',['family']]],
+    '居家服務':   [['居服員服務紀錄',['amy']],['督導電訪、家訪紀錄',['amy']],['ADL／IADL 評估',['amy']],['核定照顧計畫',['amy','ibee']],['居服員異常回報',['amy']]]
+  };
+  const nodeName = Object.fromEntries(NODES.map(n => [n[0], n[1]]));
+  const nodesEl = document.getElementById('map-nodes');
+  NODES.forEach(([id, name, place, isNew]) => {
+    const d = document.createElement('div'); d.className = 'node' + (isNew ? ' is-new' : ''); d.dataset.node = id;
+    d.innerHTML = name + '<small>' + place + '</small>'; nodesEl.appendChild(d);
+  });
+  const chips = [];
+  document.querySelectorAll('.chips').forEach(box => {
+    DATA[box.dataset.group].forEach(([label, to]) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'chip'; b.textContent = label;
+      b.dataset.to = to.join(' '); b.setAttribute('aria-pressed', 'false'); box.appendChild(b); chips.push(b);
+    });
+  });
+  const map = document.getElementById('map'), svg = map.querySelector('.map-svg'), out = document.getElementById('map-output-text');
+  let active = null;
+  function draw(animate) {
+    svg.innerHTML = '';
+    if (!active || innerWidth < 768) return;
+    const m = map.getBoundingClientRect(), c = active.getBoundingClientRect();
+    const x1 = c.left + c.width / 2 - m.left, y1 = c.bottom - m.top;
+    active.dataset.to.split(' ').forEach(id => {
+      const n = nodesEl.querySelector('[data-node="' + id + '"]').getBoundingClientRect();
+      const x2 = n.left + n.width / 2 - m.left, y2 = n.top - m.top, my = (y1 + y2) / 2;
+      const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      p.setAttribute('d', `M${x1},${y1} C${x1},${my} ${x2},${my} ${x2},${y2}`);
+      svg.appendChild(p);
+      if (animate && !reduced) { const L = p.getTotalLength(); p.style.setProperty('--len', L); p.classList.add('draw'); }
+    });
+  }
+  function select(chip) {
+    active = chip;
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+    const to = chip.dataset.to.split(' ');
+    nodesEl.querySelectorAll('.node').forEach(n => n.classList.toggle('is-linked', to.includes(n.dataset.node)));
+    out.textContent = chip.textContent + ' → 用在：' + to.map(id => nodeName[id]).join('、');
+    draw(true);
+  }
+  chips.forEach(c => c.addEventListener('click', () => select(c)));
+  addEventListener('resize', () => draw(false));
+  // 進入視窗時預選第一筆，避免空白
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { select(chips[0]); o.disconnect(); } }, { threshold: .4 }).observe(map);
+
+  /* ---------- 5 Amy 報告逐段組裝 ---------- */
+  document.querySelectorAll('.report').forEach(r => {
+    r.querySelectorAll('li').forEach((li, i) => li.style.transitionDelay = (reduced ? 0 : i * 140) + 'ms');
+    new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { r.classList.add('is-in'); o.disconnect(); } }, { threshold: .35 }).observe(r);
+  });
+})();
+</script>
+</body>
+</html>
