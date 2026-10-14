@@ -17,15 +17,15 @@ git switch -c claude/community-copy origin/master
 
 ## 延續已有分支
 
-以社群追蹤頁為例；必須先確認本機修改與已有 local branch，以下用於尚無同名本機分支的乾淨工作區：
+以下以 `claude/<topic>` 代表使用者指定的既有分支；必須先確認本機修改與已有 local branch，以下用於尚無同名本機分支的乾淨工作區：
 
 ```bash
-git ls-remote --heads origin refs/heads/claude/confident-curie-6r3n6b
-git fetch origin refs/heads/claude/confident-curie-6r3n6b:refs/remotes/origin/claude/confident-curie-6r3n6b
-git switch --track origin/claude/confident-curie-6r3n6b
+git ls-remote --heads origin refs/heads/claude/<topic>
+git fetch origin refs/heads/claude/<topic>:refs/remotes/origin/claude/<topic>
+git switch --track origin/claude/<topic>
 ```
 
-已有本機分支則 `git switch claude/confident-curie-6r3n6b`，比較本機／遠端提交後再決定 fast-forward。不得 `reset --hard` 或 force push 去覆蓋不同版本。
+已有本機分支則 `git switch claude/<topic>`，比較本機／遠端提交後再決定 fast-forward。不得 `reset --hard` 或 force push 去覆蓋不同版本。
 
 整理 PR 合併後，舊分支可能沒有新的 AGENTS.md。繼續舊任務前先讀最新 master 的共用流程，明確合併 master 並解決文件路徑衝突；不要直接重放舊檔覆蓋新架構。
 

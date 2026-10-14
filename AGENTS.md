@@ -35,4 +35,4 @@
 
 ## `/community` 的既有工作
 
-社群追蹤頁最初分支為 `claude/confident-curie-6r3n6b`；之後的細修在 `codex/community-card-motion`（PR #21）與 `claude/gallant-einstein-3tvafg`（2026-10-14 第六輪）。入口為 [community 專案](docs/projects/community/README.md)。2026-10-13 盤點 head 為 `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`；開始新工作必須重新查證，不能把這個快照當最新 head。
+社群追蹤頁已於 2026-10-14 上線並結案（PR #21、#22 已合併）。原工作分支 `claude/confident-curie-6r3n6b`、`codex/community-card-motion`、`claude/gallant-einstein-3tvafg` 已刪除，固定 SHA 保存在 [community 專案](docs/projects/community/README.md) 與 [分支盤點](docs/workflows/branch-inventory.md)。後續改善從最新 `origin/master` 另開新分支，先讀專案的 tasks.md。
