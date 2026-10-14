@@ -9,3 +9,13 @@
 - 原型 v1 `custom-code/poc/jubo-ai-agentic.html`：思考列打字＋狀態機驅動 Three.js 資料點陣（1,200 點、1 draw call）、資料地圖連線、5 張 AI 卡、Amy／iBee 時間軸、三層、資安、FAQ（含 FAQPage JSON-LD）。資料地圖新增「品質監測紀錄」chip 以對應品監 AI 卡。
 - Terris 要求改為更酷、更互動、全部置中、大量捲動動畫。依 Mobbin（Intercom、SpaceXAI／Grok、Squarespace、OpenAI）重做原型 v2，文字全部重寫；v1 保留。修正 pin 後章節觸發位置錯誤、手機版面擠壓與星座超出畫面。
 - Terris 同意 v2 動畫方向；要求改用 N.Copilot logo、做沉浸式動態敘事、精緻化對話框（參考 lattice.hr），並交給 Codex。Claude 撰寫 `reference/codex-v3-交接.md`（需求、故事線、設計方法、踩坑、驗收）與 `tools/poc-scroll-shots.js` 驗證腳本。
+
+## 2026-10-14 — Codex 完成 N.Copilot 原型 v3
+
+- 接續 `claude/jubo-ai-agentic-redesign`，讀回來源 head `6de0033`；以 v2 複製製作 v3，未改 v2。
+- 導覽 AI 項目、Hero、七節點、對話、產出卡、彈卡、交還與收尾使用原稿 N.Copilot；開場保留光點／光條／Aurora 節奏，原翼以裁切展開，取樣成粒子後散成球。
+- 實際查看 Terris 修正的 lattice.com 首頁，播放原動畫並逐格確認指令框展開、左右對話與分段回答；新增 `reference/lattice-觀察.md`。
+- 新增 Hero JS 狀態機、chip 飛入輸入欄與送出回饋；四情境改為固定高度對話串、可展開工具列、產出卡逐行展開與人員確認。修正自動情境搶走 Hero 選擇及快速切換時的舊執行結果。
+- 手機七節點交錯排列；modal 支援 Esc、焦點圈限與回到原按鈕；reduced-motion 停用循環繪製與 pin，保留可讀內容與互動。
+- 執行交接 §8 捲動截圖／拼圖與互動驗證；工具支援本機 HTTP／系統 Chromium，新增可重跑的互動檢查。細節與限制見 `reference/原型v3驗收_2026-10-14.md`。
+- 同步更新 README、current-state、tasks、decisions、deployment。Webflow 未操作，staging／production 未發布。

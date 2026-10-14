@@ -11,3 +11,7 @@
 | 2026-10-14 | 其餘採預設：iBee 寫「從現場需求到上線」；亮底、敘事式 agentic；Orb 改為 Three.js 資料點陣；不放「探索中」段；截圖先用佔位 | 採用（Terris「ok start」） | 對話 2026-10-14 | 選項 B Orb 背景 |
 | 2026-10-14 | **改採原型 v2**：全部置中、沉浸式捲動、全頁 WebGL 粒子變形、pin、彈出卡、互動示範；不沿用 v1 段落與文字 | 採用（Terris） | 使用者指示；`reference/原型v2結構與文案_2026-10-14.md` | v1「照護資料，正在思考」雙欄資訊型版型；研究 §5-3／5-4 的動效克制建議 |
 | 2026-10-14 | v2 動畫方向採用，之後再細修；Jubo AI 全頁識別改用 **N.Copilot logo**；做成沉浸式動態敘事；精緻化 Hero live mode 與對話框，參考 lattice.hr；v3 交由 Codex 實作 | 採用（Terris） | 對話 2026-10-14；`reference/codex-v3-交接.md` | v2 的抽象光球識別 |
+| 2026-10-14 | 視覺參考網址由 lattice.hr 修正為 **lattice.com**；只採互動順序與層級，不帶入其素材、文案或數據 | 採用（Terris） | 本次對話回覆；`reference/lattice-觀察.md` 實際播放器驗證 | 無法讀取的 lattice.hr／未觀看的 Mobbin 推測 |
+| 2026-10-14 | v3 開場沿用 logo rig 時序，但以裁切展開原翼；不沿用 rig 的非等比縮放及獨立凹口星星 path | 原型實作決定（Codex） | 交接 §3 硬限制、品牌 README §1；原稿兩條 path 保持一致 | rig 中獨立 `notchGlow` 與軸向變形 |
+| 2026-10-14 | reduced-motion 以靜態章節重畫取代循環 ×0.05；停用 pin、placeholder 輪播及 CSS 循環，四情境即時顯示 | 原型實作決定（Codex） | 交接 §8 的「內容全部可讀、無循環動畫」優先於 §6／通用技能的 ×0.05 建議 | v2 持續極慢的 WebGL loop |
+| 2026-10-14 | 手機七節點交錯排列、桌機保留橢圓；使用同一粒子 geometry，不新增 canvas | 原型實作決定（Codex） | 375px 拼圖與互動驗證，避免文字重疊 | v2 手機整組等比縮小後過密的橢圓 |

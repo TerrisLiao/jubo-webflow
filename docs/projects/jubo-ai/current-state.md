@@ -1,12 +1,14 @@
 # 現況
 
-- 文件更新日期：2026-10-14
-- Webflow 驗證日期與方式：2026-10-14 MCP `list_pages` 唯讀讀回（未讀元素樹）
-- 頁面 slug／Page ID：改版目標 `/ai/jubo-ai-v2`（`6a8e58aec01bc6cda7004324`，Draft）；現行 `/ai/jubo-ai`（`6a0d6565a5b081c97a4822d0`，已發布，不動）
-- `/ai/` 資料夾（parent `6a029bcb22a894d8fb8f219f`）：`jubo-ai`（已發布）、`jubo-ai-v2`（Draft）、`amy`（已發布，`6a7d2bb3988626e4f0d4c693`）、`ibee`（Draft，`6ab07c0ec3085ed21f37ebe2`）。另 `/amy-banner`（Draft）在根目錄，非 `/ai/` 下
-- 採用版本與範圍：原型 v1（本機 HTML），未進 Webflow
-- 來源分支、提交、文件：`claude/jubo-ai-agentic-redesign`；研究資料見 tasks
-- 已驗證：無
-- 研究完成：`reference/研究彙整_2026-10-14.md`；設計提案：`reference/設計方向提案_2026-10-14.md`
-- 已裁決：機構數 2,800+、改版頁 `/ai/jubo-ai-v2`、Amy／iBee 維持在 `/ai/`
-- 未驗證／待審：iBee 說法、動效大膽程度、Orb、「探索中」段、截圖；`jubo-ai-v2` 元素樹未讀回
+- 文件更新日期：2026-10-14（Asia/Taipei）
+- 本輪範圍：**本機原型與 repo 文件**；未呼叫 Webflow 工具、未修改 Designer、未發布 staging／production。
+- 前次 Webflow 驗證：2026-10-14 Claude 以 MCP `list_pages` 唯讀讀回；本輪未重新驗證線上元素樹，不能將本機驗收視為 Designer 驗收。
+- 改版目標：`/ai/jubo-ai-v2`（Page ID `6a8e58aec01bc6cda7004324`，前次讀回為 Draft）；現行 `/ai/jubo-ai`（`6a0d6565a5b081c97a4822d0`）不動。
+- 前次 `/ai/` 資料夾（parent `6a029bcb22a894d8fb8f219f`）讀回：`jubo-ai` 已發布、`jubo-ai-v2` Draft、`amy` 已發布（`6a7d2bb3988626e4f0d4c693`）、`ibee` Draft（`6ab07c0ec3085ed21f37ebe2`）。`/amy-banner` Draft 在根目錄。
+- 現行審閱版本：`custom-code/poc/jubo-ai-agentic-v3.html`。從指定分支 head `6de00335809156a090d77635845ba353eb932955` 的 v2 複製；**v2 未改**。v1 只供歷史比較。
+- 已採用方向：亮底、置中、資料 → AI 產品、沉浸式章節變形；全頁 AI 識別使用 N.Copilot 原稿兩片翼，中央星芒仍為負空間。Hero、七節點、對話頭像、產出卡、交還與收尾均使用既有 SVG。
+- 已實作：光點 → 光條 → 兩翼裁切展開 → Aurora → 取樣粒子散成球；Hero 四狀態、chip 飛入／送出；四情境對話串、可展開工具列、逐行產出、確認狀態；手機七節點交錯排列、modal 焦點管理；reduced-motion 無循環動畫。
+- 已驗證與證據：[v3 驗收](reference/原型v3驗收_2026-10-14.md)。1440／991／375 捲動截圖均無 JS 錯誤、scrollWidth 等於視窗寬；互動與 reduced-motion 結果見該表。
+- Lattice：Terris 將網址修正為 [lattice.com](https://lattice.com/)，已實際播放並逐格查看官方首頁 AI Agent 動畫；[觀察紀錄](reference/lattice-觀察.md)。lattice.hr 本身遭代理 403，未聲稱看過。
+- 已裁決：機構數 2,800+、改版頁 `/ai/jubo-ai-v2`、Amy／iBee 維持 `/ai/`、v2 動態方向與 v3 N.Copilot 識別。
+- 待 Terris：品牌變數（Teal Air 等）、Gibson／官網字體策略、示意區標示是否足夠、v3 視覺與真機效能。v2 的七處黃底待確認均保留；不宣稱客戶資料不用於訓練，不把 iBee 寫成由照護資料庫生成。
