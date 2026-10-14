@@ -14,6 +14,6 @@
 | P1 | 決定 Teal Air `#20EDF1` 等品牌 Webflow Variables 與 Gibson／官網字體策略 | Terris | 寫入 decisions | 待決定：原型暫用 CSS token 與 Poppins＋系統中文字；尚未新增 Variable 或載入 Gibson |
 | P1 | 確認 v3 示意區標示、視覺與真機效能 | Terris | 審閱 v3，真機測 FPS／互動；掉幀再調預算 | 待辦；本機軟體 WebGL 驗收不能取代真機效能 |
 | P1 | 收集真實產品截圖（智慧交班、Amy、iBee 等） | Terris | 不用生成假 UI | 待辦 |
-| P1 | 新建 Webflow 隔離原型 Draft 供 Terris 預覽 | Codex | 新頁 Draft、來源讀回、未發布 | 已建立 `/jubo-ai-v3-preview`；[紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。完整來源一致；Designer 內顯示待 Terris 端確認 |
+| P1 | 新建 Webflow 隔離原型 Draft 供 Terris 預覽 | Codex | 新頁 Draft、來源讀回、未發布 | 已建立 `/jubo-ai-v3-preview`；[紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。完整來源一致；Terris 已回覆「有看到 v3」，Designer 首屏與對話框目視確認完成 |
 | P2 | Webflow 原生元素實作（Draft） | 未認領 | Designer 讀回；未授權不 Publish | 待原型確認 |
 | P2 | 移除 `/ai/jubo-ai` JSON-LD 假評分、影片加暫停 | 未認領 | 見 Schema、無障礙稽核 | 待辦 |

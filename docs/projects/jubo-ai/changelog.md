@@ -26,3 +26,7 @@
 - 保留既有 Global Style instance，插入單一隔離 iframe，完整來源屬性讀回一致；Designer 已切到新頁。
 - 新增可重跑的匯出工具與草稿承載紀錄。Designer snapshot 無法驗證隔離 iframe 畫面、managed Chromium 封鎖 data URL，已列為目視驗證限制並請 Terris 確認。
 - 本次無 Publish；site／production `lastPublished` 未變。正式頁、v2 原型與共用資產未改。
+
+### Designer 預覽確認
+
+Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。已同步 current-state、tasks、deployment 與預覽紀錄；工具端 iframe 快照限制仍保留，不冒稱完成全部 Webflow 互動或真機效能驗證。未發布。
