@@ -1,5 +1,11 @@
 # 部署紀錄
 
+## 2026-10-14 追加：Navbar 放回、Footer 入口
+
+- Designer：`/community` 插入 Navbar instance `9736c483-5d48-8e9d-7219-c03395d12a2f`；`section_community-hero` min-height（main `calc(100svh - 7.25rem)`、medium `calc(100svh - 4.25rem)`，原 `100svh`）與 `community-hero_visual` max-width（原 `min(38.75rem, calc((100svh - 6rem) * 0.8))`）已更新並讀回。Footer 新增「官方社群」見 [導覽部署紀錄](../navigation/deployment.md)。
+- 驗證：以 staging HTML 插入 116px 佔位模擬五種桌機尺寸；非實際 Navbar 渲染。
+- staging／production：未 Publish。回退：刪除 Navbar instance，兩個樣式改回原值。
+
 ## 2026-10-14 第六輪：AI 漸層框、承諾、LINE 掃碼、通知開關
 
 - Designer（以 Data API 寫入，Designer App 未連線）：樣式、元素、六個 IX3 更新／新增均已讀回。詳見 [第六輪紀錄](history/2026-10-14-ai-frame-qr-notify.md)。

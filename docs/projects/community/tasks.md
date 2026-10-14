@@ -1,5 +1,7 @@
 # 待辦
 
+- [ ] 1366×768 加上 Navbar 後頻道卡底部超出第一屏 31px：可考慮縮短卡片高度或 Hero 上下間距（需設計確認）
+- [ ] 確認 `/community` 是否也要放回 Footer 與 Announce Bar（目前只放回 Navbar）
 - [x] 第六輪：推薦組合標籤文案＋AI 漸層框（刷上去框）、固定更新承諾、LINE 電腦版掃碼、通知開關卡；已寫入並讀回，本機九寬度模擬通過（1024 例外見下）
 - [ ] Designer Preview 驗收第六輪：三卡 hover 光掃與去框、LINE 覆蓋按鈕的 hover 是否與原本一致（timeline role metadata 已被 API 移除）、QR 開啟／關閉與重複點擊、32 秒開關節奏與循環銜接、reduced-motion
 - [ ] 確認 LINE 推播承諾「新文章上架當天」與實際經營一致；三三分享會時間「每月第三個週三 12:00」仍正確

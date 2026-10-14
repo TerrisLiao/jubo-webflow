@@ -1,5 +1,7 @@
 # 社群追蹤頁現況
 
+2026-10-14 追加：依使用者要求把全站 Navbar 放回 `/community`（instance `9736c483-5d48-8e9d-7219-c03395d12a2f`，位置同 Amy 透鏡頁：`main-wrapper` 第一個子元素）。Navbar 在版面中佔位（桌機 116px、medium 以下 68px），因此 `section_community-hero` min-height 改為 `calc(100svh - 7.25rem)`（medium 起 `calc(100svh - 4.25rem)`），`community-hero_visual` max-width 改為 `min(38.75rem, calc((100svh - 13.25rem) * 0.8))`。本機模擬：1440×900、1536×864、1280×800、1920×1080 頻道卡仍在第一屏；1366×768 卡片底部超出 31px。Footer「其他」欄已加「官方社群」入口；`/community` 頁本身仍無 Footer。
+
 更新日期：2026-10-14；第六輪已以 Data API 寫入並讀回（Designer App 未連線）。最新做法見 [第六輪紀錄](history/2026-10-14-ai-frame-qr-notify.md)；以下第五輪以前的描述中，標籤配色／外框、說明文字、「這週的新消息」計數卡與 LINE hover 觸發已被第六輪取代。
 
 左側三卡：標籤文案為 FB「活動搶先報名／每週更新」、YT「三三分享會／每月直播」、LINE「補助評鑑整理／新文章推播」。標籤無實線外框，改為青→紫漸層框（與標題「好消息」同色）＋白色內層；hover 時不透明青→紫淡色填滿並蓋掉框線，一道白光掃過，離開時倒播回框線。字級 main `min(1.5rem, 1.7vw)`。說明上方新增固定更新承諾：「每週更新」「每月第三個週三 12:00」「新文章上架當天」。
