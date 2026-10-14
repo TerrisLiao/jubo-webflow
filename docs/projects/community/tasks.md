@@ -1,5 +1,10 @@
 # 待辦
 
+- [x] 第六輪：推薦組合標籤文案＋AI 漸層框（刷上去框）、固定更新承諾、LINE 電腦版掃碼、通知開關卡；已寫入並讀回，本機九寬度模擬通過（1024 例外見下）
+- [ ] Designer Preview 驗收第六輪：三卡 hover 光掃與去框、LINE 覆蓋按鈕的 hover 是否與原本一致（timeline role metadata 已被 API 移除）、QR 開啟／關閉與重複點擊、32 秒開關節奏與循環銜接、reduced-motion
+- [ ] 確認 LINE 推播承諾「新文章上架當天」與實際經營一致；三三分享會時間「每月第三個週三 12:00」仍正確
+- [ ] 992–1100px 窄桌機版面：卡片約 129px，6 字標籤滑入後仍超出、YT 承諾換行、通知卡標籤換行（改版前即存在，需另案處理）
+- [ ] GA4 `social_click` 加 `method`（qr／link）；覆蓋按鈕與 QR 面板連結已帶 `data-platform`／`data-method`
 - [x] 第五輪 polish only：可讀性、圖示、陰影、柔焦、右側正倒播與 NEW 循環端點；已套用並讀回，六寬度本機檢查通過
 - [x] 第五輪 Designer Preview：右側卡片／專家 hover 進退與快速回位；使用者回覆「Looks smooth」
 - [x] 左側重選同色系配色、更靠邊裁切、向內聚攏後上翹、單一 hover 加減速與回位；使用者 Preview 回覆 all done

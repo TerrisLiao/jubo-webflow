@@ -2,6 +2,7 @@
 
 這個目錄保存 Webflow 頁面層設定與回退資料，不是頁面要載入的 JavaScript。
 
+- [2026-10-14-ai-frame-qr-notify.json](2026-10-14-ai-frame-qr-notify.json)：第六輪 AI 漸層框標籤、固定更新承諾、LINE 掃碼面板與通知開關卡；保存修改前文字／樣式、被刪計數卡元素與 IX3 動作，以及修改後的元素與互動 ID。
 - [2026-10-13-polish.json](2026-10-13-polish.json)：第五輪視覺細修、右側單一 hover、動畫屬性分工與 NEW 循環銜接；保存實際前後設定與驗證限制。
 - [2026-10-13-hover-continuity.json](2026-10-13-hover-continuity.json)：目前採用的同色系配色、邊緣位置及單一 hover 加減速；保存第四輪前／後設定及使用者 Preview 結果。
 - [2026-10-13-pill-fill.json](2026-10-13-pill-fill.json)：卡片裁切與六個填色底層 ID；保存第三輪前／後設定，其配色與雙 timeline hover 已取代。

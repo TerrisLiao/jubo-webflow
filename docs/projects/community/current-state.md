@@ -1,5 +1,19 @@
 # 社群追蹤頁現況
 
+更新日期：2026-10-14；第六輪已以 Data API 寫入並讀回（Designer App 未連線）。最新做法見 [第六輪紀錄](history/2026-10-14-ai-frame-qr-notify.md)；以下第五輪以前的描述中，標籤配色／外框、說明文字、「這週的新消息」計數卡與 LINE hover 觸發已被第六輪取代。
+
+左側三卡：標籤文案為 FB「活動搶先報名／每週更新」、YT「三三分享會／每月直播」、LINE「補助評鑑整理／新文章推播」。標籤無實線外框，改為青→紫漸層框（與標題「好消息」同色）＋白色內層；hover 時不透明青→紫淡色填滿並蓋掉框線，一道白光掃過，離開時倒播回框線。字級 main `min(1.5rem, 1.7vw)`。說明上方新增固定更新承諾：「每週更新」「每月第三個週三 12:00」「新文章上架當天」。
+
+LINE（main／medium）：透明覆蓋按鈕接手點擊與 hover，點擊出現 QR 面板（可解碼為 lin.ee/Clf7lXr）、可關閉、保留「直接開啟 LINE →」；卡內顯示「掃碼」提示。small 以下全部隱藏，手機維持直接開啟 LINE。
+
+右側計數卡改為「通知設定」：三個開關在 32 秒循環中隨 FB／YT／LINE 通知依序打開，之後「✓ 都開好了」徽章出現，循環末尾關回。odometer、+1 與相關 class 已刪除。
+
+已知限制：992–1100px 窄桌機卡片僅約 129px，兩個 6 字標籤滑入後仍超出約 10px（改版前即有的窄桌機問題）。動態與 QR 開關尚未經 Designer Preview 驗收；頁面 metadata 仍為 `draft: false`、`shouldPublish: true`，本輪未 Publish。
+
+---
+
+以下為第五輪（2026-10-13）紀錄，保留追溯：
+
 更新日期：2026-10-13；第五輪 polish 已讀回 Webflow 元素、四斷點樣式與 IX3。保留整頁版型，最新細修見 [第五輪紀錄](history/2026-10-13-polish.md)。
 
 左側目前為三張白底場景卡，Facebook 藍／冰藍、YouTube 珊瑚紅／淡玫瑰、LINE 綠／薄荷的同色系色團只留在上方，blur 24px、opacity .9，向下 fade 到白色文字區。六個 pill 維持 desktop 24px／mobile 22px；群組左右偏移 desktop −24px／mobile −20px，超出部分由 card overflow hidden 裁切。靜止透明；hover 同色系兩種深淺漸層填色，標籤先 x +28／−28 向內收，再 y −6／−5 微翹、rotation −3／+3。文字維持 community/ink。卡片本體不再抬升，hover 命中範圍固定；Mobile 卡高 15rem、下方文字白底。說明字級 .8125rem、行高 1.55、至少兩行高度；卡片陰影已減輕。

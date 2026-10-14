@@ -1,5 +1,13 @@
 # 部署紀錄
 
+## 2026-10-14 第六輪：AI 漸層框、承諾、LINE 掃碼、通知開關
+
+- Designer（以 Data API 寫入，Designer App 未連線）：樣式、元素、六個 IX3 更新／新增均已讀回。詳見 [第六輪紀錄](history/2026-10-14-ai-frame-qr-notify.md)。
+- 素材：新增 `community-line-qr.svg`（`6acf1f5a750cff32e1dab768`）。
+- 驗證：本機以 staging HTML 套用本輪結構／樣式，九寬度量測與 QR 解碼通過；非 IX3 runtime、無 JuboFont。Designer Preview 未驗收。
+- Git：`claude/gallant-einstein-3tvafg`，以 `codex/community-card-motion`（PR #21）為基底；設定與回退見 [第六輪快照](../../../custom-code/community/2026-10-14-ai-frame-qr-notify.json)。
+- staging／production：本輪未 Publish。staging 最後發布為 2026-10-13 12:47 UTC（早於第五輪細修），production 自 2026-10-07 後未發布；先前各輪「未 Publish」的紀錄與 staging 已有 `/community` 不一致，發布來源待查。
+
 ## 2026-10-13 第五輪：細修已寫入 Designer
 
 - Designer：九組樣式及五個 IX3 已寫入並讀回；整頁結構／內容及三個左側 hover 保留。詳見 [細修紀錄](history/2026-10-13-polish.md)。

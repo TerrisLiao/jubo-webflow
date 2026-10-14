@@ -35,4 +35,4 @@
 
 ## `/community` 的既有工作
 
-`claude/confident-curie-6r3n6b` 是已存在的社群追蹤頁分支，並非待建立分支。入口為 [community 專案](docs/projects/community/README.md)。2026-10-13 盤點 head 為 `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`；開始新工作必須重新查證，不能把這個快照當最新 head。
+社群追蹤頁最初分支為 `claude/confident-curie-6r3n6b`；之後的細修在 `codex/community-card-motion`（PR #21）與 `claude/gallant-einstein-3tvafg`（2026-10-14 第六輪）。入口為 [community 專案](docs/projects/community/README.md)。2026-10-13 盤點 head 為 `f01e920f00b7bb49427a947da5b09f7a5d2fcd9e`；開始新工作必須重新查證，不能把這個快照當最新 head。
