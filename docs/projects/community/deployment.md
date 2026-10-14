@@ -7,6 +7,7 @@
 - 驗證：本機以 staging HTML 套用本輪結構／樣式，九寬度量測與 QR 解碼通過；非 IX3 runtime、無 JuboFont。Designer Preview 未驗收。
 - Git：`claude/gallant-einstein-3tvafg`，以 `codex/community-card-motion`（PR #21）為基底；設定與回退見 [第六輪快照](../../../custom-code/community/2026-10-14-ai-frame-qr-notify.json)。
 - staging／production：本輪未 Publish。staging 最後發布為 2026-10-13 12:47 UTC（早於第五輪細修），production 自 2026-10-07 後未發布；先前各輪「未 Publish」的紀錄與 staging 已有 `/community` 不一致，發布來源待查。
+- 2026-10-14 補記：site 讀回顯示 2026-10-14 06:07:18 UTC（台北 14:07）有一次全站發布，含 production `www.jubo-health.com`，非本 agent 執行。`/community` 因 `draft: false` 已在正式站回 200；curl 比對正式站與 staging 皆為**第六輪之前**的版本（舊標籤「活動報名」、「這週的新消息」計數卡），第六輪修改（Designer 最後更新 06:37 UTC）尚未上線。
 
 ## 2026-10-13 第五輪：細修已寫入 Designer
 
