@@ -30,3 +30,12 @@
 ### Designer 預覽確認
 
 Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。已同步 current-state、tasks、deployment 與預覽紀錄；工具端 iframe 快照限制仍保留，不冒稱完成全部 Webflow 互動或真機效能驗證。未發布。
+
+## 2026-10-14｜v4 英文漸層敘事
+
+- Terris 先確認架構，再授權製作（「ok」）。
+- 新增 v4，保留 v2／v3／品牌 SVG；Jubo AI 技術與資料能力、N.Copilot 對話、Amy／iBee 系統 add-ons 分開呈現。
+- 白底漸進光場、平滑發光球體、長虹玻璃；五類資料與五種用途完整英文呈現，能力卡各自有限次動畫。
+- 四寬度、資料映射、三種對話、三個鍵盤彈窗、快速取消、暫停、reduced-motion、DPR／resize／fallback 與隔離 fixture 通過。
+- 同一 Draft iframe 更新 v4 來源及英文 title；38,442 字元 src 完整一致，元素結構及發布時間不變。
+- [完整架構與驗收](reference/原型v4架構與驗收_2026-10-14.md)。

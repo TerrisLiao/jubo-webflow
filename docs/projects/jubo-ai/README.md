@@ -1,26 +1,22 @@
-# Jubo AI 頁改版（資料 → AI 產品）
+# Jubo AI：照護知識、資料與應用
 
-狀態：**v3（N.Copilot 沉浸式敘事）已製作，待 Terris 視覺審閱與真機驗證**（2026-10-14）。後續已依 Terris 要求新建隔離原型 Draft；尚未發布。
+狀態：**v4 英文漸層原型已完成驗收並更新 Draft，待視覺與真機審閱**（2026-10-14，Asia/Taipei）。
 
-- 工作分支：`claude/jubo-ai-agentic-redesign`（基底 `origin/master` `6b84235`）
-- 前次研究：[AI 頁面競品研究](../../research/AI頁面競品研究.md)（2026-08-26，來源分支 `claude/jupo-ai-redesign-evpg2c`）
-- 協作：Claude 與 Codex 共用本資料夾交接；接手前先讀 [AGENTS.md](../../../AGENTS.md)，再讀 current-state → tasks → decisions。
-- 研究：[研究彙整](reference/研究彙整_2026-10-14.md)；提案：[設計方向](reference/設計方向提案_2026-10-14.md)
-- 文案：[初稿 v1](reference/文案初稿_2026-10-14.md)；原型：[規格](reference/原型規格_2026-10-14.md)
-- **Codex 從這裡開工：[v3 交接](reference/codex-v3-交接.md)**
-- **現行審閱原型 v3**：`custom-code/poc/jubo-ai-agentic-v3.html`；[驗收紀錄](reference/原型v3驗收_2026-10-14.md)、[Lattice 實際觀察](reference/lattice-觀察.md)。
-- **Webflow 新 Draft 預覽**：[開啟 Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)；[來源讀回與顯示限制](reference/Webflow原型預覽草稿_2026-10-14.md)。
-- **v2 基底保留未改**：`custom-code/poc/jubo-ai-agentic-v2.html`；說明：[v2 結構與文案](reference/原型v2結構與文案_2026-10-14.md)（v1 已被取代，保留比較）
+- 工作分支：`claude/jubo-ai-agentic-redesign`；[Draft PR #24](https://github.com/TerrisLiao/jubo-webflow/pull/24)。
+- **現行原型 v4**：`custom-code/poc/jubo-ai-agentic-v4.html`；[架構、參考與驗收](reference/原型v4架構與驗收_2026-10-14.md)。
+- **同一 Webflow Draft 預覽**：[Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)。URL 保留 `/jubo-ai-v3-preview`；v4 沿用隔離 iframe，未發布。
+- v2、v3 與品牌 SVG 保留未改；[v3 驗收](reference/原型v3驗收_2026-10-14.md)、[v3 原交接](reference/codex-v3-交接.md)、[原 Draft 承載紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。
+- 接手先讀 AGENTS.md → current-state → tasks → decisions。
 
-## 本輪目標（使用者 2026-10-14 需求）
+## 最新採用方向
 
-1. Jubo 沒有單一主打 AI 產品；頁面改講「我們現在收集的照護資料 → 可以長成哪些 AI 產品」。
-2. 點名最新由資料庫快速做出的 AI 產品（iBee、Amy），證明「資料底座讓 AI 功能能很快上線」。
-3. 視覺要很酷、有 agentic／「AI 正在思考」的感覺。
-4. 參考 Mobbin 收藏、M365 SharePoint 的 AI 策略與實作文件。
+Terris 已確認本輪架構（對話「ok」，2026-10-14）：
 
-- [現況](current-state.md)
-- [待辦](tasks.md)
-- [決策](decisions.md)
-- [歷程](changelog.md)
-- [部署](deployment.md)
+1. Jubo AI 呈現照護領域的技術、知識、資料與流程能力。
+2. 全頁文案、互動與可及性標籤使用英文；白底逐步加入品牌漸層，以發光玻璃球體聚焦脈絡。
+3. 原版五類資料與五種用途全部保留；領域知識與工作資料分開說明。
+4. N.Copilot 為專案型對話應用；Amy、iBee 為既有系統 add-ons，分別以資料整合與流程自動化呈現。
+5. 未來用途使用清楚的可能性提問，不當成現有產品或發布承諾。
+6. 網站風格沿用 Security 的漸層／玻璃；不將粒子視覺作為主體。
+
+[現況](current-state.md) · [待辦](tasks.md) · [決策](decisions.md) · [歷程](changelog.md) · [部署](deployment.md)
