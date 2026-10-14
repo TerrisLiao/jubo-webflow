@@ -7,3 +7,4 @@
 - Terris 裁決：2,800+、改版在 `/ai/jubo-ai-v2`、Amy／iBee 在 `/ai/` 下。Webflow `list_pages` 讀回確認 `/ai/` 資料夾四頁。
 - Terris 同意其餘預設。完成文案初稿 v1（含 7 項待確認）與原型規格，原型交由 Codex 接手。
 - 原型 v1 `custom-code/poc/jubo-ai-agentic.html`：思考列打字＋狀態機驅動 Three.js 資料點陣（1,200 點、1 draw call）、資料地圖連線、5 張 AI 卡、Amy／iBee 時間軸、三層、資安、FAQ（含 FAQPage JSON-LD）。資料地圖新增「品質監測紀錄」chip 以對應品監 AI 卡。
+- Terris 要求改為更酷、更互動、全部置中、大量捲動動畫。依 Mobbin（Intercom、SpaceXAI／Grok、Squarespace、OpenAI）重做原型 v2，文字全部重寫；v1 保留。修正 pin 後章節觸發位置錯誤、手機版面擠壓與星座超出畫面。
