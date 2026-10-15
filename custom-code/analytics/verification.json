@@ -1,0 +1,64 @@
+{
+  "verified_on": "2026-10-15 Asia/Taipei",
+  "site_id": "69ec2b02daa2e79f1da8772a",
+  "collection_id": "69f82ba2b2602e6d6594d689",
+  "item_id": "6aab4d29bc0fa97a7847135a",
+  "cms_locale_id": "69f82ba1d504290f910e8825",
+  "article_last_published_unchanged": "2026-09-22T00:38:22.420Z",
+  "head_before_sha256": "8283329e67c6f482e07bedee9394bb796f31b896043d09b4215c950e2e2dcbcf",
+  "head_after_sha256": "8bcc6f6ddc3585bad6e7786b1d143225220ce0a97940d252523f0521ae61e91e",
+  "article_before_sha256": "3f74672fdaf3595e0a32db3c4f29f2e4e62ab9a07356a78b728ee5c7d4f38eef",
+  "article_after_sha256": "61a0556d214ffc2b5bd0fb74682e2850c49ce5a043bbfe066b1b6da00b0596c2",
+  "webflow_status": "staged, exact readback matched; not published",
+  "runtime_verification": [
+    {
+      "mode": "accept",
+      "pageViews": [
+        {
+          "stage": "accept",
+          "host": "analytics.google.com",
+          "event": "page_view",
+          "gcs": "G111"
+        },
+        {
+          "stage": "next-page",
+          "host": "analytics.google.com",
+          "event": "page_view",
+          "gcs": "G111"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "mode": "reject",
+      "pageViews": [],
+      "passed": true
+    },
+    {
+      "mode": "analytics-only",
+      "pageViews": [
+        {
+          "stage": "initial",
+          "host": "www.google-analytics.com",
+          "event": "page_view",
+          "gcs": "G101"
+        },
+        {
+          "stage": "next-page",
+          "host": "www.google-analytics.com",
+          "event": "page_view",
+          "gcs": "G101"
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "event_verification": {
+    "passed": true,
+    "results": [
+      "Product, solution, contact and annotated CTA classified; rapid duplicate, external and prefix false matches excluded",
+      "Cookie preferences excluded; actual inquiry start once; no email copied",
+      "Success visibility triggers one submit event without a network submission"
+    ]
+  }
+}

@@ -1,0 +1,376 @@
+<link rel="stylesheet" href="https://slater.app/20018/60294.css" />
+
+<!-- Consent Mode v2: restore saved choice; deny unknown preferences before GTM. -->
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  // Match Finsweet's existing saved choice before GTM initializes.
+  // Unknown, malformed, expired or invalid preferences stay denied.
+  (function () {
+    function cookieValue(name) {
+      var prefix = name + '=';
+      var parts = document.cookie.split(';');
+      for (var i = 0; i < parts.length; i++) {
+        var part = parts[i].trim();
+        if (part.indexOf(prefix) === 0) return part.slice(prefix.length);
+      }
+      return '';
+    }
+    var consents = {};
+    try {
+      var raw = cookieValue('fs-cc');
+      if (raw && raw.length < 10000) {
+        for (var i = 0; i < 2; i++) raw = decodeURIComponent(raw);
+        var saved = JSON.parse(raw);
+        if (saved && saved.consents) consents = saved.consents;
+      }
+    } catch (_) { /* Fail closed; Finsweet remains the preference UI owner. */ }
+    var analytics = consents.analytics === true ? 'granted' : 'denied';
+    var marketing = consents.marketing === true ? 'granted' : 'denied';
+    var defaults = {
+      analytics_storage: analytics,
+      ad_storage: marketing,
+      ad_user_data: marketing,
+      ad_personalization: marketing,
+    };
+    // A confirmed returning visitor needs no pending-update hold.
+    if (analytics !== 'granted') defaults.wait_for_update = 500;
+    gtag('consent', 'default', defaults);
+  })();
+</script>
+
+<!-- Google Tag Manager: analytics tags inside GTM must require analytics_storage. -->
+<script>
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', 'GTM-WMQG6WS');
+</script>
+
+<!-- Finsweet Cookie Consent: opt-in plus Google Consent Mode integration. -->
+<script async src="https://cdn.jsdelivr.net/npm/@finsweet/cookie-consent@1/fs-cc.js" fs-cc-mode="opt-in" fs-cc-consentmode="true"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<!-- Finsweet Attributes -->
+<script async type="module" src="https://cdn.jsdelivr.net/npm/@finsweet/attributes@2/attributes.js" fs-list></script>
+<!-- Contact Slider CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+<!-- Flowbase Booster [Count Up] -->
+<script src="https://cdn.jsdelivr.net/npm/@flowbase-co/boosters-countup@1.0.0/dist/countup.min.js" type="text/javascript"></script>
+<meta name="google-site-verification" content="lrXY_nkggnULG5Mnys_26PWQU5PyFbWK7YxcUGPeoSo" />
+<meta name="msvalidate.01" content="77617E949DC4D5D68288FCBC6E5B05D9" />
+
+<!-- Jubo first-party analytics event interface. Never send href, names, phone numbers, email addresses, LINE IDs or free text. -->
+<script>
+  (function () {
+    var allowedEvents = {
+      select_content: true,
+      contact_route_select: true,
+      sales_contact_click: true,
+      homecare_form_open: true,
+      partner_form_start: true,
+      partner_inquiry_submit: true,
+      content_cta_click: true,
+      login_click: true,
+      file_download: true,
+    };
+    var parameterKeys = ['contact_channel', 'sales_region', 'solution_interest', 'cta_location', 'page_type', 'content_cluster', 'destination_type', 'sales_rep_id', 'form_type', 'form_provider', 'content_type', 'content_id', 'product', 'file_name'];
+    var salesByLineUrl = {
+      'https://line.me/ti/p/UJucGj7wF8': { id: 'rep_001', region: 'keelung_newtaipei_taoyuan' },
+      'https://line.me/ti/p/ffk6Fr79M3': { id: 'rep_002', region: 'taipei_east_islands' },
+      'https://line.me/ti/p/qyK926OP5X': { id: 'rep_003', region: 'hsinchu_miaoli_taichung' },
+      'https://line.me/ti/p/xZYixFWKTt': { id: 'rep_004', region: 'changhua_nantou_yunlin_chiayi' },
+      'https://line.me/ti/p/07cgQu9BNP': { id: 'rep_005', region: 'tainan_kaohsiung_pingtung' },
+    };
+    var startedForms = new WeakSet();
+    var watchedForms = new WeakSet();
+    var recentClicks = new WeakMap();
+
+    function pageType(path) {
+      path = path || '/';
+      if (path === '/') return 'home';
+      if (/^\/solutions(?:\/|$)/.test(path)) return 'solution';
+      if (/^\/products(?:\/|$)/.test(path)) return 'product';
+      if (/^\/ai(?:\/|$)/.test(path)) return 'ai';
+      if (/^\/features(?:\/|$)/.test(path)) return 'feature';
+      if (/^\/(news|blog|articles)(?:\/|$)/.test(path)) return 'news_education';
+      if (/^\/customer/.test(path)) return 'customer_story';
+      if (/^\/resources(?:\/|$)/.test(path)) return 'resource';
+      if (/^\/contact\/?$/.test(path)) return 'contact';
+      if (/^\/career/.test(path)) return 'recruitment';
+      if (/(login|demo|smc|app)/i.test(path)) return 'login_demo';
+      return 'other';
+    }
+
+    function solutionInterest(value) {
+      value = (value || '').toLowerCase();
+      if (/(home[-_ ]?care|居服|居家)/.test(value)) return 'home_care';
+      if (/(day[-_ ]?care|日照)/.test(value)) return 'day_care';
+      if (/(residential|住宿)/.test(value)) return 'residential_care';
+      if (/(integrated|large|group|整合|集團)/.test(value)) return 'large_integrated';
+      return 'not_specified';
+    }
+
+    function ctaLocation(el) {
+      if (el.closest('header, nav')) return 'header';
+      if (el.closest('footer')) return 'footer';
+      var declared = el.getAttribute('data-ga-cta-location');
+      if (declared) return declared;
+      if (el.closest('.homecare-contact_card')) return 'contact_homecare_advisor';
+      if (el.closest('.home-care-banner_component')) return 'contact_homecare_demo_banner';
+      return 'body';
+    }
+
+    function cleanToken(value, fallback) {
+      value = String(value || '')
+        .trim()
+        .toLowerCase();
+      return /^[a-z0-9_\-]{1,80}$/.test(value) ? value : fallback;
+    }
+
+    function send(name, params) {
+      if (!allowedEvents[name]) return;
+      var payload = { event: name };
+      parameterKeys.forEach(function (key) {
+        payload[key] = undefined;
+      });
+      payload.page_type = pageType(location.pathname);
+      Object.assign(payload, params || {});
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(payload);
+    }
+
+    function isDuplicateClick(el, eventName) {
+      var now = Date.now();
+      var previous = recentClicks.get(el);
+      recentClicks.set(el, { name: eventName, at: now });
+      return !!(previous && previous.name === eventName && now - previous.at < 800);
+    }
+
+    function destinationType(path) {
+      if (/^\/solutions(?:\/|$)/.test(path)) return 'solution';
+      if (/^\/products(?:\/|$)/.test(path)) return 'product';
+      if (/^\/contact/.test(path)) return 'contact';
+      if (/(login|demo|smc|app)/i.test(path)) return 'login';
+      return 'other';
+    }
+
+    function annotateHomecareFormLinks() {
+      document.querySelectorAll('a[href*="forms.cloud.microsoft"], a[href*="forms.office"]').forEach(function (link) {
+        if (pageType(location.pathname) !== 'contact') return;
+        link.dataset.gaEvent = 'homecare_form_open';
+        link.dataset.solutionInterest = 'home_care';
+        link.dataset.formType = 'homecare_consultation';
+        link.dataset.formProvider = 'microsoft_forms';
+        link.dataset.gaCtaLocation = ctaLocation(link);
+      });
+    }
+
+    function annotateSalesCards() {
+      document.querySelectorAll('.single-sales_wrap').forEach(function (card) {
+        var lineLink = card.querySelector('a[href*="line.me/"], a[href*="line.app/"]');
+        var match = lineLink ? salesByLineUrl[lineLink.href] : null;
+        if (!match) return;
+        card.dataset.salesRepId = match.id;
+        card.dataset.salesRegion = match.region;
+        if (lineLink) {
+          lineLink.dataset.gaEvent = 'sales_contact_click';
+          lineLink.dataset.contactChannel = 'line';
+          lineLink.dataset.solutionInterest = lineLink.dataset.solutionInterest || 'residential_day_care';
+          lineLink.dataset.gaCtaLocation = lineLink.dataset.gaCtaLocation || 'contact_sales_grid';
+        }
+        card.querySelectorAll('.sales-contact_wrap p').forEach(function (paragraph) {
+          if (paragraph.closest('a')) return;
+          var value = (paragraph.textContent || '').trim();
+          var digits = value.replace(/[^0-9+]/g, '');
+          if (!/^\+?[0-9]{8,15}$/.test(digits)) return;
+          var anchor = document.createElement('a');
+          anchor.href = 'tel:' + digits;
+          anchor.setAttribute('aria-label', '致電地區業務');
+          anchor.dataset.gaEvent = 'sales_contact_click';
+          anchor.dataset.contactChannel = 'phone';
+          anchor.dataset.solutionInterest = 'residential_day_care';
+          anchor.dataset.gaCtaLocation = 'contact_sales_grid';
+          paragraph.parentNode.insertBefore(anchor, paragraph);
+          anchor.appendChild(paragraph);
+        });
+      });
+    }
+
+    document.addEventListener(
+      'click',
+      function (event) {
+        var link = event.target.closest('a[href]');
+        if (!link) return;
+        var rawHref = link.getAttribute('href') || '';
+        var absolute;
+        try {
+          absolute = new URL(rawHref, location.href);
+        } catch (_) {
+          return;
+        }
+        var ds = link.dataset || {};
+        var locationCode = ctaLocation(link);
+        var currentType = pageType(location.pathname);
+        var targetPath = absolute.origin === location.origin && absolute.pathname !== location.pathname ? absolute.pathname : '';
+        var declaredEvent = ds.gaEvent || '';
+
+        if (currentType === 'contact' && rawHref === '#sales') {
+          if (isDuplicateClick(link, 'contact_route_select')) return;
+          send('contact_route_select', {
+            solution_interest: 'residential_day_care',
+            cta_location: locationCode,
+          });
+          return;
+        }
+
+        var inSalesCard = !!link.closest('.single-sales_wrap');
+        if (declaredEvent === 'sales_contact_click' || (currentType === 'contact' && inSalesCard && (/line\.me$|line\.app$/i.test(absolute.hostname) || /^tel:/i.test(rawHref)))) {
+          if (isDuplicateClick(link, 'sales_contact_click')) return;
+          var card = link.closest('.single-sales_wrap');
+          send('sales_contact_click', {
+            sales_rep_id: cleanToken(card && card.dataset.salesRepId, 'not_specified'),
+            sales_region: cleanToken(card && card.dataset.salesRegion, 'not_specified'),
+            contact_channel: cleanToken(ds.contactChannel, /line/i.test(absolute.hostname) ? 'line' : 'phone'),
+            solution_interest: cleanToken(ds.solutionInterest, 'residential_day_care'),
+            cta_location: locationCode,
+          });
+          return;
+        }
+
+        if (declaredEvent === 'homecare_form_open' || (currentType === 'contact' && /forms\.(cloud\.)?microsoft|forms\.office/i.test(absolute.hostname))) {
+          if (isDuplicateClick(link, 'homecare_form_open')) return;
+          send('contact_route_select', {
+            solution_interest: 'home_care',
+            cta_location: locationCode,
+          });
+          send('homecare_form_open', {
+            form_type: 'homecare_consultation',
+            form_provider: 'microsoft_forms',
+            solution_interest: 'home_care',
+            cta_location: locationCode,
+          });
+          return;
+        }
+
+        if (declaredEvent === 'contact_route_select') {
+          if (isDuplicateClick(link, 'contact_route_select')) return;
+          send('contact_route_select', {
+            solution_interest: cleanToken(ds.solutionInterest, 'not_specified'),
+            cta_location: locationCode,
+          });
+          return;
+        }
+
+        var externalHost = absolute.origin !== location.origin ? absolute.hostname : '';
+        if (declaredEvent === 'login_click' || /^\/(login|demo)(?:\/|$)/.test(targetPath) || (externalHost && (/^(app|smc)\./i.test(externalHost) || /^\/login(?:\/|$)/.test(absolute.pathname)))) {
+          if (isDuplicateClick(link, 'login_click')) return;
+          send('login_click', {
+            product: cleanToken(ds.product, 'not_specified'),
+            destination_type: 'login',
+          });
+          return;
+        }
+
+        if (/\.(pdf|docx?|xlsx?|csv|zip)$/i.test(absolute.pathname) || declaredEvent === 'file_download') {
+          if (isDuplicateClick(link, 'file_download')) return;
+          var ext = (absolute.pathname.match(/\.([a-z0-9]+)$/i) || [, 'file'])[1].toLowerCase();
+          send('file_download', {
+            file_name: cleanToken(ds.fileName, 'download_' + ext),
+            content_cluster: cleanToken(ds.contentCluster, 'not_specified'),
+          });
+          return;
+        }
+
+        if (declaredEvent === 'select_content' || /^\/solutions(?:\/|$)/.test(targetPath)) {
+          if (!isDuplicateClick(link, 'select_content')) {
+            send('select_content', {
+              content_type: 'audience_route',
+              content_id: cleanToken(ds.contentId, solutionInterest(targetPath)),
+            });
+          }
+        }
+
+        if (declaredEvent === 'content_cta_click' || (['news_education', 'customer_story', 'resource', 'feature', 'ai'].indexOf(currentType) >= 0 && /^\/(solutions|products|contact)(?:\/|$)/.test(targetPath))) {
+          if (!isDuplicateClick(link, 'content_cta_click')) {
+            send('content_cta_click', {
+              content_cluster: cleanToken(ds.contentCluster, currentType),
+              content_id: cleanToken(ds.contentId, location.pathname.split('/').filter(Boolean).pop()),
+              solution_interest: solutionInterest(targetPath),
+              destination_type: destinationType(targetPath),
+              cta_location: locationCode,
+            });
+          }
+        }
+      },
+      true,
+    );
+
+    function isPartnershipForm(form) {
+      if (!form || form.closest('[fs-cc]') || /cookie[-_ ]?preferences/i.test((form.id || '') + ' ' + (form.getAttribute('name') || ''))) return false;
+      if (form.getAttribute('data-ga-form-type') === 'partnership') return true;
+      if (/partner|partnership|異業合作/i.test((form.id || '') + ' ' + (form.getAttribute('name') || ''))) return true;
+      return false; // Only explicitly designated partnership forms; never classify all contact-page forms.
+    }
+
+    function trackForm(form) {
+      if (!isPartnershipForm(form) || watchedForms.has(form)) return;
+      watchedForms.add(form);
+      form.addEventListener(
+        'input',
+        function () {
+          if (startedForms.has(form)) return;
+          startedForms.add(form);
+          send('partner_form_start', { form_type: 'partnership' });
+        },
+        { once: true, passive: true },
+      );
+
+      var wrapper = form.closest('.w-form');
+      var success = wrapper && wrapper.querySelector('.w-form-done');
+      if (!success) return;
+      var wasVisible = false;
+      new MutationObserver(function () {
+        var visible = getComputedStyle(success).display !== 'none' && success.offsetParent !== null;
+        if (visible && !wasVisible) {
+          send('partner_inquiry_submit', {
+            form_type: 'partnership',
+            solution_interest: cleanToken(form.dataset.solutionInterest, 'partnership'),
+          });
+        }
+        wasVisible = visible;
+      }).observe(success, { attributes: true, attributeFilter: ['style', 'class', 'aria-hidden'] });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      annotateHomecareFormLinks();
+      annotateSalesCards();
+      document.querySelectorAll('form').forEach(trackForm);
+    });
+  })();
+</script>
+
+
+<!-- 1. JS 部分：用來自動判讀網址並給頁面標記日文 (ja) -->
+<script>
+  if (window.location.pathname.includes('/jp/')) {
+    document.documentElement.setAttribute('lang', 'ja');
+  }
+</script>
+
+<!-- 2. CSS 部分：當偵測到日文標記時，強制切換成日文系統字體 -->
+<style>
+  :lang(ja), 
+  :lang(ja) body, 
+  :lang(ja) * {
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif !important;
+  }
+</style>

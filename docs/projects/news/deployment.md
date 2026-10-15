@@ -15,3 +15,15 @@
 - master 合併提交：`fcbb26d8d4d190676e71a9542c97221365affeb6`。
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
+
+## 2026-10-15 待發布修正
+
+- Git：`codex/article-journey-tracking`，新增 [Head 原始碼與驗證](../../../custom-code/analytics/README.md)。
+- Webflow：site `69ec2b02daa2e79f1da8772a` Head 已儲存並逐字讀回；collection `69f82ba2b2602e6d6594d689`、item `6aab4d29bc0fa97a7847135a` 僅更新 content 欄位並讀回相符。
+- 文章 lastPublished 仍為 `2026-09-22T00:38:22.420Z`。未發布 staging、production 或 GTM。
+- 本機事件／consent 邏輯測試通過；公開資源隔離執行三種 consent 情境通過，正式環境須另驗證。
+- 回退檔與內容雜湊見 verification.json；後續有修改時先比對，不覆蓋他人變更。
+
+- GitHub：遠端同名分支已建立於基底 `6b84235d9db02e098422bf9cc4192ebba4edf164`；上傳 tree 被自動審核拒絕，要求對完整 Head、追蹤程式與部署文件外送至該 repo 的明確授權。修改僅保存在本機，PR 尚未建立。
+
+- 2026-10-15 使用者明確授權將修正更新至 repo，並指示「還不要發佈」。本輪只同步 Git 分支及建立審閱 PR；Webflow staging／production 均不得發布。前述自動審核阻擋已取得上傳授權，遠端同步結果以 PR 為準。
