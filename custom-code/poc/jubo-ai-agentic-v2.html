@@ -1,0 +1,872 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jubo AI 改版原型 v2｜照護資料，正在思考</title>
+<!--
+  Jubo AI 頁改版原型 v2（/ai/jubo-ai-v2 用）— 置中、沉浸式、捲動驅動、可互動
+  依 Terris 2026-10-14 指示：全部置中、大量動態、捲動動畫、彈出互動；參考 Intercom Fin、SpaceXAI／Grok、Squarespace、OpenAI。
+  技術：Three.js r155 UMD（全頁一個固定 canvas，粒子在章節間變形）＋ GSAP 3 ScrollTrigger（桌機 pin＋scrub；手機不 pin）。
+  互動示範中的病床、姓名、數值皆為「示意」，畫面已標示，非實際產品畫面。
+  [待確認] 以黃底標示；這是原型，不是 Webflow 實作。
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#00b2c0; --ocean:#175e5e; --ink:#151717; --ink-60:hsla(180,4.55%,8.63%,.6); --ink-40:hsla(180,4.55%,8.63%,.4);
+  --white:#fff; --white-50:hsla(0,0%,100%,.5); --white-72:hsla(0,0%,100%,.72); --white-92:hsla(0,0%,100%,.92);
+  --bg:#f8f8f8; --line:hsla(180,4.55%,8.63%,.08);
+  --teal-14:hsla(184.4,100%,37.65%,.14); --light-teal:#9df8ff; --blue:rgba(59,88,255,.5); --purple:hsla(270.9,100%,54.71%,.5);
+  --font:"Poppins","PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,p{margin:0}
+h1,h2{font-weight:300;letter-spacing:-.02em}
+a{color:inherit}
+button{font:inherit;color:inherit}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.tbc{background:#fff4a8;color:#6b5b00;border-radius:.25rem;padding:0 .3rem;font-size:.75rem;white-space:nowrap;font-weight:400}
+.mono{font-family:var(--mono)}
+
+/* 全頁背景與固定 canvas */
+.bg-glow{position:fixed;inset:0;z-index:0;pointer-events:none;background:
+  radial-gradient(50rem 34rem at 50% 45%,var(--teal-14),transparent 70%),
+  radial-gradient(30rem 24rem at 85% 90%,hsla(229,100%,62%,.07),transparent 70%),
+  radial-gradient(30rem 24rem at 10% 10%,hsla(270,100%,60%,.05),transparent 70%)}
+#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none}
+.no-webgl #gl{display:none}
+.no-webgl .bg-glow{background:
+  radial-gradient(circle at 50% 45%,var(--white) 0 1.5px,transparent 2.5px) 0 0/22px 22px,
+  radial-gradient(40rem 30rem at 50% 45%,var(--teal-14),transparent 70%)}
+main{position:relative;z-index:1}
+
+/* 導覽 */
+.nav{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:1.75rem;padding:.5rem .5rem .5rem 1.25rem;border-radius:999px;background:var(--white-72);border:1px solid var(--white-92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 .5rem 2rem hsla(184,40%,30%,.08);font-size:.875rem;white-space:nowrap}
+.nav b{font-weight:700;letter-spacing:.02em}.nav b i{color:var(--accent);font-style:normal}
+.nav .links{display:flex;gap:1.25rem;color:var(--ink-60)}
+.nav .links a{text-decoration:none}.nav .links a[aria-current]{color:var(--ink);font-weight:700}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;border-radius:999px;padding:.85rem 1.6rem;font-weight:700;font-size:1rem;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .25s var(--ease),box-shadow .25s,background-color .25s}
+.btn-primary{background:var(--accent);color:var(--white)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 .75rem 2rem hsla(184,100%,38%,.3)}
+.btn-ghost{background:var(--white-72);border-color:var(--white-92);backdrop-filter:blur(10px)}
+.btn-sm{padding:.55rem 1.1rem;font-size:.875rem}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* 章節導覽（右側） */
+.rail{position:fixed;right:1.5rem;top:50%;transform:translateY(-50%);z-index:25;display:flex;flex-direction:column;gap:.75rem}
+.rail a{display:flex;align-items:center;justify-content:flex-end;gap:.6rem;text-decoration:none;font-family:var(--mono);font-size:.6875rem;color:var(--ink-40);letter-spacing:.06em}
+.rail a span{opacity:0;transform:translateX(.25rem);transition:opacity .3s,transform .3s}
+.rail a i{width:.45rem;height:.45rem;border-radius:50%;background:var(--ink-40);transition:all .3s}
+.rail a:hover span,.rail a.is-on span{opacity:1;transform:none}
+.rail a.is-on{color:var(--accent)}.rail a.is-on i{background:var(--accent);box-shadow:0 0 0 .3rem var(--teal-14);transform:scale(1.2)}
+
+/* 章節通用 */
+.chapter{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:7rem 1.5rem}
+.kicker{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;color:var(--accent);margin-bottom:1.5rem;text-transform:uppercase}
+.kicker::before,.kicker::after{content:"";width:1.5rem;height:1px;background:currentColor;opacity:.5}
+.big{font-size:clamp(2.5rem,7vw,5.75rem);line-height:1.08}
+.mid{font-size:clamp(2rem,4.6vw,3.75rem);line-height:1.15}
+.lead{margin-top:1.5rem;font-size:clamp(1.0625rem,1.6vw,1.25rem);line-height:1.6;color:var(--ink-60);max-width:38rem}
+.grad{background:linear-gradient(100deg,var(--accent) 10%,#3b58ff 60%,#8b3bff 95%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.split .w{display:inline-block;will-change:transform,opacity}
+
+/* 0 Hero */
+.hero h1 .line{display:block}
+.prompt{margin-top:2.75rem;width:min(40rem,100%);background:var(--white-72);border:1px solid var(--white-92);border-radius:1.5rem;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 1.5rem 4rem hsla(184,60%,30%,.14);padding:1rem 1rem .875rem;text-align:left}
+.prompt-row{display:flex;align-items:center;gap:.75rem}
+.prompt-orb{flex:none;width:2.25rem;height:2.25rem;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--white),var(--light-teal) 30%,var(--accent) 65%,#3b58ff);box-shadow:0 0 1.25rem hsla(184,100%,40%,.45);animation:breathe 3s ease-in-out infinite}
+.prompt-text{flex:1;font-size:1.0625rem;min-height:1.6em;color:var(--ink)}
+.prompt-text .ph{color:var(--ink-40)}
+.prompt-text .caret{display:inline-block;width:2px;height:1.1em;vertical-align:-.2em;background:var(--accent);margin-left:2px;animation:blink 1s steps(1) infinite}
+.prompt-go{flex:none;width:2.5rem;height:2.5rem;border-radius:50%;border:0;background:var(--ink);color:var(--white);cursor:pointer;display:grid;place-items:center;transition:transform .2s}
+.prompt-go:hover{transform:scale(1.08)}
+.prompt-chips{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.875rem;padding-top:.875rem;border-top:1px solid var(--line)}
+.pchip{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:.4rem .85rem;font-size:.8125rem;cursor:pointer;transition:border-color .2s,color .2s,transform .2s}
+.pchip:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.6875rem;letter-spacing:.14em;color:var(--ink-40);display:flex;flex-direction:column;align-items:center;gap:.6rem}
+.scroll-hint i{width:1px;height:2.5rem;background:linear-gradient(var(--accent),transparent);animation:drip 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes breathe{50%{transform:scale(1.08);box-shadow:0 0 2rem hsla(184,100%,40%,.6)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes drip{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* 1 資料湧入（pin） */
+.inflow{height:100vh;overflow:hidden}
+.inflow .stage{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.phrases{position:relative;height:clamp(3rem,8vw,6.5rem);width:100%}
+.phrase{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0}
+.phrase.is-final{flex-direction:column}
+.fly{position:absolute;left:50%;top:50%;padding:.55rem .9rem;border-radius:.875rem;background:var(--white-92);border:1px solid var(--line);box-shadow:0 .75rem 2rem hsla(184,50%,30%,.12);font-size:.8125rem;white-space:nowrap;display:flex;align-items:center;gap:.5rem;opacity:0}
+.fly b{font-family:var(--mono);color:var(--accent);font-weight:700}
+.fly i{width:.45rem;height:.45rem;border-radius:50%;background:var(--accent)}
+.stats{position:absolute;bottom:12vh;left:50%;transform:translateX(-50%);display:flex;gap:clamp(1.5rem,5vw,4.5rem);opacity:0}
+.stat{text-align:center}
+.stat .n{font-size:clamp(2rem,4vw,3.25rem);font-weight:300;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat .n small{font-size:.5em}
+.stat .l{font-size:.875rem;color:var(--ink-60);margin-top:.25rem}
+.stats-note{position:absolute;bottom:6vh;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--ink-40);white-space:nowrap;opacity:0}
+
+/* 2 三層（pin） */
+.layers{height:100vh;overflow:hidden}
+.layers .head{position:absolute;top:13vh;left:0;right:0;padding:0 1.5rem}
+.ltag{position:absolute;left:50%;width:min(26rem,86vw);padding:1rem 1.25rem;border-radius:1.25rem;background:var(--white-72);border:1px solid var(--white-92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1rem 3rem hsla(184,50%,30%,.12);display:flex;gap:1rem;align-items:center;text-align:left;opacity:0}
+.ltag .num{font-family:var(--mono);font-size:1.5rem;color:var(--accent);font-weight:300}
+.ltag h3{font-size:1.0625rem;font-weight:700}
+.ltag p{font-size:.875rem;color:var(--ink-60);margin-top:.125rem}
+.ltag.is-human{border:2px solid var(--accent)}
+.ltag.l1{top:27vh}.ltag.l2{top:46vh}.ltag.l3{top:66vh}
+
+/* 3 星座（互動） */
+.constellation{min-height:100vh}
+.constellation .head{position:absolute;top:12vh;left:0;right:0;padding:0 1.5rem;pointer-events:none}
+.hint{margin-top:1rem;font-family:var(--mono);font-size:.75rem;color:var(--ink-40);letter-spacing:.06em}
+.hotspots{position:fixed;inset:0;z-index:5;pointer-events:none}
+.hs{position:absolute;transform:translate(-50%,-50%);pointer-events:none;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:0;transition:opacity .4s}
+.hs.is-show{opacity:1;pointer-events:auto}
+.hs .dot{width:1.25rem;height:1.25rem;border-radius:50%;background:var(--accent);box-shadow:0 0 0 .4rem var(--teal-14),0 0 1.5rem hsla(184,100%,40%,.5);position:relative}
+.hs .dot::after{content:"";position:absolute;inset:-.75rem;border-radius:50%;border:1px solid var(--accent);animation:ping 2.2s ease-out infinite}
+.hs .lbl{padding:.35rem .75rem;border-radius:999px;background:var(--white-92);border:1px solid var(--line);font-size:.8125rem;font-weight:700;white-space:nowrap;box-shadow:0 .5rem 1.5rem hsla(184,50%,30%,.1);transition:transform .25s var(--ease)}
+.hs .lbl em{font-style:normal;font-family:var(--mono);font-size:.625rem;color:var(--accent);margin-left:.35rem}
+.hs:hover .lbl,.hs:focus-visible .lbl{transform:translateY(-3px);border-color:var(--accent)}
+@keyframes ping{0%{transform:scale(.6);opacity:1}100%{transform:scale(1.8);opacity:0}}
+
+/* 彈出卡 */
+.pop-scrim{position:fixed;inset:0;z-index:40;background:hsla(180,10%,96%,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .35s}
+.pop-scrim.is-open{opacity:1;pointer-events:auto}
+.pop{position:fixed;left:50%;top:50%;z-index:41;width:min(30rem,92vw);max-height:86vh;overflow:auto;transform:translate(-50%,-46%) scale(.92);opacity:0;pointer-events:none;background:var(--white);border:1px solid var(--line);border-radius:1.75rem;box-shadow:0 2rem 6rem hsla(184,50%,20%,.22);padding:2rem;text-align:left;transition:opacity .35s var(--ease),transform .45s var(--ease)}
+.pop.is-open{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}
+.pop-close{position:absolute;top:1rem;right:1rem;width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--line);background:var(--white);cursor:pointer;font-size:1.1rem;line-height:1}
+.pop .place{font-family:var(--mono);font-size:.6875rem;letter-spacing:.1em;color:var(--accent)}
+.pop h3{font-size:1.75rem;font-weight:300;margin:.5rem 0 1.25rem}
+.pop dl{margin:0;display:grid;gap:1rem}
+.pop dt{font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;color:var(--ink-40);margin-bottom:.35rem}
+.pop dd{margin:0;font-size:.9375rem;line-height:1.6}
+.pop .chips{display:flex;flex-wrap:wrap;gap:.375rem}
+.pop .chips span{font-size:.75rem;padding:.25rem .625rem;border-radius:999px;background:var(--teal-14);color:var(--ocean)}
+.pop .more{display:inline-block;margin-top:1.5rem;font-weight:700;color:var(--accent);text-decoration:none}
+.pop dd,.pop dt,.pop h3,.pop .place,.pop .chips span{opacity:0;transform:translateY(.5rem);transition:opacity .4s,transform .4s}
+.pop.is-open dd,.pop.is-open dt,.pop.is-open h3,.pop.is-open .place,.pop.is-open .chips span{opacity:1;transform:none}
+
+/* 4 換你下指令（互動示範） */
+.demo .console{margin-top:2.5rem;width:min(44rem,100%);background:var(--white-72);border:1px solid var(--white-92);border-radius:1.75rem;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 2rem 5rem hsla(184,60%,30%,.15);padding:1.25rem;text-align:left;position:relative}
+.tabs{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center}
+.tab{border:1px solid var(--line);background:var(--white);border-radius:999px;padding:.55rem 1rem;font-size:.875rem;cursor:pointer;transition:all .25s}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+.ask{margin-top:1rem;display:flex;align-items:center;gap:.75rem;padding:.875rem 1rem;border-radius:1rem;background:var(--white);border:1px solid var(--line)}
+.ask .q{flex:1;font-size:1rem}
+.ask .who{font-family:var(--mono);font-size:.6875rem;color:var(--ink-40)}
+.run{margin-top:1rem;min-height:15rem}
+.sources{display:flex;flex-wrap:wrap;gap:.4rem;min-height:1.9rem}
+.src{font-size:.75rem;padding:.3rem .7rem;border-radius:999px;background:var(--teal-14);color:var(--ocean);display:inline-flex;align-items:center;gap:.35rem;opacity:0;transform:translateY(-1rem) scale(.8)}
+.src::before{content:"";width:.35rem;height:.35rem;border-radius:50%;background:var(--accent)}
+.steps{list-style:none;margin:.875rem 0 0;padding:0}
+.steps li{display:flex;gap:.75rem;align-items:center;padding:.45rem 0;font-size:.9375rem;opacity:0;transform:translateX(-.5rem)}
+.steps .st{flex:none;width:1rem;height:1rem;border-radius:50%;border:2px solid var(--light-teal);border-top-color:var(--accent);animation:spin .8s linear infinite}
+.steps li.is-done .st{animation:none;border:0;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m4 8.5 2.5 2.5L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.steps .verb{font-family:var(--mono);font-size:.75rem;color:var(--accent);font-weight:700;width:2.5rem}
+.out{margin-top:1rem;border-radius:1.25rem;background:var(--white);border:1px solid var(--line);padding:1.25rem;box-shadow:0 1rem 2.5rem hsla(184,50%,30%,.1);opacity:0;transform:translateY(1rem) scale(.96);transform-origin:top center}
+.out-head{display:flex;justify-content:space-between;align-items:center;font-size:.75rem;color:var(--ink-40);font-family:var(--mono);margin-bottom:.75rem}
+.out-head b{color:var(--accent)}
+.out h4{margin:0 0 .5rem;font-size:1.0625rem}
+.out ul{margin:0;padding-left:1.1rem;font-size:.9375rem;line-height:1.7}
+.out p{font-size:.9375rem;line-height:1.7}
+.confirm{margin-top:1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.875rem;border-top:1px solid var(--line);font-size:.8125rem;color:var(--ink-60)}
+.confirm button{border:0;border-radius:999px;padding:.5rem 1rem;background:var(--accent);color:var(--white);font-weight:700;cursor:pointer;font-size:.8125rem}
+.confirm.is-ok button{background:var(--ocean)}
+.disclaimer{margin-top:1rem;font-size:.75rem;color:var(--ink-40)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 5 速度（pin） */
+.speed{height:100vh;overflow:hidden}
+.track{position:relative;width:min(64rem,90vw);height:14rem;margin-top:4rem}
+.track svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.track path{fill:none;stroke:url(#tg);stroke-width:2.5;stroke-linecap:round}
+.ms{position:absolute;transform:translate(-50%,-100%);opacity:0}
+.ms .card{background:var(--white-92);border:1px solid var(--white-92);border-radius:1rem;padding:.75rem 1rem;box-shadow:0 1rem 2.5rem hsla(184,50%,30%,.14);text-align:left;min-width:11rem;margin-bottom:1rem}
+.ms .card b{display:block;font-family:var(--mono);font-size:.75rem;color:var(--accent)}
+.ms .card span{font-size:.9375rem;font-weight:700}
+.ms .card small{display:block;font-size:.75rem;color:var(--ink-60);margin-top:.15rem}
+.ms .pin{width:1rem;height:1rem;margin:0 auto;border-radius:50%;background:var(--white);border:3px solid var(--accent)}
+.ms.is-launch .pin{background:var(--accent)}
+
+/* 6 信任 */
+.badges{margin-top:2.5rem;display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;max-width:44rem}
+.badge{display:inline-flex;align-items:center;gap:.6rem;padding:.75rem 1.1rem;border-radius:999px;background:var(--white-72);border:1px solid var(--white-92);backdrop-filter:blur(10px);font-size:.9375rem;box-shadow:0 .5rem 1.5rem hsla(184,50%,30%,.08)}
+.badge svg{width:1.1rem;height:1.1rem;color:var(--accent)}
+.trust-link{margin-top:2rem;font-weight:700;color:var(--accent);text-decoration:none;font-size:.9375rem}
+
+/* FAQ */
+.faq{width:min(46rem,100%);margin-top:2.5rem;text-align:left}
+.faq details{border-bottom:1px solid var(--line);background:transparent}
+.faq summary{cursor:pointer;list-style:none;padding:1.25rem 2.5rem 1.25rem 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:.25rem;top:50%;transform:translateY(-50%);font-size:1.5rem;font-weight:300;color:var(--accent);transition:transform .3s}
+.faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.faq details p{padding:0 0 1.25rem;color:var(--ink-60);line-height:1.7}
+
+footer{position:relative;z-index:1;background:var(--ocean);color:var(--white);padding:2.5rem 1.5rem;text-align:center;font-size:.8125rem;opacity:.95}
+
+/* RWD */
+@media (max-width:991px){.nav .links{display:none}.rail{display:none}}
+@media (max-width:767px){
+  .chapter{padding:6rem 1.25rem}
+  .inflow,.layers,.speed{height:auto;min-height:100vh}
+  .inflow .stage{flex-direction:column;height:auto}
+  .layers .head{position:static;margin-bottom:2rem}
+  .ltag{position:relative;left:auto;top:auto!important;transform:none!important;margin:0 auto .75rem;opacity:1}
+  .stats{position:static;transform:none;flex-direction:column;gap:1.25rem;margin-top:3rem;opacity:1}
+  .stats-note{position:static;transform:none;margin-top:1rem;white-space:normal;opacity:1}
+  .phrases{height:auto}
+  .phrase{position:static;opacity:1;margin:.25rem 0}
+  .phrase:not(.is-final){font-size:1.5rem}
+  .fly{display:none}
+  .track{height:auto;margin-top:2rem}
+  .track svg{display:none}
+  .ms{position:static;transform:none;opacity:1;margin-bottom:.5rem}
+  .ms .pin{display:none}
+  .ms .card{margin:0 auto}
+  .constellation{justify-content:flex-start;padding-top:6.5rem}
+  .constellation .head{position:static}
+  .hs .lbl{font-size:.75rem}
+  .demo .console{padding:1rem}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  .phrase,.fly{opacity:1}
+  .phrase:not(.is-final){display:none}
+  .stats,.stats-note,.ltag,.ms{opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="bg-glow" aria-hidden="true"></div>
+<canvas id="gl" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <b>Jubo<i>.</i></b>
+  <nav class="links" aria-label="主要導覽（原型佔位）"><a href="#">解決方案</a><a href="#">產品</a><a href="#" aria-current="page">Jubo AI</a><a href="#">資源</a></nav>
+  <a class="btn btn-primary btn-sm" href="#cta">預約導覽</a>
+</header>
+
+<nav class="rail" aria-label="章節">
+  <a href="#hero" data-ch="hero"><span>思考</span><i></i></a>
+  <a href="#inflow" data-ch="inflow"><span>資料</span><i></i></a>
+  <a href="#layers" data-ch="layers"><span>拆開</span><i></i></a>
+  <a href="#constellation" data-ch="constellation"><span>幫手</span><i></i></a>
+  <a href="#demo" data-ch="demo"><span>試試看</span><i></i></a>
+  <a href="#speed" data-ch="speed"><span>速度</span><i></i></a>
+  <a href="#cta" data-ch="cta"><span>開始</span><i></i></a>
+</nav>
+
+<div class="hotspots" id="hotspots" aria-label="Jubo AI 功能星座"></div>
+
+<main>
+  <!-- 0 Hero -->
+  <section class="chapter hero" id="hero" data-morph="0" data-alpha="1" data-zoom="1">
+    <div class="kicker">Jubo AI</div>
+    <h1 class="big split" id="hero-title"><span class="line">照護資料，</span><span class="line grad">正在思考。</span></h1>
+    <p class="lead">每天，2,800+ 家機構在 Jubo 留下照護紀錄。<br>累積 30 億筆之後，它們開始幫照護團隊整理、提醒、先想一步。</p>
+    <div class="prompt" role="group" aria-label="試著問 Jubo AI">
+      <div class="prompt-row">
+        <span class="prompt-orb" aria-hidden="true"></span>
+        <span class="prompt-text" id="prompt-text" aria-live="off"></span>
+        <button class="prompt-go" id="prompt-go" aria-label="看 Jubo AI 怎麼做">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+        </button>
+      </div>
+      <div class="prompt-chips">
+        <button class="pchip" data-scenario="handover">整理今天的交班重點</button>
+        <button class="pchip" data-scenario="amy">家訪前，個案最近怎麼樣？</button>
+        <button class="pchip" data-scenario="family">把活動照片寫給家屬</button>
+        <button class="pchip" data-scenario="ibee">比對這個月的照管額度</button>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true">SCROLL<i></i></div>
+  </section>
+
+  <!-- 1 資料湧入 -->
+  <section class="chapter inflow" id="inflow" data-morph="0" data-alpha="1" data-zoom="1.25">
+    <div class="stage">
+      <div class="phrases">
+        <p class="phrase mid">一次量測。</p>
+        <p class="phrase mid">一段交班。</p>
+        <p class="phrase mid">一通電訪。</p>
+        <p class="phrase mid">一張活動照片。</p>
+        <div class="phrase is-final"><div class="kicker">AI 的養分</div><p class="mid">全都留在系統裡，<br><span class="grad">變成 AI 的記憶。</span></p></div>
+      </div>
+      <div class="fly" style="--x:-38vw;--y:-28vh"><i></i>血壓 <b>132/86</b></div>
+      <div class="fly" style="--x:36vw;--y:-30vh"><i></i>交班紀錄 <b>07:00</b></div>
+      <div class="fly" style="--x:-42vw;--y:6vh"><i></i>傷口照片 <b>評估</b></div>
+      <div class="fly" style="--x:40vw;--y:2vh"><i></i>督導電訪 <b>已完成</b></div>
+      <div class="fly" style="--x:-30vw;--y:30vh"><i></i>給藥紀錄 <b>08:00</b></div>
+      <div class="fly" style="--x:30vw;--y:30vh"><i></i>ADL 評估 <b>更新</b></div>
+      <div class="fly" style="--x:-12vw;--y:-38vh"><i></i>活動照片 <b>×3</b></div>
+      <div class="fly" style="--x:14vw;--y:38vh"><i></i>照顧計畫 <b>核定</b></div>
+      <div class="fly" style="--x:4vw;--y:-40vh"><i></i>體溫 <b>36.8°C</b></div>
+      <div class="fly" style="--x:-4vw;--y:40vh"><i></i>家訪紀錄 <b>本週</b></div>
+      <div class="stats" role="list">
+        <div class="stat" role="listitem"><div class="n" data-scramble="2,800">2,800</div><div class="l">家機構 <small>+</small></div></div>
+        <div class="stat" role="listitem"><div class="n" data-scramble="33">33</div><div class="l">萬名照護使用者（約）</div></div>
+        <div class="stat" role="listitem"><div class="n" data-scramble="30">30</div><div class="l">億+ 筆照護紀錄</div></div>
+      </div>
+      <p class="stats-note">數據截至 2026 年 <span class="tbc">[待確認：月份]</span>｜涵蓋住宿型、日照、居家服務</p>
+    </div>
+  </section>
+
+  <!-- 2 三層 -->
+  <section class="chapter layers" id="layers" data-morph="1" data-alpha="1" data-zoom="1">
+    <div class="head">
+      <div class="kicker">拆開 Jubo AI</div>
+      <h2 class="mid split">三層結構，<span class="grad">最後一層是人。</span></h2>
+    </div>
+    <div class="ltag l1"><span class="num">01</span><div><h3>資料層｜記得每一筆</h3><p>量測、紀錄、計畫，每天在系統裡累積。</p></div></div>
+    <div class="ltag l2"><span class="num">02</span><div><h3>智慧層｜整理、比對、提醒</h3><p>AI 把分散的紀錄變成摘要，找出該注意的變化。</p></div></div>
+    <div class="ltag l3 is-human"><span class="num">03</span><div><h3>決策層｜交給人判斷</h3><p>每一個 AI 產出，都由照護人員確認後才生效。</p></div></div>
+  </section>
+
+  <!-- 3 星座 -->
+  <section class="chapter constellation" id="constellation" data-morph="2" data-alpha="1" data-zoom="1">
+    <div class="head">
+      <div class="kicker">同一份資料</div>
+      <h2 class="mid split">長出 <span class="grad">7 個幫手</span></h2>
+      <p class="hint">● 點一顆星，看它讀了什麼、做了什麼</p>
+    </div>
+    <ul class="sr-only" id="hs-list"></ul>
+  </section>
+
+  <!-- 4 互動示範 -->
+  <section class="chapter demo" id="demo" data-morph="0" data-alpha=".35" data-zoom=".8">
+    <div class="kicker">換你下指令</div>
+    <h2 class="mid split">選一件事，<span class="grad">看 AI 一步步做完。</span></h2>
+    <div class="console">
+      <div class="tabs" role="tablist" aria-label="情境">
+        <button class="tab" role="tab" data-scenario="handover" aria-selected="true">智慧交班</button>
+        <button class="tab" role="tab" data-scenario="amy" aria-selected="false">Amy 透鏡</button>
+        <button class="tab" role="tab" data-scenario="family" aria-selected="false">家庭聯絡簿</button>
+        <button class="tab" role="tab" data-scenario="ibee" aria-selected="false">iBee</button>
+      </div>
+      <div class="ask"><span class="who">你</span><span class="q" id="demo-q"></span></div>
+      <div class="run" aria-live="polite">
+        <div class="sources" id="demo-src"></div>
+        <ol class="steps" id="demo-steps"></ol>
+        <div class="out" id="demo-out"></div>
+      </div>
+      <p class="disclaimer">示意流程：床號、姓名與數值皆為虛構，非實際產品畫面。</p>
+    </div>
+  </section>
+
+  <!-- 5 速度 -->
+  <section class="chapter speed" id="speed" data-morph="3" data-alpha="1" data-zoom="1">
+    <div class="kicker">2026</div>
+    <h2 class="mid split">不是幾年。<span class="grad">是幾個月。</span></h2>
+    <p class="lead">資料和流程早就在系統裡，新的 AI 不必從零開始。</p>
+    <div class="track" id="track">
+      <svg viewBox="0 0 1000 200" preserveAspectRatio="none" aria-hidden="true">
+        <defs><linearGradient id="tg" x1="0" x2="1"><stop offset="0" stop-color="#9df8ff"/><stop offset=".6" stop-color="#00b2c0"/><stop offset="1" stop-color="#3b58ff"/></linearGradient></defs>
+        <path id="track-path" d="M0,170 C200,170 260,150 380,120 S620,40 1000,20"/>
+      </svg>
+      <div class="ms" data-at=".22" style="left:22%;top:72%"><div class="card"><b>2026 春</b><span>Amy 需求提出</span><small>居服督導的家訪痛點 <span class="tbc">[待確認]</span></small></div><div class="pin"></div></div>
+      <div class="ms is-launch" data-at=".5" style="left:50%;top:44%"><div class="card"><b>2026.06</b><span>iBee 上線</span><small>i照護・第一個 AI Agent</small></div><div class="pin"></div></div>
+      <div class="ms is-launch" data-at=".7" style="left:70%;top:24%"><div class="card"><b>2026.07</b><span>iBee 擴大</span><small>Jubo 日照、居服 <span class="tbc">[待確認]</span></small></div><div class="pin"></div></div>
+      <div class="ms is-launch" data-at=".92" style="left:92%;top:12%"><div class="card"><b>2026.08</b><span>Amy 透鏡上線</span><small>家訪前一頁近況報告</small></div><div class="pin"></div></div>
+    </div>
+  </section>
+
+  <!-- 6 信任 -->
+  <section class="chapter trust" id="trust" data-morph="1" data-alpha=".5" data-zoom=".9">
+    <div class="kicker">信任</div>
+    <h2 class="big split">AI 整理。<br><span class="grad">人來判斷。</span></h2>
+    <div class="badges">
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>台灣境內存放・每日備份</span>
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>ISO/IEC 27001</span>
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>ISO/IEC 27701</span>
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>傳輸加密・權限分級</span>
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>每個 AI 產出都由人確認</span>
+    </div>
+    <a class="trust-link" href="/security">看 Jubo 資安與隱私 →</a>
+  </section>
+
+  <!-- 7 CTA ＋ FAQ -->
+  <section class="chapter cta" id="cta" data-morph="0" data-alpha="1" data-zoom="1.1">
+    <div class="kicker">下一個</div>
+    <h2 class="big split">你的照護資料，<br><span class="grad">會長成什麼？</span></h2>
+    <p class="lead">和我們聊聊你的場域，我們帶你看 Jubo AI 實際怎麼運作。</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:2.25rem">
+      <a class="btn btn-primary" href="/contact">預約導覽</a>
+      <a class="btn btn-ghost" href="/ai/amy">看 Amy 透鏡</a>
+    </div>
+    <div class="faq">
+      <details><summary>Jubo AI 是一個獨立產品嗎？</summary><p>不是。Jubo AI 是內建在住宿型、日照與居服系統裡的一組 AI 功能，例如智慧交班、家庭聯絡簿、Amy 透鏡與 iBee。</p></details>
+      <details><summary>AI 會取代照護人員嗎？</summary><p>不會。AI 負責整理、提醒與草擬，照護判斷與決策仍由照護團隊做主，所有 AI 產出都需要人員確認。</p></details>
+      <details><summary>AI 用的是哪些資料？</summary><p>機構在 Jubo 系統裡本來就會記錄的資料，例如生命徵象、護理與服務紀錄、照顧計畫，不需要另外蒐集。</p></details>
+      <details><summary>資料存放在哪裡？</summary><p>雲端主機與資料儲存設備設置於台灣境內，並通過 ISO/IEC 27001 與 27701 驗證。</p></details>
+      <details><summary>為什麼 Jubo 能這麼快推出新的 AI？</summary><p>因為資料與流程早就在系統裡，新功能不必從零開始，團隊可以專注把一件具體的事做好，再交給現場驗證。</p></details>
+    </div>
+  </section>
+</main>
+
+<footer>© 2026 Jubo 智齡科技｜原型 v2，非正式頁面｜We Connect Care.</footer>
+
+<div class="pop-scrim" id="pop-scrim"></div>
+<div class="pop" id="pop" role="dialog" aria-modal="true" aria-labelledby="pop-title" hidden>
+  <button class="pop-close" id="pop-close" aria-label="關閉">×</button>
+  <div id="pop-body"></div>
+</div>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Jubo AI 是一個獨立產品嗎？","acceptedAnswer":{"@type":"Answer","text":"不是。Jubo AI 是內建在住宿型、日照與居服系統裡的一組 AI 功能，例如智慧交班、家庭聯絡簿、Amy 透鏡與 iBee。"}},
+{"@type":"Question","name":"AI 會取代照護人員嗎？","acceptedAnswer":{"@type":"Answer","text":"不會。AI 負責整理、提醒與草擬，照護判斷與決策仍由照護團隊做主，所有 AI 產出都需要人員確認。"}},
+{"@type":"Question","name":"AI 用的是哪些資料？","acceptedAnswer":{"@type":"Answer","text":"機構在 Jubo 系統裡本來就會記錄的資料，例如生命徵象、護理與服務紀錄、照顧計畫，不需要另外蒐集。"}},
+{"@type":"Question","name":"資料存放在哪裡？","acceptedAnswer":{"@type":"Answer","text":"雲端主機與資料儲存設備設置於台灣境內，並通過 ISO/IEC 27001 與 27701 驗證。"}},
+{"@type":"Question","name":"為什麼 Jubo 能這麼快推出新的 AI？","acceptedAnswer":{"@type":"Answer","text":"因為資料與流程早就在系統裡，新功能不必從零開始，團隊可以專注把一件具體的事做好，再交給現場驗證。"}}
+]}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script>
+(() => {
+'use strict';
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isDesktop = () => innerWidth >= 768;
+const hasGsap = !!(window.gsap && window.ScrollTrigger);
+if (hasGsap) gsap.registerPlugin(ScrollTrigger);
+
+/* ================= 內容資料 ================= */
+const FEATURES = [
+  { id:'handover', name:'AI 智慧交班', place:'住宿型', reads:['生命徵象','外診與用藥','焦點護理紀錄'], does:'自動彙整個案當日紀錄，優先呈現發燒、跌倒、血糖異常等重點，協助交班更快掌握狀況。', who:'護理師確認後交班' },
+  { id:'vital', name:'生命徵象預警', place:'住宿型', reads:['生命徵象量測'], does:'量測數值上傳後比對個人趨勢，出現異常時提醒照護人員留意。<span class="tbc">[待確認：產品經理核對]</span>', who:'照護人員判斷後處置' },
+  { id:'wound', name:'AI 傷口辨識', place:'住宿型', reads:['傷口照片','傷口評估'], does:'以傷口照片協助評估與紀錄，讓追蹤變化更一致。<span class="tbc">[待確認：產品經理核對]</span>', who:'護理師確認評估結果' },
+  { id:'family', name:'AI 家庭聯絡簿', place:'日照', reads:['活動照片','關鍵字','每日照護紀錄'], does:'照服員拍照、點選關鍵字，AI 產生一段給家屬的短文。手寫約 2 小時縮短到約 10 分鐘。<span class="tbc">[待確認：統計口徑]</span>', who:'照服員確認後才送出' },
+  { id:'quality', name:'品監 AI 潤飾', place:'住宿型', reads:['品質監測紀錄'], does:'協助把品質監測紀錄改寫得更清楚、一致。<span class="tbc">[待確認：正式名稱]</span>', who:'承辦人確認後存檔' },
+  { id:'amy', name:'Amy 全人脈絡透鏡', place:'居家服務｜NEW 2026', reads:['服務紀錄','督導電訪','家訪紀錄','ADL／IADL','核定照顧計畫'], does:'家訪前，把分散的紀錄整理成一頁近況報告：個案輪廓、照顧目標、最近訪視、近三個月異常、建議追蹤重點（標明資料來源）。', who:'督導判讀，僅供參考', link:['/ai/amy','了解 Amy 透鏡 →'], isNew:true },
+  { id:'ibee', name:'iBee 照管小幫手', place:'日照・居服｜NEW 2026', reads:['照管平台額度','核定照顧計畫'], does:'Jubo 第一個上線的 AI Agent：自動比對照管額度與服務項目次數，一鍵匯入照顧計畫。不會自動送出申報。', who:'最後確認由人員完成', isNew:true }
+];
+const SCENARIOS = {
+  handover: {
+    q:'整理 302 床今天的交班重點',
+    src:['生命徵象','給藥紀錄','外診紀錄','焦點護理'],
+    steps:[['讀取','過去 24 小時的 46 筆紀錄'],['比對','標出體溫、跌倒、血糖三項異常'],['排序','依風險排出交班順序']],
+    out:{ tag:'交班摘要', title:'302 床｜今日交班重點', list:['體溫 38.2°C（14:00），已通知醫師，持續監測','夜間如廁時跌倒 1 次，無外傷，已加床欄','午餐前血糖 68 mg/dL，已補充點心後回升'] },
+    who:'等待護理師確認'
+  },
+  amy: {
+    q:'明天家訪前，陳奶奶最近怎麼樣？',
+    src:['服務紀錄','督導電訪','家訪紀錄','ADL／IADL','照顧計畫'],
+    steps:[['讀取','近三個月服務與訪視紀錄'],['整理','依五段格式組成近況報告'],['標示','每一段附上資料來源']],
+    out:{ tag:'Amy 近況報告', title:'家訪前一頁報告', list:['個案輪廓與能力','照顧計畫與服務目標','最近的訪視與紀錄','近三個月的異常與居服員回報','建議追蹤重點（附資料來源）'] },
+    who:'僅供參考・由督導判讀'
+  },
+  family: {
+    q:'把今天的活動照片寫成給家屬的話',
+    src:['活動照片 ×3','關鍵字：手作、合唱、午睡'],
+    steps:[['看圖','辨識照片中的活動'],['撰寫','用溫暖口吻寫成短文'],['檢查','確認沒有不適合分享的內容']],
+    out:{ tag:'聯絡簿草稿', title:'給林奶奶家人的一段話', text:'今天奶奶在手作課做了一個紙風車，笑著說要送給孫子。下午合唱時跟著哼了兩首老歌，午睡也睡得很安穩。' },
+    who:'等待照服員確認後送出'
+  },
+  ibee: {
+    q:'比對這個月的照管額度與服務次數',
+    src:['照管平台額度','核定照顧計畫','本月服務紀錄'],
+    steps:[['連線','讀取照管平台核定資料'],['比對','逐項比對額度與已提供次數'],['匯入','整理照顧計畫待匯入清單']],
+    out:{ tag:'iBee 比對結果', title:'本月比對完成', list:['3 個服務項目接近額度上限','1 份照顧計畫已更新，待匯入','不會自動送出申報'] },
+    who:'等待人員確認'
+  }
+};
+
+/* ================= 狀態（純 JS，算繪器訂閱） ================= */
+const view = { morph:0, alpha:1, zoom:1, disp:.08, intro: reduced ? 1 : 0 };
+
+/* ================= Three.js：全頁一個 canvas，粒子在章節間變形 ================= */
+const canvas = document.getElementById('gl');
+const hsWrap = document.getElementById('hotspots');
+let projectHotspots = () => {};
+(function initGL(){
+  let gl = null;
+  try { gl = window.THREE && (canvas.getContext('webgl2') || canvas.getContext('webgl')); } catch(e){ gl = null; }
+  if (!gl) { document.documentElement.classList.add('no-webgl'); return; }
+  const renderer = new THREE.WebGLRenderer({ canvas, context: gl, antialias: true, alpha: true });
+  const DPR = Math.min(devicePixelRatio, 2);
+  renderer.setPixelRatio(DPR);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(38, innerWidth / innerHeight, .1, 60);
+  camera.position.z = 8;
+
+  const N = innerWidth < 768 ? 1400 : 2600;
+  const S0 = new Float32Array(N*3), S1 = new Float32Array(N*3), S2 = new Float32Array(N*3), S3 = new Float32Array(N*3), SC = new Float32Array(N*3);
+  const tone = new Float32Array(N), seed = new Float32Array(N);
+  const g = Math.PI * (3 - Math.sqrt(5));
+  // 星座：7 個節點（橢圓分布）
+  const CN = FEATURES.map((f, i) => {
+    const a = -Math.PI/2 + i * (Math.PI*2/7);
+    return new THREE.Vector3(Math.cos(a) * 2.9, Math.sin(a) * 1.55 - .15, Math.sin(a*2) * .4);
+  });
+  for (let i = 0; i < N; i++) {
+    const y = 1 - (i/(N-1))*2, r = Math.sqrt(1-y*y), th = g*i;
+    // S0 球
+    S0.set([Math.cos(th)*r*1.7, y*1.7, Math.sin(th)*r*1.7], i*3);
+    // S1 三層環
+    const L = i % 3, ang = Math.random()*Math.PI*2, rad = 2.1 + (Math.random()-.5)*.35 - L*.15;
+    S1.set([Math.cos(ang)*rad, (1-L)*1.15 + (Math.random()-.5)*.08, Math.sin(ang)*rad*.42], i*3);
+    // S2 星座：60% 聚成節點、40% 連到中心
+    const k = i % 7, c = CN[k];
+    if (Math.random() < .6) {
+      const u = Math.random()*Math.PI*2, v = Math.acos(2*Math.random()-1), rr = .28*Math.cbrt(Math.random());
+      S2.set([c.x + rr*Math.sin(v)*Math.cos(u), c.y + rr*Math.sin(v)*Math.sin(u), c.z + rr*Math.cos(v)], i*3);
+    } else {
+      const t = Math.random(), j = (Math.random()-.5)*.05;
+      S2.set([c.x*t + j, c.y*t + j, c.z*t], i*3);
+    }
+    // S3 速度流：一條向右上加速的光帶
+    const t3 = Math.pow(Math.random(), .8), x3 = -4.6 + t3*9.2;
+    const spread = .06 + t3*.25;
+    S3.set([x3, -1.3 + Math.pow(t3, 2.2)*2.6 + (Math.random()-.5)*spread, (Math.random()-.5)*spread*2], i*3);
+    // 散落（開場）
+    SC.set([(Math.random()-.5)*16, (Math.random()-.5)*10, (Math.random()-.5)*6], i*3);
+    tone[i] = Math.random(); seed[i] = Math.random();
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(S0, 3));
+  geo.setAttribute('aS1', new THREE.BufferAttribute(S1, 3));
+  geo.setAttribute('aS2', new THREE.BufferAttribute(S2, 3));
+  geo.setAttribute('aS3', new THREE.BufferAttribute(S3, 3));
+  geo.setAttribute('aSC', new THREE.BufferAttribute(SC, 3));
+  geo.setAttribute('aTone', new THREE.BufferAttribute(tone, 1));
+  geo.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
+
+  const U = {
+    uTime:{value:0}, uMorph:{value:0}, uIntro:{value:view.intro}, uAlpha:{value:1}, uDisp:{value:.08},
+    uSize:{value:(innerWidth < 768 ? 22 : 26) * DPR}, uMouse:{value:new THREE.Vector3(99,99,0)}, uMouseOn:{value:0},
+    uA:{value:new THREE.Color('#00b2c0')}, uB:{value:new THREE.Color('#9df8ff')}, uC:{value:new THREE.Color('#3b58ff')}, uD:{value:new THREE.Color('#8b3bff')}
+  };
+  const mat = new THREE.ShaderMaterial({
+    uniforms:U, transparent:true, depthWrite:false,
+    vertexShader:`
+      attribute vec3 aS1, aS2, aS3, aSC; attribute float aTone, aSeed;
+      uniform float uTime, uMorph, uIntro, uDisp, uSize, uMouseOn; uniform vec3 uMouse;
+      varying float vTone, vFade;
+      vec3 shape(float i){ if(i<.5) return position; if(i<1.5) return aS1; if(i<2.5) return aS2; return aS3; }
+      float n3(vec3 p){ return sin(p.x*1.9+uTime*.8)*sin(p.y*2.3+uTime*.6+aSeed*2.)*sin(p.z*2.1+uTime*1.1); }
+      void main(){
+        float m = clamp(uMorph, 0., 3.);
+        float i0 = floor(m), f = m - i0;
+        float s = smoothstep(0., 1., clamp(f*1.4 - aSeed*.4, 0., 1.));
+        vec3 p = mix(shape(i0), shape(min(i0+1., 3.)), s);
+        vec3 n = normalize(p + vec3(.0001));
+        p += n * (n3(p)*.7 + n3(p*2.4)*.3) * uDisp;
+        float it = smoothstep(0., 1., clamp(uIntro*1.3 - aSeed*.3, 0., 1.));
+        p = mix(aSC, p, it);
+        vec4 w = modelMatrix * vec4(p, 1.);
+        vec3 d = w.xyz - uMouse; float dl = length(d);
+        w.xyz += normalize(d + vec3(.0001)) * smoothstep(1.1, 0., dl) * .45 * uMouseOn;
+        vec4 mv = viewMatrix * w;
+        gl_Position = projectionMatrix * mv;
+        gl_PointSize = uSize * (.5 + .5*aTone) / -mv.z;
+        vTone = aTone; vFade = mix(.35, 1., it);
+      }`,
+    fragmentShader:`
+      uniform vec3 uA, uB, uC, uD; uniform float uAlpha; varying float vTone, vFade;
+      void main(){
+        float r = length(gl_PointCoord - .5); if (r > .5) discard;
+        vec3 c = vTone < .5 ? uA : vTone < .8 ? mix(uA, uB, .55) : vTone < .95 ? mix(uA, uC, .6) : mix(uC, uD, .5);
+        gl_FragColor = vec4(c, smoothstep(.5, .15, r) * .9 * vFade * uAlpha);
+      }`
+  });
+  const pts = new THREE.Points(geo, mat);
+  scene.add(pts);
+
+  // 滑鼠：投影到 z=0 平面，粒子避開
+  const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0,0,1), 0), mp = new THREE.Vector2(), hit = new THREE.Vector3();
+  let mouseOn = 0;
+  addEventListener('pointermove', e => {
+    if (e.pointerType !== 'mouse') return;
+    mp.set(e.clientX/innerWidth*2-1, -(e.clientY/innerHeight)*2+1);
+    ray.setFromCamera(mp, camera);
+    if (ray.ray.intersectPlane(plane, hit)) U.uMouse.value.copy(hit);
+    mouseOn = 1;
+  });
+  addEventListener('pointerleave', () => mouseOn = 0);
+
+  // 星座熱點：投影到螢幕
+  const hsEls = FEATURES.map((f, i) => {
+    const b = document.createElement('button');
+    b.className = 'hs'; b.type = 'button'; b.dataset.id = f.id; b.tabIndex = -1;
+    b.innerHTML = '<span class="dot"></span><span class="lbl">' + f.name.replace(' 全人脈絡透鏡','').replace(' 照管小幫手','') + (f.isNew ? '<em>NEW</em>' : '') + '</span>';
+    b.addEventListener('click', () => openPop(f));
+    hsWrap.appendChild(b);
+    return b;
+  });
+  const tmp = new THREE.Vector3();
+  projectHotspots = () => {
+    const w = 1 - Math.min(1, Math.abs(U.uMorph.value - 2) * 3);
+    hsEls.forEach((el, i) => {
+      tmp.copy(CN[i]); pts.localToWorld(tmp); tmp.project(camera);
+      el.style.left = ((tmp.x+1)/2*innerWidth) + 'px';
+      el.style.top = ((1-tmp.y)/2*innerHeight) + 'px';
+      const on = w > .85;
+      el.classList.toggle('is-show', on);
+      el.tabIndex = on ? 0 : -1;
+    });
+  };
+
+  function resize(){
+    renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix();
+    // 窄螢幕整體縮小，讓 7 個節點不超出畫面
+    const halfW = Math.tan(THREE.MathUtils.degToRad(camera.fov/2)) * 8 * camera.aspect;
+    pts.scale.setScalar(Math.min(1, halfW * .82 / 3.1));
+  }
+  resize(); addEventListener('resize', resize);
+
+  const clock = new THREE.Clock(); let raf = 0, t = 0;
+  const k = reduced ? .05 : 1;
+  function frame(){
+    const dt = Math.min(clock.getDelta(), .05);
+    t += dt * k; U.uTime.value = t;
+    U.uMorph.value += (view.morph - U.uMorph.value) * (reduced ? 1 : .045);
+    U.uAlpha.value += (view.alpha - U.uAlpha.value) * .06;
+    U.uDisp.value += (view.disp - U.uDisp.value) * .05;
+    U.uIntro.value = view.intro;
+    U.uMouseOn.value += (mouseOn - U.uMouseOn.value) * .08;
+    const z = 8 / view.zoom; camera.position.z += (z - camera.position.z) * .05;
+    const constel = 1 - Math.min(1, Math.abs(U.uMorph.value - 2));
+    pts.rotation.y += dt * .07 * k * (1 - constel);
+    pts.rotation.y *= (1 - constel * .06);
+    pts.rotation.x = Math.sin(t*.15) * .1 * (1 - constel);
+    renderer.render(scene, camera);
+    projectHotspots();
+    raf = requestAnimationFrame(frame);
+  }
+  frame();
+  document.addEventListener('visibilitychange', () => { if (document.hidden) cancelAnimationFrame(raf); else { clock.getDelta(); raf = requestAnimationFrame(frame); } });
+})();
+
+/* ================= 彈出卡 ================= */
+const pop = document.getElementById('pop'), scrim = document.getElementById('pop-scrim'), popBody = document.getElementById('pop-body');
+let lastFocus = null;
+function openPop(f){
+  lastFocus = document.activeElement;
+  popBody.innerHTML = `<div class="place">${f.place}</div><h3 id="pop-title">${f.name}</h3>
+    <dl><div><dt>讀取的資料</dt><dd class="chips">${f.reads.map(r => '<span>'+r+'</span>').join('')}</dd></div>
+    <div><dt>它做什麼</dt><dd>${f.does}</dd></div>
+    <div><dt>最後由誰決定</dt><dd>${f.who}</dd></div></dl>
+    ${f.link ? `<a class="more" href="${f.link[0]}">${f.link[1]}</a>` : ''}`;
+  popBody.querySelectorAll('dt,dd,h3,.place,.chips span').forEach((el, i) => el.style.transitionDelay = (reduced ? 0 : 80 + i*45) + 'ms');
+  pop.hidden = false; requestAnimationFrame(() => { pop.classList.add('is-open'); scrim.classList.add('is-open'); });
+  document.getElementById('pop-close').focus();
+}
+function closePop(){
+  pop.classList.remove('is-open'); scrim.classList.remove('is-open');
+  setTimeout(() => { pop.hidden = true; }, 400);
+  if (lastFocus) lastFocus.focus();
+}
+document.getElementById('pop-close').addEventListener('click', closePop);
+scrim.addEventListener('click', closePop);
+addEventListener('keydown', e => { if (e.key === 'Escape' && !pop.hidden) closePop(); });
+// 螢幕閱讀器用的功能清單
+document.getElementById('hs-list').innerHTML = FEATURES.map(f => `<li><button type="button" data-id="${f.id}">${f.name}</button></li>`).join('');
+document.getElementById('hs-list').addEventListener('click', e => { const b = e.target.closest('button'); if (b) openPop(FEATURES.find(f => f.id === b.dataset.id)); });
+
+/* ================= Hero：提示框輪播打字 ================= */
+const promptText = document.getElementById('prompt-text');
+const PROMPTS = Object.entries(SCENARIOS).map(([id, s]) => [id, s.q]);
+let promptIdx = 0, promptTimer = null;
+const wait = ms => new Promise(r => setTimeout(r, ms));
+async function promptLoop(){
+  if (reduced) { promptText.innerHTML = '<span class="ph">'+PROMPTS[0][1]+'</span>'; return; }
+  for (;;) {
+    const [, q] = PROMPTS[promptIdx];
+    for (let c = 1; c <= q.length; c++) { promptText.innerHTML = '<span class="ph">'+q.slice(0,c)+'</span><span class="caret"></span>'; await wait(55); }
+    await wait(1800);
+    for (let c = q.length; c >= 0; c--) { promptText.innerHTML = '<span class="ph">'+q.slice(0,c)+'</span><span class="caret"></span>'; await wait(18); }
+    promptIdx = (promptIdx + 1) % PROMPTS.length;
+    await wait(250);
+  }
+}
+promptLoop();
+function goDemo(id){
+  const target = document.getElementById('demo');
+  target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+  setTimeout(() => runScenario(id), reduced ? 0 : 900);
+}
+document.getElementById('prompt-go').addEventListener('click', () => goDemo(PROMPTS[promptIdx][0]));
+document.querySelectorAll('.pchip').forEach(b => b.addEventListener('click', () => goDemo(b.dataset.scenario)));
+
+/* ================= 互動示範 ================= */
+const qEl = document.getElementById('demo-q'), srcEl = document.getElementById('demo-src'), stepsEl = document.getElementById('demo-steps'), outEl = document.getElementById('demo-out');
+const tabs = [...document.querySelectorAll('.tab')];
+let runToken = 0;
+async function runScenario(id){
+  const s = SCENARIOS[id]; const my = ++runToken;
+  tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.scenario === id)));
+  srcEl.innerHTML = ''; stepsEl.innerHTML = ''; outEl.innerHTML = ''; outEl.style.opacity = 0;
+  view.disp = .22; // 粒子「思考」
+  // 問題打字
+  qEl.textContent = '';
+  if (reduced) qEl.textContent = s.q; else for (let c = 1; c <= s.q.length; c++) { if (my !== runToken) return; qEl.textContent = s.q.slice(0, c); await wait(28); }
+  // 資料來源飛入
+  for (const name of s.src) {
+    if (my !== runToken) return;
+    const el = document.createElement('span'); el.className = 'src'; el.textContent = name; srcEl.appendChild(el);
+    if (hasGsap && !reduced) gsap.to(el, { opacity:1, y:0, scale:1, duration:.5, ease:'back.out(2)' }); else { el.style.opacity = 1; el.style.transform = 'none'; }
+    await wait(reduced ? 0 : 160);
+  }
+  // 步驟
+  for (const [verb, text] of s.steps) {
+    if (my !== runToken) return;
+    const li = document.createElement('li'); li.innerHTML = `<span class="st"></span><span class="verb">${verb}</span><span>${text}</span>`; stepsEl.appendChild(li);
+    if (hasGsap && !reduced) gsap.to(li, { opacity:1, x:0, duration:.35 }); else { li.style.opacity = 1; li.style.transform = 'none'; }
+    await wait(reduced ? 0 : 750); li.classList.add('is-done');
+  }
+  if (my !== runToken) return;
+  // 產出卡彈出
+  const o = s.out;
+  outEl.innerHTML = `<div class="out-head"><b>● ${o.tag}</b><span>示意</span></div><h4>${o.title}</h4>
+    ${o.list ? '<ul>' + o.list.map(x => '<li>'+x+'</li>').join('') + '</ul>' : '<p>'+o.text+'</p>'}
+    <div class="confirm"><span>${s.who}</span><button type="button">確認</button></div>`;
+  if (hasGsap && !reduced) gsap.fromTo(outEl, { opacity:0, y:16, scale:.96 }, { opacity:1, y:0, scale:1, duration:.6, ease:'back.out(1.6)' }); else { outEl.style.opacity = 1; outEl.style.transform = 'none'; }
+  view.disp = .08;
+  const cf = outEl.querySelector('.confirm');
+  cf.querySelector('button').addEventListener('click', () => { cf.classList.add('is-ok'); cf.querySelector('span').textContent = '✓ 已由人員確認，產出生效'; cf.querySelector('button').textContent = '已確認'; });
+}
+tabs.forEach(t => t.addEventListener('click', () => runScenario(t.dataset.scenario)));
+// 鍵盤左右切換分頁
+document.querySelector('.tabs').addEventListener('keydown', e => {
+  const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length]; n.focus(); runScenario(n.dataset.scenario); }
+});
+
+/* ================= 數字解碼效果（不是 counter 往上跳） ================= */
+function scramble(el){
+  const final = el.dataset.scramble, chars = '0123456789';
+  if (reduced) { el.textContent = final; return; }
+  let f = 0; const total = 22;
+  const tick = () => {
+    el.textContent = final.split('').map((ch, i) => (ch === ',' || f > total * (i+1) / final.length) ? ch : chars[Math.random()*10|0]).join('');
+    if (++f <= total) requestAnimationFrame(tick); else el.textContent = final;
+  };
+  tick();
+}
+
+/* ================= 捲動：章節切換粒子形狀、右側導覽 ================= */
+const chapters = [...document.querySelectorAll('.chapter')];
+const railLinks = [...document.querySelectorAll('.rail a')];
+function setChapter(sec){
+  view.morph = +sec.dataset.morph; view.alpha = +sec.dataset.alpha; view.zoom = +sec.dataset.zoom;
+  const id = sec.id === 'trust' ? 'speed' : sec.id;
+  railLinks.forEach(a => a.classList.toggle('is-on', a.dataset.ch === id));
+}
+// 章節觸發要在 pin 建立之後才建立（見檔尾），否則位置會被 pin 撐開的高度算錯
+function initChapterTriggers(){
+  if (hasGsap) {
+    // pin 的章節以外層 pin-spacer 當觸發範圍，才會涵蓋整段 pin 的捲動距離
+    chapters.forEach(sec => {
+      const trg = sec.parentElement.classList.contains('pin-spacer') ? sec.parentElement : sec;
+      ScrollTrigger.create({ trigger: trg, start: 'top 55%', end: 'bottom 45%', onToggle: st => st.isActive && setChapter(sec) });
+    });
+    ScrollTrigger.refresh();
+  } else {
+    const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && setChapter(e.target)), { threshold: .5 });
+    chapters.forEach(s => io.observe(s));
+  }
+}
+
+/* ================= GSAP 動態 ================= */
+function splitWords(el){
+  // 中文逐字、英數逐詞，保留 span（漸層）
+  const walk = node => {
+    [...node.childNodes].forEach(n => {
+      if (n.nodeType === 3) {
+        const frag = document.createDocumentFragment();
+        (n.textContent.match(/[A-Za-z0-9,+.]+|\s+|[^\sA-Za-z0-9,+.]/g) || []).forEach(t => {
+          if (/^\s+$/.test(t)) frag.appendChild(document.createTextNode(t));
+          else { const s = document.createElement('span'); s.className = 'w'; s.textContent = t; frag.appendChild(s); }
+        });
+        n.replaceWith(frag);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') walk(n);
+    });
+  };
+  walk(el);
+  // 漸層文字逐字切開後要讓每個字自己帶漸層
+  el.querySelectorAll('.grad .w').forEach(w => w.classList.add('grad'));
+  return el.querySelectorAll('.w');
+}
+
+if (hasGsap && !reduced) {
+  // 開場：粒子從散落聚成球、標題逐字浮出
+  gsap.to(view, { intro: 1, duration: 3.2, ease: 'power3.inOut', delay: .2 });
+  const heroWords = splitWords(document.getElementById('hero-title'));
+  gsap.from(heroWords, { yPercent: 110, opacity: 0, rotateX: -60, stagger: .05, duration: 1, ease: 'expo.out', delay: .5 });
+  gsap.from('#hero .lead, #hero .prompt', { y: 30, opacity: 0, duration: 1, stagger: .15, delay: 1.2, ease: 'power3.out' });
+  gsap.from('#hero .kicker', { opacity: 0, letterSpacing: '.5em', duration: 1.2, delay: .3 });
+
+  // 其他章節標題逐字浮出
+  document.querySelectorAll('.chapter:not(#hero) .split').forEach(h => {
+    const ws = splitWords(h);
+    gsap.from(ws, { yPercent: 100, opacity: 0, stagger: .035, duration: .9, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 80%' } });
+  });
+  gsap.utils.toArray('.chapter:not(#hero) .kicker, .chapter:not(#hero) .lead, .badge, .trust-link, .faq details').forEach(el =>
+    gsap.from(el, { y: 24, opacity: 0, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' } }));
+  gsap.from('.badge', { scale: .6, opacity: 0, stagger: .08, duration: .6, ease: 'back.out(2)', scrollTrigger: { trigger: '.badges', start: 'top 85%' } });
+  gsap.from('.demo .console', { y: 60, opacity: 0, scale: .96, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.demo .console', start: 'top 85%', onEnter: () => runScenario('handover'), once: true } });
+
+  const mm = gsap.matchMedia();
+  mm.add('(min-width: 768px)', () => {
+    // 1 資料湧入：pin＋scrub
+    const phrases = gsap.utils.toArray('.phrase'), flies = gsap.utils.toArray('.fly');
+    const tl = gsap.timeline({ scrollTrigger: { trigger: '#inflow', start: 'top top', end: '+=260%', pin: true, scrub: 1,
+      onUpdate: st => { view.disp = .08 + st.progress * .2; }, onLeave: () => view.disp = .08, onLeaveBack: () => view.disp = .08 } });
+    flies.forEach((f, i) => {
+      const vx = parseFloat(getComputedStyle(f).getPropertyValue('--x')), vy = parseFloat(getComputedStyle(f).getPropertyValue('--y'));
+      gsap.set(f, { xPercent: -50, yPercent: -50 });
+      tl.fromTo(f, { x: () => vx * innerWidth / 100, y: () => vy * innerHeight / 100, opacity: 0, scale: .7 },
+        { opacity: 1, scale: 1, duration: .4, ease: 'back.out(2)' }, i * .28)
+        .to(f, { x: 0, y: 0, scale: .2, opacity: 0, duration: .9, ease: 'power2.in' }, i * .28 + .55);
+    });
+    phrases.forEach((p, i) => {
+      const at = i * .75;
+      tl.fromTo(p, { opacity: 0, y: 40, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .35 }, at);
+      if (i < phrases.length - 1) tl.to(p, { opacity: 0, y: -40, filter: 'blur(8px)', duration: .35 }, at + .5);
+    });
+    tl.to('.stats', { opacity: 1, duration: .4, onStart: () => document.querySelectorAll('[data-scramble]').forEach(scramble) }, phrases.length * .75 - .2)
+      .to('.stats-note', { opacity: 1, duration: .3 }, '>-.1')
+      .to({}, { duration: .6 });
+
+    // 2 三層：pin，標籤依序彈出
+    const lt = gsap.timeline({ scrollTrigger: { trigger: '#layers', start: 'top top', end: '+=180%', pin: true, scrub: 1 } });
+    gsap.utils.toArray('.ltag').forEach((el, i) => {
+      lt.fromTo(el, { opacity: 0, xPercent: i % 2 ? -10 : -90, x: 0, scale: .9 }, { opacity: 1, xPercent: -50, scale: 1, duration: 1, ease: 'back.out(1.6)' }, i * 1.1);
+    });
+    lt.to('.ltag.is-human', { boxShadow: '0 0 0 .5rem hsla(184,100%,38%,.18), 0 1.5rem 4rem hsla(184,100%,38%,.25)', duration: .8 }).to({}, { duration: .6 });
+
+    // 5 速度：pin，光帶畫出、里程碑彈出
+    const path = document.getElementById('track-path'), L = path.getTotalLength();
+    gsap.set(path, { strokeDasharray: L, strokeDashoffset: L });
+    const st = gsap.timeline({ scrollTrigger: { trigger: '#speed', start: 'top top', end: '+=180%', pin: true, scrub: 1 } });
+    st.to(path, { strokeDashoffset: 0, duration: 4, ease: 'none' }, 0);
+    gsap.utils.toArray('.ms').forEach(m => st.fromTo(m, { opacity: 0, y: 20, scale: .8 }, { opacity: 1, y: 0, scale: 1, duration: .5, ease: 'back.out(2)' }, +m.dataset.at * 4 - .2));
+    st.to({}, { duration: .5 });
+  });
+  mm.add('(max-width: 767px)', () => {
+    document.querySelectorAll('[data-scramble]').forEach(el => ScrollTrigger.create({ trigger: el, start: 'top 85%', once: true, onEnter: () => scramble(el) }));
+    gsap.utils.toArray('.ltag, .ms').forEach(el => gsap.from(el, { y: 30, opacity: 0, scale: .95, duration: .7, ease: 'back.out(1.6)', scrollTrigger: { trigger: el, start: 'top 88%' } }));
+  });
+} else {
+  // 無 GSAP 或減少動態：直接顯示
+  document.querySelectorAll('.phrase').forEach((p, i, a) => { p.style.opacity = (i === a.length - 1) ? 1 : 0; });
+  document.querySelectorAll('[data-scramble]').forEach(scramble);
+  document.getElementById('track-path').style.strokeDasharray = 'none';
+  const once = new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { runScenario('handover'); o.disconnect(); } }, { threshold: .3 });
+  once.observe(document.querySelector('.demo .console'));
+}
+initChapterTriggers();
+})();
+</script>
+</body>
+</html>
