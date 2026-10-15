@@ -1,0 +1,92 @@
+--- custom-code/analytics/site-head.html
++++ custom-code/analytics/site-head.html
+@@ -1,44 +1,18 @@
+ <link rel="stylesheet" href="https://slater.app/20018/60294.css" />
+ 
+-<!-- Consent Mode v2: restore saved choice; deny unknown preferences before GTM. -->
++<!-- Consent Mode v2: default denied before GTM or any Google tag loads. -->
+ <script>
+   window.dataLayer = window.dataLayer || [];
+   function gtag() {
+     dataLayer.push(arguments);
+   }
+-  // Match Finsweet's existing saved choice before GTM initializes.
+-  // Unknown, malformed, expired or invalid preferences stay denied.
+-  (function () {
+-    function cookieValue(name) {
+-      var prefix = name + '=';
+-      var parts = document.cookie.split(';');
+-      for (var i = 0; i < parts.length; i++) {
+-        var part = parts[i].trim();
+-        if (part.indexOf(prefix) === 0) return part.slice(prefix.length);
+-      }
+-      return '';
+-    }
+-    var consents = {};
+-    try {
+-      var raw = cookieValue('fs-cc');
+-      if (raw && raw.length < 10000) {
+-        for (var i = 0; i < 2; i++) raw = decodeURIComponent(raw);
+-        var saved = JSON.parse(raw);
+-        if (saved && saved.consents) consents = saved.consents;
+-      }
+-    } catch (_) { /* Fail closed; Finsweet remains the preference UI owner. */ }
+-    var analytics = consents.analytics === true ? 'granted' : 'denied';
+-    var marketing = consents.marketing === true ? 'granted' : 'denied';
+-    var defaults = {
+-      analytics_storage: analytics,
+-      ad_storage: marketing,
+-      ad_user_data: marketing,
+-      ad_personalization: marketing,
+-    };
+-    // A confirmed returning visitor needs no pending-update hold.
+-    if (analytics !== 'granted') defaults.wait_for_update = 500;
+-    gtag('consent', 'default', defaults);
+-  })();
++  gtag('consent', 'default', {
++    analytics_storage: 'denied',
++    ad_storage: 'denied',
++    ad_user_data: 'denied',
++    ad_personalization: 'denied',
++    wait_for_update: 500,
++  });
+ </script>
+ 
+ <!-- Google Tag Manager: analytics tags inside GTM must require analytics_storage. -->
+@@ -156,8 +130,7 @@
+     }
+ 
+     function destinationType(path) {
+-      if (/^\/solutions(?:\/|$)/.test(path)) return 'solution';
+-      if (/^\/products(?:\/|$)/.test(path)) return 'product';
++      if (/^\/solutions/.test(path)) return 'solution';
+       if (/^\/contact/.test(path)) return 'contact';
+       if (/(login|demo|smc|app)/i.test(path)) return 'login';
+       return 'other';
+@@ -299,12 +272,10 @@
+           }
+         }
+ 
+-        if (declaredEvent === 'content_cta_click' || (['news_education', 'customer_story', 'resource', 'feature', 'ai'].indexOf(currentType) >= 0 && /^\/(solutions|products|contact)(?:\/|$)/.test(targetPath))) {
++        if (declaredEvent === 'content_cta_click' || (['news_education', 'customer_story', 'resource', 'feature', 'ai'].indexOf(currentType) >= 0 && /^(\/solutions|\/contact)/.test(targetPath))) {
+           if (!isDuplicateClick(link, 'content_cta_click')) {
+             send('content_cta_click', {
+               content_cluster: cleanToken(ds.contentCluster, currentType),
+-              content_id: cleanToken(ds.contentId, location.pathname.split('/').filter(Boolean).pop()),
+-              solution_interest: solutionInterest(targetPath),
+               destination_type: destinationType(targetPath),
+               cta_location: locationCode,
+             });
+@@ -315,10 +286,10 @@
+     );
+ 
+     function isPartnershipForm(form) {
+-      if (!form || form.closest('[fs-cc]') || /cookie[-_ ]?preferences/i.test((form.id || '') + ' ' + (form.getAttribute('name') || ''))) return false;
++      if (!form) return false;
+       if (form.getAttribute('data-ga-form-type') === 'partnership') return true;
+       if (/partner|partnership|異業合作/i.test((form.id || '') + ' ' + (form.getAttribute('name') || ''))) return true;
+-      return false; // Only explicitly designated partnership forms; never classify all contact-page forms.
++      return pageType(location.pathname) === 'contact' && !!form.closest('.w-form');
+     }
+ 
+     function trackForm(form) {

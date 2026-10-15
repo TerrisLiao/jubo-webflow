@@ -17,3 +17,7 @@
 - `claude/brave-hopper-6j5awf` @ `e58465456f16afb985e473f78cc922b700356c81`
 
 固定版本僅供追溯；繼續既有工作先重新確認 head，遵循 [Git 流程](../../workflows/git-workflow.md)。
+
+## 文章後續行為追蹤
+
+2026-10-15 的 CTA、Cookie／表單追蹤與部署狀態見 [修正與驗證](../../../custom-code/analytics/README.md)。
