@@ -1,16 +1,21 @@
 # Jubo AI：照護知識、資料與應用
 
-狀態：**v9 沉浸式中文敘事原型已完成本機驗收，待 Terris 審閱；Webflow Draft 仍為 v6**（2026-10-19，Asia/Taipei）。
+狀態：**v10（v9 故事＋依 Mobbin 重整視覺）已完成本機驗收，待 Terris 審閱；Webflow Draft 仍為 v6**（2026-10-19，Asia/Taipei）。
 
 - 工作分支：v1–v6 在 `claude/jubo-ai-agentic-redesign`（[Draft PR #24](https://github.com/TerrisLiao/jubo-webflow/pull/24)）；v7 在平台指定分支 `claude/confident-ramanujan-fivatw`，以 PR #24 head `e6a6c0e` 為基底接續，未改寫原分支。
-- **現行原型 v9**：`custom-code/poc/jubo-ai-agentic-v9.html`；[故事線、文案來源、互動與驗收](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
+- **現行原型 v10**：`custom-code/poc/jubo-ai-agentic-v10.html`；[Mobbin 參考與視覺調整](reference/原型v10暖白底與Mobbin參考_2026-10-19.md)。
+- v9（故事與文案來源）：`custom-code/poc/jubo-ai-agentic-v9.html`；[故事線、文案來源、互動與驗收](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
 - v8（同日，英文捲動展示）：`custom-code/poc/jubo-ai-agentic-v8.html`；[場景、參考與驗收](reference/原型v8捲動體驗與驗收_2026-10-19.md)。
 - v7（同日稍早，Terris 看完後改方向）：`custom-code/poc/jubo-ai-agentic-v7.html`；[原規劃對照、章節與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
 - **Webflow Draft 預覽**：[Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)，`/jubo-ai-v3-preview` 仍載入 **v6**；v7 待 Terris 確認後再替換同一隔離 iframe，未發布。
 - v6 紀錄：[架構、參考與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。v2–v6 與品牌 SVG 保留未改；[v4 歷史驗收](reference/原型v4架構與驗收_2026-10-14.md)、[v3 原交接](reference/codex-v3-交接.md)、[原 Draft 承載紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。
 - 接手先讀 AGENTS.md → current-state → tasks → decisions。
 
-## 最新方向（v9，2026-10-19）
+## 最新視覺（v10，2026-10-19）
+
+Terris 認為 v9 紫色太多、很醜，要求先用 Mobbin 了解現行 AI 公司設計。依 Claude、OpenAI、ElevenLabs、Intercom、Cursor、Lattice、Amigo 等實際截圖：暖米白底、近黑大字、只用 Jubo 青強調、色彩只在三個大型圓角媒體面板內（長虹玻璃思考光改為青／天空／薄荷／沙色）。故事、文案與互動沿用 v9。[細節](reference/原型v10暖白底與Mobbin參考_2026-10-19.md)
+
+## 故事與文案（v9，2026-10-19）
 
 Terris 看完 v8：主視覺取消圓形，只用長虹玻璃帶出模糊漸層代表思考；全頁改回繁體中文並依原 Jubo AI 頁內容潤飾；Amy／iBee 不放框；整頁沉浸式、不做 panel／pill，用 motion graphics 說故事。故事線：認識 Jubo AI → 不是產品，是每一套照護系統背後的技術 → 30 億筆資料 → 資安（引用資安頁已查核說法）→ 資料能做什麼 → 已經做到（Suite、Amy、iBee）→ 認識 N.Copilot（粗大標題後彈出對話框）→ 這只是開始 → 預約諮詢。[細節](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)
 

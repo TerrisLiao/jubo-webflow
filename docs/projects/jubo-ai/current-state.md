@@ -1,6 +1,14 @@
 # 現況
 
 - 文件更新：2026-10-19（Asia/Taipei）。
+- **現行原型 v10**：`custom-code/poc/jubo-ai-agentic-v10.html`。[Mobbin 參考與視覺調整](reference/原型v10暖白底與Mobbin參考_2026-10-19.md)。故事、文案、互動同 v9。
+- 視覺：暖米白 `#F6F5F1` 底、近黑 700 字重、Jubo 青為唯一強調色；長虹玻璃思考光只在 Hero、N.Copilot、結尾三個圓角媒體面板內，色彩為青／天空／薄荷／沙色。無紫色、無漸層字。
+- Webflow：Draft 仍為 v6，未更新、未 Publish。
+- 待確認：Terris 對 v10 的目視審閱；v9 紀錄 §3 三項待核准文案；是否以 v10 替換 Draft；真機效能。
+
+## v9 摘要（同日稍早）
+
+- 文件更新：2026-10-19（Asia/Taipei）。
 - **現行原型 v9**：`custom-code/poc/jubo-ai-agentic-v9.html`（分支 `claude/confident-ramanujan-fivatw`）。[故事線、文案來源、互動與驗收](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
 - 視覺：全螢幕長虹玻璃後的模糊漸層＝思考；沒有圓形；游標牽引光團、點擊漣漪、捲動越快光流越快；粗大中文標題（Noto Sans TC 900）。
 - 故事：11 個場景、8 個桌機 pin；Amy／iBee 無外框；N.Copilot 先出現巨大標題再彈出對話框（三個情境按鈕）。

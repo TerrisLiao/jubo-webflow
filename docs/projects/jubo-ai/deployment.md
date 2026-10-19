@@ -2,6 +2,9 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（v10） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
+| 本機瀏覽器（v10） | `tools/verify-jubo-ai-v10.js`（v9 全部檢查＋配色與媒體面板檢查） | 2026-10-19 | [v10 紀錄](reference/原型v10暖白底與Mobbin參考_2026-10-19.md) |
+| Webflow 頁面資料（v10） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認 |
 | Git（v9） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
 | 本機瀏覽器（v9） | `tools/verify-jubo-ai-v9.js`：四寬度、8 個 pin 場景、遮蔽鏡、N.Copilot、對話、彈窗、暫停、reduced-motion、DPR、矮視窗、fallback、sandbox fixture | 2026-10-19 | [v9 紀錄](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md) |
 | Webflow 頁面資料（v9） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認後替換同一 iframe |

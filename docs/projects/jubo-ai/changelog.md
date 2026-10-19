@@ -88,3 +88,11 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 新增 `custom-code/poc/jubo-ai-agentic-v9.html`：11 場景、8 個 pin；全螢幕思考光 shader（無圓形、依場景調整稜線／飽和／色相／中央柔光）；遮蔽鏡互動；資料文字流；能力大字清單；Amy／iBee 開放式構圖；N.Copilot 巨大標題後彈出對話框。
 - 製作中調整：初版漸層過飽和導致小字難讀 → 加入中央柔光、加深漸層字與次要文字色。
 - 新增 `tools/verify-jubo-ai-v9.js`；pack 工具支援 `--version 9`。結果見 [v9 紀錄](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。Draft 未更新、未 Publish。
+
+
+## 2026-10-19｜v10 依 Mobbin 重整視覺
+
+- Terris：v9 紫色太多、很醜，先用 Mobbin 了解現行 AI 公司設計。
+- 以 Mobbin `search_sections` 實際檢視 AI 首頁、AI agent 介紹、醫療 AI、資安段、Claude 網站與柔焦媒體面板等參考，整理四項共同做法（見 v10 紀錄 §2）。
+- 新增 `custom-code/poc/jubo-ai-agentic-v10.html`：暖米白底、Jubo 青強調、700 字重、黑色按鈕；shader 改為只在可見媒體面板的圓角矩形內繪製長虹玻璃思考光（青／天空／薄荷／沙色）；N.Copilot 面板隨對話框彈出才亮起。
+- 新增 `tools/verify-jubo-ai-v10.js`；pack 工具支援 `--version 10`。Draft 未更新、未 Publish。

@@ -64,3 +64,8 @@ Terris 看完 v8 後指示：取消主視覺圓形，只用玻璃帶出模糊漸
 
 實作決定（Claude）：資安只使用 `/security` 已查核的八項；不寫「不用於訓練」、多因子驗證、AES 位元數、去識別化；三項文案待核准（見紀錄 §3）。CTA 文字改為站上一致的「預約諮詢」。[紀錄](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
 
+
+## v10 視覺重整（2026-10-19）
+
+Terris 認為 v9 紫色過多、很醜，指示先用 Mobbin 研究現行 AI 公司網站。實際檢視 Claude、OpenAI、ElevenLabs、Intercom、Superhuman、Air、Cursor、Lattice、Notion、Amigo、Ease 等截圖後決定：暖米白底、近黑字、Jubo 青為唯一強調色、取消漸層字；長虹玻璃思考光只放在三個大型圓角媒體面板內，改用青／天空／薄荷／沙色。取代 v8–v9 的藍紫配色與全頁光場。故事、文案、互動不變。[紀錄](reference/原型v10暖白底與Mobbin參考_2026-10-19.md)。
+
