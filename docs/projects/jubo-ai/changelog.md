@@ -79,3 +79,12 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 主視覺 shader：長虹玻璃稜線取樣流動光、磨砂玻璃圓、游標牽引光團與稜線高光、點擊漣漪、顆粒；單 canvas／draw call。
 - 製作中修正：玻璃圓尺寸只在 scroll 事件更新，GSAP scrub 收斂期間不跟隨 → 改為每幀追蹤；預覽 iframe sandbox 未允許 forms，輸入列與對話送出鈕的 form submit 會被擋 → 改為一般按鈕（v6 Draft 與 v7 的對話送出鈕有相同潛在問題，示例 chips 不受影響）。
 - 新增 `tools/verify-jubo-ai-v8.js`；pack 工具支援 `--version 8`。結果見 [v8 紀錄](reference/原型v8捲動體驗與驗收_2026-10-19.md) 與 deployment。Draft 未更新、未 Publish。
+
+
+## 2026-10-19｜v9 沉浸式中文敘事
+
+- Terris 看完 v8：取消圓形、只用長虹玻璃帶出模糊漸層；改回繁體中文；Amy／iBee 不放框；整頁沉浸式 motion graphics；故事線與 N.Copilot 登場方式（見 decisions）。
+- 讀取現行 `/ai/jubo-ai` 取得原始五類資料、五種能力、Jubo AI Suite 與 N-Copilot 說明；從 `/security` 查核紀錄取用八項資安作為。
+- 新增 `custom-code/poc/jubo-ai-agentic-v9.html`：11 場景、8 個 pin；全螢幕思考光 shader（無圓形、依場景調整稜線／飽和／色相／中央柔光）；遮蔽鏡互動；資料文字流；能力大字清單；Amy／iBee 開放式構圖；N.Copilot 巨大標題後彈出對話框。
+- 製作中調整：初版漸層過飽和導致小字難讀 → 加入中央柔光、加深漸層字與次要文字色。
+- 新增 `tools/verify-jubo-ai-v9.js`；pack 工具支援 `--version 9`。結果見 [v9 紀錄](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。Draft 未更新、未 Publish。

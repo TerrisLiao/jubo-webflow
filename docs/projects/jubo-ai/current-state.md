@@ -1,6 +1,16 @@
 # 現況
 
 - 文件更新：2026-10-19（Asia/Taipei）。
+- **現行原型 v9**：`custom-code/poc/jubo-ai-agentic-v9.html`（分支 `claude/confident-ramanujan-fivatw`）。[故事線、文案來源、互動與驗收](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
+- 視覺：全螢幕長虹玻璃後的模糊漸層＝思考；沒有圓形；游標牽引光團、點擊漣漪、捲動越快光流越快；粗大中文標題（Noto Sans TC 900）。
+- 故事：11 個場景、8 個桌機 pin；Amy／iBee 無外框；N.Copilot 先出現巨大標題再彈出對話框（三個情境按鈕）。
+- 文案：繁體中文，改寫自現行 `/ai/jubo-ai` 與已查核的 `/security` 說法。待確認：「照護資料屬於每一家機構…受同一套資安防護」（資安窗口）、「約 33 萬」截至月份、「iBee 為 Jubo 第一個上線的 AI Agent」可否對外。
+- Webflow：Draft 仍為 v6，未更新、未 Publish。
+- 待確認：Terris 對 v9 的目視審閱；是否以 v9 替換 Draft；真機效能；正式原生做法與中文字體。
+
+## v8 摘要（同日稍早）
+
+- 文件更新：2026-10-19（Asia/Taipei）。
 - **現行原型 v8**：`custom-code/poc/jubo-ai-agentic-v8.html`（分支 `claude/confident-ramanujan-fivatw`）。[場景、參考與驗收](reference/原型v8捲動體驗與驗收_2026-10-19.md)。
 - 最新要求：主視覺＝長虹玻璃後流動的藍／紫／青綠光＋磨砂玻璃圓＋玻璃輸入列，循環且可互動；整頁為捲動觸發的 AI 體驗展示，少資訊、高科技感。參考圖另含 Verba 對話卡、Living Systems 玻璃面板、打字游標／黑底 chip／顆粒漸層球／曲線標籤的動態卡。
 - 場景：Key visual → Every record（捲動逐字＋chips 選取）→ Understanding（chips 匯入玻璃圓）→ Capabilities（6 張循環動態卡）→ Applications（N.Copilot／Amy／iBee 示範）→ What if（捲動逐字）→ Close。桌機 4 個 GSAP pin；手機、矮視窗、reduced-motion 不 pin。
