@@ -60,3 +60,13 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 同一隔離 Draft 更新 v6；45,066 字元 src 與全部屬性一致，原六個元素結構及 Site／domain 發布時間不變。Designer MCP 斷線，畫布目視及真機效能仍待確認。
 - v2／v3／v4／v5 HTML 與品牌 SVG 保留；未改共用資產、正式字體或站台腳本，未 Publish。六份現行文件與既有 Draft PR #24 同步。
 - [參考、調整、驗收與限制](reference/原型v6極簡質感與驗收_2026-10-15.md)。
+
+
+## 2026-10-19｜v7 依原規劃精修
+
+- Terris 認為現行 Draft（v6）很不好看，要求依 git 脈絡回到原先規劃。讀回 v1–v6 decisions、交接、驗收與 PR #24，整理出 v6 偏離的已確認規劃（漸進顯色、glowing orb、磨砂／長虹玻璃、官網字體）。
+- 在平台指定分支 `claude/confident-ramanujan-fivatw` 以 PR #24 head `e6a6c0e` 快轉為基底，新增 `custom-code/poc/jubo-ai-agentic-v7.html`；v2–v6 未改。
+- 視覺：Poppins／18px 內文；一條 Jubo 青 → 藍 → 紫漸層強調詞；單一 shader 同時繪製隨章節增強的光場、Understanding 章長虹折射與互動球體。
+- 結構：7 章；Foundation／Capabilities／Applications 為 sticky 章，固定章標題與分頁，內容離散切換並各有玻璃示意動畫；Statement 與 Possibilities 逐字顯現；整頁約 18 個視窗高（v6 約 26）。
+- 新增 `tools/verify-jubo-ai-v7.js`；`tools/pack-jubo-ai-preview.py` 支援 `--version 7`。完整驗收全部通過，詳見 [v7 紀錄](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
+- Webflow Draft 未更新（仍為 v6）、未 Publish；未改共用資產、Slater 或站台腳本。分支登記於 branch-inventory。

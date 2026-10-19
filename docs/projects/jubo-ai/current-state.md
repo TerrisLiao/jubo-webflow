@@ -1,5 +1,18 @@
 # 現況
 
+- 文件更新：2026-10-19（Asia/Taipei）。
+- **現行原型 v7**：`custom-code/poc/jubo-ai-agentic-v7.html`（分支 `claude/confident-ramanujan-fivatw`，基底為 PR #24 head `e6a6c0e`）。[原規劃對照、章節與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
+- 最新要求：Terris 認為 v6 Draft 很不好看，要求依 git 脈絡回到原先規劃精修。v7 恢復 v4 已確認的白底漸進顯色、glowing orb、磨砂／長虹玻璃，保留 v5 的置中逐幕揭露、獨立互動球體與 Jubo CTA，保留 v4 的資料 → 能力 → 應用架構與全英文。
+- 視覺：官網 Poppins、內文 18px、標題 400 字重；一行漸層強調詞（Jubo 青 → 藍 → 紫，同 CTA 箭頭漸層）。光場隨章節增強，Understanding 章到達高峰並出現長虹折射，結尾淡回白底。
+- 敘事：Hero → Statement → Foundation（5 類資料）→ Understanding → Capabilities（5 種能力）→ Applications（N.Copilot／Amy／iBee）→ Possibilities（3 個 What if）→ People／CTA。整頁約 18 個視窗高（v6 約 26）。桌機三個 sticky 章各有固定章標題與分頁，內容離散切換；手機、矮視窗、reduced-motion 自然文件流。
+- 示意：每類資料一張玻璃紀錄示意、每種能力一個玻璃視窗動畫；全部標示 Illustration／no real data。N.Copilot 第一次抵達自動播放一段示意對話。
+- 技術：單 Three.js r155 canvas／ShaderMaterial／draw call 同時繪製光場、長虹與球體；DPR 桌機 ≤2／手機 ≤1.5；Pause、分頁隱藏停止、reduced-motion、CSS fallback。
+- 驗收：`tools/verify-jubo-ai-v7.js` 全部通過，詳見 deployment 與 v7 驗收文件。軟體 WebGL，未做真機 FPS／Lighthouse。
+- Webflow：`/jubo-ai-v3-preview` Draft 仍為 **v6**，本輪未更新、未 Publish。正式 `/ai/jubo-ai` 與 `/ai/jubo-ai-v2` 未動。
+- 待確認：Terris 對 v7 的目視審閱；是否以 v7 替換 Draft iframe；真機效能、真實產品截圖、正式原生整合。Gibson／品牌 Variable 策略仍待決定。
+
+## v6 歷史摘要（2026-10-15）
+
 - 文件更新：2026-10-15（Asia/Taipei）。
 - **現行原型 v6**：`custom-code/poc/jubo-ai-agentic-v6.html`。[OpenAI 參考、質感調整與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。
 - 最新授權：Terris 認為 v5 質感不足，要求接近 OpenAI。保留置中、慢速捲動揭露與獨立互動球體，改以中性排版、留白、局部材質建立層級；同一隔離 Draft，不發布。

@@ -1,0 +1,1046 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Jubo AI brings care knowledge and real-world care records together, so the people behind care can see clearly and decide well."><link rel="icon" href="data:,"><title>Jubo AI — AI that understands care · v7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<!-- v7: returns to the approved plan (English, centered scroll reveal, white base that gains colour,
+     interactive glowing orb, frosted + prismatic glass, Jubo CTA) and refines execution:
+     site type scale (Poppins, 18px body), fewer and fuller scenes, discrete step transitions
+     instead of scroll-scrubbed opacity, one canvas / one draw call for orb and light field.
+     Isolated prototype only. No shared Webflow assets or production pages modified. -->
+<style>
+:root{
+ --primary--accent:#00b2c0;--jubo-ai-teal-ink:#00808a;--jubo-ai-blue:#3b58ff;--jubo-ai-purple:#b15dff;
+ --neutral--black:#151717;--jubo-ai-text-2:#4c5258;--jubo-ai-text-3:#7a8086;--neutral--white:#fff;--neutral--bg-grey:#f8f8f8;
+ --jubo-ai-line:rgba(21,23,23,.09);--jubo-ai-gradient:linear-gradient(100deg,#00b2c0 6%,#3b8bff 52%,#b15dff 96%);
+ --jubo-ai-glass:rgba(255,255,255,.6);--jubo-ai-glass-edge:rgba(255,255,255,.95);
+ --jubo-ai-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1.5rem 4rem -1.5rem rgba(18,74,88,.2),0 .125rem .5rem rgba(16,24,40,.04);
+ --jubo-ai-ease:cubic-bezier(.22,.8,.24,1);--jubo-ai-font:"Poppins",Arial,sans-serif;--jubo-ai-nav:4.5rem;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:var(--jubo-ai-nav)}
+body{margin:0;background:#fafbfb;color:var(--neutral--black);font-family:var(--jubo-ai-font);font-size:1.125rem;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+a{color:inherit}
+h1,h2,h3,p{margin:0}
+h1,h2{font-weight:400;letter-spacing:-.045em;line-height:1.04}
+h3{font-weight:500;letter-spacing:-.02em;line-height:1.25}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+button{cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:2px solid var(--primary--accent);outline-offset:4px;border-radius:.25rem}
+[hidden]{display:none!important}
+.jubo-ai_sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.jubo-ai_skip{position:fixed;z-index:100;top:1rem;left:1rem;padding:.75rem 1rem;background:white;border-radius:.5rem;transform:translateY(-200%)}
+.jubo-ai_skip:focus{transform:none}
+.page-wrapper{position:relative;overflow:clip}
+.main-wrapper{position:relative;z-index:1}
+.padding-global{padding-left:2.5rem;padding-right:2.5rem}
+.container-large{max-width:80rem;width:100%;margin-left:auto;margin-right:auto}
+.container-medium{max-width:64rem;width:100%;margin-left:auto;margin-right:auto}
+.container-small{max-width:48rem;width:100%;margin-left:auto;margin-right:auto}
+
+/* Light field: the WebGL canvas paints paper, colour field, prism and orb in one pass. */
+#jubo-ai-gl{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none}
+.jubo-ai_atmosphere{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.2s;background:radial-gradient(40% 45% at 18% 30%,rgba(157,248,255,.5),transparent 70%),radial-gradient(38% 42% at 84% 40%,rgba(160,190,255,.45),transparent 70%),radial-gradient(45% 40% at 50% 92%,rgba(212,182,249,.45),transparent 70%)}
+html[data-webgl="unavailable"] .jubo-ai_atmosphere{opacity:var(--jubo-ai-tone,.4)}
+.jubo-ai_fallback-orb{position:fixed;z-index:0;top:50%;left:50%;width:20rem;aspect-ratio:1;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);opacity:0;background:radial-gradient(circle at var(--shine-x,32%) var(--shine-y,26%),white,transparent 42%),radial-gradient(ellipse at 72% 68%,rgba(32,237,241,.75),transparent 62%),radial-gradient(ellipse at 28% 78%,rgba(59,88,255,.28),transparent 60%),#d9f3f7;box-shadow:inset 0 0 1.5rem white,inset -.75rem -1rem 2rem rgba(0,128,138,.18),0 2rem 5rem rgba(0,178,192,.22)}
+html[data-webgl="unavailable"] #jubo-ai-gl{display:none}
+
+/* Type */
+.jubo-ai_eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-size:.8125rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--jubo-ai-teal-ink)}
+.jubo-ai_eyebrow::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--jubo-ai-gradient)}
+.jubo-ai_gradient-text{color:var(--primary--accent);background:var(--jubo-ai-gradient);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;padding-bottom:.06em}
+.jubo-ai_h1{font-size:clamp(3rem,7.4vw,6.75rem)}
+.jubo-ai_h2{font-size:clamp(2.5rem,5.4vw,4.75rem)}
+.jubo-ai_h2.is-stage{font-size:clamp(2rem,3.6vw,3.25rem)}
+.jubo-ai_lead{font-size:clamp(1.0625rem,1.4vw,1.25rem);line-height:1.6;color:var(--jubo-ai-text-2);max-width:36rem}
+.jubo-ai_center{text-align:center;display:flex;flex-direction:column;align-items:center}
+.jubo-ai_text-link{display:inline-flex;align-items:center;gap:.45rem;font-size:1rem;font-weight:500;color:var(--neutral--black);text-decoration:none;padding:.5rem 0;border-bottom:1px solid transparent;transition:border-color .3s,gap .3s var(--jubo-ai-ease)}
+.jubo-ai_text-link:hover{border-color:var(--primary--accent);gap:.7rem}
+.jubo-ai_text-link svg{width:1rem;height:1rem;stroke:var(--primary--accent);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+/* Frosted glass, one recipe for every surface */
+.jubo-ai_glass{background:var(--jubo-ai-glass);border:1px solid var(--jubo-ai-glass-edge);border-radius:1.75rem;box-shadow:var(--jubo-ai-shadow);backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%)}
+.jubo-ai_chip{display:inline-flex;align-items:center;gap:.45rem;padding:.45rem .9rem;border-radius:2rem;font-size:.875rem;line-height:1.3;background:rgba(255,255,255,.7);border:1px solid rgba(21,23,23,.07);color:var(--neutral--black);white-space:nowrap}
+.jubo-ai_chip.is-capability{background:linear-gradient(white,white) padding-box,var(--jubo-ai-gradient) border-box;border:1px solid transparent;color:var(--jubo-ai-teal-ink);font-weight:500}
+.jubo-ai_skeleton{display:block;height:.45rem;border-radius:1rem;background:linear-gradient(90deg,rgba(21,23,23,.09),rgba(21,23,23,.045));width:var(--w,100%)}
+
+/* Nav */
+.jubo-ai_nav{position:fixed;z-index:20;top:0;left:0;right:0;height:var(--jubo-ai-nav);display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:0 2.5rem;transition:background .4s,box-shadow .4s,backdrop-filter .4s}
+html[data-scrolled="true"] .jubo-ai_nav{background:rgba(250,251,251,.72);backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);box-shadow:0 1px 0 var(--jubo-ai-line)}
+.jubo-ai_brand{font-size:1.25rem;font-weight:500;letter-spacing:-.03em;text-decoration:none;display:flex;align-items:center;gap:.35rem}
+.jubo-ai_brand span{color:var(--primary--accent)}
+.jubo-ai_nav-links{display:flex;gap:2rem;font-size:.9375rem}
+.jubo-ai_nav-links a{text-decoration:none;color:var(--jubo-ai-text-2);transition:color .3s}
+.jubo-ai_nav-links a:hover,.jubo-ai_nav-links a[aria-current="true"]{color:var(--neutral--black)}
+.jubo-ai_nav-actions{display:flex;align-items:center;gap:.75rem}
+.jubo-ai_motion-toggle{display:inline-flex;align-items:center;justify-content:center;width:2.5rem;height:2.5rem;border-radius:50%;border:1px solid var(--jubo-ai-line);background:rgba(255,255,255,.55);color:var(--jubo-ai-text-2);padding:0}
+.jubo-ai_motion-toggle svg{width:.85rem;height:.85rem;fill:currentColor}
+.jubo-ai_motion-toggle:hover{color:var(--neutral--black);border-color:rgba(0,178,192,.4)}
+
+/* Existing Jubo glass CTA (structure and seven effect layers read from the published site). */
+.glass-effect__fill-burn{opacity:0;mix-blend-mode:color-burn;border-radius:inherit;background-color:currentColor;position:absolute;inset:0}
+.glass-effect__fill{opacity:1;border-radius:inherit;background-color:#f0f0f0;position:absolute;inset:0}
+.glass-effect{z-index:0;-webkit-backdrop-filter:saturate(170%) blur(.75em);backdrop-filter:saturate(170%) blur(.75em);pointer-events:none;isolation:isolate;color:#201d1d;border-radius:inherit;position:absolute;inset:0;overflow:hidden}
+.glass-effect__edge-dark{mix-blend-mode:overlay;border-radius:inherit;position:absolute;inset:0}
+.glass-effect__inner-glow{mix-blend-mode:darken;border-radius:inherit;position:absolute;inset:0;box-shadow:inset 0 0 1.75em #f2f2f21a}
+.glass-effect__highlight-strong{border-radius:inherit;position:absolute;inset:0;box-shadow:inset .28125em .18125em .09375em -.328125em #ffffff80}
+.glass-effect__edge-light{border-radius:inherit;mix-blend-mode:plus-lighter;position:absolute;inset:0;box-shadow:inset .2em .28125em .09375em -.1875em #b3b3b31a}
+.glass-effect__highlight-soft{mix-blend-mode:overlay;border-radius:inherit;position:absolute;inset:0;box-shadow:inset .15em .15em .09375em -.328125em #ffffffb3}
+.glass-element{z-index:1;gap:.5rem;border-top:.5px solid var(--neutral--white);border-left:.5px solid var(--neutral--white);border-radius:50em;justify-content:flex-start;align-items:center;display:flex;position:relative}
+.glass-element.is-cta{-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);background-color:#e6e6e680;padding:.6rem .7rem .6rem 1.6rem;gap:1.1rem;box-shadow:inset 0 1px 5px #d6d6d633}
+.glass-element.is-icon{justify-content:center;width:2rem;height:2rem;padding:.25rem;overflow:clip;transform:rotate(-45deg);flex:none}
+.glass-effect.is-icon{pointer-events:auto;background-color:var(--neutral--white)}
+.glass-effect__fill.is-icon{background-color:#f7f7f700}
+.glass-effect__fill-burn.is-icon{background-color:#0000}
+.glass-button{display:inline-flex;align-items:center;text-decoration:none;color:var(--neutral--black);font-size:1rem;font-weight:500;line-height:1.5;transition:transform .4s var(--jubo-ai-ease)}
+.glass-button:hover{transform:translateY(-1px)}
+.glass-button .gradient-icon{position:absolute;display:grid;place-items:center;inset:.45rem;transition:transform .5s var(--jubo-ai-ease),opacity .5s;z-index:1}
+.glass-button .gradient-icon svg{width:100%;height:100%;display:block}
+.glass-button .gradient-icon.is-2{transform:translateX(-130%);opacity:0}
+.glass-button:hover .gradient-icon.is-1{transform:translateX(130%);opacity:0}
+.glass-button:hover .gradient-icon.is-2{transform:none;opacity:1}
+.jubo-ai_nav .glass-button{font-size:.875rem}
+.jubo-ai_nav .glass-element.is-cta{padding:.4rem .45rem .4rem 1.1rem;gap:.7rem}
+.jubo-ai_nav .glass-element.is-icon{width:1.75rem;height:1.75rem}
+
+/* Hero */
+.jubo-ai_hero{min-height:100svh;padding:calc(var(--jubo-ai-nav) + 3.5rem) 0 2.5rem;display:flex;align-items:center}
+.jubo-ai_hero>.padding-global{width:100%}
+.jubo-ai_hero .jubo-ai_center{gap:1.5rem}
+.jubo-ai_hero-actions{display:flex;align-items:center;gap:1.75rem;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
+.jubo-ai_orb-slot{width:min(26rem,62vw,36svh);aspect-ratio:1;flex:none}
+.jubo-ai_hero .jubo-ai_orb-slot{margin-top:1rem}
+.jubo-ai_hint{font-size:.8125rem;color:var(--jubo-ai-text-3);margin-top:-.5rem}
+
+/* Statement with word-by-word reveal */
+.jubo-ai_statement{padding:16svh 0 18svh}
+.jubo-ai_statement-text{font-size:clamp(2.5rem,6vw,5.5rem);line-height:1.08;letter-spacing:-.045em;font-weight:400;margin-top:1.75rem}
+.jubo-ai_statement-text .jubo-ai_line{display:block}
+[data-words] .jubo-ai_word{transition:opacity .25s linear}
+html[data-scrub="true"] [data-words] .jubo-ai_word{opacity:var(--o,.16)}
+.jubo-ai_domains{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:2.75rem}
+.jubo-ai_stats{display:grid;grid-template-columns:repeat(2,minmax(0,15rem));gap:1rem 4rem;justify-content:center;margin-top:4.5rem}
+.jubo-ai_stat{text-align:center;border-top:1px solid var(--jubo-ai-line);padding-top:1.4rem}
+.jubo-ai_stat strong{display:block;font-size:clamp(2.5rem,4vw,3.5rem);font-weight:400;letter-spacing:-.05em;line-height:1}
+.jubo-ai_stat span{display:block;margin-top:.7rem;font-size:.9375rem;color:var(--jubo-ai-text-2);line-height:1.5}
+
+/* Staged (sticky) chapters. Steps change discretely; no half-faded scrub frames. */
+.jubo-ai_stage{position:relative}
+html[data-scrub="true"] .jubo-ai_stage{height:calc(var(--steps) * var(--step,60svh) + 100svh)}
+.jubo-ai_stage-inner{padding:6rem 0 4rem}
+html[data-scrub="true"] .jubo-ai_stage-inner{position:sticky;top:0;height:100svh;padding:calc(var(--jubo-ai-nav) + 1.5rem) 0 2rem;display:flex;flex-direction:column}
+.jubo-ai_stage-head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.jubo-ai_tabs{display:inline-flex;gap:.25rem;padding:.3rem;margin-top:1.25rem;border-radius:3rem;position:relative}
+.jubo-ai_tab{border:0;background:none;padding:.55rem 1.05rem;border-radius:2rem;font-size:.875rem;color:var(--jubo-ai-text-2);transition:color .3s,background .3s,box-shadow .3s;white-space:nowrap}
+.jubo-ai_tab:hover{color:var(--neutral--black)}
+.jubo-ai_tab[aria-current="step"]{background:white;color:var(--neutral--black);box-shadow:0 .25rem 1rem -.25rem rgba(18,74,88,.18),inset 0 0 0 1px rgba(0,178,192,.18)}
+html:not([data-scrub="true"]) .jubo-ai_tabs{display:none}
+.jubo-ai_panels{position:relative;flex:1;min-height:0;margin-top:1.5rem}
+html[data-scrub="true"] .jubo-ai_panel{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:safe center;opacity:0;visibility:hidden;transform:translateY(1.5rem);transition:opacity .3s ease,transform .4s var(--jubo-ai-ease),visibility 0s linear .4s}
+html[data-scrub="true"] .jubo-ai_panel[data-active="true"]{opacity:1;visibility:visible;transform:none;transition:opacity .55s ease .2s,transform .8s var(--jubo-ai-ease) .2s,visibility 0s}
+html:not([data-scrub="true"]) .jubo-ai_panel{display:flex;flex-direction:column;align-items:center;padding:3.5rem 0}
+html:not([data-scrub="true"]) .jubo-ai_panel + .jubo-ai_panel{border-top:1px solid var(--jubo-ai-line)}
+.jubo-ai_panel-head{text-align:center;display:flex;flex-direction:column;align-items:center;gap:.6rem;max-width:40rem}
+.jubo-ai_panel-index{font-size:.8125rem;color:var(--jubo-ai-text-3);font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.jubo-ai_panel-title{font-size:clamp(2rem,3.4vw,3rem);font-weight:400;letter-spacing:-.04em;line-height:1.08}
+.jubo-ai_panel-copy{font-size:1.0625rem;color:var(--jubo-ai-text-2);line-height:1.55}
+.jubo-ai_uses{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;align-items:center;margin-top:1.4rem}
+.jubo-ai_uses-label{font-size:.8125rem;color:var(--jubo-ai-text-3);margin-right:.25rem}
+.jubo-ai_progress{height:2px;width:min(18rem,60%);margin:1rem auto 0;background:var(--jubo-ai-line);border-radius:2px;overflow:hidden}
+.jubo-ai_progress i{display:block;height:100%;width:100%;background:var(--jubo-ai-gradient);transform-origin:left;transform:scaleX(var(--stage-progress,0))}
+html:not([data-scrub="true"]) .jubo-ai_progress{display:none}
+html:not([data-scrub="true"]) .jubo-ai_chat-thread{height:16rem}
+
+/* Motion primitives: children with data-seq reveal when their panel plays. */
+[data-motion] [data-seq]{transition:opacity .55s ease,transform .7s var(--jubo-ai-ease);transition-delay:calc(var(--seq,0) * 110ms + 250ms)}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) [data-seq]{opacity:0;transform:translateY(.6rem)}
+html[data-motion-state="paused"] [data-motion] [data-seq],html[data-reduced="true"] [data-motion] [data-seq]{opacity:1!important;transform:none!important;transition:none}
+
+/* Foundation record surfaces */
+.jubo-ai_record{width:min(34rem,100%);margin-top:1.75rem;padding:1.4rem 1.5rem;text-align:left}
+.jubo-ai_record-top{display:flex;align-items:center;justify-content:space-between;font-size:.8125rem;color:var(--jubo-ai-text-3);padding-bottom:.9rem;border-bottom:1px solid var(--jubo-ai-line);margin-bottom:.4rem}
+.jubo-ai_record-top b{display:flex;align-items:center;gap:.55rem;font-weight:500;color:var(--neutral--black);font-size:.9375rem}
+.jubo-ai_icon{width:1.9rem;height:1.9rem;border-radius:.6rem;display:grid;place-items:center;background:linear-gradient(140deg,rgba(157,248,255,.55),rgba(185,205,255,.5));color:var(--jubo-ai-teal-ink)}
+.jubo-ai_icon svg{width:1.05rem;height:1.05rem;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.jubo-ai_row{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:.4rem 1rem;padding:.8rem 0;border-bottom:1px solid var(--jubo-ai-line)}
+.jubo-ai_row:last-child{border-bottom:0}
+.jubo-ai_row span:first-child{font-size:.9375rem;min-width:11rem}
+.jubo-ai_row .jubo-ai_skeleton{max-width:12rem;justify-self:end}
+.jubo-ai_vitals{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem;padding-top:.6rem}
+.jubo-ai_vital{padding:.8rem .7rem .6rem;border-radius:1rem;background:rgba(255,255,255,.7);border:1px solid rgba(21,23,23,.06)}
+.jubo-ai_vital small{display:block;font-size:.75rem;line-height:1.3;color:var(--jubo-ai-text-2);min-height:2em}
+.jubo-ai_vital svg{display:block;width:100%;height:2.2rem;margin-top:.3rem;fill:none;stroke:var(--primary--accent);stroke-width:2;stroke-linecap:round}
+.jubo-ai_vital svg path{stroke-dasharray:120;stroke-dashoffset:120;transition:stroke-dashoffset 1.4s var(--jubo-ai-ease) calc(var(--seq,0) * 110ms + 450ms)}
+[data-play="true"] .jubo-ai_vital svg path,html:not([data-enhanced="true"]) .jubo-ai_vital svg path,html[data-reduced="true"] .jubo-ai_vital svg path,html[data-motion-state="paused"] .jubo-ai_vital svg path{stroke-dashoffset:0}
+.jubo-ai_status{display:inline-flex;align-items:center;gap:.45rem;font-size:.9375rem}
+.jubo-ai_status::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--dot,var(--primary--accent));box-shadow:0 0 0 .25rem color-mix(in srgb,var(--dot,var(--primary--accent)) 18%,transparent)}
+.jubo-ai_timeline{display:grid;grid-template-columns:repeat(3,1fr);position:relative;padding:1.5rem 0 .75rem}
+.jubo-ai_timeline::before{content:"";position:absolute;left:16.6%;right:16.6%;top:2.05rem;height:2px;background:var(--jubo-ai-gradient);transform-origin:left;transform:scaleX(var(--line,1));transition:transform 1.2s var(--jubo-ai-ease) .45s;opacity:.55}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) .jubo-ai_timeline::before{--line:0}
+.jubo-ai_timeline div{text-align:center;position:relative;font-size:.9375rem;line-height:1.35;padding:0 .4rem}
+.jubo-ai_timeline div::before{content:"";display:block;width:1.15rem;height:1.15rem;border-radius:50%;margin:0 auto .85rem;background:white;border:2px solid var(--primary--accent);box-shadow:0 0 0 .3rem rgba(0,178,192,.12)}
+.jubo-ai_timeline small{display:block;font-size:.75rem;color:var(--jubo-ai-text-3);margin-top:.3rem}
+.jubo-ai_bubbles{display:flex;flex-direction:column;gap:.55rem;padding-top:.7rem}
+.jubo-ai_bubble{max-width:78%;padding:.6rem .95rem;border-radius:1.1rem 1.1rem 1.1rem .3rem;background:rgba(255,255,255,.85);border:1px solid rgba(21,23,23,.06);font-size:.9375rem}
+.jubo-ai_bubble small{display:block;font-size:.75rem;color:var(--jubo-ai-text-3);margin-bottom:.35rem}
+.jubo-ai_bubble.is-right{align-self:flex-end;border-radius:1.1rem 1.1rem .3rem 1.1rem;background:linear-gradient(135deg,rgba(157,248,255,.4),rgba(185,205,255,.35));border-color:rgba(0,178,192,.14)}
+.jubo-ai_photo{height:2.75rem;border-radius:.7rem;margin-top:.5rem;background:radial-gradient(circle at 25% 35%,rgba(255,255,255,.9),transparent 30%),linear-gradient(120deg,#c8f4f2,#d9e2ff 55%,#eadcff)}
+
+/* Understanding */
+.jubo-ai_understanding{position:relative}
+html[data-scrub="true"] .jubo-ai_understanding{height:190svh}
+.jubo-ai_understanding-inner{padding:8rem 0 6rem;display:flex;flex-direction:column;align-items:center;text-align:center;gap:1.75rem}
+html[data-scrub="true"] .jubo-ai_understanding-inner{position:sticky;top:0;height:100svh;padding:calc(var(--jubo-ai-nav) + 2rem) 0 2.5rem;justify-content:center;gap:1.25rem}
+.jubo-ai_understanding .jubo-ai_orb-slot{width:min(24rem,58vw,38svh)}
+.jubo-ai_understanding-lines{display:grid;gap:.35rem;font-size:clamp(1.125rem,1.6vw,1.375rem);color:var(--jubo-ai-text-2);min-height:5.5em}
+.jubo-ai_understanding-lines span{transition:opacity .6s ease,transform .8s var(--jubo-ai-ease)}
+html[data-scrub="true"] .jubo-ai_understanding-lines span:not([data-on="true"]){opacity:0;transform:translateY(.5rem)}
+.jubo-ai_understanding-lines span:last-child{color:var(--neutral--black)}
+
+/* Capability window */
+.jubo-ai_window{width:min(42rem,100%);margin-top:1.75rem;overflow:hidden;text-align:left}
+.jubo-ai_window-bar{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.25rem;border-bottom:1px solid var(--jubo-ai-line);font-size:.8125rem;color:var(--jubo-ai-text-3)}
+.jubo-ai_window-bar b{font-weight:500;color:var(--neutral--black);display:flex;align-items:center;gap:.5rem}
+.jubo-ai_window-bar b::before{content:"";width:.5rem;height:.5rem;border-radius:50%;background:var(--jubo-ai-gradient)}
+.jubo-ai_window-body{height:15.5rem;position:relative;padding:1.5rem 1.75rem;display:flex;flex-direction:column;justify-content:center;gap:.75rem}
+.jubo-ai_search{display:flex;align-items:center;gap:.7rem;padding:.8rem 1rem;border-radius:1rem;background:white;border:1px solid rgba(0,178,192,.25);box-shadow:0 .5rem 1.5rem -.75rem rgba(0,128,138,.3);font-size:1rem}
+.jubo-ai_search svg{width:1.1rem;height:1.1rem;stroke:var(--jubo-ai-teal-ink);fill:none;stroke-width:2;stroke-linecap:round}
+.jubo-ai_typed{display:inline-block;overflow:hidden;white-space:nowrap;border-right:2px solid var(--primary--accent);width:9ch;animation:jubo-ai-caret 1s steps(1) infinite}
+[data-play="true"] .jubo-ai_typed{animation:jubo-ai-type 1.1s steps(9) .35s both,jubo-ai-caret 1s steps(1) infinite}
+@keyframes jubo-ai-type{from{width:0}to{width:9ch}}
+@keyframes jubo-ai-caret{50%{border-color:transparent}}
+.jubo-ai_result{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.7rem 1rem;border-radius:.85rem;font-size:.9375rem;color:var(--jubo-ai-text-2);background:rgba(255,255,255,.55)}
+.jubo-ai_result.is-match{color:var(--neutral--black);background:linear-gradient(90deg,rgba(157,248,255,.5),rgba(185,205,255,.3));box-shadow:inset 0 0 0 1px rgba(0,178,192,.25)}
+.jubo-ai_result small{font-size:.75rem;color:var(--jubo-ai-text-3)}
+.jubo-ai_merge{display:grid;grid-template-columns:1fr auto 1.2fr;align-items:center;gap:1.25rem}
+.jubo-ai_sources{display:grid;gap:.55rem}
+.jubo-ai_source{padding:.6rem .85rem;border-radius:.8rem;background:rgba(255,255,255,.75);border:1px solid rgba(21,23,23,.06);font-size:.875rem;display:grid;gap:.4rem}
+.jubo-ai_arrow{width:2.25rem;height:2.25rem;border-radius:50%;display:grid;place-items:center;background:white;box-shadow:0 .25rem 1rem -.25rem rgba(18,74,88,.25);color:var(--primary--accent)}
+.jubo-ai_arrow svg{width:1rem;height:1rem;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.jubo-ai_summary{padding:1rem 1.1rem;border-radius:1rem;background:white;box-shadow:0 .75rem 2rem -1rem rgba(18,74,88,.3),inset 0 0 0 1px rgba(0,178,192,.2);display:grid;gap:.6rem}
+.jubo-ai_summary b{font-weight:500;font-size:.9375rem}
+.jubo-ai_summary span{display:flex;align-items:center;gap:.5rem;font-size:.8125rem;color:var(--jubo-ai-text-2)}
+.jubo-ai_summary span::before{content:"";width:.35rem;height:.35rem;border-radius:50%;background:var(--primary--accent);flex:none}
+.jubo-ai_trend{width:100%;height:10rem;overflow:visible}
+.jubo-ai_trend .grid{stroke:var(--jubo-ai-line);stroke-width:1}
+.jubo-ai_trend .line{fill:none;stroke:url(#jubo-ai-trend-gradient);stroke-width:3;stroke-linecap:round;stroke-dasharray:640;stroke-dashoffset:var(--dash,0);transition:stroke-dashoffset 1.8s var(--jubo-ai-ease) .3s}
+.jubo-ai_trend .area{fill:url(#jubo-ai-trend-fill);opacity:var(--area,1);transition:opacity 1s ease 1.2s}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) .jubo-ai_trend .line{--dash:640}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) .jubo-ai_trend .area{--area:0}
+.jubo-ai_trend .focus{fill:rgba(0,178,192,.12);stroke:rgba(0,178,192,.35);stroke-width:1;transform-origin:430px 46px;animation:jubo-ai-ping 2.4s ease-in-out infinite}
+.jubo-ai_trend .dot{fill:white;stroke:var(--primary--accent);stroke-width:3}
+@keyframes jubo-ai-ping{50%{transform:scale(1.25);opacity:.55}}
+.jubo-ai_flag{position:absolute;right:1.75rem;top:1.4rem;display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .8rem;border-radius:2rem;background:white;font-size:.8125rem;box-shadow:0 .5rem 1.25rem -.5rem rgba(18,74,88,.3)}
+.jubo-ai_flag::before{content:"";width:.45rem;height:.45rem;border-radius:50%;background:var(--primary--accent)}
+.jubo-ai_doc{display:grid;gap:.7rem;padding:1.1rem 1.25rem;border-radius:1rem;background:white;box-shadow:inset 0 0 0 1px rgba(21,23,23,.06)}
+.jubo-ai_doc b{font-weight:500;font-size:.9375rem;display:flex;justify-content:space-between}
+.jubo-ai_doc b small{font-weight:400;font-size:.75rem;color:var(--jubo-ai-text-3)}
+.jubo-ai_write{transform-origin:left;transition:transform .9s var(--jubo-ai-ease);transition-delay:calc(var(--seq,0) * 160ms + 400ms)}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) .jubo-ai_write{transform:scaleX(0)}
+.jubo-ai_doc-tags{display:flex;gap:.5rem;flex-wrap:wrap}
+.jubo-ai_bars{display:flex;align-items:flex-end;gap:.7rem;height:9rem;padding:0 .5rem;border-bottom:1px solid var(--jubo-ai-line)}
+.jubo-ai_bars i{flex:1;border-radius:.5rem .5rem .2rem .2rem;height:var(--h);background:linear-gradient(180deg,rgba(0,178,192,.75),rgba(157,248,255,.35));transform-origin:bottom;transition:transform 1s var(--jubo-ai-ease);transition-delay:calc(var(--seq,0) * 90ms + 300ms)}
+.jubo-ai_bars i:nth-child(n+5){background:linear-gradient(180deg,rgba(59,88,255,.6),rgba(185,205,255,.35))}
+html[data-enhanced="true"] [data-motion]:not([data-play="true"]) .jubo-ai_bars i{transform:scaleY(.08)}
+.jubo-ai_bars-label{display:flex;justify-content:space-between;font-size:.8125rem;color:var(--jubo-ai-text-3)}
+
+/* Applications */
+.jubo-ai_app{display:flex;flex-direction:column;align-items:center;text-align:center;gap:.6rem;width:100%;padding-top:.5rem}
+.jubo-ai_app .jubo-ai_panel-copy{max-width:38rem}
+.jubo-ai_app-type{font-size:.8125rem;color:var(--jubo-ai-teal-ink);font-weight:500;letter-spacing:.02em}
+.jubo-ai_copilot-wordmark{width:11.5rem;height:auto;margin:.15rem 0 .1rem}
+.jubo-ai_app-tagline{font-size:1.25rem;font-weight:500;letter-spacing:-.02em}
+.jubo-ai_app-name{font-size:clamp(2.5rem,4.2vw,3.75rem);font-weight:400;letter-spacing:-.05em;line-height:1}
+.jubo-ai_prompt-options{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:.5rem}
+.jubo-ai_prompt-option{border:1px solid rgba(21,23,23,.1);background:rgba(255,255,255,.7);border-radius:2rem;padding:.5rem 1rem;font-size:.875rem;transition:background .3s,border-color .3s,color .3s}
+.jubo-ai_prompt-option:hover{border-color:rgba(0,178,192,.4)}
+.jubo-ai_prompt-option[aria-pressed="true"]{background:white;border-color:rgba(0,178,192,.5);color:var(--jubo-ai-teal-ink);box-shadow:0 .25rem 1rem -.4rem rgba(0,128,138,.4)}
+.jubo-ai_chat{width:min(40rem,100%);margin-top:.85rem;padding:1rem 1.25rem 1rem;text-align:left}
+.jubo-ai_chat-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--jubo-ai-line);font-size:.8125rem;color:var(--jubo-ai-text-3)}
+.jubo-ai_chat-top b{font-weight:500;color:var(--neutral--black);display:flex;align-items:center;gap:.5rem}
+.jubo-ai_chat-top b svg{width:1.4rem;height:auto}
+.jubo-ai_chat-status{display:flex;align-items:center;gap:.45rem}
+.jubo-ai_chat-status::before{content:"";width:.45rem;height:.45rem;background:var(--primary--accent);border-radius:50%}
+.jubo-ai_chat[data-status="working"] .jubo-ai_chat-status::before{animation:jubo-ai-blink 1s ease-in-out infinite}
+@keyframes jubo-ai-blink{50%{opacity:.25}}
+.jubo-ai_chat-thread{height:clamp(8rem,calc(100svh - 45rem),15rem);overflow:auto;scrollbar-width:thin;scrollbar-color:rgba(0,178,192,.25) transparent;display:flex;flex-direction:column;gap:.85rem;padding:1rem .1rem;overscroll-behavior:contain}
+.jubo-ai_chat-intro{margin:auto;text-align:center;max-width:20rem;color:var(--jubo-ai-text-2);font-size:.9375rem}
+.jubo-ai_chat-intro .jubo-ai_copilot-mark{width:3rem;margin:0 auto .8rem;display:block}
+.jubo-ai_chat-user{align-self:flex-end;max-width:85%;padding:.65rem 1rem;background:linear-gradient(135deg,rgba(157,248,255,.45),rgba(185,205,255,.4));border:1px solid rgba(0,178,192,.15);border-radius:1.1rem 1.1rem .3rem 1.1rem;font-size:.9375rem;animation:jubo-ai-rise .5s var(--jubo-ai-ease) both}
+.jubo-ai_chat-answer{display:flex;gap:.7rem;align-items:flex-start;animation:jubo-ai-rise .5s var(--jubo-ai-ease) both}
+.jubo-ai_chat-answer .jubo-ai_copilot-mark{width:1.7rem;min-width:1.7rem;margin-top:.25rem}
+.jubo-ai_chat-content{flex:1;min-width:0;font-size:.9375rem;line-height:1.6}
+.jubo-ai_chat-content p{margin-bottom:.5rem}
+.jubo-ai_shimmer{background:linear-gradient(90deg,var(--jubo-ai-text-3) 30%,var(--primary--accent) 50%,var(--jubo-ai-text-3) 70%);background-size:200% 100%;background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:jubo-ai-shimmer 1.4s linear infinite}
+@keyframes jubo-ai-shimmer{to{background-position:-200% 0}}
+@keyframes jubo-ai-rise{from{opacity:0;transform:translateY(.5rem)}}
+.jubo-ai_chat-sources{margin-bottom:.6rem;font-size:.8125rem;color:var(--jubo-ai-text-2)}
+.jubo-ai_chat-sources summary{cursor:pointer;color:var(--jubo-ai-teal-ink);width:max-content}
+.jubo-ai_chat-sources ul{padding-left:1.1rem;margin:.4rem 0 0}
+.jubo-ai_chat-output{padding:.85rem 1rem;border:1px solid rgba(0,178,192,.18);border-radius:1rem;background:rgba(255,255,255,.85);transition:border-color .4s,box-shadow .4s}
+.jubo-ai_chat-output strong{font-weight:500}
+.jubo-ai_chat-output ol{margin:.4rem 0 0;padding-left:1.15rem;font-size:.875rem;color:var(--jubo-ai-text-2)}
+.jubo-ai_chat-output li{margin-top:.2rem;animation:jubo-ai-rise .45s var(--jubo-ai-ease) both}
+.jubo-ai_review-button{margin-top:.75rem;border:1px solid rgba(0,178,192,.3);border-radius:2rem;padding:.4rem .9rem;background:white;font-size:.8125rem;color:var(--jubo-ai-teal-ink)}
+.jubo-ai_chat-output[data-reviewed="true"]{border-color:var(--primary--accent);box-shadow:0 0 0 .3rem rgba(0,178,192,.1)}
+.jubo-ai_composer{display:flex;align-items:center;gap:.65rem;padding:.4rem .4rem .4rem 1rem;border-radius:2rem;background:white;border:1px solid rgba(21,23,23,.08)}
+.jubo-ai_composer input{width:100%;min-width:0;border:0;background:none;font-size:.9375rem;outline-offset:3px}
+.jubo-ai_send{width:2.25rem;min-width:2.25rem;height:2.25rem;background:var(--neutral--black);border:0;color:white;border-radius:50%;display:grid;place-items:center;transition:transform .3s var(--jubo-ai-ease),background .3s}
+.jubo-ai_send:hover{background:var(--jubo-ai-teal-ink)}
+.jubo-ai_send:active{transform:scale(.92)}
+.jubo-ai_send:disabled{opacity:.45}
+.jubo-ai_send svg{width:1rem;height:1rem;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.jubo-ai_chat-note{font-size:.75rem;color:var(--jubo-ai-text-3);margin-top:.6rem;text-align:center}
+.jubo-ai_amy{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:1.25rem;width:min(38rem,100%);margin-top:1rem;padding:1.5rem;text-align:left}
+.jubo-ai_amy .jubo-ai_sources{min-width:9.5rem}
+.jubo-ai_report{padding:1.1rem 1.25rem;border-radius:1.1rem;background:white;box-shadow:inset 0 0 0 1px rgba(0,178,192,.2),0 1rem 2.5rem -1.25rem rgba(18,74,88,.35);display:grid;gap:.15rem}
+.jubo-ai_report b{font-weight:500;font-size:1rem;margin-bottom:.35rem}
+.jubo-ai_report span{display:flex;justify-content:space-between;align-items:center;gap:1rem;font-size:.875rem;padding:.45rem 0;border-top:1px solid var(--jubo-ai-line)}
+.jubo-ai_report span i{width:3.5rem;height:.4rem;border-radius:1rem;background:linear-gradient(90deg,rgba(0,178,192,.5),rgba(59,88,255,.3))}
+.jubo-ai_sync{width:min(38rem,100%);margin-top:1rem;padding:1.5rem;display:grid;grid-template-columns:1fr auto 1fr;gap:1.25rem;align-items:center;text-align:left}
+.jubo-ai_sheet{padding:1rem 1.1rem;border-radius:1rem;background:white;box-shadow:inset 0 0 0 1px rgba(21,23,23,.06)}
+.jubo-ai_sheet b{display:block;font-weight:500;font-size:.9375rem;margin-bottom:.4rem}
+.jubo-ai_sheet span{display:flex;justify-content:space-between;align-items:center;font-size:.875rem;padding:.45rem 0;border-top:1px solid var(--jubo-ai-line)}
+.jubo-ai_check{width:1.1rem;height:1.1rem;border-radius:50%;background:rgba(0,178,192,.14);display:grid;place-items:center}
+.jubo-ai_check svg{width:.7rem;height:.7rem;stroke:var(--jubo-ai-teal-ink);fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.jubo-ai_steps{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:.75rem;font-size:.875rem;color:var(--jubo-ai-text-2)}
+.jubo-ai_steps i{width:1.75rem;height:1px;background:var(--jubo-ai-gradient)}
+.jubo-ai_app-links{display:flex;gap:1.5rem;margin-top:.75rem;justify-content:center}
+
+/* Possibilities */
+.jubo-ai_ideas{padding:14svh 0 4svh}
+.jubo-ai_idea{display:flex;flex-direction:column;align-items:center;gap:1rem;padding:5.5rem 0;text-align:center}
+.jubo-ai_idea + .jubo-ai_idea{border-top:1px solid var(--jubo-ai-line)}
+.jubo-ai_idea h3{font-size:clamp(2rem,4.4vw,3.75rem);font-weight:400;letter-spacing:-.045em;line-height:1.08}
+.jubo-ai_idea-button{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(21,23,23,.12);background:rgba(255,255,255,.65);border-radius:2rem;padding:.6rem 1.1rem;font-size:.9375rem;transition:border-color .3s,background .3s}
+.jubo-ai_idea-button:hover{border-color:rgba(0,178,192,.5);background:white}
+.jubo-ai_idea-button span{display:grid;place-items:center;width:1.4rem;height:1.4rem;border-radius:50%;background:var(--jubo-ai-gradient);color:white;font-size:1rem;line-height:1}
+.jubo-ai_ideas-note{font-size:.875rem;color:var(--jubo-ai-text-3);margin-top:1.25rem}
+
+/* People and closing */
+.jubo-ai_people{padding:6rem 0 5rem}
+.jubo-ai_principles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2.5rem;margin-top:4.5rem;text-align:left}
+.jubo-ai_principle{border-top:1px solid var(--jubo-ai-line);padding-top:1.5rem}
+.jubo-ai_principle h3{font-size:1.25rem}
+.jubo-ai_principle p{font-size:1rem;color:var(--jubo-ai-text-2);line-height:1.6;margin-top:.6rem}
+.jubo-ai_closing{padding:6rem 0 9rem;text-align:center}
+.jubo-ai_closing .jubo-ai_orb-slot{width:min(16rem,48vw,30svh);margin:0 auto 1.5rem}
+.jubo-ai_closing h2{font-size:clamp(2.5rem,5.4vw,4.75rem)}
+.jubo-ai_closing .jubo-ai_hero-actions{margin-top:2.25rem}
+.jubo-ai_footer{position:relative;z-index:1;display:flex;justify-content:space-between;gap:1rem;padding:1.75rem 2.5rem;border-top:1px solid var(--jubo-ai-line);font-size:.875rem;color:var(--jubo-ai-text-3)}
+.jubo-ai_footer a{text-decoration:none;margin-left:1.5rem}
+.jubo-ai_footer a:hover{color:var(--neutral--black)}
+.jubo-ai_reveal{transition:opacity .9s ease,transform 1s var(--jubo-ai-ease)}
+html[data-enhanced="true"] .jubo-ai_reveal:not([data-visible="true"]){opacity:0;transform:translateY(1.25rem)}
+
+/* Idea dialog */
+.jubo-ai_dialog{width:min(34rem,calc(100% - 2rem));border:1px solid white;border-radius:1.75rem;padding:2.25rem;background:rgba(255,255,255,.92);box-shadow:0 2rem 6rem -1rem rgba(18,74,88,.35);color:var(--neutral--black)}
+.jubo-ai_dialog::backdrop{background:rgba(236,244,246,.6);backdrop-filter:blur(8px)}
+.jubo-ai_dialog h2{font-size:1.75rem;letter-spacing:-.035em;margin:1rem 0 .85rem;line-height:1.15}
+.jubo-ai_dialog p{font-size:1rem;line-height:1.65;color:var(--jubo-ai-text-2)}
+.jubo-ai_dialog [data-idea-sources]{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.25rem 0}
+.jubo-ai_dialog [data-idea-review]{font-size:.9375rem;padding-top:1rem;border-top:1px solid var(--jubo-ai-line);margin-bottom:1rem}
+.jubo-ai_dialog-close{position:absolute;top:1rem;right:1rem;width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--jubo-ai-line);background:white;font-size:1.25rem;line-height:1}
+
+@media (max-width:991px){
+ .jubo-ai_nav-links{display:none}
+ .jubo-ai_principles{grid-template-columns:1fr;gap:1.5rem}
+}
+@media (max-width:767px){
+ :root{--jubo-ai-nav:4rem}
+ body{font-size:1rem}
+ .padding-global{padding-left:1.25rem;padding-right:1.25rem}
+ .jubo-ai_nav{padding:0 1.25rem}
+ .jubo-ai_hero{padding-top:calc(var(--jubo-ai-nav) + 2.5rem)}
+ .jubo-ai_hero-actions{gap:1.25rem}
+ .jubo-ai_orb-slot{width:min(18rem,72vw)}
+ .jubo-ai_stats{grid-template-columns:1fr;gap:1.5rem}
+ .jubo-ai_vitals{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .jubo-ai_row{grid-template-columns:1fr}
+ .jubo-ai_row span:first-child{min-width:0}
+ .jubo-ai_row .jubo-ai_skeleton{justify-self:start}
+ .jubo-ai_merge,.jubo-ai_amy,.jubo-ai_sync{grid-template-columns:1fr}
+ .jubo-ai_arrow{transform:rotate(90deg);justify-self:center}
+ .jubo-ai_window-body{height:auto;min-height:15rem}
+ .jubo-ai_flag{position:static;align-self:flex-start}
+ .jubo-ai_chat{padding:.9rem}
+ .jubo-ai_dialog{padding:1.75rem 1.4rem}
+ .jubo-ai_footer{flex-direction:column;padding:1.5rem 1.25rem}
+ .jubo-ai_footer a{margin:0 1.25rem 0 0}
+ .jubo-ai_statement{padding:10svh 0 12svh}
+ .jubo-ai_idea{padding:3.5rem 0}
+ .jubo-ai_people{padding:6rem 0 4rem}
+}
+@media (prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style></head><body>
+<a class="jubo-ai_skip" href="#main">Skip to content</a>
+<canvas id="jubo-ai-gl" aria-hidden="true"></canvas><div class="jubo-ai_atmosphere" aria-hidden="true"></div><div class="jubo-ai_fallback-orb" aria-hidden="true"></div>
+<div class="page-wrapper"><header class="jubo-ai_nav"><a class="jubo-ai_brand" href="#hero" aria-label="Jubo AI, back to top"><span>Jubo</span> AI</a><nav class="jubo-ai_nav-links" aria-label="Page sections"><a href="#foundation" data-chapter-link="foundation">Foundation</a><a href="#capabilities" data-chapter-link="capabilities">Capabilities</a><a href="#applications" data-chapter-link="applications">Applications</a><a href="#possibilities" data-chapter-link="possibilities">What's next</a></nav><div class="jubo-ai_nav-actions"><button class="jubo-ai_motion-toggle" type="button" data-motion-toggle aria-pressed="false" aria-label="Pause motion"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.4" height="12" rx="1"/><rect x="9.6" y="2" width="3.4" height="12" rx="1"/></svg></button><a data-button-animate="" data-wf--glass-button--variant="base" href="/contact" class="glass-button w-inline-block"><div class="glass-element is-cta"><div class="glass-text_wrapper"><span data-button-animate-chars="" class="btn-animate-chars__text">Talk to Jubo</span></div><div class="glass-element is-icon"><div class="glass-effect is-icon"><div class="glass-effect__fill is-icon"></div><div class="glass-effect__fill-burn is-icon"></div><div class="glass-effect__highlight-soft is-icon"></div><div class="glass-effect__highlight-strong is-icon"></div><div class="glass-effect__edge-light is-icon"></div><div class="glass-effect__edge-dark is-icon"></div><div class="glass-effect__inner-glow is-icon"></div></div><div class="gradient-icon is-1 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-nav" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-nav)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-nav)"/>
+</g>
+<defs>
+<linearGradient id="paint-nav" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div><div class="gradient-icon is-2 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-nav-2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-nav-2)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-nav-2)"/>
+</g>
+<defs>
+<linearGradient id="paint-nav-2" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div></div></div></a></div></header>
+<main class="main-wrapper" id="main">
+
+<section class="section_jubo-ai-hero jubo-ai_hero" id="hero" data-scene data-tone=".38" aria-labelledby="hero-title"><div class="padding-global"><div class="container-large jubo-ai_center">
+ <p class="jubo-ai_eyebrow jubo-ai_reveal" data-reveal>Jubo AI</p>
+ <h1 id="hero-title" class="jubo-ai_h1 jubo-ai_reveal" data-reveal style="--d:1">AI that understands <span class="jubo-ai_gradient-text">care.</span></h1>
+ <p class="jubo-ai_lead jubo-ai_reveal" data-reveal>Care knowledge and real-world records, brought together to help the people behind care see clearly and decide well.</p>
+ <div class="jubo-ai_hero-actions jubo-ai_reveal" data-reveal><a data-button-animate="" data-wf--glass-button--variant="base" href="/contact" class="glass-button w-inline-block"><div class="glass-element is-cta"><div class="glass-text_wrapper"><span data-button-animate-chars="" class="btn-animate-chars__text">Talk to Jubo</span></div><div class="glass-element is-icon"><div class="glass-effect is-icon"><div class="glass-effect__fill is-icon"></div><div class="glass-effect__fill-burn is-icon"></div><div class="glass-effect__highlight-soft is-icon"></div><div class="glass-effect__highlight-strong is-icon"></div><div class="glass-effect__edge-light is-icon"></div><div class="glass-effect__edge-dark is-icon"></div><div class="glass-effect__inner-glow is-icon"></div></div><div class="gradient-icon is-1 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-hero" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-hero)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-hero)"/>
+</g>
+<defs>
+<linearGradient id="paint-hero" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div><div class="gradient-icon is-2 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-hero-2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-hero-2)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-hero-2)"/>
+</g>
+<defs>
+<linearGradient id="paint-hero-2" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div></div></div></a><a class="jubo-ai_text-link" href="#statement">See how it works <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-6-6 6 6 6-6"/></svg></a></div>
+ <div class="jubo-ai_orb-slot" data-orb-anchor="hero" aria-hidden="true"></div>
+ <p class="jubo-ai_hint" data-pointer-hint>Move your cursor. Follow the light.</p>
+</div></div></section>
+
+<section class="section_jubo-ai-statement jubo-ai_statement" id="statement" data-scene data-tone=".28" aria-labelledby="statement-title"><div class="padding-global"><div class="container-medium jubo-ai_center">
+ <p class="jubo-ai_eyebrow">Built for the world of care</p>
+ <h2 id="statement-title" class="jubo-ai_statement-text" data-words><span class="jubo-ai_line">Care knowledge.</span><span class="jubo-ai_line">Everyday experience.</span><span class="jubo-ai_line jubo-ai_gradient-text">Deeper understanding.</span></h2>
+ <div class="jubo-ai_domains jubo-ai_reveal" data-reveal><span class="jubo-ai_chip">Nursing</span><span class="jubo-ai_chip">Long-term care</span><span class="jubo-ai_chip">Home care</span><span class="jubo-ai_chip">Day care</span></div>
+ <div class="jubo-ai_stats jubo-ai_reveal" data-reveal><div class="jubo-ai_stat"><strong>3 billion</strong><span>care records accumulated<br>across Jubo’s platforms</span></div><div class="jubo-ai_stat"><strong>2,800+</strong><span>care organizations<br>working with Jubo</span></div></div>
+</div></div></section>
+
+<section id="foundation" class="section_jubo-ai-foundation jubo-ai_stage" data-stage data-scene data-tone=".5" style="--steps:5" aria-labelledby="foundation-title"><div class="jubo-ai_stage-inner">
+ <div class="jubo-ai_stage-head padding-global"><p class="jubo-ai_eyebrow">The foundation</p><h2 id="foundation-title" class="jubo-ai_h2 is-stage">Grounded in real care data.</h2>
+  <div class="jubo-ai_tabs jubo-ai_glass" role="group" aria-label="Care data types"><button class="jubo-ai_tab" type="button" data-tab="0">Care records</button><button class="jubo-ai_tab" type="button" data-tab="1">Vital signs</button><button class="jubo-ai_tab" type="button" data-tab="2">Handover notes</button><button class="jubo-ai_tab" type="button" data-tab="3">Home visits</button><button class="jubo-ai_tab" type="button" data-tab="4">Family updates</button></div></div>
+ <div class="jubo-ai_panels padding-global">
+  <article class="jubo-ai_panel" data-panel="0" aria-labelledby="data-0"><div class="jubo-ai_panel-head"><p class="jubo-ai_panel-index">01 / 05</p><h3 id="data-0" class="jubo-ai_panel-title">Care records.</h3><p class="jubo-ai_panel-copy">The assessments, plans and notes that describe care, day after day.</p></div>
+   <div class="jubo-ai_record jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_record-top"><b><span class="jubo-ai_icon"><svg viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></svg></span>Care record</b><span>Illustration</span></div>
+    <div class="jubo-ai_row" data-seq style="--seq:0"><span>Nursing assessments</span><i class="jubo-ai_skeleton" style="--w:80%"></i></div><div class="jubo-ai_row" data-seq style="--seq:1"><span>Care plans</span><i class="jubo-ai_skeleton" style="--w:62%"></i></div><div class="jubo-ai_row" data-seq style="--seq:2"><span>Daily service notes</span><i class="jubo-ai_skeleton" style="--w:90%"></i></div></div>
+   <div class="jubo-ai_uses"><span class="jubo-ai_uses-label">Helps teams</span><span class="jubo-ai_chip is-capability">Find</span><span class="jubo-ai_chip is-capability">Summarize</span><span class="jubo-ai_chip is-capability">Draft</span><span class="jubo-ai_chip is-capability">Discover insights</span></div></article>
+  <article class="jubo-ai_panel" data-panel="1" aria-labelledby="data-1"><div class="jubo-ai_panel-head"><p class="jubo-ai_panel-index">02 / 05</p><h3 id="data-1" class="jubo-ai_panel-title">Vital signs.</h3><p class="jubo-ai_panel-copy">Small measurements. Meaningful changes over time.</p></div>
+   <div class="jubo-ai_record jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_record-top"><b><span class="jubo-ai_icon"><svg viewBox="0 0 24 24"><path d="M3 12h4l2-5 4 10 2-5h6"/></svg></span>Vital signs</b><span>Illustration · no real data</span></div>
+    <div class="jubo-ai_vitals"><div class="jubo-ai_vital" data-seq style="--seq:0"><small>Blood pressure</small><svg viewBox="0 0 80 30"><path d="M2 20 14 16 26 19 38 12 50 15 62 10 78 13"/></svg></div><div class="jubo-ai_vital" data-seq style="--seq:1"><small>Pulse</small><svg viewBox="0 0 80 30"><path d="M2 16h16l5-9 6 16 5-7h44"/></svg></div><div class="jubo-ai_vital" data-seq style="--seq:2"><small>Temperature</small><svg viewBox="0 0 80 30"><path d="M2 18 16 17 30 18 44 16 58 9 78 11"/></svg></div><div class="jubo-ai_vital" data-seq style="--seq:3"><small>Blood glucose</small><svg viewBox="0 0 80 30"><path d="M2 14 14 20 26 12 38 17 50 9 62 15 78 12"/></svg></div><div class="jubo-ai_vital" data-seq style="--seq:4"><small>Weight</small><svg viewBox="0 0 80 30"><path d="M2 12 20 13 38 13 56 15 78 16"/></svg></div></div></div>
+   <div class="jubo-ai_uses"><span class="jubo-ai_uses-label">Helps teams</span><span class="jubo-ai_chip is-capability">Find</span><span class="jubo-ai_chip is-capability">Notice changes</span><span class="jubo-ai_chip is-capability">Discover insights</span></div></article>
+  <article class="jubo-ai_panel" data-panel="2" aria-labelledby="data-2"><div class="jubo-ai_panel-head"><p class="jubo-ai_panel-index">03 / 05</p><h3 id="data-2" class="jubo-ai_panel-title">Handover notes.</h3><p class="jubo-ai_panel-copy">What happened. What changed. What needs attention next.</p></div>
+   <div class="jubo-ai_record jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_record-top"><b><span class="jubo-ai_icon"><svg viewBox="0 0 24 24"><path d="M4 8h13l-3-3M20 16H7l3 3"/></svg></span>Shift handover</b><span>Illustration</span></div>
+    <div class="jubo-ai_row" data-seq style="--seq:0"><span class="jubo-ai_status">Shift updates</span><i class="jubo-ai_skeleton" style="--w:84%"></i></div><div class="jubo-ai_row" data-seq style="--seq:1"><span class="jubo-ai_status" style="--dot:#3b58ff">Unusual events</span><i class="jubo-ai_skeleton" style="--w:58%"></i></div><div class="jubo-ai_row" data-seq style="--seq:2"><span class="jubo-ai_status" style="--dot:#b15dff">Follow-up items</span><i class="jubo-ai_skeleton" style="--w:72%"></i></div></div>
+   <div class="jubo-ai_uses"><span class="jubo-ai_uses-label">Helps teams</span><span class="jubo-ai_chip is-capability">Find</span><span class="jubo-ai_chip is-capability">Summarize</span><span class="jubo-ai_chip is-capability">Notice changes</span><span class="jubo-ai_chip is-capability">Draft</span></div></article>
+  <article class="jubo-ai_panel" data-panel="3" aria-labelledby="data-3"><div class="jubo-ai_panel-head"><p class="jubo-ai_panel-index">04 / 05</p><h3 id="data-3" class="jubo-ai_panel-title">Home visit records.</h3><p class="jubo-ai_panel-copy">A person’s circumstances, understood over time.</p></div>
+   <div class="jubo-ai_record jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_record-top"><b><span class="jubo-ai_icon"><svg viewBox="0 0 24 24"><path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/></svg></span>Home visit</b><span>Illustration</span></div>
+    <div class="jubo-ai_timeline"><div data-seq style="--seq:0">Past records<small>What we know</small></div><div data-seq style="--seq:1">Current circumstances<small>What we see</small></div><div data-seq style="--seq:2">Follow-up priorities<small>What comes next</small></div></div></div>
+   <div class="jubo-ai_uses"><span class="jubo-ai_uses-label">Helps teams</span><span class="jubo-ai_chip is-capability">Find</span><span class="jubo-ai_chip is-capability">Summarize</span><span class="jubo-ai_chip is-capability">Draft</span><span class="jubo-ai_chip is-capability">Discover insights</span></div></article>
+  <article class="jubo-ai_panel" data-panel="4" aria-labelledby="data-4"><div class="jubo-ai_panel-head"><p class="jubo-ai_panel-index">05 / 05</p><h3 id="data-4" class="jubo-ai_panel-title">Family updates.</h3><p class="jubo-ai_panel-copy">The everyday conversations behind care.</p></div>
+   <div class="jubo-ai_record jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_record-top"><b><span class="jubo-ai_icon"><svg viewBox="0 0 24 24"><path d="M5 5h14v10H9l-4 4z"/></svg></span>Family updates</b><span>Illustration</span></div>
+    <div class="jubo-ai_bubbles"><div class="jubo-ai_bubble" data-seq style="--seq:0"><small>Activity report</small>Morning music session<div class="jubo-ai_photo"></div></div><div class="jubo-ai_bubble is-right" data-seq style="--seq:1"><small>Everyday conversation</small>Thank you for sharing!</div><div class="jubo-ai_bubble" data-seq style="--seq:2"><small>Health update</small><i class="jubo-ai_skeleton" style="--w:12rem"></i></div></div></div>
+   <div class="jubo-ai_uses"><span class="jubo-ai_uses-label">Helps teams</span><span class="jubo-ai_chip is-capability">Find</span><span class="jubo-ai_chip is-capability">Summarize</span><span class="jubo-ai_chip is-capability">Draft</span><span class="jubo-ai_chip is-capability">Discover insights</span></div></article>
+ </div>
+ <div class="jubo-ai_progress" aria-hidden="true"><i></i></div>
+</div></section>
+
+<section class="section_jubo-ai-understanding jubo-ai_understanding" id="understanding" data-scene data-tone="1" data-prism="1" aria-labelledby="understanding-title"><div class="jubo-ai_understanding-inner padding-global">
+ <p class="jubo-ai_eyebrow">Knowledge meets context</p>
+ <h2 id="understanding-title" class="jubo-ai_h2">From records to <span class="jubo-ai_gradient-text">understanding.</span></h2>
+ <div class="jubo-ai_orb-slot" data-orb-anchor="understanding" aria-hidden="true"></div>
+ <p class="jubo-ai_understanding-lines" data-lines><span>Knowledge gives meaning.</span><span>Records bring context.</span><span>Together, they help teams see the whole person.</span></p>
+</div></section>
+
+<section id="capabilities" class="section_jubo-ai-capabilities jubo-ai_stage" data-stage data-scene data-tone=".6" style="--steps:5" aria-labelledby="capabilities-title"><div class="jubo-ai_stage-inner">
+ <div class="jubo-ai_stage-head padding-global"><p class="jubo-ai_eyebrow">Capabilities</p><h2 id="capabilities-title" class="jubo-ai_h2 is-stage">Put understanding to work.</h2>
+  <div class="jubo-ai_tabs jubo-ai_glass" role="group" aria-label="Capabilities"><button class="jubo-ai_tab" type="button" data-tab="0">Find</button><button class="jubo-ai_tab" type="button" data-tab="1">Summarize</button><button class="jubo-ai_tab" type="button" data-tab="2">Notice changes</button><button class="jubo-ai_tab" type="button" data-tab="3">Draft</button><button class="jubo-ai_tab" type="button" data-tab="4">Discover insights</button></div></div>
+ <div class="jubo-ai_panels padding-global">
+  <article class="jubo-ai_panel" data-panel="0" aria-labelledby="cap-0"><div class="jubo-ai_panel-head"><h3 id="cap-0" class="jubo-ai_panel-title">Find answers.</h3><p class="jubo-ai_panel-copy">Locate the person, case or organization information you need.</p></div>
+   <div class="jubo-ai_window jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_window-bar"><b>Find</b><span>Illustration</span></div><div class="jubo-ai_window-body">
+    <div class="jubo-ai_search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/></svg><span class="jubo-ai_typed">care plan</span></div>
+    <div class="jubo-ai_result" data-seq style="--seq:4">Nursing assessment<small>Care records</small></div><div class="jubo-ai_result is-match" data-seq style="--seq:5">Care plan<small>Care records</small></div><div class="jubo-ai_result" data-seq style="--seq:6">Handover note<small>Handover notes</small></div></div></div></article>
+  <article class="jubo-ai_panel" data-panel="1" aria-labelledby="cap-1"><div class="jubo-ai_panel-head"><h3 id="cap-1" class="jubo-ai_panel-title">Summarize records.</h3><p class="jubo-ai_panel-copy">Bring key details together from many records, with their context.</p></div>
+   <div class="jubo-ai_window jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_window-bar"><b>Summarize</b><span>Illustration</span></div><div class="jubo-ai_window-body"><div class="jubo-ai_merge">
+    <div class="jubo-ai_sources"><div class="jubo-ai_source" data-seq style="--seq:0">Visit note<i class="jubo-ai_skeleton" style="--w:80%"></i></div><div class="jubo-ai_source" data-seq style="--seq:1">Care record<i class="jubo-ai_skeleton" style="--w:65%"></i></div><div class="jubo-ai_source" data-seq style="--seq:2">Handover<i class="jubo-ai_skeleton" style="--w:72%"></i></div></div>
+    <span class="jubo-ai_arrow" data-seq style="--seq:3"><svg viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span>
+    <div class="jubo-ai_summary" data-seq style="--seq:4"><b>The essentials</b><span>Current circumstances</span><span>Recent changes</span><span>Items to follow up</span></div></div></div></div></article>
+  <article class="jubo-ai_panel" data-panel="2" aria-labelledby="cap-2"><div class="jubo-ai_panel-head"><h3 id="cap-2" class="jubo-ai_panel-title">Notice changes.</h3><p class="jubo-ai_panel-copy">Highlight care changes that may need attention or follow-up.</p></div>
+   <div class="jubo-ai_window jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_window-bar"><b>Notice changes</b><span>Illustration · no real data</span></div><div class="jubo-ai_window-body">
+    <svg class="jubo-ai_trend" viewBox="0 0 560 160" preserveAspectRatio="none"><defs><linearGradient id="jubo-ai-trend-gradient" x1="0" x2="1"><stop offset="0" stop-color="#00b2c0"/><stop offset=".7" stop-color="#3b8bff"/><stop offset="1" stop-color="#b15dff"/></linearGradient><linearGradient id="jubo-ai-trend-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#9df8ff" stop-opacity=".45"/><stop offset="1" stop-color="#9df8ff" stop-opacity="0"/></linearGradient></defs><path class="grid" d="M0 40h560M0 90h560M0 140h560"/><path class="area" d="M8 118C60 114 80 96 120 100s70 18 110 2 60-12 90-22 60-36 110-34 70 40 122 30V160H8Z"/><path class="line" d="M8 118C60 114 80 96 120 100s70 18 110 2 60-12 90-22 60-36 110-34 70 40 122 30"/><circle class="focus" cx="430" cy="46" r="26"/><circle class="dot" cx="430" cy="46" r="6"/></svg>
+    <span class="jubo-ai_flag" data-seq style="--seq:8">Worth a closer look</span></div></div></article>
+  <article class="jubo-ai_panel" data-panel="3" aria-labelledby="cap-3"><div class="jubo-ai_panel-head"><h3 id="cap-3" class="jubo-ai_panel-title">Draft content.</h3><p class="jubo-ai_panel-copy">A clearer starting point for summaries, reports, handovers and family updates.</p></div>
+   <div class="jubo-ai_window jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_window-bar"><b>Draft</b><span>Illustration</span></div><div class="jubo-ai_window-body">
+    <div class="jubo-ai_doc"><b>A first draft <small>For your review</small></b><i class="jubo-ai_skeleton jubo-ai_write" style="--w:92%;--seq:0"></i><i class="jubo-ai_skeleton jubo-ai_write" style="--w:78%;--seq:1"></i><i class="jubo-ai_skeleton jubo-ai_write" style="--w:86%;--seq:2"></i><i class="jubo-ai_skeleton jubo-ai_write" style="--w:54%;--seq:3"></i></div>
+    <div class="jubo-ai_doc-tags"><span class="jubo-ai_chip" data-seq style="--seq:5">Care summary</span><span class="jubo-ai_chip" data-seq style="--seq:6">Handover note</span><span class="jubo-ai_chip" data-seq style="--seq:7">Family update</span></div></div></div></article>
+  <article class="jubo-ai_panel" data-panel="4" aria-labelledby="cap-4"><div class="jubo-ai_panel-head"><h3 id="cap-4" class="jubo-ai_panel-title">Discover insights.</h3><p class="jubo-ai_panel-copy">Help teams understand everyday operations and service quality.</p></div>
+   <div class="jubo-ai_window jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_window-bar"><b>Discover insights</b><span>Illustration · no real data</span></div><div class="jubo-ai_window-body">
+    <div class="jubo-ai_bars"><i style="--h:34%;--seq:0"></i><i style="--h:46%;--seq:1"></i><i style="--h:40%;--seq:2"></i><i style="--h:58%;--seq:3"></i><i style="--h:66%;--seq:4"></i><i style="--h:80%;--seq:5"></i><i style="--h:74%;--seq:6"></i><i style="--h:92%;--seq:7"></i></div>
+    <div class="jubo-ai_bars-label"><span>Patterns over time</span><span>Service quality</span></div></div></div></article>
+ </div>
+ <div class="jubo-ai_progress" aria-hidden="true"><i></i></div>
+</div></section>
+
+<section id="applications" class="section_jubo-ai-applications jubo-ai_stage" data-stage data-scene data-tone=".75" style="--steps:3;--step:80svh" aria-labelledby="applications-title"><div class="jubo-ai_stage-inner">
+ <div class="jubo-ai_stage-head padding-global"><p class="jubo-ai_eyebrow" id="applications-title">Already part of care</p>
+  <div class="jubo-ai_tabs jubo-ai_glass" role="group" aria-label="Applications"><button class="jubo-ai_tab" type="button" data-tab="0">N.Copilot</button><button class="jubo-ai_tab" type="button" data-tab="1">Amy</button><button class="jubo-ai_tab" type="button" data-tab="2">iBee</button></div></div>
+ <div class="jubo-ai_panels padding-global">
+  <article class="jubo-ai_panel" data-panel="0" aria-labelledby="app-0"><div class="jubo-ai_app">
+   <p class="jubo-ai_app-type">Conversational application · Project-based</p>
+   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 379.31 74.05" role="img" aria-label="N.Copilot" class="jubo-ai_copilot-wordmark">
+  <path fill="#373A36" d="M9.89 21.67L9.89 67.45L0 67.45L0 0L48.18 47.08L48.18 0.36L58.08 0.36L58.08 67.85L9.89 21.67"/>
+  <path fill="#373A36" d="M71.9 69.09C69.18 69.09 66.97 66.88 66.97 64.17C66.97 61.45 69.18 59.24 71.9 59.24C74.62 59.24 76.83 61.45 76.83 64.17C76.83 66.88 74.62 69.09 71.9 69.09"/>
+  <path fill="#373A36" d="M267.03 10.32C264.31 10.32 262.1 8.11 262.1 5.39C262.1 2.67 264.31 0.46 267.03 0.46C269.75 0.46 271.96 2.67 271.96 5.39C271.96 8.11 269.75 10.32 267.03 10.32"/>
+  <path fill="#373A36" d="M262.82 16.46H271.63V64.84H262.82Z"/>
+  <path fill="#373A36" d="M282.31 0.44H291.02V64.84H282.31Z"/>
+  <path fill="#373A36" d="M112.32 68.14C111.12 68.13 110.13 68.07 109.15 67.99C108.72 67.95 108.3 67.9 107.88 67.85C107.21 67.76 106.69 67.69 106.17 67.6C105.57 67.5 104.97 67.39 104.37 67.26L103.9 67.14C87.86 63.3 76.82 49.84 76.82 34.33C76.82 18.82 87.87 5.35 103.69 1.57L104.38 1.41C104.96 1.28 105.56 1.17 106.17 1.07C106.7 0.98 107.21 0.9 107.73 0.84L108.07 0.8C108.43 0.75 108.79 0.71 109.15 0.68C110.13 0.59 111.12 0.54 112.12 0.53L112.52 0.51C113.52 0.54 114.51 0.59 115.49 0.68C115.91 0.71 116.33 0.77 116.74 0.82C117.43 0.9 117.95 0.98 118.46 1.07C119.08 1.17 119.68 1.28 120.27 1.41L120.97 1.58C127.82 3.22 134.12 6.89 138.87 11.97C136.83 13.92 135.04 16.05 133.53 18.34C132.12 16.66 130.52 15.17 128.76 13.91C127.78 13.21 126.84 12.62 125.86 12.1C123.88 11.03 121.81 10.21 119.62 9.64L118.99 9.49C118.12 9.28 117.25 9.12 116.37 9L115.62 8.89C114.43 8.75 113.36 8.69 112.34 8.69C111.27 8.69 110.17 8.75 108.97 8.89L108.59 8.95C107.43 9.11 106.5 9.28 105.59 9.5L105.07 9.63C98.51 11.33 92.95 15.24 89.33 20.67L89.31 20.67L88.85 21.34C86.37 25.3 85.05 29.79 85.05 34.33C85.05 38.88 86.37 43.37 88.85 47.32L89.27 48L89.32 48C91.07 50.61 93.27 52.88 95.88 54.75C96.88 55.46 97.82 56.05 98.78 56.57C100.75 57.64 102.83 58.45 105.02 59.02L105.51 59.15C106.52 59.39 107.39 59.54 108.26 59.67L109.04 59.78C110.17 59.91 111.24 59.98 112.3 59.98C113.39 59.98 114.49 59.91 115.67 59.77L116.06 59.72C117.21 59.56 118.14 59.39 119.05 59.17L119.57 59.04C123.9 57.91 127.83 55.81 131.06 52.9C132.24 55.43 133.7 57.79 135.4 59.95C131.22 63.37 126.25 65.83 120.95 67.09L120.27 67.26C119.68 67.39 119.07 67.5 118.46 67.6C117.95 67.69 117.43 67.76 116.91 67.83C116.34 67.9 115.92 67.95 115.49 67.99C114.51 68.07 113.52 68.13 112.52 68.13L112.35 68.14L112.32 68.14"/>
+  <path fill="#373A36" d="M325.99 23.57C316.05 23.57 307.96 30.71 307.96 39.48C307.96 48.25 316.05 55.38 325.99 55.38C335.93 55.38 344.02 48.25 344.02 39.48C344.02 30.71 335.93 23.57 325.99 23.57M325.99 64.38C311.61 64.38 299.92 53.21 299.92 39.48C299.92 25.75 311.61 14.58 325.99 14.58C340.37 14.58 352.06 25.75 352.06 39.48C352.06 53.21 340.37 64.38 325.99 64.38"/>
+  <path fill="#373A36" d="M371.05 64.71C370.84 64.69 370.67 64.68 370.55 64.67C360.79 63.54 358.7 56.17 358.7 47.56L358.7 8.15L367.58 8.15L367.58 15.09L378.67 15.09L378.67 22.6L367.58 22.6L367.58 44.62C367.58 49.15 368.02 51.66 369.1 53.3C370.53 55.45 372.88 55.72 374.76 55.72C376.01 55.72 378.44 55.55 379.31 55.35C379.31 55.35 379.31 64.07 379.31 64.08C379.12 65.08 373.07 64.86 371.05 64.71"/>
+  <path fill="#373A36" d="M225.96 55.39C215.61 55.39 207.18 48.25 207.18 39.48C207.18 30.71 215.61 23.58 225.96 23.58C236.32 23.58 244.74 30.71 244.74 39.48C244.74 48.25 236.32 55.39 225.96 55.39M225.96 14.58C212.7 14.58 198.61 23.31 198.61 39.48L198.61 74.02L207.17 74.05L207.17 57.46C207.17 57.46 208.46 58.91 211.33 60.54C211.36 60.55 211.4 60.56 211.42 60.57C212.47 61.17 213.56 61.69 214.68 62.15C214.88 62.24 215.12 62.31 215.33 62.39C218.68 63.68 222.29 64.38 225.96 64.38C241.05 64.38 253.32 53.21 253.32 39.48C253.32 25.75 241.05 14.58 225.96 14.58"/>
+  <path fill="#373A36" d="M165.34 23.57C155.39 23.57 147.3 30.71 147.3 39.48C147.3 48.25 155.39 55.38 165.34 55.38C175.28 55.38 183.37 48.25 183.37 39.48C183.37 30.71 175.28 23.57 165.34 23.57M165.34 64.38C150.96 64.38 139.27 53.21 139.27 39.48C139.27 25.75 150.96 14.58 165.34 14.58C179.72 14.58 191.41 25.75 191.41 39.48C191.41 53.21 179.72 64.38 165.34 64.38"/>
+</svg><h3 id="app-0" class="jubo-ai_sr-only">N.Copilot</h3>
+   <p class="jubo-ai_app-tagline">Ask. Understand. Draft.</p>
+   <p class="jubo-ai_panel-copy">Work with case files and interview transcripts to organize information and prepare care-plan drafts, shaped around your organization’s workflow and templates.</p>
+   <div class="jubo-ai_prompt-options" role="group" aria-label="Choose an illustrative N.Copilot conversation"><button class="jubo-ai_prompt-option" type="button" data-prompt="summary" aria-pressed="true">Summarize a case</button><button class="jubo-ai_prompt-option" type="button" data-prompt="interview" aria-pressed="false">Organize an interview</button><button class="jubo-ai_prompt-option" type="button" data-prompt="plan" aria-pressed="false">Draft a care plan</button></div>
+   <div class="jubo-ai_chat jubo-ai_glass" data-chat data-status="idle">
+    <div class="jubo-ai_chat-top"><b><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 247.84 119.69" aria-hidden="true" focusable="false" class="jubo-ai_copilot-mark">
+  <path fill="#20EDF1" d="M112.3 59.74L112.39 59.68C115.63 57.55 117.38 53.76 116.91 49.91L115.29 36.45L122.76 47.77C124.89 51.01 128.68 52.76 132.53 52.29L133.13 52.22C139.85 50.18 215.56 22.27 246.79 10.78C247.84 10.4 247.37 8.82 246.27 9.07C134.64 33.84 110.15 21.11 107.2 0.15C107.18 0.04 107.04 0 106.97 0.09L30.19 90.05C30.93 89.57 111.58 60.66 112.07 59.87C112.15 59.83 112.22 59.79 112.3 59.74"/>
+  <path fill="#20EDF1" d="M135.54 59.95L135.45 60.01C132.21 62.14 130.46 65.93 130.92 69.78L132.55 83.24L125.08 71.92C122.94 68.68 119.16 66.93 115.31 67.4L114.7 67.47C107.99 69.51 32.28 97.42 1.05 108.91C0 109.29 0.47 110.86 1.56 110.62C113.2 85.85 137.68 98.58 140.64 119.54C140.66 119.65 140.79 119.69 140.87 119.6L217.64 29.64C216.91 30.12 136.26 59.03 135.77 59.82C135.69 59.86 135.61 59.9 135.54 59.95"/>
+</svg>N.Copilot</b><span class="jubo-ai_chat-status" data-chat-status>Ready to explore</span></div>
+    <div class="jubo-ai_chat-thread" data-chat-thread role="log" aria-label="Illustrative N.Copilot conversation" aria-live="polite" aria-relevant="additions text"><div class="jubo-ai_chat-intro"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 247.84 119.69" role="img" aria-label="N.Copilot" class="jubo-ai_copilot-mark">
+  <path fill="#20EDF1" d="M112.3 59.74L112.39 59.68C115.63 57.55 117.38 53.76 116.91 49.91L115.29 36.45L122.76 47.77C124.89 51.01 128.68 52.76 132.53 52.29L133.13 52.22C139.85 50.18 215.56 22.27 246.79 10.78C247.84 10.4 247.37 8.82 246.27 9.07C134.64 33.84 110.15 21.11 107.2 0.15C107.18 0.04 107.04 0 106.97 0.09L30.19 90.05C30.93 89.57 111.58 60.66 112.07 59.87C112.15 59.83 112.22 59.79 112.3 59.74"/>
+  <path fill="#20EDF1" d="M135.54 59.95L135.45 60.01C132.21 62.14 130.46 65.93 130.92 69.78L132.55 83.24L125.08 71.92C122.94 68.68 119.16 66.93 115.31 67.4L114.7 67.47C107.99 69.51 32.28 97.42 1.05 108.91C0 109.29 0.47 110.86 1.56 110.62C113.2 85.85 137.68 98.58 140.64 119.54C140.66 119.65 140.79 119.69 140.87 119.6L217.64 29.64C216.91 30.12 136.26 59.03 135.77 59.82C135.69 59.86 135.61 59.9 135.54 59.95"/>
+</svg><p>Choose an example to see how context becomes a useful starting point.</p></div></div>
+    <form class="jubo-ai_composer" data-chat-form><input data-chat-input aria-label="Selected example prompt" value="Summarize this case information." readonly><button class="jubo-ai_send" type="submit" aria-label="Run the selected conversation example"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6"/></svg></button></form>
+   </div>
+   <p class="jubo-ai_chat-note">Illustrative conversation. No real case data or live system actions.</p>
+  </div></article>
+  <article class="jubo-ai_panel" data-panel="1" aria-labelledby="app-1"><div class="jubo-ai_app">
+   <p class="jubo-ai_app-type">System add-on · Home care</p><h3 id="app-1" class="jubo-ai_app-name">Amy</h3><p class="jubo-ai_app-tagline">See the whole picture.</p>
+   <p class="jubo-ai_panel-copy">Brings service records, visits, assessments and care plans into one clear, person-centered overview before a home visit.</p>
+   <div class="jubo-ai_amy jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_sources"><div class="jubo-ai_source" data-seq style="--seq:0">Service records</div><div class="jubo-ai_source" data-seq style="--seq:1">Visit notes</div><div class="jubo-ai_source" data-seq style="--seq:2">Assessments</div></div><span class="jubo-ai_arrow" data-seq style="--seq:3"><svg viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span>
+    <div class="jubo-ai_report" data-seq style="--seq:4"><b>A person-centered view</b><span>Background &amp; abilities<i></i></span><span>Care plan &amp; goals<i></i></span><span>Recent changes<i></i></span><span>Follow-up priorities<i></i></span></div></div>
+   <div class="jubo-ai_app-links"><a class="jubo-ai_text-link" href="/ai/amy">Explore Amy <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a></div>
+  </div></article>
+  <article class="jubo-ai_panel" data-panel="2" aria-labelledby="app-2"><div class="jubo-ai_app">
+   <p class="jubo-ai_app-type">System add-on · Workflow automation</p><h3 id="app-2" class="jubo-ai_app-name">iBee</h3><p class="jubo-ai_app-tagline">Connect the workflow.</p>
+   <p class="jubo-ai_panel-copy">Compares care-management allowances and service items across platforms, and brings care plans into the Jubo system with less repeated entry.</p>
+   <div class="jubo-ai_sync jubo-ai_glass" data-motion aria-hidden="true"><div class="jubo-ai_sheet" data-seq style="--seq:0"><b>Care platform</b><span>Care plan<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span><span>Service items<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span><span>Allowance<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span></div>
+    <span class="jubo-ai_arrow" data-seq style="--seq:2"><svg viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span>
+    <div class="jubo-ai_sheet" data-seq style="--seq:4"><b>Jubo system</b><span>Care plan<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span><span>Service items<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span><span>Allowance<i class="jubo-ai_check"><svg viewBox="0 0 12 12"><path d="m2.5 6 2.2 2.2L9.5 3.5"/></svg></i></span></div>
+    <div class="jubo-ai_steps" data-seq style="--seq:5"><span>Read</span><i></i><span>Compare</span><i></i><span>Import</span></div></div>
+   <div class="jubo-ai_app-links"><a class="jubo-ai_text-link" href="/contact">Ask about iBee <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a></div>
+  </div></article>
+ </div>
+ <div class="jubo-ai_progress" aria-hidden="true"><i></i></div>
+</div></section>
+
+<section class="section_jubo-ai-possibilities jubo-ai_ideas" id="possibilities" data-scene data-tone=".7" aria-labelledby="possibilities-title"><div class="padding-global"><div class="container-medium">
+ <div class="jubo-ai_center"><p class="jubo-ai_eyebrow">Imagine what comes next</p><h2 id="possibilities-title" class="jubo-ai_sr-only">Ideas for future applications</h2></div>
+ <div class="jubo-ai_idea"><h3 data-words>What if changes were easier to spot?</h3><button type="button" class="jubo-ai_idea-button" data-idea="signals">Explore the idea <span aria-hidden="true">+</span></button></div>
+ <div class="jubo-ai_idea"><h3 data-words>What if teams had more time for care?</h3><button type="button" class="jubo-ai_idea-button" data-idea="time">Explore the idea <span aria-hidden="true">+</span></button></div>
+ <div class="jubo-ai_idea"><h3 data-words>What if the bigger picture was clearer?</h3><button type="button" class="jubo-ai_idea-button" data-idea="picture">Explore the idea <span aria-hidden="true">+</span></button></div>
+ <p class="jubo-ai_ideas-note jubo-ai_center">Ideas for future applications, not current products. A space to explore together.</p>
+</div></div></section>
+
+<section class="section_jubo-ai-people jubo-ai_people" id="people" data-scene data-tone=".3" aria-labelledby="people-title"><div class="padding-global"><div class="container-large">
+ <div class="jubo-ai_center"><p class="jubo-ai_eyebrow jubo-ai_reveal" data-reveal>People at the center</p><h2 id="people-title" class="jubo-ai_h2 jubo-ai_reveal" data-reveal style="margin-top:1.5rem">AI supports.<br><span class="jubo-ai_gradient-text">People decide.</span></h2></div>
+ <div class="jubo-ai_principles">
+  <div class="jubo-ai_principle jubo-ai_reveal" data-reveal><h3>Context you can check.</h3><p>Outputs connect back to their source information, so people can review them in context.</p></div>
+  <div class="jubo-ai_principle jubo-ai_reveal" data-reveal><h3>Professional judgment.</h3><p>AI provides a starting point. Care decisions remain with the people responsible for care.</p></div>
+  <div class="jubo-ai_principle jubo-ai_reveal" data-reveal><h3>Security by design.</h3><p>Built around data protection, access permissions and each organization’s needs.</p><a class="jubo-ai_text-link" href="/security" style="margin-top:.75rem">Explore security &amp; privacy <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a></div>
+ </div>
+</div></div></section>
+
+<section class="section_jubo-ai-closing jubo-ai_closing" id="closing" data-scene data-tone=".45" aria-labelledby="closing-title"><div class="padding-global"><div class="container-medium">
+ <div class="jubo-ai_orb-slot" data-orb-anchor="closing" aria-hidden="true"></div>
+ <h2 id="closing-title" class="jubo-ai_reveal" data-reveal>What could we<br>build together?</h2>
+ <div class="jubo-ai_hero-actions jubo-ai_reveal" data-reveal><a data-button-animate="" data-wf--glass-button--variant="base" href="/contact" class="glass-button w-inline-block"><div class="glass-element is-cta"><div class="glass-text_wrapper"><span data-button-animate-chars="" class="btn-animate-chars__text">Talk to Jubo</span></div><div class="glass-element is-icon"><div class="glass-effect is-icon"><div class="glass-effect__fill is-icon"></div><div class="glass-effect__fill-burn is-icon"></div><div class="glass-effect__highlight-soft is-icon"></div><div class="glass-effect__highlight-strong is-icon"></div><div class="glass-effect__edge-light is-icon"></div><div class="glass-effect__edge-dark is-icon"></div><div class="glass-effect__inner-glow is-icon"></div></div><div class="gradient-icon is-1 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-end" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-end)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-end)"/>
+</g>
+<defs>
+<linearGradient id="paint-end" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div><div class="gradient-icon is-2 w-embed"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fill="none" preserveAspectRatio="xMidYMid meet" aria-hidden="true" role="img">
+<mask id="mask-end-2" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="18" height="18">
+<rect width="17.5" height="17.5" fill="currentColor"/>
+</mask>
+<g mask="url(#mask-end-2)">
+<path d="M1.6016 9.33556L1.6016 8.13241L14.1478 8.13253L10.487 4.47178L11.3464 3.61241L16.468 8.73398L11.3464 13.8556L10.487 12.9962L14.1478 9.33543L1.6016 9.33556Z" fill="url(#paint-end-2)"/>
+</g>
+<defs>
+<linearGradient id="paint-end-2" x1="4.86702" y1="4.86699" x2="12.601" y2="12.601" gradientUnits="userSpaceOnUse">
+<stop offset="0.389423" stop-color="#00B2C0"/>
+<stop offset="1" stop-color="#3B58FF" stop-opacity="0.72"/>
+</linearGradient>
+</defs>
+</svg></div></div></div></a><a class="jubo-ai_text-link" href="/ai/amy">Explore Amy <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a></div>
+</div></div></section>
+
+</main><footer class="jubo-ai_footer"><span>© Jubo · Intelligence, grounded in care.</span><div><a href="/security">Security &amp; privacy</a><a href="/contact">Contact</a><a href="#hero">Back to top</a></div></footer></div>
+<dialog class="jubo-ai_dialog" data-idea-dialog aria-labelledby="idea-title">
+ <button class="jubo-ai_dialog-close" type="button" data-dialog-close aria-label="Close the idea">×</button>
+ <p class="jubo-ai_eyebrow">A future possibility</p><h2 id="idea-title"></h2><p data-idea-copy></p><div data-idea-sources></div><p data-idea-review></p><a class="jubo-ai_text-link" href="/contact">Explore with Jubo <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></a>
+</dialog>
+<script id="jubo-ai-vertex" type="x-shader/x-vertex">varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.0,1.0);}</script><script id="jubo-ai-fragment" type="x-shader/x-fragment">
+precision highp float;
+varying vec2 vUv;
+uniform vec2 uResolution;
+uniform float uTime;
+uniform float uTone;
+uniform float uPrism;
+uniform vec2 uOrbCenter;
+uniform float uRadius;
+uniform float uOrbOpacity;
+uniform vec2 uGaze;
+uniform float uInteraction;
+uniform float uPulse;
+float field(vec2 p,vec2 center,vec2 scale){vec2 v=(p-center)/scale;return exp(-dot(v,v)*2.0);}
+// Orb interior: Jubo teal body with a faint blue / violet band taken from the CTA gradient.
+vec3 volume(vec3 n,float t){
+ vec2 drift=vec2(sin(t*.13),cos(t*.11))*.16;
+ vec3 pearl=vec3(.95,.985,.99);
+ float tide=sin(n.x*2.7+n.y*1.9+sin(n.z*2.1+t*.09)+t*.12);
+ float cyan=field(n.xy,vec2(.3,-.2)+drift,vec2(.85,.75));
+ float jade=field(n.xy,vec2(.4,-.55)-drift*.5,vec2(.75,.5));
+ float blue=field(n.xy,vec2(-.55,-.2)+drift.yx,vec2(.6,.8));
+ float violet=field(n.xy,vec2(-.2,-.75)-drift,vec2(.55,.35));
+ vec3 c=mix(pearl,vec3(.13,.86,.9),cyan*.8);
+ c=mix(c,vec3(0.,.66,.73),jade*.55);
+ c=mix(c,vec3(.55,.66,1.),blue*.42);
+ c=mix(c,vec3(.78,.62,1.),violet*.3);
+ float membrane=exp(-pow((tide-.15)*4.7,2.));
+ c=mix(c,vec3(.97,1.,1.),membrane*.22);
+ return c;
+}
+void main(){
+ float aspect=uResolution.x/uResolution.y;
+ vec2 p=(vUv-.5)*vec2(aspect,1.);
+ float t=uTime;
+ // Paper that gains colour as the story moves from records to understanding.
+ vec3 color=vec3(.98,.984,.984);
+ vec2 w=vec2(aspect*.5,.5);
+ float a=field(p,vec2(-.62,.34)*w*2.+vec2(sin(t*.07),cos(t*.05))*.06,vec2(.95,.75));
+ float b=field(p,vec2(.66,.12)*w*2.+vec2(cos(t*.06),sin(t*.08))*.07,vec2(.9,.8));
+ float c2=field(p,vec2(.05,-.72)*w*2.+vec2(sin(t*.05),0.)*.08,vec2(1.2,.6));
+ float m=field(p,vec2(-.18,-.1)+vec2(cos(t*.04),sin(t*.06))*.1,vec2(.7,.5));
+ color=mix(color,vec3(.72,.97,.98),a*uTone*.75);
+ color=mix(color,vec3(.8,.86,1.),b*uTone*.68);
+ color=mix(color,vec3(.9,.84,1.),c2*uTone*.6);
+ color=mix(color,vec3(.85,.98,.95),m*uTone*.35);
+ vec2 center=(uOrbCenter-.5)*vec2(aspect,1.);
+ center+=uGaze*.014*uInteraction;
+ float r=max(uRadius,.001);
+ // Prismatic glass: soft vertical refraction bands around the orb, strongest in Understanding.
+ if(uPrism>.001){
+  float zone=field(p,center,vec2(r*3.,r*1.9));
+  float x=(p.x-center.x)/r;
+  float band=pow(.5+.5*sin(x*7.+t*.18),3.);
+  vec3 hue=.5+.5*cos(6.2831*(vec3(0.,.33,.67)+x*.12+.52));
+  color=mix(color,mix(vec3(1.),hue,.35),zone*uPrism*(.1+.22*band));
+ }
+ vec2 q=(p-center)/r;
+ float angle=atan(q.y,q.x);
+ q/=1.+.011*uInteraction*sin(angle*3.+t*.4)+.035*uPulse;
+ q.x*=1.-uGaze.x*.012*uInteraction;
+ float d=length(q);
+ float shadow=field(q,vec2(.05,-1.15),vec2(.9,.14));
+ color=mix(color,vec3(.55,.68,.7),shadow*.18*uOrbOpacity);
+ float glow=exp(-pow(max(d-.98,0.)*2.4,2.));
+ color=mix(color,vec3(.62,.95,.97),glow*.22*uOrbOpacity*(1.-step(d,1.)));
+ float mask=1.-smoothstep(.993,1.005,d);
+ if(d<1.01){
+  float z=sqrt(max(0.,1.-dot(q,q)));
+  vec3 n=normalize(vec3(q,z));
+  float ay=uGaze.x*.44*uInteraction,ax=-uGaze.y*.3*uInteraction;
+  n=mat3(cos(ay),0.,-sin(ay),0.,1.,0.,sin(ay),0.,cos(ay))*n;
+  n=mat3(1.,0.,0.,0.,cos(ax),sin(ax),0.,-sin(ax),cos(ax))*n;
+  vec3 c=volume(n,t);
+  vec3 light=normalize(vec3(-.65,.85,1.65));
+  float diffuse=max(dot(n,light),0.);
+  c*=.9+diffuse*.11;
+  float fresnel=pow(1.-z,2.4);
+  vec3 rim=mix(vec3(.75,.93,.98),vec3(1.),smoothstep(-.4,.8,n.y));
+  c=mix(c,rim,fresnel*.55);
+  float spec=pow(max(dot(reflect(-light,n),vec3(0.,0.,1.)),0.),42.);
+  c=mix(c,vec3(1.),spec*(.28+uInteraction*.12));
+  float softHighlight=field(n.xy,vec2(-.34,.5),vec2(.48,.18));
+  c=mix(c,vec3(1.),softHighlight*.65);
+  float edge=exp(-pow((d-.996)*220.,2.));
+  c=mix(c,vec3(1.),edge*.6);
+  color=mix(color,c,mask*uOrbOpacity);
+ }
+ gl_FragColor=vec4(color,1.);
+}
+</script><script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script><script>(() => {
+ 'use strict';
+ const root=document.documentElement;
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+ const finePointer=matchMedia('(hover:hover) and (pointer:fine)');
+ const motionButton=document.querySelector('[data-motion-toggle]');
+ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+ let paused=reduced.matches,visual=null,frame=0,last=performance.now(),elapsed=0,drawCount=0;
+ const gaze={x:0,y:0,strength:0,pulse:0},targetGaze={x:0,y:0,strength:0,pulse:0};
+ const orb={x:.5,y:.4,r:.2,opacity:1},targetOrb={x:.5,y:.4,r:.2,opacity:1};
+ const light={tone:.38,prism:0},targetLight={tone:.38,prism:0};
+ const scenes=[...document.querySelectorAll('[data-scene]')];
+ const stages=[...document.querySelectorAll('[data-stage]')].map(el=>({
+  el,id:el.id,panels:[...el.querySelectorAll('[data-panel]')],tabs:[...el.querySelectorAll('[data-tab]')],active:-1,mode:null,top:0,height:0
+ }));
+ const isScrub=()=>innerWidth>=768&&innerHeight>=680&&!reduced.matches;
+
+ function updateMotionButton(){
+  motionButton.setAttribute('aria-pressed',String(paused));
+  motionButton.setAttribute('aria-label',paused?'Resume motion':'Pause motion');
+  motionButton.innerHTML=paused?'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2.5v11l9.5-5.5z"/></svg>':'<svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="2" width="3.4" height="12" rx="1"/><rect x="9.6" y="2" width="3.4" height="12" rx="1"/></svg>';
+  root.dataset.motionState=paused?'paused':'playing';
+  root.dataset.reduced=String(reduced.matches);
+ }
+ function wake(){if(!frame&&!document.hidden){last=performance.now();frame=requestAnimationFrame(render);}}
+ function setPaused(value){paused=value;updateMotionButton();if(paused){gaze.x=gaze.y=gaze.strength=gaze.pulse=0;}wake();}
+ motionButton.addEventListener('click',()=>setPaused(!paused));
+ updateMotionButton();root.dataset.enhanced='true';
+ document.querySelector('[data-pointer-hint]').textContent=finePointer.matches?'Move your cursor. Follow the light.':'Touch the light. Scroll to discover.';
+
+ // Split [data-words] text into word spans, keeping gradient spans intact.
+ document.querySelectorAll('[data-words]').forEach(el=>{
+  const walk=node=>{
+   [...node.childNodes].forEach(child=>{
+    if(child.nodeType===3){
+     const frag=document.createDocumentFragment();
+     child.textContent.split(/(\s+)/).forEach(part=>{
+      if(!part)return;
+      if(/^\s+$/.test(part)){frag.append(part);return;}
+      const span=document.createElement('span');span.className='jubo-ai_word';span.textContent=part;frag.append(span);
+     });
+     child.replaceWith(frag);
+    }else if(child.nodeType===1&&!child.classList.contains('jubo-ai_gradient-text'))walk(child);
+    else if(child.nodeType===1){child.classList.add('jubo-ai_word');}
+   });
+  };
+  walk(el);
+ });
+ const words=[...document.querySelectorAll('[data-words] .jubo-ai_word')];
+
+ function play(el){
+  if(!el)return;
+  if(paused||reduced.matches){el.dataset.play='true';return;}
+  el.removeAttribute('data-play');void el.offsetWidth;el.dataset.play='true';
+ }
+ const revealObserver=new IntersectionObserver(entries=>entries.forEach(({target,isIntersecting})=>{
+  if(!isIntersecting)return;
+  if(target.hasAttribute('data-reveal'))target.dataset.visible='true';
+  if(target.hasAttribute('data-motion')&&!isScrub())play(target);
+ }),{threshold:.2});
+ document.querySelectorAll('[data-reveal],[data-motion]').forEach(el=>revealObserver.observe(el));
+
+ function measure(){
+  root.dataset.scrub=String(isScrub());
+  stages.forEach(stage=>{stage.top=stage.el.getBoundingClientRect().top+scrollY;stage.height=stage.el.offsetHeight;stage.active=-1;});
+  if(visual)visual.resize();
+  onScroll();
+ }
+ function setActive(stage,index){
+  const mode=isScrub();
+  if(stage.active===index&&stage.mode===mode)return;
+  const first=stage.active===-1;
+  stage.active=index;stage.mode=mode;stage.el.dataset.activeStep=String(index);
+  stage.tabs.forEach((tab,i)=>{if(i===index)tab.setAttribute('aria-current','step');else tab.removeAttribute('aria-current');});
+  stage.panels.forEach((panel,i)=>{
+   panel.dataset.active=String(!mode||i===index);
+   if(mode){panel.inert=i!==index;panel.setAttribute('aria-hidden',String(i!==index));}
+   else{panel.inert=false;panel.removeAttribute('aria-hidden');}
+  });
+  if(mode){play(stage.panels[index].querySelector('[data-motion]'));if(!first||index>0)onPanel(stage,index);}
+ }
+ function onPanel(stage,index){
+  // Bring the N.Copilot example to life once, the first time its scene is reached.
+  if(stage.id==='applications'&&index===0&&!chatStarted&&!paused&&!reduced.matches){chatStarted=true;runConversation();}
+ }
+ function updateStages(){
+  const scrub=isScrub();
+  stages.forEach(stage=>{
+   if(scrub){
+    const progress=clamp((scrollY-stage.top)/Math.max(1,stage.height-innerHeight));
+    const index=Math.min(stage.panels.length-1,Math.floor(progress*stage.panels.length));
+    stage.el.style.setProperty('--stage-progress',((index+1)/stage.panels.length).toFixed(3));
+    const inView=scrollY>=stage.top-innerHeight*.4&&scrollY<=stage.top+stage.height-innerHeight*.6;
+    if(inView&&!stage.inView){stage.inView=true;stage.active=-1;}
+    if(!inView)stage.inView=false;
+    setActive(stage,index);
+    if(inView&&stage.id==='applications'&&index===0)onPanel(stage,0);
+   }else{
+    setActive(stage,0);
+    if(stage.id==='applications'){const r=stage.panels[0].getBoundingClientRect();if(r.top<innerHeight*.6&&r.bottom>0)onPanel(stage,0);}
+   }
+  });
+ }
+ function updateWords(){
+  const scrub=isScrub();
+  words.forEach(word=>{
+   if(!scrub){word.style.removeProperty('--o');return;}
+   const top=word.getBoundingClientRect().top;
+   const t=clamp((innerHeight*.88-top)/(innerHeight*.34));
+   word.style.setProperty('--o',(.16+.84*t).toFixed(3));
+  });
+  const lines=document.querySelector('[data-lines]');
+  if(lines){
+   const host=lines.closest('section');
+   const progress=clamp((scrollY-host.offsetTop)/Math.max(1,host.offsetHeight-innerHeight));
+   [...lines.children].forEach((line,i)=>{line.dataset.on=String(!scrub||progress>.12+i*.22);});
+  }
+ }
+ function updateLight(){
+  const probe=innerHeight*.5;
+  let tone=.38,prism=0;
+  for(const scene of scenes){
+   const rect=scene.getBoundingClientRect();
+   if(rect.top<=probe&&rect.bottom>probe){
+    tone=Number(scene.dataset.tone||.4);prism=Number(scene.dataset.prism||0);
+    const edge=Math.min(probe-rect.top,rect.bottom-probe)/innerHeight;
+    if(prism)prism*=clamp(edge*2.4);
+    break;
+   }
+  }
+  targetLight.tone=tone;targetLight.prism=prism;
+  root.style.setProperty('--jubo-ai-tone',tone);
+ }
+ function updateOrb(){
+  let best=null,score=0;
+  for(const el of document.querySelectorAll('[data-orb-anchor]')){
+   const rect=el.getBoundingClientRect();
+   const visible=Math.min(rect.bottom,innerHeight)-Math.max(rect.top,0);
+   if(visible>score){score=visible;best=rect;}
+  }
+  if(best&&score>best.height*.12){
+   const radius=Math.min(best.width,best.height)*.5;
+   targetOrb.x=(best.left+best.width*.5)/innerWidth;targetOrb.y=1-(best.top+best.height*.5)/innerHeight;
+   targetOrb.r=radius/innerHeight;targetOrb.opacity=1;
+  }else targetOrb.opacity=0;
+ }
+ function updateNav(){
+  root.dataset.scrolled=String(scrollY>24);
+  let current=null;
+  for(const link of document.querySelectorAll('[data-chapter-link]')){
+   const target=document.getElementById(link.dataset.chapterLink);const rect=target.getBoundingClientRect();
+   if(rect.top<=innerHeight*.5&&rect.bottom>innerHeight*.5)current=link;
+   link.removeAttribute('aria-current');
+  }
+  if(current)current.setAttribute('aria-current','true');
+ }
+ function onScroll(){updateStages();updateWords();updateLight();updateOrb();updateNav();wake();}
+ addEventListener('scroll',onScroll,{passive:true});
+ addEventListener('resize',measure,{passive:true});
+ reduced.addEventListener('change',()=>{setPaused(reduced.matches);measure();});
+ document.fonts.ready.then(measure);
+
+ function goToPanel(stage,index,behavior){
+  const target=isScrub()?stage.top+(index+.5)/stage.panels.length*(stage.height-innerHeight):stage.panels[index].getBoundingClientRect().top+scrollY-90;
+  scrollTo({top:Math.round(target),behavior:behavior||(paused||reduced.matches?'instant':'smooth')});
+ }
+ stages.forEach(stage=>stage.tabs.forEach(tab=>tab.addEventListener('click',()=>goToPanel(stage,Number(tab.dataset.tab)))));
+ document.querySelectorAll('[data-chapter-link]').forEach(link=>link.addEventListener('click',event=>{
+  const stage=stages.find(s=>s.id===link.dataset.chapterLink);
+  if(stage){event.preventDefault();goToPanel(stage,0);}
+ }));
+
+ function pointer(event){
+  if(paused||reduced.matches||!finePointer.matches||event.pointerType==='touch')return;
+  const x=event.clientX/innerWidth,y=1-event.clientY/innerHeight;
+  const radius=Math.max(.08,orb.r);
+  const dx=(x-orb.x)*innerWidth/innerHeight,dy=y-orb.y;
+  targetGaze.x=clamp(dx/radius,-1,1);targetGaze.y=clamp(dy/radius,-1,1);
+  targetGaze.strength=clamp(1.8-Math.hypot(dx,dy)/radius,0,1)*targetOrb.opacity;
+  wake();
+ }
+ addEventListener('pointermove',pointer,{passive:true});
+ document.addEventListener('pointerleave',()=>{targetGaze.x=targetGaze.y=targetGaze.strength=0;wake();});
+ addEventListener('pointerdown',event=>{
+  if(paused||reduced.matches)return;
+  const dx=(event.clientX/innerWidth-orb.x)*innerWidth/innerHeight,dy=1-event.clientY/innerHeight-orb.y;
+  if(Math.hypot(dx,dy)<orb.r*1.15&&orb.opacity>.3){targetGaze.pulse=1;wake();}
+ },{passive:true});
+
+ // Illustrative N.Copilot conversation. No real case data, no backend, no system actions.
+ const chat=document.querySelector('[data-chat]'),thread=document.querySelector('[data-chat-thread]');
+ const chatStatus=document.querySelector('[data-chat-status]'),chatInput=document.querySelector('[data-chat-input]'),send=chat.querySelector('.jubo-ai_send');
+ const logo=thread.querySelector('svg').outerHTML;
+ const prompts={
+  summary:{question:'Summarize this case information.',title:'Case overview',reply:'Here is a structure for a clear case overview.',inputs:['Uploaded case information','Nursing assessment'],items:['Background and current circumstances','Care needs and existing support','Points to clarify with the person']},
+  interview:{question:'Organize the key points from this interview.',title:'Interview essentials',reply:'The interview can be organized into these key areas.',inputs:['Interview transcript','Case information'],items:['The person’s priorities and concerns','Current support and daily routines','Questions and follow-up points']},
+  plan:{question:'Help me prepare a care-plan draft.',title:'Care-plan starting point',reply:'Start with the available context, then review each part.',inputs:['Case information','Interview transcript','Your organization’s template'],items:['Describe the needs supported by the records','Draft goals to discuss and confirm','Outline actions for professional review']}
+ };
+ let selectedPrompt='summary',chatController=null,chatStarted=false;
+ function setChatState(state,label){chat.dataset.status=state;chatStatus.textContent=label;send.disabled=state==='working';}
+ function scrollChat(){thread.scrollTo({top:thread.scrollHeight,behavior:paused?'instant':'smooth'});}
+ function wait(ms,signal){
+  return new Promise((resolve,reject)=>{
+   if(signal.aborted){reject(new DOMException('Aborted','AbortError'));return;}
+   const abort=()=>{clearTimeout(timer);reject(new DOMException('Aborted','AbortError'));};
+   const timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},paused||reduced.matches?0:ms);
+   signal.addEventListener('abort',abort,{once:true});
+  });
+ }
+ async function runConversation(){
+  chatStarted=true;
+  if(chatController)chatController.abort();
+  chatController=new AbortController();const signal=chatController.signal;
+  const content=prompts[selectedPrompt];
+  chat.dataset.prompt=selectedPrompt;thread.replaceChildren();
+  const user=document.createElement('div');user.className='jubo-ai_chat-user';user.textContent=content.question;thread.append(user);
+  const answer=document.createElement('div');answer.className='jubo-ai_chat-answer';answer.innerHTML=logo;
+  const body=document.createElement('div');body.className='jubo-ai_chat-content';answer.append(body);
+  const status=document.createElement('p');status.className='jubo-ai_shimmer';status.textContent='Connecting the example context…';body.append(status);
+  setChatState('working','Connecting context');
+  try{
+   await wait(450,signal);thread.append(answer);scrollChat();
+   await wait(900,signal);
+   status.className='';status.textContent=content.reply;
+   const details=document.createElement('details');details.className='jubo-ai_chat-sources';
+   const summary=document.createElement('summary');summary.textContent='Example inputs · '+content.inputs.length;
+   const list=document.createElement('ul');content.inputs.forEach(text=>{const li=document.createElement('li');li.textContent=text;list.append(li);});
+   details.append(summary,list);body.append(details);scrollChat();
+   await wait(600,signal);
+   const output=document.createElement('div');output.className='jubo-ai_chat-output';
+   const title=document.createElement('strong');title.textContent=content.title;
+   const items=document.createElement('ol');output.append(title,items);body.append(output);
+   for(const text of content.items){await wait(380,signal);const li=document.createElement('li');li.textContent=text;items.append(li);scrollChat();}
+   const review=document.createElement('button');review.type='button';review.className='jubo-ai_review-button';review.textContent='Mark as reviewed';
+   review.addEventListener('click',()=>{output.dataset.reviewed='true';review.textContent='Reviewed by you ✓';review.disabled=true;setChatState('reviewed','Reviewed by you');});
+   output.append(review);setChatState('ready-for-review','Ready for your review');scrollChat();
+  }catch(error){if(error.name!=='AbortError')throw error;}
+ }
+ document.querySelector('[data-chat-form]').addEventListener('submit',event=>{event.preventDefault();runConversation();});
+ document.querySelectorAll('[data-prompt]').forEach(button=>button.addEventListener('click',()=>{
+  selectedPrompt=button.dataset.prompt;chatInput.value=prompts[selectedPrompt].question;
+  document.querySelectorAll('[data-prompt]').forEach(el=>el.setAttribute('aria-pressed',String(el===button)));
+  runConversation();
+ }));
+
+ const ideas={
+  signals:{title:'What if changes were easier to spot?',copy:'Imagine a tool that brings recent measurements and care notes into one view, helping a team notice what deserves a closer look.',sources:['Vital signs','Care records','Handover notes'],review:'Care professionals would assess the context and decide what to do next.'},
+  time:{title:'What if teams had more time for care?',copy:'Imagine more add-ons that prepare routine drafts from the information already available in a workflow, giving people a clearer starting point.',sources:['Service records','Visit notes','Care plans'],review:'Teams would review and adapt the output before using it.'},
+  picture:{title:'What if the bigger picture was clearer?',copy:'Imagine bringing patterns across visits, services, and everyday records into a view that helps teams ask better questions about care.',sources:['Home visit records','Service records','Family updates'],review:'Insight would support discussion and professional judgment, rather than make care decisions.'}
+ };
+ const dialog=document.querySelector('[data-idea-dialog]');
+ let dialogTrigger=null;
+ document.querySelectorAll('[data-idea]').forEach(button=>button.addEventListener('click',()=>{
+  dialogTrigger=button;const idea=ideas[button.dataset.idea];
+  document.querySelector('#idea-title').textContent=idea.title;
+  dialog.querySelector('[data-idea-copy]').textContent=idea.copy;
+  const sources=dialog.querySelector('[data-idea-sources]');sources.replaceChildren();
+  idea.sources.forEach(text=>{const chip=document.createElement('span');chip.className='jubo-ai_chip';chip.textContent=text;sources.append(chip);});
+  dialog.querySelector('[data-idea-review]').textContent=idea.review;
+  dialog.showModal();
+ }));
+ dialog.querySelector('[data-dialog-close]').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('keydown',event=>{
+  if(event.key!=='Tab')return;
+  const controls=[...dialog.querySelectorAll('button:not(:disabled),a[href]')].filter(el=>el.getClientRects().length);
+  const first=controls[0],lastControl=controls[controls.length-1];
+  if(event.shiftKey&&document.activeElement===first){event.preventDefault();lastControl.focus();}
+  else if(!event.shiftKey&&document.activeElement===lastControl){event.preventDefault();first.focus();}
+ });
+ dialog.addEventListener('click',event=>{const rect=dialog.getBoundingClientRect();if(event.target===dialog&&(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom))dialog.close();});
+ dialog.addEventListener('close',()=>{if(dialogTrigger)dialogTrigger.focus();});
+
+ function render(now){
+  frame=0;
+  const dt=Math.min((now-last)/1000,.05);last=now;
+  const blend=paused?1:1-Math.exp(-dt*5);
+  if(!paused)elapsed+=dt;
+  for(const key of ['x','y','r','opacity'])orb[key]+=(targetOrb[key]-orb[key])*blend;
+  for(const key of ['x','y','strength'])gaze[key]+=(targetGaze[key]-gaze[key])*blend;
+  const lightBlend=paused?1:1-Math.exp(-dt*1.6);
+  light.tone+=(targetLight.tone-light.tone)*lightBlend;light.prism+=(targetLight.prism-light.prism)*lightBlend;
+  gaze.pulse=paused?0:Math.max(gaze.pulse,targetGaze.pulse);targetGaze.pulse=0;gaze.pulse*=Math.exp(-dt*3.5);
+  if(visual)visual.draw();
+  else{
+   const fallback=document.querySelector('.jubo-ai_fallback-orb');
+   fallback.style.left=(orb.x+gaze.x*.014*gaze.strength)*100+'%';
+   fallback.style.top=(1-orb.y-gaze.y*.014*gaze.strength)*100+'%';
+   fallback.style.width=orb.r*innerHeight*2*(1+.035*gaze.pulse)+'px';
+   fallback.style.opacity=orb.opacity;
+   fallback.style.setProperty('--shine-x',32+gaze.x*15*gaze.strength+'%');
+   fallback.style.setProperty('--shine-y',26-gaze.y*15*gaze.strength+'%');
+  }
+  if(!paused&&!document.hidden)frame=requestAnimationFrame(render);
+ }
+ try{
+  if(!window.THREE)throw new Error('WebGL library unavailable');
+  const canvas=document.querySelector('#jubo-ai-gl');
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:false,powerPreference:'low-power'});
+  const uniforms={
+   uResolution:{value:new THREE.Vector2(innerWidth,innerHeight)},uTime:{value:0},uTone:{value:light.tone},uPrism:{value:0},
+   uOrbCenter:{value:new THREE.Vector2(orb.x,orb.y)},uRadius:{value:orb.r},uOrbOpacity:{value:orb.opacity},
+   uGaze:{value:new THREE.Vector2(0,0)},uInteraction:{value:0},uPulse:{value:0}
+  };
+  const material=new THREE.ShaderMaterial({uniforms,vertexShader:document.querySelector('#jubo-ai-vertex').textContent,fragmentShader:document.querySelector('#jubo-ai-fragment').textContent,depthTest:false,depthWrite:false});
+  const scene=new THREE.Scene();scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),material));
+  const camera=new THREE.Camera();
+  visual={
+   resize(){renderer.setPixelRatio(Math.min(devicePixelRatio,innerWidth<768?1.5:2));renderer.setSize(innerWidth,innerHeight,false);uniforms.uResolution.value.set(innerWidth,innerHeight);},
+   draw(){
+    uniforms.uTime.value=elapsed;uniforms.uTone.value=light.tone;uniforms.uPrism.value=light.prism;
+    uniforms.uOrbCenter.value.set(orb.x,orb.y);uniforms.uRadius.value=orb.r;uniforms.uOrbOpacity.value=orb.opacity;
+    uniforms.uGaze.value.set(gaze.x,gaze.y);uniforms.uInteraction.value=gaze.strength;uniforms.uPulse.value=gaze.pulse;
+    renderer.render(scene,camera);drawCount++;
+   },
+   get calls(){return renderer.info.render.calls;},get dpr(){return renderer.getPixelRatio();}
+  };
+  visual.resize();root.dataset.webgl='ready';
+  canvas.addEventListener('webglcontextlost',event=>{event.preventDefault();root.dataset.webgl='unavailable';visual=null;wake();});
+ }catch(error){root.dataset.webgl='unavailable';}
+ document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(frame);frame=0;}else wake();});
+ measure();
+ // Read-only diagnostics expose visual state, never application or case data.
+ window.juboAIVisual={
+  get draws(){return drawCount;},get drawCalls(){return visual?visual.calls:0;},get pixelRatio(){return visual?visual.dpr:1;},
+  get time(){return elapsed;},get gaze(){return {...gaze};},get orb(){return {...orb};},get light(){return {...light};},
+  get stages(){return stages.map(s=>({id:s.id,active:s.active}));},
+  goToPanel(id,index){const stage=stages.find(s=>s.id===id);if(stage)goToPanel(stage,index,'instant');}
+ };
+ wake();
+})();
+</script>
+</body></html>

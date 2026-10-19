@@ -87,3 +87,7 @@
 - 刪除方式：agent 環境的 Git 代理拒絕刪除遠端分支（HTTP 403），由使用者在 Mac 以暫存空 repo 執行 `git push <repo URL> --delete …`，三個分支均回傳 deleted。
 - GitHub 讀回：三個分支均不存在，遠端共 23 個分支。
 - `claude/gallant-einstein-3tvafg` 之後若因平台指定再出現，為新的短期工作分支，與上表刪除的版本無關。
+
+## 進行中分支登記（2026-10-19）
+
+- `claude/confident-ramanujan-fivatw`：平台指定分支，用於 Jubo AI 頁 v7 精修。以 `claude/jubo-ai-agentic-redesign`（PR #24）head `e6a6c0ec77761e1ef0c80e950f26aaa91ee183d1` 快轉後接續提交；原分支與 PR #24 未改寫。細節見 [Jubo AI 專案](../projects/jubo-ai/README.md)。

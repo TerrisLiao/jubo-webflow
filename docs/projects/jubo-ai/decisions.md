@@ -42,3 +42,10 @@ Terris 指出 v4 版型變成制式介紹；保留其玻璃與漸層材質，重
 Terris 認為 v5 質感不足，要求接近 OpenAI 風格。以近黑文字、留白與單一視覺焦點重整；保留置中慢速揭露、Jubo 青色互動球體與原 CTA，降低全頁玻璃／漸層裝飾。系統 Helvetica／Arial 僅作隔離原型排版研究，不改全站字體。
 
 OpenAI 即時站 403，改看 Mobbin 的實際靜態截圖；不宣稱觀察到即時動畫，不引入其素材或程式碼。v6 另存，保留 v5 比較；同一 Draft、不 Publish。[來源、架構與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。
+
+
+## v7 依原規劃精修（2026-10-19）
+
+Terris 認為 v6 Draft 很不好看，要求依 git 脈絡回到原先規劃。v7 判定並恢復被 v6 移除的已確認規劃：v4 的白底漸進顯色、glowing orb、磨砂與長虹玻璃；字體回到官網 Poppins 與 18px 內文（v6 的系統 Helvetica／Arial 研究不再沿用）。保留 v5 的置中逐幕揭露、獨立互動球體、Jubo CTA，以及 v4 的英文資料 → 能力 → 應用架構與 What if 標示。
+
+執行層調整（Claude 實作決定）：16 個單行畫面收斂為 7 章；sticky 章改為依捲動離散切換，取代捲動綁定透明度造成的半透明殘影；Possibilities 改為自然流逐字顯現。v7 另存新檔，v2–v6 保留；Webflow Draft 未更新、未 Publish。[對照與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
