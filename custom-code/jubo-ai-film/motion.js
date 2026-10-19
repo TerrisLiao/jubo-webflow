@@ -94,7 +94,7 @@ void main(){
  col+=(fract(sin(dot(floor(p),vec2(12.9898,78.233)))*43758.5453)-.5)*.02;
  gl_FragColor=vec4(col,1.);
 }`;
- let gl = null, U = {};
+ let gl = null, U = {}, aura = null; // aura is declared before the try so fallback() can run inside it
  try {
   gl = canvas.getContext('webgl', { antialias: false, alpha: false, depth: false, powerPreference: 'low-power' });
   const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
@@ -110,7 +110,6 @@ void main(){
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); fallback(); });
   root.dataset.gl = 'on';
  } catch (err) { fallback(); }
- let aura = null;
  function fallback() {
   gl = null; root.dataset.gl = 'off'; canvas.hidden = true;
   if (!aura) { aura = document.createElement('div'); aura.className = 'jaf-aura'; aura.setAttribute('aria-hidden', 'true'); root.prepend(aura); }

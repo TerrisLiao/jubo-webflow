@@ -4,11 +4,11 @@
 Outputs (default dist/ under this folder, not committed):
   whtml.json    root + one fragment per section for data_whtml_builder (each class's CSS sent once)
   head.html     page custom code, Inside <head>
-  footer.html   page custom code, Before </body> (motion.js)
+  footer.html   page custom code, Before </body>: inline motion.js, or with --cdn the jsDelivr loader pinned to a commit (what Webflow uses)
   ix3.json      IX3 interaction payloads for data_interactions_tool
   preview.html  local preview: published page shell + this page + IX3 emulator (needs --shell)
 
-Usage: python3 build.py [--shell path/to/published-page.html] [--cta path/to/glass-button.html] [--out dir]
+Usage: python3 build.py [--shell path/to/published-page.html] [--cta path/to/glass-button.html] [--cdn <pushed commit>] [--out dir]
 """
 import argparse, json, re
 from pathlib import Path
@@ -17,7 +17,7 @@ HERE = Path(__file__).resolve().parent
 REPO = HERE.parent.parent
 PAGE_ID = '6a8e58aec01bc6cda7004324'  # /ai/jubo-ai-v2 Draft
 ap = argparse.ArgumentParser()
-ap.add_argument('--shell'); ap.add_argument('--cta'); ap.add_argument('--terser', help='path to a terser binary; minifies the footer script'); ap.add_argument('--out', default=str(HERE / 'dist'))
+ap.add_argument('--shell'); ap.add_argument('--cta'); ap.add_argument('--terser', help='path to a terser binary; minifies the footer script'); ap.add_argument('--cdn', help='pushed commit SHA; footer.html loads motion.js from jsDelivr at that commit with SRI'); ap.add_argument('--out', default=str(HERE / 'dist'))
 args = ap.parse_args()
 OUT = Path(args.out); OUT.mkdir(parents=True, exist_ok=True)
 
@@ -79,6 +79,14 @@ if args.terser:
     import subprocess
     motion = subprocess.run([args.terser, '--compress', '--mangle', '--comments', '/^!|來源/'], input=motion, capture_output=True, text=True, check=True).stdout
 footer = f'<script>\n{motion}</script>'
+if args.cdn:
+    import base64, hashlib, subprocess
+    sha = subprocess.run(['git', 'rev-parse', args.cdn], cwd=REPO, capture_output=True, text=True, check=True).stdout.strip()
+    src = subprocess.run(['git', 'show', f'{sha}:custom-code/jubo-ai-film/motion.js'], cwd=REPO, capture_output=True, check=True).stdout
+    sri = 'sha384-' + base64.b64encode(hashlib.sha384(src).digest()).decode()
+    footer = ('<!-- Jubo AI 原生頁動態。來源：repo custom-code/jubo-ai-film/motion.js，固定在 commit ' + sha[:7]
+              + '；修改時先改 repo，再更新此處 commit 與 integrity。使用站上已載入的 GSAP 3.15＋ScrollTrigger。 -->\n'
+              + f'<script src="https://cdn.jsdelivr.net/gh/TerrisLiao/jubo-webflow@{sha}/custom-code/jubo-ai-film/motion.js" integrity="{sri}" crossorigin="anonymous"></script>\n')
 (OUT / 'head.html').write_text(head); (OUT / 'footer.html').write_text(footer)
 
 # ---- IX3 interactions (Designer-visible): intro on load, headline lines and soft rises on scroll ----
