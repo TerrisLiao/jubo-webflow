@@ -1,0 +1,306 @@
+<!--
+  Jubo AI 原生頁（/ai/jubo-ai-v2 Draft）內容來源。
+  每個 <!-- section:name --> 區塊是一次 WHTML 插入的單一根元素；每個元素只有一個 class。
+  data-scene／data-stage：場景與釘選舞台。data-fin="n"：長虹玻璃鰭片錨點（WebGL 依其位置繪製）。
+  data-light：思考光錨點。data-ix-*：IX3 互動掛鉤。其他 data-*：motion.js 掛鉤。
+  {{ICON:name}}、{{WORDMARK}}、{{MARK}} 由 build.py 代入。
+-->
+
+<!-- section:hero -->
+<section class="jubo-ai-film_hero" data-scene="hero" aria-labelledby="jaf-hero-title">
+ <div class="jubo-ai-film_stage" data-stage="hero">
+  <div class="jubo-ai-film_hero-copy" data-hero-copy="">
+   <p class="jubo-ai-film_eyebrow" data-ix-intro="eyebrow"><span class="jubo-ai-film_dot"></span>認識 Jubo AI</p>
+   <h1 id="jaf-hero-title" class="jubo-ai-film_hero-title"><span class="jubo-ai-film_line"><span class="jubo-ai-film_line-inner" data-ix-intro="line">讓 AI 真正</span></span><span class="jubo-ai-film_line"><span class="jubo-ai-film_line-accent" data-ix-intro="line">理解照護工作</span></span></h1>
+   <p class="jubo-ai-film_lead" data-ix-intro="lead">Jubo AI 建立在長照與醫護現場的實務資料、產品經驗與照護流程之上，協助照護團隊更快掌握重點，少做重複的事。</p>
+  </div>
+  <div class="jubo-ai-film_hero-glass" data-light="hero" data-light-hue="0" data-hero-glass="">
+   <div class="jubo-ai-film_hero-fin-a" data-fin="0" data-ix-intro="fin"></div>
+   <div class="jubo-ai-film_hero-fin-b" data-fin="1" data-ix-intro="fin"></div>
+   <div class="jubo-ai-film_hero-fin-c" data-fin="2" data-ix-intro="fin"></div>
+   <div class="jubo-ai-film_hero-fin-d" data-fin="3" data-ix-intro="fin"></div>
+   <div class="jubo-ai-film_hero-fin-e" data-fin="4" data-ix-intro="fin"></div>
+   <div class="jubo-ai-film_think" data-ix-intro="think" aria-hidden="true"><span class="jubo-ai-film_think-dots"><span class="jubo-ai-film_think-dot"></span><span class="jubo-ai-film_think-dot"></span><span class="jubo-ai-film_think-dot"></span></span><span class="jubo-ai-film_think-text" data-think-text="">正在比對交班紀錄</span><span class="jubo-ai-film_caret"></span></div>
+   <p class="jubo-ai-film_hint" data-pointer-hint="" data-ix-intro="hint">移動游標，玻璃後的光會跟著你思考</p>
+  </div>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:tech -->
+<section class="jubo-ai-film_tech" data-scene="tech" aria-labelledby="jaf-tech-title">
+ <div class="jubo-ai-film_stage" data-stage="tech">
+  <h2 id="jaf-tech-title" class="jubo-ai-film_sr-only">Jubo AI 不是一個產品，而是 Jubo 每一套照護系統背後的技術。</h2>
+  <div class="jubo-ai-film_statement" aria-hidden="true">
+   <p class="jubo-ai-film_say-a" data-tech="a"><span class="jubo-ai-film_say-strong">Jubo AI</span><span class="jubo-ai-film_say-no" data-chars="">不是一個產品。</span><span class="jubo-ai-film_strike" data-tech="strike"></span></p>
+   <p class="jubo-ai-film_say-b" data-tech="b"><span class="jubo-ai-film_say-line" data-chars="">它是 Jubo 每一套照護系統</span><span class="jubo-ai-film_say-line-2" data-chars="">背後的<span class="jubo-ai-film_say-key">技術</span>。</span></p>
+  </div>
+  <div class="jubo-ai-film_map" data-tech="map" aria-hidden="true">
+   <svg class="jubo-ai-film_map-lines" data-tech-lines=""></svg>
+   <div class="jubo-ai-film_core" data-tech="core" data-light="tech" data-light-hue="0">
+    <div class="jubo-ai-film_core-fin-a" data-fin="1"></div>
+    <div class="jubo-ai-film_core-fin-b" data-fin="2"></div>
+    <div class="jubo-ai-film_core-fin-c" data-fin="3"></div>
+    <p class="jubo-ai-film_core-label" data-tech="core-label">Jubo AI</p>
+   </div>
+   <div class="jubo-ai-film_system-a" data-system=""><span class="jubo-ai-film_icon">{{ICON:building-2}}</span><span class="jubo-ai-film_system-name">住宿型照護系統</span><span class="jubo-ai-film_system-sub">護理作業・機構管理</span></div>
+   <div class="jubo-ai-film_system-b" data-system=""><span class="jubo-ai-film_icon">{{ICON:sun}}</span><span class="jubo-ai-film_system-name">日照型照護系統</span><span class="jubo-ai-film_system-sub">每日活動・家屬溝通</span></div>
+   <div class="jubo-ai-film_system-c" data-system=""><span class="jubo-ai-film_icon">{{ICON:house}}</span><span class="jubo-ai-film_system-name">居服照護系統</span><span class="jubo-ai-film_system-sub">派案・服務紀錄</span></div>
+   <div class="jubo-ai-film_system-d" data-system=""><span class="jubo-ai-film_icon">{{ICON:network}}</span><span class="jubo-ai-film_system-name">專案與系統整合</span><span class="jubo-ai-film_system-sub">政府・醫院・大型組織</span></div>
+  </div>
+  <p class="jubo-ai-film_tech-caption" data-tech="caption">同一套技術，持續長出讓照護人員更有效率的 AI 小工具。</p>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:data -->
+<section class="jubo-ai-film_data" data-scene="data" aria-labelledby="jaf-data-title">
+ <div class="jubo-ai-film_stage" data-stage="data">
+  <div class="jubo-ai-film_count-wrap" data-data="count">
+   <p class="jubo-ai-film_eyebrow-center" data-ix-rise=""><span class="jubo-ai-film_dot"></span>資料是 AI 的地基</p>
+   <h2 id="jaf-data-title" class="jubo-ai-film_count"><span class="jubo-ai-film_count-num" data-count="30">30</span><span class="jubo-ai-film_count-unit">億</span><span class="jubo-ai-film_count-label">筆照護資料</span></h2>
+  </div>
+  <div class="jubo-ai-film_streams" data-data="streams" data-light="data" data-light-hue="0.35" aria-label="五類照護資料">
+   <div class="jubo-ai-film_stream" data-fin="0" data-stream=""><div class="jubo-ai-film_stream-window"><div class="jubo-ai-film_stream-track" data-stream-track=""><span class="jubo-ai-film_stream-item">護理評估</span><span class="jubo-ai-film_stream-item">照護計畫</span><span class="jubo-ai-film_stream-item">日常服務紀錄</span><span class="jubo-ai-film_stream-item">護理評估</span><span class="jubo-ai-film_stream-item">照護計畫</span><span class="jubo-ai-film_stream-item">日常服務紀錄</span></div></div><p class="jubo-ai-film_stream-label">照護紀錄</p></div>
+   <div class="jubo-ai-film_stream" data-fin="1" data-stream=""><div class="jubo-ai-film_stream-window"><div class="jubo-ai-film_stream-track" data-stream-track=""><span class="jubo-ai-film_stream-item">血壓</span><span class="jubo-ai-film_stream-item">脈搏</span><span class="jubo-ai-film_stream-item">體溫</span><span class="jubo-ai-film_stream-item">血糖</span><span class="jubo-ai-film_stream-item">體重</span><span class="jubo-ai-film_stream-item">血壓</span><span class="jubo-ai-film_stream-item">脈搏</span><span class="jubo-ai-film_stream-item">體溫</span><span class="jubo-ai-film_stream-item">血糖</span><span class="jubo-ai-film_stream-item">體重</span></div></div><p class="jubo-ai-film_stream-label">生命徵象</p></div>
+   <div class="jubo-ai-film_stream" data-fin="2" data-stream=""><div class="jubo-ai-film_stream-window"><div class="jubo-ai-film_stream-track" data-stream-track=""><span class="jubo-ai-film_stream-item">交班內容</span><span class="jubo-ai-film_stream-item">異常狀況</span><span class="jubo-ai-film_stream-item">待追蹤事項</span><span class="jubo-ai-film_stream-item">交班內容</span><span class="jubo-ai-film_stream-item">異常狀況</span><span class="jubo-ai-film_stream-item">待追蹤事項</span></div></div><p class="jubo-ai-film_stream-label">交班紀錄</p></div>
+   <div class="jubo-ai-film_stream" data-fin="3" data-stream=""><div class="jubo-ai-film_stream-window"><div class="jubo-ai-film_stream-track" data-stream-track=""><span class="jubo-ai-film_stream-item">個案近況</span><span class="jubo-ai-film_stream-item">過去紀錄</span><span class="jubo-ai-film_stream-item">追蹤重點</span><span class="jubo-ai-film_stream-item">個案近況</span><span class="jubo-ai-film_stream-item">過去紀錄</span><span class="jubo-ai-film_stream-item">追蹤重點</span></div></div><p class="jubo-ai-film_stream-label">家訪紀錄</p></div>
+   <div class="jubo-ai-film_stream" data-fin="4" data-stream=""><div class="jubo-ai-film_stream-window"><div class="jubo-ai-film_stream-track" data-stream-track=""><span class="jubo-ai-film_stream-item">活動回報</span><span class="jubo-ai-film_stream-item">健康更新</span><span class="jubo-ai-film_stream-item">日常溝通</span><span class="jubo-ai-film_stream-item">活動回報</span><span class="jubo-ai-film_stream-item">健康更新</span><span class="jubo-ai-film_stream-item">日常溝通</span></div></div><p class="jubo-ai-film_stream-label">家屬訊息</p></div>
+  </div>
+  <div class="jubo-ai-film_stats" data-data="stats">
+   <p class="jubo-ai-film_stat"><span class="jubo-ai-film_stat-num" data-count="2800" data-suffix="+">2,800+</span><span class="jubo-ai-film_stat-label">家機構每天使用</span></p>
+   <p class="jubo-ai-film_stat"><span class="jubo-ai-film_stat-num" data-count="33" data-prefix="約 " data-suffix=" 萬">約 33 萬</span><span class="jubo-ai-film_stat-label">名照護使用者</span></p>
+  </div>
+  <p class="jubo-ai-film_data-note" data-data="note">每一筆紀錄，都是照護現場真實工作留下的脈絡。Jubo AI 把它們變成可查詢、可摘要、可提醒、可生成、可洞察的能力。</p>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:secure -->
+<section class="jubo-ai-film_secure" data-scene="secure" aria-labelledby="jaf-secure-title">
+ <div class="jubo-ai-film_stage" data-stage="secure">
+  <div class="jubo-ai-film_duo">
+  <div class="jubo-ai-film_secure-copy">
+   <p class="jubo-ai-film_eyebrow-left" data-ix-rise=""><span class="jubo-ai-film_dot"></span>資安與隱私</p>
+   <h2 id="jaf-secure-title" class="jubo-ai-film_h2" data-ix-split=""><span class="jubo-ai-film_h2-line">資料越多，</span><span class="jubo-ai-film_accent">越要守得住。</span></h2>
+   <p class="jubo-ai-film_body" data-ix-rise="">照護資料屬於每一家機構。Jubo AI 在 Jubo 系統裡運作，和所有照護紀錄一樣，受同一套國際級資安防護。</p>
+   <ul class="jubo-ai-film_checks" role="list">
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">ISO/IEC 27001・27701 國際驗證</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">全程加密傳輸</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">依角色授權存取</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">異常登入自動鎖定</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">操作留下紀錄</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">每日自動備份</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">資料存放於台灣境內</span></li>
+    <li class="jubo-ai-film_check" data-check=""><svg class="jubo-ai-film_check-icon" viewBox="0 0 20 20" aria-hidden="true"><circle class="jubo-ai-film_check-ring" cx="10" cy="10" r="8.5"></circle><path class="jubo-ai-film_check-tick" d="m6 10.2 2.6 2.6L14 7.5"></path></svg><span class="jubo-ai-film_check-text">年度第三方滲透測試</span></li>
+   </ul>
+   <a class="jubo-ai-film_link" href="/security">看 Jubo 資安與隱私<span class="jubo-ai-film_arrow" aria-hidden="true">→</span></a>
+  </div>
+  <div class="jubo-ai-film_vault" data-secure="vault" data-light="secure" data-light-hue="0.1">
+   <div class="jubo-ai-film_vault-fin-a" data-fin="0"></div>
+   <div class="jubo-ai-film_vault-fin-b" data-fin="4"></div>
+   <div class="jubo-ai-film_record" data-secure="record" aria-label="示意紀錄，非真實個案資料">
+    <p class="jubo-ai-film_record-row"><span class="jubo-ai-film_record-key">姓名</span><span class="jubo-ai-film_record-val" data-mask="陳＊玲">陳美玲</span></p>
+    <p class="jubo-ai-film_record-row"><span class="jubo-ai-film_record-key">身分證字號</span><span class="jubo-ai-film_record-val" data-mask="A12＊＊＊＊＊89">A123456789</span></p>
+    <p class="jubo-ai-film_record-row"><span class="jubo-ai-film_record-key">聯絡電話</span><span class="jubo-ai-film_record-val" data-mask="0912-＊＊＊-678">0912-345-678</span></p>
+    <p class="jubo-ai-film_record-row"><span class="jubo-ai-film_record-key">今日血壓</span><span class="jubo-ai-film_record-val">128 / 82 mmHg</span></p>
+    <div class="jubo-ai-film_shield" data-secure="shield" aria-hidden="true"><span class="jubo-ai-film_shield-icon">{{ICON:shield-check}}</span></div>
+   </div>
+   <p class="jubo-ai-film_vault-note">示意資料。可開啟的敏感欄位遮蔽，讓畫面上只留下工作需要的資訊。</p>
+  </div>
+  </div>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:caps -->
+<section class="jubo-ai-film_caps" data-scene="caps" aria-labelledby="jaf-caps-title">
+ <div class="jubo-ai-film_stage" data-stage="caps">
+  <div class="jubo-ai-film_duo">
+  <div class="jubo-ai-film_caps-copy">
+   <p class="jubo-ai-film_eyebrow-left" data-ix-rise=""><span class="jubo-ai-film_dot"></span>資料能做什麼</p>
+   <h2 id="jaf-caps-title" class="jubo-ai-film_h2-caps" data-ix-split=""><span class="jubo-ai-film_h2-line">一般 AI 很會回答問題，</span><span class="jubo-ai-film_h2-line">照護現場需要的，</span><span class="jubo-ai-film_accent">是理解。</span></h2>
+   <p class="jubo-ai-film_body" data-ix-rise="">以既有資料與照護脈絡生成內容，輸出可檢核、可追溯；最終判斷，仍回到照護專業。</p>
+  </div>
+  <ol class="jubo-ai-film_caps-list" role="list" data-light="caps" data-light-hue="0.2">
+   <li class="jubo-ai-film_cap" data-cap=""><span class="jubo-ai-film_cap-icon">{{ICON:search}}</span><span class="jubo-ai-film_cap-word">快速查詢</span><span class="jubo-ai-film_cap-desc">用問的，找到需要的住民、個案與機構資料。</span></li>
+   <li class="jubo-ai-film_cap" data-cap=""><span class="jubo-ai-film_cap-icon">{{ICON:file-text}}</span><span class="jubo-ai-film_cap-word">自動摘要</span><span class="jubo-ai-film_cap-desc">從大量紀錄中，整理出重點與脈絡。</span></li>
+   <li class="jubo-ai-film_cap" data-cap=""><span class="jubo-ai-film_cap-icon">{{ICON:bell-ring}}</span><span class="jubo-ai-film_cap-word">異常提醒</span><span class="jubo-ai-film_cap-desc">協助看見需要追蹤的照護變化。</span></li>
+   <li class="jubo-ai-film_cap" data-cap=""><span class="jubo-ai-film_cap-icon">{{ICON:pen-line}}</span><span class="jubo-ai-film_cap-word">內容生成</span><span class="jubo-ai-film_cap-desc">產出摘要、報告、交班與家屬溝通訊息。</span></li>
+   <li class="jubo-ai-film_cap" data-cap=""><span class="jubo-ai-film_cap-icon">{{ICON:chart-line}}</span><span class="jubo-ai-film_cap-word">管理洞察</span><span class="jubo-ai-film_cap-desc">讓主管更快掌握現場與服務品質。</span></li>
+   <li class="jubo-ai-film_scanner" data-fin="2" data-caps="scanner" aria-hidden="true"></li>
+  </ol>
+  </div>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:suite -->
+<section class="jubo-ai-film_suite" data-scene="suite" aria-labelledby="jaf-suite-title">
+ <div class="jubo-ai-film_stage" data-stage="suite">
+  <div class="jubo-ai-film_suite-head">
+   <p class="jubo-ai-film_eyebrow-left" data-ix-rise=""><span class="jubo-ai-film_dot"></span>我們已經做到的</p>
+   <h2 id="jaf-suite-title" class="jubo-ai-film_h2" data-ix-split=""><span class="jubo-ai-film_h2-line">已經在照護現場</span><span class="jubo-ai-film_accent">上班的 AI</span></h2>
+  </div>
+  <div class="jubo-ai-film_suite-track" data-suite="track" data-light="suite" data-light-hue="0.15">
+   <article class="jubo-ai-film_work" data-work="">
+    <div class="jubo-ai-film_work-visual" aria-hidden="true">
+     <div class="jubo-ai-film_raw" data-raw=""><span class="jubo-ai-film_raw-line-a"></span><span class="jubo-ai-film_raw-line-b"></span><span class="jubo-ai-film_raw-line-c"></span><span class="jubo-ai-film_raw-line-a"></span><span class="jubo-ai-film_raw-line-c"></span><span class="jubo-ai-film_raw-line-b"></span></div>
+     <div class="jubo-ai-film_work-fin" data-fin="1"></div>
+     <ul class="jubo-ai-film_sum" data-sum="" role="list"><li class="jubo-ai-film_sum-item">夜間血壓偏高，已通知護理師</li><li class="jubo-ai-film_sum-item">午餐進食量約一半</li><li class="jubo-ai-film_sum-item">明早追蹤傷口換藥</li></ul>
+    </div>
+    <h3 class="jubo-ai-film_work-title">交班紀錄 AI</h3>
+    <p class="jubo-ai-film_work-copy">把交班內容與照護紀錄整理成重點摘要，降低漏接與重複查找。</p>
+   </article>
+   <article class="jubo-ai-film_work" data-work="">
+    <div class="jubo-ai-film_work-visual" aria-hidden="true">
+     <div class="jubo-ai-film_raw" data-raw=""><span class="jubo-ai-film_raw-line-b"></span><span class="jubo-ai-film_raw-line-a"></span><span class="jubo-ai-film_raw-line-c"></span><span class="jubo-ai-film_raw-line-b"></span><span class="jubo-ai-film_raw-line-a"></span><span class="jubo-ai-film_raw-line-c"></span></div>
+     <div class="jubo-ai-film_work-fin" data-fin="2"></div>
+     <ul class="jubo-ai-film_sum" data-sum="" role="list"><li class="jubo-ai-film_sum-item">今天參加了園藝活動</li><li class="jubo-ai-film_sum-item">血壓穩定，胃口不錯</li><li class="jubo-ai-film_sum-item">提醒週五回診</li></ul>
+    </div>
+    <h3 class="jubo-ai-film_work-title">家庭聯絡簿 AI</h3>
+    <p class="jubo-ai-film_work-copy">把照護紀錄轉成家屬更容易理解的訊息，溝通更即時、更有溫度。</p>
+   </article>
+   <article class="jubo-ai-film_work" data-work="">
+    <div class="jubo-ai-film_work-visual" aria-hidden="true">
+     <div class="jubo-ai-film_raw" data-raw=""><span class="jubo-ai-film_raw-line-c"></span><span class="jubo-ai-film_raw-line-a"></span><span class="jubo-ai-film_raw-line-b"></span><span class="jubo-ai-film_raw-line-c"></span><span class="jubo-ai-film_raw-line-b"></span><span class="jubo-ai-film_raw-line-a"></span></div>
+     <div class="jubo-ai-film_work-fin" data-fin="3"></div>
+     <ul class="jubo-ai-film_sum" data-sum="" role="list"><li class="jubo-ai-film_sum-item">近況：行走需攙扶</li><li class="jubo-ai-film_sum-item">上次電訪：家屬擔心跌倒</li><li class="jubo-ai-film_sum-item">本次追蹤：居家環境安全</li></ul>
+    </div>
+    <h3 class="jubo-ai-film_work-title">家訪紀錄 AI</h3>
+    <p class="jubo-ai-film_work-copy">整理家訪、電訪與個案近況，讓追蹤重點更清楚，也方便團隊接續服務。</p>
+   </article>
+  </div>
+  <p class="jubo-ai-film_suite-note">示意內容，非真實個案資料。</p>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:amy -->
+<section class="jubo-ai-film_amy" data-scene="amy" aria-labelledby="jaf-amy-title">
+ <div class="jubo-ai-film_stage" data-stage="amy">
+  <div class="jubo-ai-film_product-head">
+   <p class="jubo-ai-film_eyebrow-center" data-ix-rise=""><span class="jubo-ai-film_dot"></span>居家服務・全人脈絡透鏡</p>
+   <h2 id="jaf-amy-title" class="jubo-ai-film_wordmark" data-ix-split="">Amy</h2>
+   <p class="jubo-ai-film_tagline" data-ix-rise="">家訪前，一頁看懂個案全貌。</p>
+  </div>
+  <div class="jubo-ai-film_amy-stage" data-amy="stage" data-light="amy" data-light-hue="0.25" aria-label="Amy 報告由五段組成">
+   <span class="jubo-ai-film_source-a" data-source="" aria-hidden="true">服務紀錄</span>
+   <span class="jubo-ai-film_source-b" data-source="" aria-hidden="true">居服回報</span>
+   <span class="jubo-ai-film_source-c" data-source="" aria-hidden="true">電訪紀錄</span>
+   <span class="jubo-ai-film_source-d" data-source="" aria-hidden="true">家訪紀錄</span>
+   <span class="jubo-ai-film_source-e" data-source="" aria-hidden="true">ADL／IADL</span>
+   <span class="jubo-ai-film_source-f" data-source="" aria-hidden="true">照顧計畫</span>
+   <div class="jubo-ai-film_amy-fin" data-fin="2" data-amy="fin"></div>
+   <ol class="jubo-ai-film_report" role="list">
+    <li class="jubo-ai-film_report-item" data-report=""><span class="jubo-ai-film_report-num">01</span>個案輪廓與能力</li>
+    <li class="jubo-ai-film_report-item" data-report=""><span class="jubo-ai-film_report-num">02</span>照顧計畫與服務目標</li>
+    <li class="jubo-ai-film_report-item" data-report=""><span class="jubo-ai-film_report-num">03</span>最近的訪視與紀錄</li>
+    <li class="jubo-ai-film_report-item" data-report=""><span class="jubo-ai-film_report-num">04</span>近三個月異常與居服回報</li>
+    <li class="jubo-ai-film_report-item" data-report=""><span class="jubo-ai-film_report-num">05</span>建議追蹤重點</li>
+   </ol>
+  </div>
+  <p class="jubo-ai-film_fine">內容由 AI 依既有資料整理並標明來源，僅供參考，由督導判讀。</p>
+  <a class="jubo-ai-film_link" href="/ai/amy">了解 Amy 透鏡<span class="jubo-ai-film_arrow" aria-hidden="true">→</span></a>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:ibee -->
+<section class="jubo-ai-film_ibee" data-scene="ibee" aria-labelledby="jaf-ibee-title">
+ <div class="jubo-ai-film_stage" data-stage="ibee">
+  <div class="jubo-ai-film_product-head">
+   <p class="jubo-ai-film_eyebrow-center" data-ix-rise=""><span class="jubo-ai-film_dot"></span>日照・居服・Jubo 第一個上線的 AI Agent</p>
+   <h2 id="jaf-ibee-title" class="jubo-ai-film_wordmark" data-ix-split="">iBee</h2>
+   <p class="jubo-ai-film_tagline" data-ix-rise="">自動比對照管額度與服務項目，一鍵匯入照顧計畫。</p>
+  </div>
+  <div class="jubo-ai-film_sync" data-ibee="sync" data-light="ibee" data-light-hue="0.45" aria-hidden="true">
+   <div class="jubo-ai-film_sync-col"><p class="jubo-ai-film_sync-head">照管平台</p><p class="jubo-ai-film_sync-row" data-from="">照顧計畫</p><p class="jubo-ai-film_sync-row" data-from="">服務項目次數</p><p class="jubo-ai-film_sync-row" data-from="">照管額度</p></div>
+   <div class="jubo-ai-film_sync-fin" data-fin="2" data-ibee="fin"><span class="jubo-ai-film_sync-beam" data-ibee="beam"></span></div>
+   <div class="jubo-ai-film_sync-col-right"><p class="jubo-ai-film_sync-head">Jubo 系統</p><p class="jubo-ai-film_sync-row-right" data-to="">照顧計畫</p><p class="jubo-ai-film_sync-row-right" data-to="">服務項目次數</p><p class="jubo-ai-film_sync-row-right" data-to="">照管額度</p></div>
+  </div>
+  <p class="jubo-ai-film_steps" aria-label="讀取、比對、匯入"><span class="jubo-ai-film_step" data-step="">讀取</span><span class="jubo-ai-film_step-arrow" aria-hidden="true">→</span><span class="jubo-ai-film_step" data-step="">比對</span><span class="jubo-ai-film_step-arrow" aria-hidden="true">→</span><span class="jubo-ai-film_step" data-step="">匯入</span></p>
+  <a class="jubo-ai-film_replay" href="#" role="button" data-ibee="replay">↻ 再執行一次</a>
+  <p class="jubo-ai-film_fine">iBee 協助比對與匯入，不會自動送出申報；最後確認仍由人員完成。</p>
+  <a class="jubo-ai-film_link" href="/contact">洽詢 iBee<span class="jubo-ai-film_arrow" aria-hidden="true">→</span></a>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:copilot -->
+<section class="jubo-ai-film_copilot" data-scene="copilot" aria-labelledby="jaf-copilot-title">
+ <div class="jubo-ai-film_stage" data-stage="copilot">
+  <div class="jubo-ai-film_meet" data-copilot="meet">
+   <h2 id="jaf-copilot-title" class="jubo-ai-film_meet-title"><span class="jubo-ai-film_meet-word" data-chars="">認識</span><span class="jubo-ai-film_meet-mark" role="img" aria-label="N.Copilot">{{WORDMARK}}</span></h2>
+   <p class="jubo-ai-film_meet-sub" data-copilot="sub">專為照護工作打造的 AI 智慧助理</p>
+  </div>
+  <div class="jubo-ai-film_chat-zone" data-copilot="zone" data-light="copilot" data-light-hue="0.6">
+   <div class="jubo-ai-film_chat-fin-a" data-fin="1"></div>
+   <div class="jubo-ai-film_chat-fin-b" data-fin="3"></div>
+   <div class="jubo-ai-film_chat" data-chat="" data-status="idle">
+    <div class="jubo-ai-film_chat-bar"><p class="jubo-ai-film_chat-name"><span class="jubo-ai-film_chat-logo">{{MARK}}</span>N.Copilot</p><p class="jubo-ai-film_chat-status" data-chat-status="">就緒</p></div>
+    <div class="jubo-ai-film_chat-thread" data-chat-thread="" role="log" aria-live="polite" aria-label="N.Copilot 示意對話"><p class="jubo-ai-film_chat-hello">今天要整理哪一位個案？</p></div>
+    <div class="jubo-ai-film_chat-prompts" role="group" aria-label="選擇示意情境">
+     <a class="jubo-ai-film_prompt" href="#" role="button" data-prompt="summary" aria-pressed="true">派案資料摘要</a>
+     <a class="jubo-ai-film_prompt" href="#" role="button" data-prompt="interview" aria-pressed="false">訪談重點整理</a>
+     <a class="jubo-ai-film_prompt" href="#" role="button" data-prompt="plan" aria-pressed="false">照顧計畫草稿</a>
+    </div>
+    <div class="jubo-ai-film_chat-input"><p class="jubo-ai-film_chat-field" data-chat-input="">幫我整理這位個案的派案資料重點。</p><a class="jubo-ai-film_chat-send" href="#" role="button" data-chat-send="" aria-label="執行示意對話">↑</a></div>
+   </div>
+  </div>
+  <p class="jubo-ai-film_fine-center">示意對話，非真實個案資料，也不會執行系統動作。N.Copilot 為專案型應用，依組織資料、系統環境與資安需求規劃。</p>
+  <a class="jubo-ai-film_link" href="/contact">洽詢專案合作<span class="jubo-ai-film_arrow" aria-hidden="true">→</span></a>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:next -->
+<section class="jubo-ai-film_next" data-scene="next" aria-labelledby="jaf-next-title">
+ <div class="jubo-ai-film_stage" data-stage="next">
+  <p class="jubo-ai-film_eyebrow-center" data-ix-rise=""><span class="jubo-ai-film_dot"></span>這只是開始</p>
+  <h2 id="jaf-next-title" class="jubo-ai-film_sr-only">同一套技術，會長出更多照護小工具。以下為探索中的構想，並非現有產品。</h2>
+  <div class="jubo-ai-film_ask" data-next="ask" data-light="next" data-light-hue="0.3" aria-hidden="true">
+   <div class="jubo-ai-film_ask-fin-a" data-fin="1"></div>
+   <div class="jubo-ai-film_ask-fin-b" data-fin="2"></div>
+   <div class="jubo-ai-film_ask-fin-c" data-fin="3"></div>
+   <p class="jubo-ai-film_question" data-question=""><span class="jubo-ai-film_question-text" data-question-text="">如果變化能更早被看見？</span><span class="jubo-ai-film_caret"></span></p>
+  </div>
+  <ul class="jubo-ai-film_ideas" role="list">
+   <li class="jubo-ai-film_idea-item"><a class="jubo-ai-film_idea" href="#" role="button" data-idea="signals">如果變化能更早被看見？</a></li>
+   <li class="jubo-ai-film_idea-item"><a class="jubo-ai-film_idea" href="#" role="button" data-idea="time">如果團隊能多一點時間陪伴長輩？</a></li>
+   <li class="jubo-ai-film_idea-item"><a class="jubo-ai-film_idea" href="#" role="button" data-idea="picture">如果主管能更清楚看見全貌？</a></li>
+  </ul>
+  <p class="jubo-ai-film_fine-center">有了這套技術與資料，新的照護小工具能更快長出來。以上為探索中的構想，並非現有產品。</p>
+  <div class="jubo-ai-film_dialog" data-idea-dialog="" role="dialog" aria-modal="true" aria-labelledby="jaf-idea-title" hidden="">
+   <div class="jubo-ai-film_dialog-card">
+    <p class="jubo-ai-film_dialog-tag">探索中的構想・並非現有產品</p>
+    <h3 id="jaf-idea-title" class="jubo-ai-film_dialog-title" data-idea-title="">如果變化能更早被看見？</h3>
+    <p class="jubo-ai-film_dialog-copy" data-idea-copy="">想像一個工具，把近期量測與照護紀錄放在同一個畫面，協助團隊注意值得多看一眼的變化。</p>
+    <p class="jubo-ai-film_dialog-copy" data-idea-review="">照護專業人員依脈絡判斷，決定下一步。</p>
+    <a class="jubo-ai-film_dialog-close" href="#" role="button" data-dialog-close="">關閉</a>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- /section -->
+
+<!-- section:close -->
+<section class="jubo-ai-film_close" data-scene="close" aria-labelledby="jaf-close-title">
+ <div class="jubo-ai-film_stage" data-stage="close">
+  <div class="jubo-ai-film_close-glass" data-light="close" data-light-hue="0.5">
+   <div class="jubo-ai-film_close-fin-a" data-fin="0"></div>
+   <div class="jubo-ai-film_close-fin-b" data-fin="1"></div>
+   <div class="jubo-ai-film_close-fin-c" data-fin="2"></div>
+   <div class="jubo-ai-film_close-fin-d" data-fin="3"></div>
+   <div class="jubo-ai-film_close-fin-e" data-fin="4"></div>
+  </div>
+  <div class="jubo-ai-film_close-copy">
+   <h2 id="jaf-close-title" class="jubo-ai-film_close-title" data-ix-split=""><span class="jubo-ai-film_h2-line">AI 協助整理，</span><span class="jubo-ai-film_h2-line">判斷交給專業。</span></h2>
+   <p class="jubo-ai-film_close-lead" data-ix-rise="">想知道 Jubo AI 能怎麼幫上你的團隊？和我們聊聊你的場域與流程。</p>
+   <div class="jubo-ai-film_close-actions" data-close-actions="">
+    <a class="jubo-ai-film_close-link" href="/security">資安與隱私<span class="jubo-ai-film_arrow" aria-hidden="true">→</span></a>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- /section -->

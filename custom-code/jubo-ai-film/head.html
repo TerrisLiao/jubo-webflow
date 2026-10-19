@@ -1,0 +1,90 @@
+<!-- Jubo AI 原生頁 head（page settings → Inside <head>）。來源：custom-code/jubo-ai-film/head.html -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap">
+<style id="jubo-ai-film-head">
+/* Things Webflow class styles cannot express: prefixes, state attributes, pseudo elements,
+   keyframes, reduced motion and the pinned desktop layout (data-film-mode="scrub"). */
+.jubo-ai-film_component{-webkit-font-smoothing:antialiased}
+.jubo-ai-film_component>section{position:relative;z-index:1}
+.jubo-ai-film_think,.jubo-ai-film_record,.jubo-ai-film_chat,.jubo-ai-film_pause,.jubo-ai-film_dialog{-webkit-backdrop-filter:blur(18px) saturate(1.4)}
+.jubo-ai-film_shield{-webkit-backdrop-filter:blur(7px) saturate(1.5)}
+.jubo-ai-film_line-accent,.jubo-ai-film_say-key{background-image:linear-gradient(100deg,#007c85 0%,#00a3ae 45%,#3a9fcf 70%,#007c85 100%);background-size:220% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.jubo-ai-film_stream-window{-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
+.jubo-ai-film_icon::before,.jubo-ai-film_cap-icon::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(20,224,212,.5),rgba(143,208,255,.25) 45%,transparent 70%);filter:blur(9px);animation:jaf-glow 7s ease-in-out infinite alternate}
+.jubo-ai-film_cap-icon{position:relative}
+.jubo-ai-film_cap-icon .jubo-ai-film_icon-svg{position:relative;z-index:1}
+.jubo-ai-film_think-dot{animation:jaf-dot 1.2s ease-in-out infinite}
+.jubo-ai-film_think-dot:nth-child(2){animation-delay:.15s}.jubo-ai-film_think-dot:nth-child(3){animation-delay:.3s}
+.jubo-ai-film_caret{animation:jaf-caret 1s steps(1) infinite}
+.jubo-ai-film_component[data-paused="true"] *,.jubo-ai-film_component[data-paused="true"] *::before{animation-play-state:paused!important}
+@keyframes jaf-glow{from{transform:translate(-8%,-6%) scale(.9);opacity:.75}to{transform:translate(8%,6%) scale(1.08);opacity:1}}
+@keyframes jaf-dot{0%,100%{opacity:.25;transform:translateY(0)}45%{opacity:1;transform:translateY(-3px)}}
+@keyframes jaf-caret{50%{opacity:0}}
+@keyframes jaf-flow{to{transform:translateY(-50%)}}
+@keyframes jaf-pulse{0%{box-shadow:0 0 0 0 rgba(0,163,174,.35)}100%{box-shadow:0 0 0 14px rgba(0,163,174,0)}}
+
+/* Interactive states */
+.jubo-ai-film_cap .jubo-ai-film_cap-icon{opacity:.35;filter:grayscale(1);transition:opacity .5s,filter .5s}
+.jubo-ai-film_cap[data-on="true"] .jubo-ai-film_cap-icon{opacity:1;filter:none}
+.jubo-ai-film_step{transition:color .4s}
+.jubo-ai-film_step[data-on="true"]{color:#151717}
+.jubo-ai-film_step[data-on="true"]:last-child{color:#007c85}
+.jubo-ai-film_sync-row,.jubo-ai-film_sync-row-right{transition:opacity .4s,color .4s}
+.jubo-ai-film_sync-row-right::before{content:"";display:inline-block;width:.55em;height:.55em;margin-right:.55em;border-radius:50%;background:#00a3ae;transform:scale(var(--dot,0));transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+.jubo-ai-film_sync-row-right[data-on="true"]{--dot:1}
+.jubo-ai-film_prompt[aria-pressed="true"]{border-color:#151717;background:#151717;color:#fff}
+.jubo-ai-film_chat[data-status="working"] .jubo-ai-film_chat-status{color:#007c85}
+.jubo-ai-film_streams:hover .jubo-ai-film_stream:not(:hover) .jubo-ai-film_stream-window{opacity:.35}
+.jubo-ai-film_stream{transition:flex-grow .7s cubic-bezier(.22,1,.36,1)}
+.jubo-ai-film_stream-window{transition:opacity .5s}
+@media (hover:hover) and (min-width:768px){.jubo-ai-film_stream:hover{flex-grow:2.1}}
+.jubo-ai-film_record-mask{position:absolute;inset:0;white-space:nowrap;color:#007c85;clip-path:inset(0 100% 0 0)}
+.jubo-ai-film_dialog[hidden]{display:none}
+.jubo-ai-film_component a[role="button"]:focus-visible,.jubo-ai-film_component a:focus-visible{outline:2px solid #00a3ae;outline-offset:3px;border-radius:999px}
+
+/* Chat messages are created by motion.js, so their styles live here. */
+.jaf-msg-user{align-self:flex-end;max-width:80%;padding:.6rem .9rem;border-radius:1rem 1rem .3rem 1rem;background:#151717;color:#fff;font-size:.875rem;line-height:1.5}
+.jaf-msg-ai{display:flex;gap:.6rem;align-items:flex-start;font-size:.875rem;line-height:1.65;color:#151717}
+.jaf-msg-ai svg{width:1.5rem;height:.75rem;flex:none;margin-top:.3rem}
+.jaf-msg-ai p{margin:0 0 .4rem}
+.jaf-msg-ai details{margin:.2rem 0 .5rem;color:#007c85;font-size:.8125rem}
+.jaf-msg-ai summary{cursor:pointer}
+.jaf-msg-ai ul{margin:.35rem 0 0;padding-left:1.1rem;color:rgba(21,23,23,.66)}
+.jaf-out{padding:.75rem .9rem;border-radius:.9rem;background:rgba(0,163,174,.07);box-shadow:inset 0 0 0 1px rgba(0,163,174,.16)}
+.jaf-out strong{display:block;margin-bottom:.3rem}
+.jaf-out ol{margin:0;padding-left:1.1rem}
+.jaf-out li{animation:jaf-in .45s cubic-bezier(.22,1,.36,1) both}
+.jaf-review{margin-top:.6rem;padding:.4rem .8rem;border:0;border-radius:999px;background:#151717;color:#fff;font:inherit;font-size:.75rem;cursor:pointer}
+.jaf-review[disabled]{background:#007c85;cursor:default}
+@keyframes jaf-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* Fallback when WebGL is unavailable: CSS frosted glass on the same anchors. */
+.jubo-ai-film_component[data-gl="off"] [data-fin]{border-left:1px solid rgba(255,255,255,.9);border-right:1px solid rgba(255,255,255,.9);background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 2px,rgba(255,255,255,0) 2px 10px,rgba(0,124,133,.05) 12px,rgba(255,255,255,.45) 14px);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);-webkit-mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent);mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent)}
+.jaf-aura{position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(60px);background:radial-gradient(closest-side at 30% 45%,rgba(0,178,192,.55),transparent),radial-gradient(closest-side at 70% 55%,rgba(143,208,255,.55),transparent),radial-gradient(closest-side at 50% 75%,rgba(243,217,168,.5),transparent)}
+
+/* Pinned desktop layout. motion.js sets data-film-mode="scrub" only at ≥992×620 without reduced motion. */
+[data-film-mode="scrub"] .jubo-ai-film_stage{height:100vh;min-height:0;overflow:hidden}
+[data-film-mode="scrub"] .jubo-ai-film_statement{position:absolute;inset:0;display:grid;place-items:center;align-content:center}
+[data-film-mode="scrub"] .jubo-ai-film_say-a,[data-film-mode="scrub"] .jubo-ai-film_say-b{grid-area:1/1;text-align:center}
+[data-film-mode="scrub"] .jubo-ai-film_map{position:absolute;left:0;right:0;top:15vh;margin:0 auto;height:66vh;max-width:min(76rem,90vw)}
+[data-film-mode="scrub"] .jubo-ai-film_tech-caption{position:absolute;left:0;right:0;bottom:5vh;margin:0 auto}
+[data-film-mode="scrub"] .jubo-ai-film_count-wrap{position:absolute;left:0;right:0;top:calc(50% - 10rem)}
+[data-film-mode="scrub"] .jubo-ai-film_streams{position:absolute;left:0;right:0;top:30vh;height:42vh;margin:0 auto;max-width:min(70rem,88vw)}
+[data-film-mode="scrub"] .jubo-ai-film_stats{position:absolute;left:0;right:0;top:78vh}
+[data-film-mode="scrub"] .jubo-ai-film_data-note{position:absolute;left:0;right:0;bottom:3.5vh;margin:0 auto;font-size:.9375rem}
+[data-film-mode="scrub"] .jubo-ai-film_suite-track{display:flex;width:max-content;max-width:none;gap:9vw;padding:0 10vw;align-self:flex-start}
+[data-film-mode="scrub"] .jubo-ai-film_work{width:42vw}
+[data-film-mode="scrub"] .jubo-ai-film_suite-head,[data-film-mode="scrub"] .jubo-ai-film_suite-note{padding:0 calc(10vw - 1.5rem);max-width:none}
+[data-film-mode="scrub"] .jubo-ai-film_meet{position:absolute;left:0;right:0;top:calc(50% - 6.5rem)}
+[data-film-mode="scrub"] .jubo-ai-film_chat-zone{position:absolute;left:0;right:0;top:23vh;margin:0 auto}
+[data-film-mode="scrub"] .jubo-ai-film_copilot .jubo-ai-film_fine-center{position:absolute;left:0;right:0;bottom:4.25rem}
+[data-film-mode="scrub"] .jubo-ai-film_copilot .jubo-ai-film_link{position:absolute;left:0;right:0;bottom:1.75rem;margin:0 auto;width:max-content}
+[data-film-mode="scrub"] .jubo-ai-film_ideas{display:flex}
+
+@media (max-height:760px){[data-film-mode="scrub"] .jubo-ai-film_chat-thread{height:11rem}[data-film-mode="scrub"] .jubo-ai-film_chat-zone{top:21vh}}
+@media (prefers-reduced-motion:reduce){
+ .jubo-ai-film_icon::before,.jubo-ai-film_cap-icon::before,.jubo-ai-film_think-dot,.jubo-ai-film_caret{animation:none}
+ .jubo-ai-film_stream{transition:none}
+}
+</style>
