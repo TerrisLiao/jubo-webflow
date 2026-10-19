@@ -107,3 +107,11 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 以 Mobbin `search_sections` 實際檢視 AI 首頁、AI agent 介紹、醫療 AI、資安段、Claude 網站與柔焦媒體面板等參考，整理四項共同做法（見 v10 紀錄 §2）。
 - 新增 `custom-code/poc/jubo-ai-agentic-v10.html`：暖米白底、Jubo 青強調、700 字重、黑色按鈕；shader 改為只在可見媒體面板的圓角矩形內繪製長虹玻璃思考光（青／天空／薄荷／沙色）；N.Copilot 面板隨對話框彈出才亮起。
 - 新增 `tools/verify-jubo-ai-v10.js`；pack 工具支援 `--version 10`。Draft 未更新、未 Publish。
+
+## 2026-10-19 — 原生動態頁覆蓋 Draft `/ai/jubo-ai-v2`
+
+- 依 Terris 授權移除 Draft 上的 Codex v6 原生根元素與其 Three.js footer，插入 Navbar、原生根元素（11 場景，WHTML）、Glass Button（`/contact`、預約諮詢）與 Footer；既有隱藏 legacy-archive 保留未動。
+- 寫入 page head（字體、前綴、狀態、keyframes、scrub 版面、fallback）與 footer（jsDelivr 固定 commit＋SRI）；新增 3 個本頁 IX3；更新頁面 title 與 SEO，draft:true。
+- 來源 `custom-code/jubo-ai-film/`：`build.py` 產生 WHTML、head、footer（`--cdn`）、IX3 與本機 preview；新增 `tools/verify-jubo-ai-film.js`。
+- 驗收抓到無 WebGL 時 `fallback()` 暫時性死區錯誤會中斷整支動態；修正於 `4831e19`，footer 改指向該 commit，jsDelivr 內容與 SRI 讀回一致。
+- 未 Publish；`/jubo-ai-v3-preview`、正式 `/ai/jubo-ai` 未動；未改共用 Component 定義、utility、Variables、Slater、站台腳本。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)

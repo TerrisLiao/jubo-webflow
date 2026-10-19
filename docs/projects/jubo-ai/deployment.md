@@ -2,6 +2,10 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（原生動態頁） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19；`motion.js` 固定於 `4831e19` | 遠端 head 以 push 後讀回為準 |
+| 本機瀏覽器（原生動態頁） | `tools/verify-jubo-ai-film.js`：桌機 scrub 10 pin、1280×600／375 flow、減少動態、無 WebGL 全部通過 | 2026-10-19 | [紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)；IX3 為本機模擬器、WebGL 為軟體繪製 |
+| Webflow 頁面資料（原生動態頁） | **Draft `/ai/jubo-ai-v2` 已覆蓋**：元素結構、head／footer code、3 個 IX3、頁面設定皆讀回確認；footer 指向 jsDelivr `4831e19`＋SRI，CDN 內容逐位元組一致 | 2026-10-19；`6a8e58aec01bc6cda7004324` | [Designer](https://jubo-health.design.webflow.com/?pageId=6a8e58aec01bc6cda7004324)；畫布未目視 |
+| staging／production（原生動態頁） | **未發布** | — | 未呼叫 Publish |
 | Git（v11） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
 | 本機瀏覽器（v11） | `tools/verify-jubo-ai-v11.js`（v10 全部檢查＋無邊框媒體、圖示、曲線、技術圖畫線） | 2026-10-19 | [v11 紀錄](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md) |
 | Webflow 頁面資料（v11） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認 |

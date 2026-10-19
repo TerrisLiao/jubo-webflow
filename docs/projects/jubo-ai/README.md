@@ -1,18 +1,23 @@
 # Jubo AI：照護知識、資料與應用
 
-狀態：**v11（長虹玻璃鰭片主視覺＋資安頁式技術圖）已完成本機驗收，待 Terris 審閱；Webflow Draft 仍為 v6**（2026-10-19，Asia/Taipei）。
+狀態：**Webflow Draft `/ai/jubo-ai-v2` 已覆蓋為原生動態頁（Webflow 元素＋IX3＋GSAP＋WebGL 長虹玻璃），未 Publish，待 Terris 在 Designer 預覽目視**（2026-10-19，Asia/Taipei）。
 
 - 工作分支：v1–v6 在 `claude/jubo-ai-agentic-redesign`（[Draft PR #24](https://github.com/TerrisLiao/jubo-webflow/pull/24)）；v7 在平台指定分支 `claude/confident-ramanujan-fivatw`，以 PR #24 head `e6a6c0e` 為基底接續，未改寫原分支。
-- **現行原型 v11**：`custom-code/poc/jubo-ai-agentic-v11.html`；[主視覺、技術圖與資安頁差異](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md)。
+- **現行版本：原生動態頁**，來源 `custom-code/jubo-ai-film/`（sections、page.css、head.html、motion.js、build.py）；[分鏡、Webflow 實作、驗收與限制](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。驗收 `tools/verify-jubo-ai-film.js`。
+- 前一版原型 v11：`custom-code/poc/jubo-ai-agentic-v11.html`；[主視覺、技術圖與資安頁差異](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md)。
 - v10（配色基礎）：`custom-code/poc/jubo-ai-agentic-v10.html`；[Mobbin 參考與視覺調整](reference/原型v10暖白底與Mobbin參考_2026-10-19.md)。
 - v9（故事與文案來源）：`custom-code/poc/jubo-ai-agentic-v9.html`；[故事線、文案來源、互動與驗收](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。
 - v8（同日，英文捲動展示）：`custom-code/poc/jubo-ai-agentic-v8.html`；[場景、參考與驗收](reference/原型v8捲動體驗與驗收_2026-10-19.md)。
 - v7（同日稍早，Terris 看完後改方向）：`custom-code/poc/jubo-ai-agentic-v7.html`；[原規劃對照、章節與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
-- **Webflow Draft 預覽**：[Designer](https://jubo-health.design.webflow.com/?pageId=6acf60696126abae97656a6b)，`/jubo-ai-v3-preview` 仍載入 **v6**；v7 待 Terris 確認後再替換同一隔離 iframe，未發布。
+- **Webflow Draft**：[`/ai/jubo-ai-v2` Designer](https://jubo-health.design.webflow.com/?pageId=6a8e58aec01bc6cda7004324) 已依授權覆蓋為原生動態頁，未發布。隔離預覽 `/jubo-ai-v3-preview` 仍為 v6 iframe，未動。
 - v6 紀錄：[架構、參考與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。v2–v6 與品牌 SVG 保留未改；[v4 歷史驗收](reference/原型v4架構與驗收_2026-10-14.md)、[v3 原交接](reference/codex-v3-交接.md)、[原 Draft 承載紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。
 - 接手先讀 AGENTS.md → current-state → tasks → decisions。
 
-## 最新主視覺（v11，2026-10-19）
+## 原生動態頁（2026-10-19）
+
+Terris 認為原型風格與 motion graphic 不夠好，要求直接在 Webflow 用 IX3／GSAP 做到 After Effects 等級，並授權覆蓋 Draft。做法：內容改為 11 個原生 section；頁上錨點元素定義玻璃鰭片與光的位置，單一 WebGL canvas 依可見場景混合錨點，鰭片在場景間連續變形，像同一顆鏡頭；IX3 做首屏、標題逐行與浮現，GSAP 做 pin、scrub、遮罩擦除、計數、畫線、對話與彈窗。[細節](reference/原生動態頁_IX3與GSAP_2026-10-19.md)
+
+## 前一版主視覺（v11，2026-10-19）
 
 Terris 認為 v10 技術圖很醜，並要求長虹玻璃思考光作為主視覺，但不能是一整塊 panel。v11 改為五片高低錯落的直立長虹玻璃鰭片浮在無邊界柔光上；技術圖改用依像素計算的細曲線、流動光點與 Lucide 漸層圖示（資安頁做法）；能力清單加入同風格圖示。與資安頁的差異不是技術限制，而是分鏡與打磨方法。[細節](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md)
 

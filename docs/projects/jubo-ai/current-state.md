@@ -1,10 +1,18 @@
 # 現況
 
 - 文件更新：2026-10-19（Asia/Taipei）。
+- **現行版本：原生動態頁**，來源 `custom-code/jubo-ai-film/`。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。故事、文案、配色同 v9–v11。
+- Webflow：Draft `/ai/jubo-ai-v2`（`6a8e58aec01bc6cda7004324`）已依授權覆蓋：Navbar → 原生根元素（11 場景）→ 既有隱藏 legacy-archive → Footer；page head／footer code、3 個 IX3（`i-aaaf8f07`、`i-36b86400`、`i-266dec8e`）。footer 以 jsDelivr 固定 commit `4831e19`＋SRI 載入 `motion.js`。原 Codex v6 原生根元素與其 Three.js footer 已取代。**未 Publish**；`/jubo-ai-v3-preview` 與正式 `/ai/jubo-ai` 未動。
+- 驗收：`tools/verify-jubo-ai-film.js` 桌機 scrub（10 pin）、短螢幕／手機 flow、減少動態、無 WebGL 皆通過；IX3 以本機模擬器執行、WebGL 為軟體繪製，Designer 預覽與真機尚未驗證。
+- 待確認：Terris 在 Designer 預覽目視；v9 紀錄 §3 三項待核准文案；jsDelivr 長期承載與否；真機效能。
+
+## v11 摘要（同日稍早）
+
+- 文件更新：2026-10-19（Asia/Taipei）。
 - **現行原型 v11**：`custom-code/poc/jubo-ai-agentic-v11.html`。[紀錄](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md)。配色同 v10，故事、文案、互動同 v9。
 - 主視覺：五片直立長虹玻璃鰭片（寬高、上下位置不同）浮在無邊界柔光上，無邊框、無圓角、無面板；技術圖為細曲線＋流動光點＋Lucide 漸層圖示；能力清單有漸層圖示。
 - 配色（v10 起）：暖米白 `#F6F5F1` 底、近黑 700 字重、Jubo 青為唯一強調色；思考光只在 Hero、N.Copilot、結尾三處出現，色彩為青／天空／薄荷／沙色（v11 起不再有圓角面板）。無紫色、無漸層字。
-- Webflow：Draft 仍為 v6，未更新、未 Publish。
+- Webflow：（當時）Draft 仍為 v6，未更新、未 Publish。
 - 待確認：Terris 對 v11 的目視審閱；v9 紀錄 §3 三項待核准文案；是否以 v11 替換 Draft；真機效能。
 
 ## v9 摘要（同日稍早）

@@ -90,4 +90,4 @@
 
 ## 進行中分支登記（2026-10-19）
 
-- `claude/confident-ramanujan-fivatw`：平台指定分支，用於 Jubo AI 頁 v7 精修。以 `claude/jubo-ai-agentic-redesign`（PR #24）head `e6a6c0ec77761e1ef0c80e950f26aaa91ee183d1` 快轉後接續提交；原分支與 PR #24 未改寫。細節見 [Jubo AI 專案](../projects/jubo-ai/README.md)。
+- `claude/confident-ramanujan-fivatw`：平台指定分支，用於 Jubo AI 頁 v7–v11 精修與原生動態頁（Draft `/ai/jubo-ai-v2`，未發布）。以 `claude/jubo-ai-agentic-redesign`（PR #24）head `e6a6c0ec77761e1ef0c80e950f26aaa91ee183d1` 快轉後接續提交；原分支與 PR #24 未改寫。細節見 [Jubo AI 專案](../projects/jubo-ai/README.md)。
