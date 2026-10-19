@@ -70,3 +70,12 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 結構：7 章；Foundation／Capabilities／Applications 為 sticky 章，固定章標題與分頁，內容離散切換並各有玻璃示意動畫；Statement 與 Possibilities 逐字顯現；整頁約 18 個視窗高（v6 約 26）。
 - 新增 `tools/verify-jubo-ai-v7.js`；`tools/pack-jubo-ai-preview.py` 支援 `--version 7`。完整驗收全部通過，詳見 [v7 紀錄](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
 - Webflow Draft 未更新（仍為 v6）、未 Publish；未改共用資產、Slater 或站台腳本。分支登記於 branch-inventory。
+
+
+## 2026-10-19｜v8 捲動驅動 AI 體驗
+
+- Terris 看完 v7 後提供新參考：長虹玻璃後的流動漸層＋磨砂玻璃圓、玻璃輸入列、Verba 對話卡、Living Systems 玻璃面板、打字游標與黑底 chip 的動態卡；要求主視覺循環且可互動，整頁為捲動觸發的 AI 體驗、少資訊、高科技感。
+- 新增 `custom-code/poc/jubo-ai-agentic-v8.html`：7 場景（Key visual、Every record、Understanding、Capabilities、Applications、What if、Close）；桌機 4 個 GSAP pin，手機／矮視窗／reduced-motion 不 pin。
+- 主視覺 shader：長虹玻璃稜線取樣流動光、磨砂玻璃圓、游標牽引光團與稜線高光、點擊漣漪、顆粒；單 canvas／draw call。
+- 製作中修正：玻璃圓尺寸只在 scroll 事件更新，GSAP scrub 收斂期間不跟隨 → 改為每幀追蹤；預覽 iframe sandbox 未允許 forms，輸入列與對話送出鈕的 form submit 會被擋 → 改為一般按鈕（v6 Draft 與 v7 的對話送出鈕有相同潛在問題，示例 chips 不受影響）。
+- 新增 `tools/verify-jubo-ai-v8.js`；pack 工具支援 `--version 8`。結果見 [v8 紀錄](reference/原型v8捲動體驗與驗收_2026-10-19.md) 與 deployment。Draft 未更新、未 Publish。

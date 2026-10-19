@@ -49,3 +49,11 @@ OpenAI 即時站 403，改看 Mobbin 的實際靜態截圖；不宣稱觀察到�
 Terris 認為 v6 Draft 很不好看，要求依 git 脈絡回到原先規劃。v7 判定並恢復被 v6 移除的已確認規劃：v4 的白底漸進顯色、glowing orb、磨砂與長虹玻璃；字體回到官網 Poppins 與 18px 內文（v6 的系統 Helvetica／Arial 研究不再沿用）。保留 v5 的置中逐幕揭露、獨立互動球體、Jubo CTA，以及 v4 的英文資料 → 能力 → 應用架構與 What if 標示。
 
 執行層調整（Claude 實作決定）：16 個單行畫面收斂為 7 章；sticky 章改為依捲動離散切換，取代捲動綁定透明度造成的半透明殘影；Possibilities 改為自然流逐字顯現。v7 另存新檔，v2–v6 保留；Webflow Draft 未更新、未 Publish。[對照與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
+
+
+## v8 捲動驅動 AI 體驗（2026-10-19）
+
+Terris 看完 v7 後提供新參考並指示：Jubo AI 主視覺為長虹玻璃後的流動漸層光、磨砂玻璃圓與玻璃輸入列，需循環且可互動；整頁為捲動觸發的一連串動畫，是 AI 體驗與展示，不要太資訊型、要 high-tech。取代 v7 的資訊型章節（逐類資料卡、能力視窗、原則三欄）。
+
+實作決定（Claude）：7 場景、每場景一句文字；桌機以 GSAP ScrollTrigger pin＋scrub（僅隔離原型載入），手機與 reduced-motion 不 pin；漸層改藍 → 紫 → 青（依參考），Jubo 青保留於品牌字與 N.Copilot。v7 保留比較；Draft 未更新、未 Publish。[紀錄](reference/原型v8捲動體驗與驗收_2026-10-19.md)。
+

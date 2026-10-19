@@ -1,6 +1,16 @@
 # 現況
 
 - 文件更新：2026-10-19（Asia/Taipei）。
+- **現行原型 v8**：`custom-code/poc/jubo-ai-agentic-v8.html`（分支 `claude/confident-ramanujan-fivatw`）。[場景、參考與驗收](reference/原型v8捲動體驗與驗收_2026-10-19.md)。
+- 最新要求：主視覺＝長虹玻璃後流動的藍／紫／青綠光＋磨砂玻璃圓＋玻璃輸入列，循環且可互動；整頁為捲動觸發的 AI 體驗展示，少資訊、高科技感。參考圖另含 Verba 對話卡、Living Systems 玻璃面板、打字游標／黑底 chip／顆粒漸層球／曲線標籤的動態卡。
+- 場景：Key visual → Every record（捲動逐字＋chips 選取）→ Understanding（chips 匯入玻璃圓）→ Capabilities（6 張循環動態卡）→ Applications（N.Copilot／Amy／iBee 示範）→ What if（捲動逐字）→ Close。桌機 4 個 GSAP pin；手機、矮視窗、reduced-motion 不 pin。
+- 技術：單 Three.js canvas／draw call（長虹玻璃、玻璃圓、漣漪、顆粒）；GSAP 3.13＋ScrollTrigger 僅載入於隔離原型。DPR 桌機 ≤1.5、手機 ≤1.25。
+- Webflow：Draft 仍為 v6，本輪未更新、未 Publish。
+- 待確認：Terris 對 v8 的目視審閱；是否以 v8 替換 Draft；真機效能；正式原生做法（IX3 或站上 GSAP）。
+
+## v7 摘要（同日稍早）
+
+- 文件更新：2026-10-19（Asia/Taipei）。
 - **現行原型 v7**：`custom-code/poc/jubo-ai-agentic-v7.html`（分支 `claude/confident-ramanujan-fivatw`，基底為 PR #24 head `e6a6c0e`）。[原規劃對照、章節與驗收](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。
 - 最新要求：Terris 認為 v6 Draft 很不好看，要求依 git 脈絡回到原先規劃精修。v7 恢復 v4 已確認的白底漸進顯色、glowing orb、磨砂／長虹玻璃，保留 v5 的置中逐幕揭露、獨立互動球體與 Jubo CTA，保留 v4 的資料 → 能力 → 應用架構與全英文。
 - 視覺：官網 Poppins、內文 18px、標題 400 字重；一行漸層強調詞（Jubo 青 → 藍 → 紫，同 CTA 箭頭漸層）。光場隨章節增強，Understanding 章到達高峰並出現長虹折射，結尾淡回白底。

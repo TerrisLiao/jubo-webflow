@@ -12,13 +12,14 @@
 | P1 | 原型 v2 `custom-code/poc/jubo-ai-agentic-v2.html` | Claude | 置中、捲動驅動、互動 | 完成 2026-10-14：Playwright 1440／375 捲動逐格截圖、無 JS 錯誤、無水平捲動、7 熱點可點、示範 4 情境可跑。**未做**：真機效能、Lighthouse |
 | P0 | **原型 v3：N.Copilot 沉浸式動態敘事**（精緻化 Hero live mode 與對話框、參考 lattice.com（Terris 修正）） | **Codex** | 依 `reference/codex-v3-交接.md` §8 驗收清單 | 完成 2026-10-14：`custom-code/poc/jubo-ai-agentic-v3.html`；[§8 驗收證據](reference/原型v3驗收_2026-10-14.md)、[Lattice 實際觀察](reference/lattice-觀察.md)。1440／991／375 無 JS 錯誤、無水平捲動；四情境與七節點鍵盤驗證、reduced-motion 已檢查。v2 未改；待 Terris 審閱及真機效能 |
 | P1 | 決定 Teal Air `#20EDF1` 等品牌 Webflow Variables 與 Gibson／官網字體策略 | Terris | 寫入 decisions | 待決定：原型暫用 CSS token 與 Poppins＋系統中文字；尚未新增 Variable 或載入 Gibson |
-| P1 | 確認 v7 視覺、示意區標示與真機效能 | Terris | 審閱 v7，真機測 FPS／互動；掉幀再調預算 | 待辦；v6 已被 Terris 評為不好看，改審 v7。本機軟體 WebGL 驗收不能取代真機效能 |
-| P1 | 以 v7 替換 `/jubo-ai-v3-preview` 隔離 iframe | 未認領 | Terris 確認 v7 後執行；完整讀回、未 Publish | 待 Terris 指示；`python tools/pack-jubo-ai-preview.py --version 7` |
+| P1 | 確認 v8 體驗、主視覺與真機效能 | Terris | 審閱 v8，真機測 FPS／捲動流暢度；掉幀再調預算 | 待辦；v7 已依 Terris 新參考改為 v8。本機軟體 WebGL 驗收不能取代真機效能 |
+| P1 | 以 v8 替換 `/jubo-ai-v3-preview` 隔離 iframe | 未認領 | Terris 確認後執行；完整讀回、未 Publish | 待 Terris 指示；`python tools/pack-jubo-ai-preview.py --version 8` |
 | P1 | 收集真實產品截圖（智慧交班、Amy、iBee 等） | Terris | 不用生成假 UI | 待辦 |
 | P1 | 新建 Webflow 隔離原型 Draft 供 Terris 預覽 | Codex | 新頁 Draft、來源讀回、未發布 | 已建立 `/jubo-ai-v3-preview`；[紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。完整來源一致；Terris 已回覆「有看到 v3」，Designer 首屏與對話框目視確認完成 |
 | P0 | **v4：英文漸層光場與資料 → 能力 → 應用** | Codex | 四斷點、五類資料、五種能力、三種對話、三個鍵盤彈窗、reduced-motion、隔離 Draft 來源讀回 | 歷史版本已驗收；Terris 未採用制式版型，保留材質改做 v5；[紀錄](reference/原型v4架構與驗收_2026-10-14.md) |
 | P0 | **v5：置中捲動揭露與滑鼠互動球體** | Codex | 四寬度、逐幕慢速揭露、無環繞卡片、pointer／touch、CTA、完整互動與隔離 Draft | 完成；四寬度逐幕／互動、pointer／touch、resize、reduced-motion、sandbox 通過；同一 Draft 41,434 字元來源完整一致，發布時間未變；[紀錄](reference/原型v5置中捲動與互動驗收_2026-10-15.md)。歷史證據保留；質感由 v6 接續調整 |
 | P0 | **v6：OpenAI 參考下的留白、字體與局部玻璃質感** | Codex | 四寬度、原有資訊／互動完整、球體與鍵盤驗證、同一 Draft 讀回 | 完成；四寬度、pointer／touch、鍵盤／對話、reduced-motion、resize／fallback、sandbox 通過；同一 Draft 45,066 字元來源與屬性完整一致，發布時間未變；[紀錄](reference/原型v6極簡質感與驗收_2026-10-15.md)。待 Terris 目視／真機 |
 | P0 | **v7：依原規劃精修（漸進顯色、glowing orb、玻璃／長虹、官網字級、7 章離散切換）** | Claude | 四寬度逐幕、資料／能力／應用完整、對話與彈窗、reduced-motion、DPR／fallback、匯出 fixture | 完成 2026-10-19；`tools/verify-jubo-ai-v7.js` 全部通過；[紀錄](reference/原型v7依原規劃精修與驗收_2026-10-19.md)。待 Terris 目視 |
-| P2 | Webflow 原生元素實作（Draft） | 未認領 | Designer 讀回；未授權不 Publish | 待 v7 原型確認 |
+| P0 | **v8：捲動驅動 AI 體驗（長虹玻璃主視覺、循環＋互動、7 場景）** | Claude | 四寬度、pin 場景逐段、循環、互動、對話、彈窗、暫停、reduced-motion、DPR、fallback、fixture | 完成 2026-10-19；`tools/verify-jubo-ai-v8.js`；[紀錄](reference/原型v8捲動體驗與驗收_2026-10-19.md)。待 Terris 目視 |
+| P2 | Webflow 原生元素實作（Draft） | 未認領 | Designer 讀回；未授權不 Publish；依 GSAP 規範 §13 先評估 IX3 | 待 v8 原型確認 |
 | P2 | 移除 `/ai/jubo-ai` JSON-LD 假評分、影片加暫停 | 未認領 | 見 Schema、無障礙稽核 | 待辦 |

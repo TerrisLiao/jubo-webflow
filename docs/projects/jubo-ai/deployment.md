@@ -2,6 +2,9 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（v8） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
+| 本機瀏覽器（v8） | `tools/verify-jubo-ai-v8.js`：四寬度、4 個 pin 場景、循環、互動、對話、彈窗、暫停、reduced-motion、DPR、矮視窗、fallback、sandbox fixture | 2026-10-19 | [v8 紀錄](reference/原型v8捲動體驗與驗收_2026-10-19.md) |
+| Webflow 頁面資料（v8） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認後替換同一 iframe |
 | Git（v7） | 已提交並推送至 `claude/confident-ramanujan-fivatw`（基底 PR #24 head `e6a6c0e`）；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
 | 本機瀏覽器（v7） | `tools/verify-jubo-ai-v7.js` 全部通過：四寬度、13 幕逐幕、對話、鍵盤、reduced-motion、DPR、fallback、sandbox fixture | 2026-10-19；來源 SHA-256 9a1d5665…e8eb | [v7 驗收與限制](reference/原型v7依原規劃精修與驗收_2026-10-19.md) |
 | Webflow 頁面資料（v7） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認 v7 後替換同一 iframe |
