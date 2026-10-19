@@ -2,6 +2,9 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（v11） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
+| 本機瀏覽器（v11） | `tools/verify-jubo-ai-v11.js`（v10 全部檢查＋無邊框媒體、圖示、曲線、技術圖畫線） | 2026-10-19 | [v11 紀錄](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md) |
+| Webflow 頁面資料（v11） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認 |
 | Git（v10） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19 | 遠端 head 以 push 後讀回為準 |
 | 本機瀏覽器（v10） | `tools/verify-jubo-ai-v10.js`（v9 全部檢查＋配色與媒體面板檢查） | 2026-10-19 | [v10 紀錄](reference/原型v10暖白底與Mobbin參考_2026-10-19.md) |
 | Webflow 頁面資料（v10） | **未更新**；Draft 仍為 v6 | 2026-10-19 | 待 Terris 確認 |

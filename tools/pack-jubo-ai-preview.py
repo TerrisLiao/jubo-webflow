@@ -17,8 +17,8 @@ import re
 ROOT = Path(__file__).resolve().parent.parent
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("output_directory", nargs="?")
-parser.add_argument("--version", choices=[4, 5, 6, 7, 8, 9, 10], type=int, default=4,
-                    help="Keep v4 as the compatible default; select v5–v10 explicitly.")
+parser.add_argument("--version", choices=[4, 5, 6, 7, 8, 9, 10, 11], type=int, default=4,
+                    help="Keep v4 as the compatible default; select v5–v11 explicitly.")
 args = parser.parse_args()
 SOURCE = ROOT / f"custom-code/poc/jubo-ai-agentic-v{args.version}.html"
 OUT = Path(args.output_directory or f"/tmp/v{args.version}-draft-preview")
@@ -45,7 +45,8 @@ attrs = [
         else "Jubo AI — Care, understood prototype v7" if args.version == 7
         else "Jubo AI — Scroll experience prototype v8" if args.version == 8
         else "Jubo AI — 沉浸式中文敘事原型 v9" if args.version == 9
-        else "Jubo AI — 暖白底與青色光原型 v10"
+        else "Jubo AI — 暖白底與青色光原型 v10" if args.version == 10
+        else "Jubo AI — 長虹玻璃思考光原型 v11"
     )},
     {"name": "sandbox", "value": "allow-scripts allow-popups allow-popups-to-escape-sandbox"},
     {"name": "class", "value": "jubo-ai-preview_frame"},

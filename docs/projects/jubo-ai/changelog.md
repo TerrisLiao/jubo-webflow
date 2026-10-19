@@ -90,6 +90,17 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 新增 `tools/verify-jubo-ai-v9.js`；pack 工具支援 `--version 9`。結果見 [v9 紀錄](reference/原型v9沉浸式中文敘事與驗收_2026-10-19.md)。Draft 未更新、未 Publish。
 
 
+## 2026-10-19｜v11 長虹玻璃鰭片主視覺與技術圖
+
+- Terris：v10 技術圖很醜；問為何資安頁動畫做得到、這頁做不到；長虹玻璃思考光要當主視覺，但不能是一整塊 panel。
+- 新增 `custom-code/poc/jubo-ai-agentic-v11.html`：
+  - Shader 改為五片直立長虹玻璃鰭片，加上無邊界柔光與邊緣淡出；手機上鰭片隨寬度縮窄。
+  - 媒體範圍取消邊框、圓角與陰影，Hero 改為全出血。
+  - 技術圖改為依像素計算的曲線、`offset-path` 光點、Lucide 漸層圖示，中央加 CSS 長虹玻璃。
+  - 能力清單加入漸層圖示。
+  - 手機結尾標題字級調整。
+- 新增 `tools/verify-jubo-ai-v11.js`；pack 工具支援 `--version 11`。結果見 [v11 紀錄](reference/原型v11長虹玻璃思考光與技術圖_2026-10-19.md)。Draft 未更新、未 Publish。
+
 ## 2026-10-19｜v10 依 Mobbin 重整視覺
 
 - Terris：v9 紫色太多、很醜，先用 Mobbin 了解現行 AI 公司設計。
