@@ -8,7 +8,7 @@
 | 資安工具／程式 | [security-mg](security-mg/README.md) | 源分支工具，本輪未部署 |
 | 無障礙工具 | [a11y-audit](a11y-audit/README.md) | 原始 baseline 另見外部索引 |
 | 品牌 SVG | [n-copilot](brand/n-copilot/README.md) | SVG 保留；AI／PDF 來源另見外部索引 |
-| llms.txt | [seo/llms.txt](seo/llms.txt) | 網站根目錄 llms.txt 的維護來源；Webflow MCP 無法寫入，需在 Site settings → SEO 手動貼上 |
+| llms.txt | [seo/llms.txt](seo/llms.txt) | 網站根目錄 llms.txt 的維護來源；Webflow MCP 無法寫入，需在 Site settings → SEO → LLMs.txt 手動上傳檔案（UTF-8、100KB 以下） |
 | POC | poc/ | 實驗；不是全站已採用程式 |
 | archive/ | 舊版本 | 只作追溯，不直接復原 |
 
