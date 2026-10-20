@@ -1,5 +1,7 @@
 # 11 AEO 稽核與優化計畫
 
+> 2026-10-20 更新：Webflow AEO Assessment（3／5）的判讀與最新線上複驗見 [Webflow_AEO_Assessment_2026-10-20.md](Webflow_AEO_Assessment_2026-10-20.md)。A1、A2、A3–A6、A7 已修；N1 內嵌圖、`/demo/*` sitemap、llms.txt 仍待處理。
+
 稽核日期：2026-08-20　｜　基準：Webflow × HubSpot《The AI Discovery Playbook》（40 頁）
 稽核範圍：**中文正式站**（`jubo-health.com`，54 頁 + 12 個 CMS Collection）
 **不含** `/jp` 日文改版頁（仍為 Draft，見 `../JP日本市場頁面改版/`）

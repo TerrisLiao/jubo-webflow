@@ -4,6 +4,7 @@
 
 - [無障礙稽核與90%達標計畫.md](accessibility/%E7%84%A1%E9%9A%9C%E7%A4%99%E7%A8%BD%E6%A0%B8%E8%88%8790%25%E9%81%94%E6%A8%99%E8%A8%88%E7%95%AB.md)
 - [AEO稽核與優化計畫.md](aeo/AEO%E7%A8%BD%E6%A0%B8%E8%88%87%E5%84%AA%E5%8C%96%E8%A8%88%E7%95%AB.md)
+- [Webflow_AEO_Assessment_2026-10-20.md](aeo/Webflow_AEO_Assessment_2026-10-20.md)：Webflow AEO 報告判讀、10/1 待辦複驗與新建議
 - [合規稽核報告.md](design/%E5%90%88%E8%A6%8F%E7%A8%BD%E6%A0%B8%E5%A0%B1%E5%91%8A.md)
 - [IX2全站逐頁清查_2026-09-23.md](motion/IX2%E5%85%A8%E7%AB%99%E9%80%90%E9%A0%81%E6%B8%85%E6%9F%A5_2026-09-23.md)
 - [IX2轉IX3遷移盤點與計畫.md](motion/IX2%E8%BD%89IX3%E9%81%B7%E7%A7%BB%E7%9B%A4%E9%BB%9E%E8%88%87%E8%A8%88%E7%95%AB.md)
