@@ -1,0 +1,86 @@
+/* 首頁資安入口原版標記在 CMS 文章中的寬度適配。
+   不修改首頁 class／共用 Glass Button 定義；只作用於此 wrapper。 */
+.richtext .cms-security_banner {
+  container-type: inline-size;
+  margin: 2.5rem 0;
+}
+.richtext .cms-security_banner .home-security_card {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+.richtext .cms-security_banner .home-security_content,
+.richtext .cms-security_banner .home-security_visual {
+  grid-area: auto;
+  min-width: 0;
+  max-width: 100%;
+  z-index: 2;
+}
+.richtext .cms-security_banner .home-security_content { gap: 1.25rem; }
+.richtext .cms-security_banner .home-security_title-row {
+  margin: 0;
+  gap: 1rem;
+  align-items: center;
+  flex-direction: row;
+}
+.richtext .cms-security_banner .home-security_title {
+  margin: 0;
+  padding: 0;
+  color: var(--neutral--white);
+  font-size: clamp(1.5rem, 3.8cqi, 1.875rem);
+  font-weight: 400;
+  line-height: 1.45;
+  word-break: normal;
+}
+.richtext .cms-security_banner .home-security_shield {
+  width: 4.25rem;
+  height: 4.25rem;
+  flex: 0 0 4.25rem;
+}
+.richtext .cms-security_banner .home-security_shield-disc {
+  width: 4.25rem;
+  height: 4.25rem;
+}
+.richtext .cms-security_banner .home-security_shield-icon {
+  width: 2rem;
+  height: 2rem;
+}
+.richtext .cms-security_banner .home-security_logo-row {
+  width: 100%;
+  margin: 0;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+.richtext .cms-security_banner img {
+  margin: 0;
+  border-radius: 0;
+}
+.richtext .cms-security_banner .home-security_logo {
+  width: auto;
+  max-width: 6rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+.richtext .cms-security_banner .home-security_logo.is-wide { max-width: 7rem; height: 1.125rem; }
+.richtext .cms-security_banner .home-security_logo.is-badge { height: 2.25rem; }
+.richtext .cms-security_banner .glass-button {
+  align-self: flex-start;
+  max-width: 100%;
+  margin: 0;
+  color: var(--neutral--white);
+  text-decoration: none !important;
+}
+.richtext .cms-security_banner .glass-button:focus-visible {
+  outline: .125rem solid var(--neutral--white);
+  outline-offset: .25rem;
+}
+@container (max-width: 28rem) {
+  .richtext .cms-security_banner .home-security_card { padding: 1.5rem; }
+  .richtext .cms-security_banner .home-security_title-row { align-items: flex-start; flex-direction: column; }
+  .richtext .cms-security_banner .home-security_logo-row { gap: 1rem; }
+  .richtext .cms-security_banner .home-security_logo.is-badge { height: 2rem; }
+}

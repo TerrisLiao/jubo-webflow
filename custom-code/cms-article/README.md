@@ -12,6 +12,8 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 | `_style-common.css` | 兩個模板共用的樣式（表格、引言卡片、FAQ 外觀） |
 | `_article-links.css` | 文章文字連結的深青綠色、底線、hover 與鍵盤焦點；只由兩個模板 head 載入，排除按鈕與圖片連結 |
 | `_faq-icon-state.css` | 新版 FAQ embed 的加減圖示與鍵盤焦點狀態；只由新聞模板 head 載入 |
+| `home-security-banner.html` | 從已發布首頁讀回的資安入口標記，作為 CMS HTML embed 沿用；資產與 Glass Button 結構沿用原版 |
+| `_home-security-banner.css` | 限 `.cms-security_banner` 的文章寬度適配，不修改首頁或共用按鈕樣式 |
 | `_caption.css` | 圖說玻璃條（只在 story 模板） |
 | `faq-accordion.js` | FAQ 展開動畫，`embed-news.html` 內嵌的就是這份 |
 | `page-head-*.html` | 貼進 Webflow「頁面自訂程式碼 → head」的內容 |
@@ -105,6 +107,12 @@ story 的 embed 另有第 5 節「圖片說明玻璃條」（`_caption.css`）�
 CMS 編輯器不一定載入模板的共用 CSS。若只留下 `<details style="margin:0">`，編輯器會顯示成沒有卡片間距的問題文字。文章 FAQ 需以真正的 `w-embed` 包住語意化 details/summary，並在 HTML 本身保留卡片白底、1rem 圓角、細框、summary 內距與 answer-inner 內距作為基本外觀；不得將 style/script 直接寫進 rich text。
 
 圖示沿用既有 `.aeo-faq__icon`，內含兩條行內 span，其中直線使用 `data-faq-icon-vertical` 標記；`_faq-icon-state.css` 依 aria-expanded 或原生 open 狀態旋轉直線，顯示加號／減號。展開動畫仍使用既有 `faq-accordion.js` 的 400ms/ease，不另塞第二套事件處理器。未載入模板 CSS/JS 時，原生 details 仍可展開與閱讀。
+
+### 文章資安入口（2026-10-20）
+
+使用者明確要求沿用首頁資安 banner，因此此模組保留原版深底玻璃漸層。`home-security-banner.html` 是從首頁 DOM 讀回的原版內容，非重繪 Glass Button；移除首頁 IX3 target、清理已被逐字動畫拆開的文字，並將標題改為 H3 以接續文章 H2。原始盾牌、8 個標章／合作夥伴素材與按鈕 variant 保留，連到 `/security`。
+
+放置方式：以 `w-embed` 包住 `.cms-security_banner`，只在智齡介紹段落末尾使用。寬度適配由 `_home-security-banner.css` 在 news 模板 head 載入；內文採單欄、標章可換行，容器寬度小於 28rem 時標題與盾牌改直排。不要把首頁的 padding-global／container-large 整段包進文章，也不要修改全站 `home-security_*` class 的 CSS。
 
 ## 已知未涵蓋
 

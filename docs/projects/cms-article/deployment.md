@@ -1,5 +1,14 @@
 # 部署紀錄
 
+## 2026-10-20 首頁資安入口沿用至文章
+
+- source：已發布首頁 `.section_home-security .home-security_card`；標題「認證與法規雙重把關／資料安心交給智齡」，CTA「了解資安與隱私」。保留原始盾牌、8 個合作夥伴／標章素材與 Glass Button On Dark DOM，原始 Homepage element／Component 未修改。
+- news head 新增 `style#cms-home-security-banner`，作用範圍只有 `.richtext .cms-security_banner`；完整保留原有 head，寫入後逐字讀回。
+- CMS item `6ad58c06a97067448a667937` 在智齡段落末尾插入 banner，取代單行 CTA。表格、FAQ、法規、案例、圖片、標題與封面讀回比對不變。
+- 文章寫入前已是 `isDraft:false`，`lastPublished:2026-10-20T08:35:00.966Z`；本輪寫入後 lastPublished 不變。未呼叫 CMS publish 或 site publish，未擅自改回 draft。
+- 測試瀏覽器在 1280／991／767／479／390 寬度檢查：無橫向溢出、9 個圖像正常載入、按鈕在卡片內且可聚焦，目標為官方 `/security`。這是本機暫時套用樣式的驗證，非發布後畫面。
+- 本機原始 DOM、CMS/head 前後備份與測試截圖位於 `outputs/cms-link-styles-2026-10-20/` 及 `outputs/ai-nis-security-2026-10-19/`。回退只移除文章內此 banner 及該 style block，同步來源與 build；不得覆蓋整份舊 head。
+
 ## 2026-10-20 文章文字連結
 
 ### 同日 FAQ 與文章資安段落補正

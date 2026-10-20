@@ -22,6 +22,9 @@ cd "$(dirname "$0")"
   echo '<style id="cms-faq-icon-state">'
   cat _faq-icon-state.css
   echo '</style>'
+  echo '<style id="cms-home-security-banner">'
+  cat _home-security-banner.css
+  echo '</style>'
 } > page-head-news.html
 
 {
