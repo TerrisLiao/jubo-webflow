@@ -10,6 +10,7 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 | `embed-news.html` | `/news` 模板 embed 的完整內容（可整段貼回 Webflow） |
 | `embed-story.html` | `/customer-stories` 模板 embed 的完整內容 |
 | `_style-common.css` | 兩個模板共用的樣式（表格、引言卡片、FAQ 外觀） |
+| `_article-links.css` | 文章文字連結的深青綠色、底線、hover 與鍵盤焦點；只由兩個模板 head 載入，排除按鈕與圖片連結 |
 | `_caption.css` | 圖說玻璃條（只在 story 模板） |
 | `faq-accordion.js` | FAQ 展開動畫，`embed-news.html` 內嵌的就是這份 |
 | `page-head-*.html` | 貼進 Webflow「頁面自訂程式碼 → head」的內容 |
@@ -91,6 +92,12 @@ story 的 embed 另有第 5 節「圖片說明玻璃條」（`_caption.css`）�
    比例對照表改動 → `bash build.sh` 後貼回頁面自訂程式碼。
 3. 取得明確發布授權後發布 staging，確認線上內容與這裡逐字相同再收工。
    （Webflow 發布後 CDN 約需 20–60 秒才會更新，太早比對會拿到舊版。）
+
+### 文章連結（2026-10-20）
+
+使用者授權讓整個 CMS 文章文字連結可辨識。採用既有 `primary/Ocean` 作文字色與底線，白底對比約 7.5:1；移入改為 `neutral/black` 並加粗底線，鍵盤焦點另有外框。不得改成白底上的亮青綠 `primary/accent` 文字，因其文字對比不足。
+
+樣式只作用於這兩個模板的 `.richtext`，不修改全站 `a`、Variables、Slater 或共用 Component。不逐篇在 CMS rich text 內加樣式；透過 `build.sh` 重建兩個 page head。部署前須即時讀取 Webflow 既有 head，保留所有其他程式。若 head 與 repo 有差異，先比對，不直接整份覆蓋。
 
 ## 已知未涵蓋
 

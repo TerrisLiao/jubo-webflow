@@ -1,8 +1,14 @@
 # CMS 文章閱讀表面現況
 
-文件整理日期：2026-10-13；本輪未讀回 Webflow。
+文件更新日期：2026-10-20；本次即時讀回兩個 CMS 模板的 head/footer。
 
-master 已包含模板、中文排版、CLS／LCP 修正紀錄；原始碼位於 custom-code/cms-article。來源記錄已有正式站驗證，本輪只重建程式產物，未查正式站是否與 Git 一致。
+## 2026-10-20 文章文字連結
+
+新聞與客戶故事模板的 head 已加入 `_article-links.css`，文字連結使用既有 `primary/Ocean` 深青綠色與常駐底線，hover 加深與加粗底線，鍵盤焦點有外框。排除按鈕及圖片／圖示連結。原有 head 內容完整保留，footer 未變更；Webflow 寫入後逐字讀回確認，與 repo 建置結果一致（忽略檔尾空白）。
+
+瀏覽器在既有住宿補助文章暫時套用新 CSS，1280／991／767／479 寬度的常態、hover、焦點均通過，表格與 FAQ 連結亦通過。這是本機瀏覽器模擬，尚未發布 staging 或 production。既有文章在下次網站發布後才會顯示此樣式。
+
+master 已包含模板、中文排版、CLS／LCP 修正紀錄；原始碼位於 custom-code/cms-article。2026-10-20 即時讀回確認本次修改前兩個 head 與 repo 一致（僅檔尾換行差異），沒有用舊版覆蓋新內容。
 
 頁面範圍：`/news/*`、`/customer-stories/*`。
 
