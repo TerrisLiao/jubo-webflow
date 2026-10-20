@@ -183,6 +183,9 @@ Webflow 會用它自己的 sanitizer 重寫整個欄位。實際發生過的損�
 > 2. **表格不要再寫 inline style。** 樣式已集中到兩個 CMS 模板的樣式表，
 >    見 `docs/projects/cms-article/history/CMS文章閱讀表面_news與customer-stories.md` §9、§10。
 > 3. **寫完一定要重新讀回確認** `w-embed` 數量與 `<table>` 數量正確，不要只看渲染結果。
+>
+> **⚠️ 2026-10-20 更正：`w-embed` 擋不住 Editor 存檔。** `/news/system-cybersecurity` 的表格、資安 banner、FAQ 都已包在 `<div class="w-embed">`，Terris 在 Webflow Editor 改一個字存檔後，三個區塊全部被拆成純文字，FAQ 問題整段消失，參考文獻的 `class="reference"` 也被拿掉，而且存檔即發布到正式站。
+> 結論：**透過 API 寫入、含程式區塊的文章，不可以在 Webflow Editor／CMS 面板直接改字。** 要改字請交給 agent 用 CMS API 改，或先備份完整 HTML（`docs/projects/news/articles/`）再改、改完立即讀回比對。發現被消毒時，以備份 HTML 為來源還原，只套用人工改過的文字。
 
 
 `/news` 文章內文欄位（`Content`）是 **Rich Text** 型別。理論上 Rich Text 支援表格標籤，
