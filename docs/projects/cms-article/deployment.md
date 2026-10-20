@@ -1,5 +1,14 @@
 # 部署紀錄
 
+## 2026-10-20 文章 banner 導流與 FAQ 配色修正（現行）
+
+- 使用者回報 banner 的 logo 不突出、按鈕不明顯，FAQ 紫色圓底錯誤。更新文章 banner 為行內自包含版型，保留首頁原始 8 個標章資產：四個主標章放大、其餘四個保留在下方，白色 CTA 與主標章區均指向 /security。首頁與共用 Component 未改。
+- FAQ 移除紫色圓底，改為透明背景的青綠至紫色漸層線條加號。線條以 data-faq-line=vertical 標記，模板狀態 CSS 旋轉整個圖示 45 度，避免舊直線旋轉規則干擾。問答文字未變。
+- news head 只替換 style#cms-faq-icon-state 與 style#cms-home-security-banner，原有內容與 footer 保留；寫入後逐字讀回一致。來源 CSS、banner HTML 與 build 產物同步更新。
+- CMS item 6ad58c06a97067448a667937 已儲存，updated 2026-10-20T08:59:10.987Z；isDraft:false 與 lastPublished:2026-10-20T08:35:00.966Z 均未變。未執行發布，不能宣稱已上線。
+- 本機瀏覽器檢查 1280／991／767／479／390：主標章桌機 1 列、手機 2 列，8 個資產全部載入，CTA 無溢出；FAQ 配色、開合及 Enter 鍵通過。未套用新頁面 CSS 前，banner 的白色 CTA 與核心排版也已驗證。
+- CMS 前後備份、驗證報告與桌機／手機截圖保存在工作區 outputs/ai-nis-security-2026-10-19/，檔名含 banner-logo-refinement 或 security-banner-refined。不提交可重建大圖。
+
 ## 2026-10-20 首頁資安入口沿用至文章
 
 - source：已發布首頁 `.section_home-security .home-security_card`；標題「認證與法規雙重把關／資料安心交給智齡」，CTA「了解資安與隱私」。保留原始盾牌、8 個合作夥伴／標章素材與 Glass Button On Dark DOM，原始 Homepage element／Component 未修改。

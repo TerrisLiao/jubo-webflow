@@ -1,21 +1,29 @@
 # CMS 文章閱讀表面現況
 
-2026-10-20 後續：依使用者要求，資安文章智齡介紹末尾已改用首頁資安入口 banner（原版文案、玻璃漸層、盾牌、標章與按鈕），取代單行 CTA。只新增文章 wrapper 的寬度適配，首頁與共用 Component 未變。1280／991／767／479／390 寬度無橫向溢出，所有資產載入且按鈕位於卡片內。寫入前文章已由使用者發布（lastPublished 08:35 UTC），本輪僅儲存修改，未執行發布或改動 isDraft。
+文件更新與即時驗證日期：2026-10-20。原始碼位於 custom-code/cms-article；Webflow 已儲存的內容已讀回比對，發布站點與本機模擬仍分開記錄。
 
-文件更新日期：2026-10-20；本次即時讀回兩個 CMS 模板的 head/footer。
+## 文章文字連結
 
-## 2026-10-20 文章文字連結
+news／customer-stories 模板 head 已加入 _article-links.css。文字連結使用既有 primary/Ocean 深青綠色及常駐底線，hover 加深、鍵盤焦點有外框，排除按鈕及圖片連結。兩模板原有 head 完整保留、footer 未改。四種寬度的本機瀏覽器驗證通過。
 
-同日後續已修正資安文章的 FAQ embed 基本外觀，加入白底圓角卡片、細框、內距與圓形加減圖示。新聞模板 head 加入 `_faq-icon-state.css`，保留先前連結樣式與所有原有內容，寫入後逐字讀回一致。四種寬度的展開、收合與鍵盤 Enter 操作通過；沒有模板 CSS/JS 時，也以原生 details 驗證答案可讀。文章仍是草稿，尚未發布。
+## FAQ 現行設計
 
-智齡介紹改引用中文 `/security`，該段加入柔和漸層防護資訊圖與唯一導向資安頁的 CTA，其他法規、事件、表格與封面均保留。圖卡約 102 KB WebP，CDN 回應正常。這是文章資料更新，不是資安頁本身的改版。
+資安文章的 FAQ 以 w-embed 包住語意化 details/summary，保留行內白底、細框、圓角及內距，讓編輯器未載入模板 CSS 時仍有完整卡片外觀。圖示為**透明背景、沒有圓底的青綠至紫色漸層線條加號**；展開後旋轉 45 度，舊版紫色實心圓底已取代。
 
-新聞與客戶故事模板的 head 已加入 `_article-links.css`，文字連結使用既有 `primary/Ocean` 深青綠色與常駐底線，hover 加深與加粗底線，鍵盤焦點有外框。排除按鈕及圖片／圖示連結。原有 head 內容完整保留，footer 未變更；Webflow 寫入後逐字讀回確認，與 repo 建置結果一致（忽略檔尾空白）。
+圖示直線標記為 data-faq-line=vertical；模板 _faq-icon-state.css 只負責整個圖示的旋轉、鍵盤焦點與減少動態偏好，開合沿用原有 400ms/ease 腳本。1280／991／767／479／390 寬度的開合、Enter 鍵及圖示狀態通過本機驗證，問答文字未變。
 
-瀏覽器在既有住宿補助文章暫時套用新 CSS，1280／991／767／479 寬度的常態、hover、焦點均通過，表格與 FAQ 連結亦通過。這是本機瀏覽器模擬，尚未發布 staging 或 production。既有文章在下次網站發布後才會顯示此樣式。
+## 文章資安入口現行設計
 
-master 已包含模板、中文排版、CLS／LCP 修正紀錄；原始碼位於 custom-code/cms-article。2026-10-20 即時讀回確認本次修改前兩個 head 與 repo 一致（僅檔尾換行差異），沒有用舊版覆蓋新內容。
+使用者先要求沿用首頁資安 banner，之後要求按鈕與 logo 更突出。現行為文章專用版：深色柔和漸層、醒目的白色 CTA；ISO 27001、ISO 27701、Google Cloud、Cloudflare 四個原始主標章放大，其餘四個原始標章保留在下方。兩個連結（按鈕與主標章區）均導向 /security，位於智齡介紹末尾。
 
-頁面範圍：`/news/*`、`/customer-stories/*`。
+核心排版／色彩／標章尺寸在 HTML embed 行內保留，Flex 在手機自然換成兩欄，不依賴新模板 CSS。_home-security-banner.css 只補互動效果。此文章版不再沿用首頁的整套 home-security_* 排版或 Glass Button DOM；首頁、共用 Component、Variables、Slater 均未修改。
 
-詳細歷史與數值見 [專案入口](README.md)，發生差異時先即時讀回再更新，不從舊段落復原網站。
+新版在 1280／991／767／479／390 寬度檢查：主標章桌機一列、手機兩列，8 個標章全部載入，沒有溢出，CTA 位於卡片內並可鍵盤聚焦。未套用新頁面 CSS 前也已確認白色 CTA 與基本版型能顯示。
+
+## CMS 與發布狀態
+
+文章 6ad58c06a97067448a667937 的 banner、FAQ 圖示及 news 模板的兩個 style block 已儲存並讀回確認。標題、封面、法規、醫院案例、4 張資訊圖、表格、FAQ 問答及參考文獻保留；智齡資訊引用中文 /security。
+
+使用者曾於 2026-10-20 08:35 UTC 發布此文章，isDraft:false 屬正常狀態，本次未改動。此次儲存後 lastPublished 仍為 2026-10-20T08:35:00.966Z；未呼叫 CMS publish、staging publish 或 production publish。所有版型驗證均為本機測試瀏覽器，不能當成新版正式站畫面。
+
+頁面範圍為 /news/*、/customer-stories/*。中文排版與 CLS/LCP 基線保留於 [專案入口](README.md) 的歷史來源，後續變更先即時讀回，不由舊版筆記復原網站。

@@ -1,12 +1,12 @@
-/* 對新版 FAQ HTML embed 的行內圖示補上狀態，不依賴 rich text 內的 style/script。 */
-.richtext .aeo-faq summary[aria-expanded="true"] [data-faq-icon-vertical],
-.richtext .aeo-faq details[open] summary:not([aria-expanded]) [data-faq-icon-vertical] {
-  transform: translate(-50%, -50%) rotate(0deg) !important;
+/* 官網標準 FAQ 圖示：無圓底，青綠至紫色線條加號，展開旋轉 45 度。 */
+.richtext .aeo-faq summary[aria-expanded="true"] .aeo-faq__icon,
+.richtext .aeo-faq details[open] summary:not([aria-expanded]) .aeo-faq__icon {
+  transform: rotate(45deg) !important;
 }
 .richtext .aeo-faq summary:focus-visible {
   outline: .125rem solid var(--primary--ocean);
   outline-offset: -.25rem;
 }
 @media (prefers-reduced-motion: reduce) {
-  .richtext .aeo-faq [data-faq-icon-vertical] { transition: none !important; }
+  .richtext .aeo-faq .aeo-faq__icon { transition: none !important; }
 }
