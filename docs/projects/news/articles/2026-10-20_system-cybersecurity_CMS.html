@@ -17,14 +17,14 @@
 <p><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=L0020214">《護理機構個人資料檔案安全維護計畫實施辦法》</a>針對開放床數超過 200 床的私立護理之家，明確規範了身分驗證、個資隱碼、傳輸加密、存取控制與異常行為監控等具體措施。依第 17 條之 1，國際傳輸、事故通報與迅速應變等指定條款，也準用於公私立居家護理所、公立護理之家及開放床數 200 床以下的私立護理之家。機構切勿因自身規模較小，而誤認無須承擔個資安全責任。</p>
 <figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" data-rt-type="image" data-rt-align="fullwidth"><div><img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6ad71b4a3e506fddaa9a2d32_6ad71a24d4692caaea21a797_care-system-taiwan-laws-v4.webp" loading="lazy" alt="照護資料涉及的臺灣法規與政策，列出完整名稱、適用範圍與資料保護重點。"></div></figure>
 <p>若機構自行建置的工具串接了外部公有雲 AI 服務，更必須確認該服務的資料留存期限、模型訓練授權、資料中心所在地點與防洩漏機制，並參照衛福部負責任 AI 的管理實務方針進行評估；這類管理指引仍須與適用法令一併理解（<a href="https://respai.mohw.gov.tw/rai/fp-7246-81814-209.html">衛生福利部，2025a</a>）。</p>
-<h2 id="hospital-cases">真實案例借鏡：勒索病毒威脅下，醫療機構的實體考驗</h2>
+<h2 id="hospital-cases">醫院端重大資安事件案例</h2>
 <p>資安風險帶來的後果不僅是「資料被偷看」，更嚴重的威脅是勒索病毒加密重要檔案，造成醫療照護系統中斷。當醫師無法開啟電子病歷、護理同仁無法調閱給藥明細時，考驗的正是平日建置的架構與應變韌性。以下兩起事件並非 AI 自建系統造成，而是用來說明系統中斷對醫療照護的影響。</p>
 <ul><li><strong>馬偕紀念醫院應變實務（2025 年 2 月）</strong><br>遭受勒索軟體攻擊期間，約 500 台電腦受影響，醫師一度無法調閱病歷。院方採取封鎖可疑連線、重設密碼並逐步重灌復原設備等措施，同時啟動手動替代流程維持急診運作。這起事件顯示，真正的系統復原工程涵蓋了實體設備、帳號授權到臨床流程的全面重整，絕非單純「重啟程式」就能解決（<a href="https://www.cna.com.tw/news/ahel/202502120295.aspx">沈佩瑤，2025</a>；<a href="https://www.cna.com.tw/news/afe/202502180305.aspx">中央通訊社，2025</a>）。TeamT5 後續依公開情資分析可能的攻擊路徑，並提醒完整經過仍須以事件鑑識結果為準（<a href="https://teamt5.org/en/posts/the-case-study-hospital-crazyhunter-ransomware-attack/">TeamT5 IR Team, 2025</a>）。</li></ul>
 <figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" data-rt-type="image" data-rt-align="fullwidth"><div><img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6ad70d0118cb51661d0bee05_6ad70c4236726e7c5cf3f933_mackay-hospital-incident-story-v3.webp" loading="lazy" alt="馬偕紀念醫院資安事件圖卡，整理攻擊背景、作業影響與復原處理。"></div></figure>
 <ul><li><strong>彰化基督教醫院分階段復原（2025 年 3 月）</strong><br>彰基在連假期間遭受攻擊，部分院外掛號服務一度無法使用。後續由衛福部協調資安署專家進駐，協助隔離受感染系統、清除惡意程式並落實防護措施。依衛福部 3 月 4 日公告，核心系統已全面恢復，部分非核心系統仍在修復中。這說明事件處理需要隔離、清除與分階段復原；公開資訊仍不足以確認完整入侵原因（<a href="https://www.cna.com.tw/news/aloc/202503030073.aspx">吳哲豪，2025</a>；<a href="https://www.mohw.gov.tw/cp-7180-81726-1.html">衛生福利部，2025b</a>）。</li></ul>
 <figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" data-rt-type="image" data-rt-align="fullwidth"><div><img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6ad70d0118cb51661d0bee02_6ad70c4675e70d8c072a085b_changhua-hospital-incident-story-v3.webp" loading="lazy" alt="彰化基督教醫院資安事件圖卡，整理掛號影響、系統隔離與分階段復原。"></div></figure>
 <p>這兩起事件提醒所有健康照護機構：當系統遭遇非預期中斷，機構內部是否備妥交班、發藥與紀錄補登的備援 SOP？如果日常高度依賴自建系統，一旦停擺，機構是否有能力承擔相應的營運與法律責任？</p>
-<h2 id="jubo-security">智齡科技（Jubo）：從底層架構到長期營運，守護照護資料資安</h2>
+<h2 id="jubo-security">智齡照護系統，擁有國際級的資安標準</h2>
 <p>評估一套適合長照機構的資訊系統，除了操作介面，也需要了解資料如何保存、權限如何管理，以及系統由誰持續維護。</p>
 <p>智齡的照護系統建置於 Google Cloud，資料存放在臺灣境內，並透過 Cloudflare 過濾惡意流量。從帳號登入、加密傳輸到每日備份與定期還原演練，讓照護資料在使用、傳送與保存時都有對應的保護措施。</p>
 <figure class="w-richtext-figure-type-image w-richtext-align-fullwidth" data-rt-type="image" data-rt-align="fullwidth"><div><img src="https://cdn.prod.website-files.com/69f82ba1d504290f910e8826/6ad7265418b86f58f0c171e1_6ad7256cd4a7ee66bdb3a582_jubo-security-gradient-v2.webp" loading="lazy" alt="智齡的多層資安防護，包含帳號權限、臺灣境內儲存與加密傳輸、每日備份與定期還原演練，以及持續資安檢測。"></div></figure>
@@ -87,7 +87,6 @@
 <p class="reference">吳哲豪。（2025 年 3 月 3 日）。<a href="https://www.cna.com.tw/news/aloc/202503030073.aspx"><em>彰基醫院遭駭客攻擊已修復 院外掛號系統短暫失靈</em></a>。中央通訊社。</p>
 <p class="reference">沈佩瑤。（2025 年 2 月 12 日）。<a href="https://www.cna.com.tw/news/ahel/202502120295.aspx"><em>馬偕醫院遭駭500電腦當機 衛福部：無個資外洩、已守住這波</em></a>。中央通訊社。</p>
 <p class="reference">中央通訊社。（2025 年 2 月 18 日）。<a href="https://www.cna.com.tw/news/afe/202502180305.aspx"><em>醫院遭駭引關注 資安署規劃關鍵基礎設施深度檢查</em></a>。</p>
-<p class="reference">智齡科技。（無日期）。<a href="https://www.jubo-health.com/security"><em>醫療照護資安與隱私</em></a>。2026 年 10 月 20 日擷取。</p>
 <p class="reference">衛生福利部。（2023 年 11 月 2 日）。<a href="https://www.nurse.org.tw/filecenter/B/8DBDC79000484EC028/a21000000i_1121561689a_doc3_attach2.pdf"><em>護理機構照護紀錄電子化注意事項</em></a>。</p>
 <p class="reference">衛生福利部。（2025a，5 月 16 日）。<a href="https://respai.mohw.gov.tw/rai/fp-7246-81814-209.html"><em>符合資安與隱私保護原則的管理辦法</em></a>。負責任 AI 執行中心。</p>
 <p class="reference">衛生福利部。（2025b，3 月 4 日）。<a href="https://www.mohw.gov.tw/cp-7180-81726-1.html"><em>彰化基督教醫院遭勒索攻擊，衛福部迅速啟動全國資安應變機制</em></a>。</p>
