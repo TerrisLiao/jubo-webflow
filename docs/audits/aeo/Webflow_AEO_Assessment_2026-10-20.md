@@ -142,3 +142,25 @@ Terris 指示：demo 頁不要被搜尋到、`/security` 已確定上線、修 s
 | llms.txt | 與 `custom-code/seo/llms.txt` 逐位元組相同（Terris 已上傳；last-modified 09:34:29 GMT） |
 
 T1、T2、T3、T5 完成。
+
+## C3 條列結構（2026-10-20，已寫入 Designer，未 Publish）
+
+Webflow 的 Div Block 不能把 tag 改成 `ul`／`li`，所以不改原元素，而是在卡片群組外加一層語意標籤：
+
+- 新增 class `list-contents`：`display: contents; margin: 0; padding-left: 0; list-style-type: none`。只給新增的 `ul`／`li` 用，**沒有修改任何既有 class、Component 或 Variable**；`display: contents` 讓這層不參與排版，原卡片仍是 grid／flex 的直接排版子項，`w-node` 格位、`data-parallax`、hover CSS 都不受影響。
+- 結構：原容器 > `ul.list-contents` > `li.list-contents` > 原卡片（元素 ID、class、屬性都不變，只是移位）。
+
+| 頁面 | 群組 | 項目數 | 容器 element id |
+|---|---|---|---|
+| `/`（首頁） | 數字區 `3col-grid` | 3 | `f8833101-3e14-5aa1-3269-29bf058cf1ba` |
+| `/ai/jubo-ai` | `jubo-ai_cards_content-item content-item-1`（資料來源） | 5 | `6f3c509c-7485-1f33-9c63-224eb537a081` |
+| `/ai/jubo-ai` | `content-item-2`（能力） | 5 | `739ec14a-3266-a672-211f-0d175f1ed7cc` |
+| `/company` | 數字區 `3col-grid is-2row` | 5 | `c84dd9f4-f5bb-1ea8-5f61-5018745bd302` |
+| `/contact` | 據點 CMS 模板 `location-info_wrap`（地址／電話／Email） | 3 | `82263ad7-8e5c-a753-ae46-e93e3f00b606` |
+| `/products/day-care` | 方案內容 `why-us-list_wrapper` > `price-list_items` | 5 | `64928eb8-ed24-1abb-e5c4-88c3bafed394` |
+
+未處理：`/ai/jubo-ai` 的 4 格數字區在共用 Component 內（依規範不動）；CMS Collection List（新聞、見證、FAQ、業務窗口）由 Webflow 輸出 `role="list"`，無法改 tag。
+
+寫入前驗證：在線上頁面以 Playwright 套用同樣的 DOM 變換，桌機 1440 與手機 390 兩種寬度下，所有卡片的位置與尺寸 0 差異；全頁截圖逐像素比對 0 差異（首頁與日照頁的差異區塊與「不做任何變更的兩次截圖」完全相同，屬輪播動畫雜訊，且不在目標區塊）。
+
+回退：把每個原卡片移回容器、刪除 `ul`，或直接刪掉 `list-contents` class 的元素。
