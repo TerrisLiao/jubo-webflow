@@ -15,3 +15,13 @@
 - master 合併提交：`fcbb26d8d4d190676e71a9542c97221365affeb6`。
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
+
+## 2026-10-20 `/news/system-cybersecurity` 資安 banner
+
+| 層次 | 狀態 |
+|---|---|
+| CMS | 已寫入 `content`（item `6ad58c06a97067448a667937`，lastUpdated 2026-10-20T09:30:49Z）並讀回 |
+| staging | 寫入前的版本（09:22 發布）已驗證：小標移除、標章文字對齊、玻璃按鈕與首頁同款；本次 logo 對齊修正尚待 staging 發布後複驗 |
+| production | 未發布 |
+
+回退：把四個 `<span data-security-more-logo="true" …>` 外層拿掉，img 的 `max-width:100%` 改回 `3.25rem`。
