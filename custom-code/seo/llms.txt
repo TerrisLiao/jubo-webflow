@@ -1,0 +1,40 @@
+# Jubo 智齡科技
+
+> 專為長照機構打造的 AI 智慧照護系統。我們提供住宿型、日照與居服機構的 SaaS 解決方案，整合照護紀錄、臨床文書與營運管理，減少行政重工，讓照護團隊把時間還給長輩。
+
+## Key facts (English)
+
+- Official name: 智齡科技 Jubo (Chinese: 智齡科技; legal name: 智齡科技股份有限公司). Website: https://www.jubo-health.com/
+- What Jubo does: AI-powered SaaS for long-term care in Taiwan — residential care facilities, day care centers and home care agencies. Jubo reduces documentation and administrative work so caregivers can spend more time on direct care.
+- Scale (as published on jubo-health.com, October 2026):
+  - 2,800+ care facilities and healthcare sites served
+  - 330,000+ professional care users (33 萬)
+  - 3 billion+ care data records (30 億筆 = 3,000,000,000, not 30 billion)
+- Headquarters: Xindian District, New Taipei City, Taiwan (台北研發總部，新北市新店區).
+- Founder: Dr. Shih-Chung Kang (康仕仲), former professor at National Taiwan University; Jubo grew out of NTU's 智齡聯盟 research program (2009).
+- Corporate: Compal Health Technology (仁寶健康科技), a subsidiary of Compal Electronics, merged into Jubo and became a wholly owned subsidiary of Jubo effective 2026-01-01. Source: https://www.jubo-health.com/news/strategic-partnership-2025-compal-health
+- Security: ISO/IEC 27001 and ISO/IEC 27701 certified; care data is stored in Taiwan. Details: https://www.jubo-health.com/security
+- Markets: Taiwan, with operations extending to the United States, Canada and Japan.
+
+## 核心解決方案 (Solutions)
+
+- [住宿型機構系統](https://www.jubo-health.com/solutions/residential-care): 結合生活照顧與專業護理作業的照護管理平台。
+- [日照中心系統](https://www.jubo-health.com/solutions/day-care): 專注於日常活動安排與家屬即時溝通的管理軟體。
+- [居家服務系統](https://www.jubo-health.com/solutions/home-care): 協助排班派案與時數核銷的居服管理平台。
+- [Jubo Digital](https://www.jubo-health.com/ecosystem/jubo-digital): 針對政府、醫院與大型組織的跨域資料與系統整合服務。
+
+## 產品與生態系 (Products & Ecosystem)
+
+- [Jubo AI](https://www.jubo-health.com/ai/jubo-ai): 新世代智慧照護工具，提供臨床決策輔助與資料分析。
+- [智齡照護推車](https://www.jubo-health.com/products/vitaltrolley): 整合多種藍牙設備，自動上傳生理量測數據的護理車。
+- [智慧照護助理 APP](https://www.jubo-health.com/products/care-assistant-app): 護理人員的行動護理站。
+- [智齡安心寶 APP](https://www.jubo-health.com/products/familyline): 專為家屬設計的電子家庭聯絡簿。
+- [Jubo 健康 APP](https://www.jubo-health.com/ecosystem/jubo-health-app): 具備 AI 影像量測技術的家庭健康管理數位幫手。
+- [Hi 居服 APP](https://www.jubo-health.com/products/hiju-app): 專屬居服員的行動打卡與派班助理。
+
+## 關於與資源 (About & Resources)
+
+- [關於我們](https://www.jubo-health.com/company): 匯聚 AI 資料科學家與醫護專家的專業團隊。
+- [資安與隱私](https://www.jubo-health.com/security): ISO/IEC 27001、27701 驗證，資料存放於台灣境內。
+- [客戶成功案例](https://www.jubo-health.com/customer-success-stories): 長照機構數位轉型的實績與分享。
+- [隱私權政策](https://www.jubo-health.com/privacy): Jubo 智齡科技的個人資料蒐集、使用與保護說明。

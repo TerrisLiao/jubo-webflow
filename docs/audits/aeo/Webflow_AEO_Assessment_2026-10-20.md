@@ -1,7 +1,7 @@
 # Webflow AEO Assessment 判讀與待辦（2026-10-20）
 
 來源：Webflow 寄送的 [AEO Assessment：jubo-health.com](https://webflow.com/aeo-assessment/jubo-healthdotcom)。報告頁的 `data-pages`／`data-details` 屬性列出了各項的「Pages to fix」清單，本文已逐筆對照。
-線上複驗：2026-10-20 以 curl 抓 `www.jubo-health.com` 線上 HTML。只做稽核，**沒有修改或 Publish Webflow**。
+線上複驗：2026-10-20 以 curl 抓 `www.jubo-health.com` 線上 HTML。同日依 Terris 指示修改 Webflow（見文末「執行紀錄」），尚未 Publish。
 前次基準：[AEO稽核與優化計畫.md](AEO稽核與優化計畫.md)（8/20 稽核、10/1 複驗）。
 
 ## 報告分數
@@ -102,3 +102,18 @@ Content gate 的「Pages to fix」也列出 `/ecosystem/jubo-digital3`，線上�
 ## 執行原則
 
 所有 Webflow 修改需 Terris 授權後才 Publish；Publish 後用 curl 抓線上 HTML 驗證，再更新本文件。
+
+## 執行紀錄（2026-10-20）
+
+Terris 指示：demo 頁不要被搜尋到、`/security` 已確定上線、修 solutions 內嵌圖、更新 llms.txt。以下都已寫入 Webflow 並讀回，**尚未 Publish**；線上 sitemap 與 `/security` 的 noindex 在 Publish 前不會變。
+
+| 項目 | 做法 | 狀態 |
+|---|---|---|
+| T1 demo 頁 | `/demo` 下 `home`、`jubo-ai-tech-01`、`jubo-ai-tech-02`、`jubo-demo-01`～`03` 的 Sitemap indexing 關閉（`jubo-demo-04` 原本就關）。Webflow 關閉 sitemap indexing 時會自動輸出 `<meta content="noindex" name="robots">`（`/security` 與 `jubo-demo-04` 線上即為此格式），所以 `jubo-ai-tech-02` 也會補上 noindex | Webflow 已寫入；待 Publish 後 curl 複驗 |
+| T2 `/security` | Sitemap indexing 開啟；頁面 head 沒有手寫 noindex，noindex 來自這個開關 | Webflow 已寫入；待 Publish 後確認 noindex 消失、sitemap 出現 `/security` |
+| T3 solutions 內嵌圖 | 三頁（`/solutions/residential-care`、`day-care`、`home-care`）bento 卡片的 HTML Embed（class `icon-embed-super-2xlarge`，三頁原始碼完全相同）內，Figma 匯出的 SVG 以 base64 內嵌一張 987×1024 PNG 頭像（1,746,492 bytes）。改為 494×512 WebP（16,802 bytes），上傳 Assets（asset `6ad72a17a855e26c482da5ed`），SVG 的 `<image xlink:href>` 改指 CDN；`width`／`height`／pattern transform 不變，版面不動。Embed 原始碼由 2,331,888 字元降為 3,322 字元。本機 Chromium 新舊並排截圖一致 | Webflow 已寫入（day-care 讀回逐字確認）；待 Publish 後確認三頁 HTML 約 0.3MB |
+| T5 llms.txt | 新版放在 [custom-code/seo/llms.txt](../../../custom-code/seo/llms.txt)：連結全改 www（16 條皆回 200）、加 `/security`、新增英文 Key facts（正式名稱、2,800+ 機構、330,000+ 使用者、3 billion+ 筆資料並註明 30 億 ≠ 30 billion、總部、創辦人、仁寶健康併入、ISO 驗證）、隱私權政策說明移除無佐證的「最高防護」 | Webflow MCP 沒有 llms.txt 寫入功能，需手動到 Site settings → SEO → llms.txt 貼上後 Publish |
+
+數字來源：機構數 2,800+ 依 2026-10-13 Terris 指示（[全站Schema檢查](../schema/全站Schema檢查_2026-10-13.md)）；33 萬使用者、30 億筆依首頁現行文案；仁寶健康併入依站上新聞 `/news/strategic-partnership-2025-compal-health`。
+
+注意：Publish 會連同站上其他尚未發布的修改一起上線，發布前先確認沒有別人的未完成修改。
