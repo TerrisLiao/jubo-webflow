@@ -21,7 +21,7 @@
 | 層次 | 狀態 |
 |---|---|
 | CMS | 已寫入 `content`（item `6ad58c06a97067448a667937`，lastUpdated 2026-10-20T09:30:49Z）並讀回 |
-| staging | 寫入前的版本（09:22 發布）已驗證：小標移除、標章文字對齊、玻璃按鈕與首頁同款；本次 logo 對齊修正尚待 staging 發布後複驗 |
-| production | 未發布 |
+| staging | 寫入前的版本（09:22 發布）已驗證：小標移除、標章文字對齊、玻璃按鈕與首頁同款 |
+| production | 2026-10-20 Terris 授權後全站 Publish。線上 HTML 含 4 個 `data-security-more-logo`；CMS `content` 的全部文字與 24 個 src／href 都出現在線上頁面；Chromium 量測桌機四欄文字同列對齊、手機兩欄左緣一致（90／241px） |
 
 回退：把四個 `<span data-security-more-logo="true" …>` 外層拿掉，img 的 `max-width:100%` 改回 `3.25rem`。

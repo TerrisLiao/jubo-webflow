@@ -130,3 +130,15 @@ Terris 指示：demo 頁不要被搜尋到、`/security` 已確定上線、修 s
 | llms.txt | Webflow 不會發布到 staging 網域，需正式 Publish 後到 `www.jubo-health.com/llms.txt` 驗證 |
 
 正式網域尚未 Publish。
+
+### Production 驗證（2026-10-20，Terris 授權後由 Claude Publish 到 `www.jubo-health.com`、`jubo-health.com`、staging）
+
+| 項目 | 結果 |
+|---|---|
+| `/demo` 下 7 頁 | 全部有 noindex（含 `jubo-ai-tech-02`） |
+| sitemap | 135 個 URL，無 `/demo/*`，含 `/security` |
+| `/security` | 200，無 noindex |
+| solutions 三頁 | 297,539／286,480／279,662 bytes；Chromium 載入 `/solutions/home-care` 頭像 WebP 回 200 |
+| llms.txt | 與 `custom-code/seo/llms.txt` 逐位元組相同（Terris 已上傳；last-modified 09:34:29 GMT） |
+
+T1、T2、T3、T5 完成。
