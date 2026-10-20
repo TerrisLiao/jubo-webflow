@@ -117,3 +117,16 @@ Terris 指示：demo 頁不要被搜尋到、`/security` 已確定上線、修 s
 數字來源：機構數 2,800+ 依 2026-10-13 Terris 指示（[全站Schema檢查](../schema/全站Schema檢查_2026-10-13.md)）；33 萬使用者、30 億筆依首頁現行文案；仁寶健康併入依站上新聞 `/news/strategic-partnership-2025-compal-health`。
 
 注意：Publish 會連同站上其他尚未發布的修改一起上線，發布前先確認沒有別人的未完成修改。
+
+### Staging 驗證（2026-10-20，Terris 發布到 `jubo-health.webflow.io` 後）
+
+| 項目 | 結果 |
+|---|---|
+| `/demo` 下 7 頁 | 全部有 Webflow 輸出的 `<meta content="noindex" name="robots"/>`；`jubo-ai-tech-02` 已補上 |
+| sitemap | 135 個 URL（原 139），不含任何 `/demo/*`；含 `/security` |
+| `/security` | 頁面 noindex 已移除（staging 網域本身另有全站 `x-robots-tag: noindex` header，是 Webflow 子網域的正常行為，正式網域不會有） |
+| solutions 三頁 HTML | residential 297,542／day-care 286,483／home-care 279,665 bytes（原約 2.6MB）；剩一個 89,798 字元的小型內嵌圖，非本次範圍 |
+| 頭像 | Chromium 實際載入 `/solutions/day-care`：WebP 回 200、無失敗請求，截圖與原版一致 |
+| llms.txt | Webflow 不會發布到 staging 網域，需正式 Publish 後到 `www.jubo-health.com/llms.txt` 驗證 |
+
+正式網域尚未 Publish。
