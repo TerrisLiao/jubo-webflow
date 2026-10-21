@@ -45,6 +45,10 @@
 | `docs/css-audit-slater-constraints` | `45da1d2274dfc27a7af7fca09caa714204049c79` | 0／145 | 2026-10-13 已刪除；提交保留於 master |
 | `master` | `c1a898d393e6ec2c285ffb497c9a326e55f6e717` | — | 長期主分支 |
 
+## 進行中工作分支
+
+- `claude/compassionate-sagan-qkygoc`（2026-10-21 起，基於 master `6b84235`）：客戶故事模板單欄版面研究與方案一規格；只有文件，Webflow 未修改。
+
 ## 未合併 PR
 
 - [#12](https://github.com/TerrisLiao/jubo-webflow/pull/12)：JP 返回頂部；較新的 JP 校訂與來源待辦需一併核對。

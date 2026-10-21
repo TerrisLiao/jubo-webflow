@@ -6,6 +6,7 @@
 
 - [CMS文章閱讀表面_news與customer-stories.md](history/CMS文章閱讀表面_news與customer-stories.md)
 - [CMS文章中文排版修正紀錄.md](history/CMS文章中文排版修正紀錄.md)
+- [客戶故事單欄閱讀版面_方案一_研究與模擬.md](history/客戶故事單欄閱讀版面_方案一_研究與模擬.md)（2026-10-21，Webflow 未修改）
 
 ## 來源分支（固定版本）
 
