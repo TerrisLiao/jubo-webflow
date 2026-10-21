@@ -4,7 +4,8 @@
 - [ ] 記錄 Embed 與各 head/footer 的版本，確認部署內容逐字一致
 - [x] 客戶故事方案一：Designer 修改並讀回四斷點（2026-10-21，見 [§5](history/客戶故事單欄閱讀版面_方案一_研究與模擬.md)）
 - [x] 客戶故事方案一：staging 發布並驗證（2026-10-21）
-- [ ] 客戶故事方案一：正式站發布（整站發布會一併上線 10-20 的 AEO `list-contents` 5 頁修改，待 Terris 決定）
+- [x] 客戶故事方案一：正式站發布並驗證（2026-10-21，一併上線 10-20 的 AEO `list-contents`）
+- [ ] 合併 `claude/eloquent-feynman-p6is8u` 時，把 AEO C3 的「未 Publish」改成 2026-10-21 已上線
 - [ ] 客戶故事方案一：移除隱藏左欄清單的 Finsweet 載入全部（每次開頁背景多抓 228 KiB），或刪除左欄；見 [載入檢查](../../audits/performance/客戶故事頁載入與動畫檢查_2026-10-21.md)
 - [ ] 新文章內文 PNG 轉 WebP（jubostory14 五張共 2.5 MiB）
 - [ ] 另案：1024px 導覽列 logo 與選單間距過近

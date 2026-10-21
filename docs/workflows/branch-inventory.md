@@ -47,7 +47,7 @@
 
 ## 進行中工作分支
 
-- `claude/compassionate-sagan-qkygoc`（2026-10-21 起，基於 master `6b84235`）：客戶故事模板單欄版面研究、方案一規格與 Designer 修改紀錄；Webflow 已改 Designer、未發布。
+- `claude/compassionate-sagan-qkygoc`（2026-10-21 起，基於 master `6b84235`）：客戶故事模板單欄版面研究、方案一規格與 Designer 修改紀錄；2026-10-21 已發布正式站並驗證。
 
 ## 未合併 PR
 

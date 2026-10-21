@@ -15,7 +15,7 @@
 |---|---|
 | Designer | 已修改客戶成功案例s Template（`6a1c22366d4d91ecdbddfca6`），四斷點讀回正確 |
 | staging | 2026-10-21 Terris 授權後整站發布到 `jubo-health.webflow.io`（publishTaskId `714eca81-1f2f-4af0-9906-79cb007c847e`），已驗證，見下 |
-| production | **未發布**。單頁發布不支援（API 400 `Invalid parameter: pageId`）；整站發布會一併上線 2026-10-20 另一工作階段寫入、只在 staging 的 AEO `ul/li`（`list-contents`）5 頁修改，待 Terris 決定 |
+| production | 2026-10-21 Terris 確認後整站發布到 `www.jubo-health.com`、`jubo-health.com`、staging（publishTaskId `a9c7e5ae-930c-4a10-b413-1c8d063e9862`）。單頁發布不支援（API 400），所以一併上線了 10-20 的 AEO `list-contents` 5 頁修改（Terris 知情同意） |
 
 修改值、元素 ID、驗證限制與回退步驟見 [方案一紀錄 §5](history/客戶故事單欄閱讀版面_方案一_研究與模擬.md)。
 
@@ -35,3 +35,9 @@
 ### 正式站發布前的阻擋事項
 
 正式網域最後發布 2026-10-20 09:34 UTC；之後 `/`、`/contact`、`/company`、`/ai/jubo-ai`、`/products/day-care` 有 `ul.list-contents` 修改（紀錄見 `origin/claude/eloquent-feynman-p6is8u` 的 `docs/audits/aeo/Webflow_AEO_Assessment_2026-10-20.md` §C3，標示「未 Publish」）。2026-10-21 讀回：staging 有、正式站沒有。整站發布會把它一起上線，需 Terris 確認。
+
+### production 驗證（2026-10-21）
+
+- 故事頁 jubostory14、jubostory03 五種寬度：與 staging 驗證結果逐項相同（見上），無 console／page error、無水平捲動。
+- `/news/ltc-guide` 內文 18px／27px，未受影響。
+- 一併上線的 `ul.list-contents`：`/` 3 卡、`/company` 5 卡、`/ai/jubo-ai` 5＋5、`/contact` 據點 4 組、`/products/day-care` 5 項；`ul` 為 `display: contents`，1440 與 390 皆無錯誤、無水平捲動，首頁 1440 三卡同列、公司頁 3＋2 排列與原設計相同。該修改的原始紀錄在 `origin/claude/eloquent-feynman-p6is8u`，該分支文件仍寫「未 Publish」，合併時需更新。
