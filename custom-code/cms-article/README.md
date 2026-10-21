@@ -10,6 +10,10 @@ Webflow 裡的 embed 是部署品，兩邊不一致時以這裡為準。
 | `embed-news.html` | `/news` 模板 embed 的完整內容（可整段貼回 Webflow） |
 | `embed-story.html` | `/customer-stories` 模板 embed 的完整內容 |
 | `_style-common.css` | 兩個模板共用的樣式（表格、引言卡片、FAQ 外觀） |
+| `_article-links.css` | 文章文字連結的深青綠色、底線、hover 與鍵盤焦點；只由兩個模板 head 載入，排除按鈕與圖片連結 |
+| `_faq-icon-state.css` | 新版 FAQ embed 的加減圖示與鍵盤焦點狀態；只由新聞模板 head 載入 |
+| `home-security-banner.html` | 文章版資安入口；沿用首頁 8 個原始標章與技術夥伴資產及原版 Glass Button On Dark；標章固定圖框與基本排版在 HTML 行內保留 |
+| `_home-security-banner.css` | 限 `.cms-security_banner` 的 hover／focus 狀態，不修改首頁或共用按鈕樣式 |
 | `_caption.css` | 圖說玻璃條（只在 story 模板） |
 | `faq-accordion.js` | FAQ 展開動畫，`embed-news.html` 內嵌的就是這份 |
 | `page-head-*.html` | 貼進 Webflow「頁面自訂程式碼 → head」的內容 |
@@ -91,6 +95,24 @@ story 的 embed 另有第 5 節「圖片說明玻璃條」（`_caption.css`）�
    比例對照表改動 → `bash build.sh` 後貼回頁面自訂程式碼。
 3. 取得明確發布授權後發布 staging，確認線上內容與這裡逐字相同再收工。
    （Webflow 發布後 CDN 約需 20–60 秒才會更新，太早比對會拿到舊版。）
+
+### 文章連結（2026-10-20）
+
+使用者授權讓整個 CMS 文章文字連結可辨識。採用既有 `primary/Ocean` 作文字色與底線，白底對比約 7.5:1；移入改為 `neutral/black` 並加粗底線，鍵盤焦點另有外框。不得改成白底上的亮青綠 `primary/accent` 文字，因其文字對比不足。
+
+樣式只作用於這兩個模板的 `.richtext`，不修改全站 `a`、Variables、Slater 或共用 Component。不逐篇在 CMS rich text 內加樣式；透過 `build.sh` 重建兩個 page head。部署前須即時讀取 Webflow 既有 head，保留所有其他程式。若 head 與 repo 有差異，先比對，不直接整份覆蓋。
+
+### FAQ 的 CMS 編輯器顯示（2026-10-20）
+
+CMS 編輯器不一定載入模板的共用 CSS。若只留下 `<details style="margin:0">`，編輯器會顯示成沒有卡片間距的問題文字。文章 FAQ 需以真正的 `w-embed` 包住語意化 details/summary，並在 HTML 本身保留卡片白底、1rem 圓角、細框、summary 內距與 answer-inner 內距作為基本外觀；不得將 style/script 直接寫進 rich text。
+
+圖示沿用既有 `.aeo-faq__icon`，透明背景且沒有圓底，兩條行內 span 使用官網青綠至紫色線性漸層；直線以 `data-faq-line="vertical"` 標記，避免舊版模板直線旋轉規則干擾。`_faq-icon-state.css` 依 aria-expanded 或原生 open 狀態旋轉整個圖示 45 度，與官網標準 FAQ 一致。展開動畫仍使用既有 `faq-accordion.js` 的 400ms/ease，不另塞第二套事件處理器。未載入模板 CSS/JS 時，圖示仍是正確配色且原生 details 可展開與閱讀。**舊版紫色實心圓底不再使用**。
+
+### 文章資安入口（2026-10-20）
+
+使用者先要求沿用首頁資安 banner，之後要求凸顯按鈕與 logo，並指定移除「資安與隱私」小標、標章說明對齊、換回首頁玻璃按鈕。現行 `home-security-banner.html` 為文章專用版，沿用首頁 8 個原始標章／合作夥伴資產，非重繪 logo。H3 接續文章 H2；CTA 從首頁原始匯出標記完整沿用 Glass Button On Dark（含 9 個內部 class 與漸層箭頭），不手刻仿製或修改共用元件定義。按鈕及主標章區均導向 `/security`；四大標章使用相同高度圖框，讓說明文字基線對齊，其餘四個保留在下方。驗證、法規遵循與技術夥伴以文字區別，不能全部宣稱為資安認證。
+
+放置方式：以 `w-embed` 包住 `.cms-security_banner`，只在智齡介紹段落末尾使用。基本排版、深色漸層及標章尺寸在 HTML 行內保留，Flex 自然由四欄換為兩欄；玻璃按鈕使用官網已發布的元件樣式與 Slater 原有 hover。CTA 標記為 `data-security-glass-cta`，避免舊版白色按鈕的 hover 覆寫。`_home-security-banner.css` 只補標章 hover 與鍵盤焦點，不改按鈕外觀。不修改首頁 class、共用按鈕或 Component。
 
 ## 已知未涵蓋
 

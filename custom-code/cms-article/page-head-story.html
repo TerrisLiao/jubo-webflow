@@ -29,3 +29,26 @@
 .client-story_template-img[src*="6a11218b5b4e7aeea2c52f1e"],
 .client-story_template-img[src*="6a11218dd6d952f141e1737c"] { aspect-ratio: 644 / 484; }
 </style>
+<style id="cms-article-links">
+/* CMS 文章文字連結，2026-10-20。
+   只由 news / customer-stories 模板 head 載入。
+   排除按鈕與圖片／圖示連結，避免改到既有 CTA。 */
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)) {
+  color: var(--primary--ocean) !important;
+  text-decoration-line: underline !important;
+  text-decoration-color: currentColor !important;
+  text-decoration-thickness: .0625rem !important;
+  text-underline-offset: .1875rem !important;
+  text-decoration-skip-ink: auto;
+}
+
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)):hover {
+  color: var(--neutral--black) !important;
+  text-decoration-thickness: .125rem !important;
+}
+
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)):focus-visible {
+  outline: .125rem solid var(--primary--ocean) !important;
+  outline-offset: .1875rem !important;
+}
+</style>

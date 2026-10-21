@@ -1,6 +1,8 @@
 # CMS 文章閱讀表面
 
-文件整理日期：2026-10-13。先讀 [現況](current-state.md)、[待辦](tasks.md) 與 [部署紀錄](deployment.md)，再查詳細來源。
+文件更新日期：2026-10-20。先讀 [現況](current-state.md)、[待辦](tasks.md) 與 [部署紀錄](deployment.md)，再查詳細來源。
+
+2026-10-20 新增文章文字連結的深青綠色與常駐底線，兩個 CMS 模板 head 已儲存，尚未發布。來源與建置方式見 [程式入口](../../../custom-code/cms-article/README.md)。
 
 ## 詳細來源
 

@@ -1,0 +1,12 @@
+/* 官網標準 FAQ 圖示：無圓底，青綠至紫色線條加號，展開旋轉 45 度。 */
+.richtext .aeo-faq summary[aria-expanded="true"] .aeo-faq__icon,
+.richtext .aeo-faq details[open] summary:not([aria-expanded]) .aeo-faq__icon {
+  transform: rotate(45deg) !important;
+}
+.richtext .aeo-faq summary:focus-visible {
+  outline: .125rem solid var(--primary--ocean);
+  outline-offset: -.25rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .richtext .aeo-faq .aeo-faq__icon { transition: none !important; }
+}

@@ -16,9 +16,23 @@ cd "$(dirname "$0")"
   cat _cover-aspect-news.css
   echo '</style>'
   cat _defer-thumbs-news.html
+  echo '<style id="cms-article-links">'
+  cat _article-links.css
+  echo '</style>'
+  echo '<style id="cms-faq-icon-state">'
+  cat _faq-icon-state.css
+  echo '</style>'
+  echo '<style id="cms-home-security-banner">'
+  cat _home-security-banner.css
+  echo '</style>'
 } > page-head-news.html
 
-{ echo '<style>'; cat _cover-aspect-story.css; echo '</style>'; } > page-head-story.html
+{
+  echo '<style>'; cat _cover-aspect-story.css; echo '</style>'
+  echo '<style id="cms-article-links">'
+  cat _article-links.css
+  echo '</style>'
+} > page-head-story.html
 
 # footer：內文圖片比例
 { echo '<style>'; cat _img-aspect-news.css;  echo '</style>'; } > page-footer-news.html

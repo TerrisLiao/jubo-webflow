@@ -136,3 +136,54 @@
 <style>
 .jb-defer-thumbs .section_related-news .single-news_cover-img { background-image: none !important; }
 </style>
+<style id="cms-article-links">
+/* CMS 文章文字連結，2026-10-20。
+   只由 news / customer-stories 模板 head 載入。
+   排除按鈕與圖片／圖示連結，避免改到既有 CTA。 */
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)) {
+  color: var(--primary--ocean) !important;
+  text-decoration-line: underline !important;
+  text-decoration-color: currentColor !important;
+  text-decoration-thickness: .0625rem !important;
+  text-underline-offset: .1875rem !important;
+  text-decoration-skip-ink: auto;
+}
+
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)):hover {
+  color: var(--neutral--black) !important;
+  text-decoration-thickness: .125rem !important;
+}
+
+.richtext a[href]:not(.w-button, .w-inline-block, .cta-button, .glass-button, [role="button"]):not(:has(img, svg)):focus-visible {
+  outline: .125rem solid var(--primary--ocean) !important;
+  outline-offset: .1875rem !important;
+}
+</style>
+<style id="cms-faq-icon-state">
+/* 官網標準 FAQ 圖示：無圓底，青綠至紫色線條加號，展開旋轉 45 度。 */
+.richtext .aeo-faq summary[aria-expanded="true"] .aeo-faq__icon,
+.richtext .aeo-faq details[open] summary:not([aria-expanded]) .aeo-faq__icon {
+  transform: rotate(45deg) !important;
+}
+.richtext .aeo-faq summary:focus-visible {
+  outline: .125rem solid var(--primary--ocean);
+  outline-offset: -.25rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .richtext .aeo-faq .aeo-faq__icon { transition: none !important; }
+}
+</style>
+<style id="cms-home-security-banner">
+/* 2026-10-20 文章版資安入口。
+   核心排版／顏色在 HTML embed 行內保留，CMS 單篇發布亦可呈現。
+   本檔只補互動狀態，不覆寫首頁或共用 Component。 */
+/* CTA 使用首頁原版 Glass Button On Dark，保留原生外觀與 hover。 */
+.richtext .cms-security_banner [data-security-logos]:hover [data-security-tile] {
+  border-color: var(--neutral--white-50) !important;
+}
+.richtext .cms-security_banner [data-security-glass-cta]:focus-visible,
+.richtext .cms-security_banner [data-security-logos]:focus-visible {
+  outline: .125rem solid var(--neutral--white);
+  outline-offset: .25rem;
+}
+</style>
