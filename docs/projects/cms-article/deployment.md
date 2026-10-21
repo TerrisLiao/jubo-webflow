@@ -26,6 +26,16 @@
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
 
+### 內文圖 WebP、左欄 Finsweet（2026-10-21，未發布）
+
+| 層次 | 狀態 |
+|---|---|
+| CMS | 11 篇 `content` 已改（43 張圖換成 WebP），重新匯出逐字比對通過；其他 13 篇與其他欄位未變。項目 `lastUpdated` 晚於 `lastPublished`，正式站仍是舊圖 |
+| Designer | 模板 footer 比例表已寫入並讀回一致；左欄清單 `e4df1f5b-…1c23` 已移除 `fs-list-*` |
+| staging／production | 未發布，等 Terris 授權 |
+
+細節與回退見 [方案一紀錄 §6](history/客戶故事單欄閱讀版面_方案一_研究與模擬.md)。
+
 ### staging 驗證（2026-10-21，實際 Webflow 輸出）
 
 - 故事頁 jubostory14、jubostory03，寬度 1440／1280／1024／768／390：左欄 `display:none`；封面 1024／1024／896／736／366px；白卡 896px（≤991 隨容器）；內文 20px／行高 35px，390 為 18px／27px；文末 3 卡（≥768 grid、390 橫列）；按鈕列「看全部成功故事 → /customer-success-stories」「我想分享故事 → Forms（_blank）」；CTA 區塊 → `/contact`；不含目前文章；h1 只有 1 個；無水平捲動；無 console／page error；分頁元素不存在。
