@@ -177,21 +177,13 @@
 /* 2026-10-20 文章版資安入口。
    核心排版／顏色在 HTML embed 行內保留，CMS 單篇發布亦可呈現。
    本檔只補互動狀態，不覆寫首頁或共用 Component。 */
-.richtext .cms-security_banner [data-security-cta]:hover {
-  background: var(--primary--accent) !important;
-  color: var(--neutral--black) !important;
-  transform: translateY(-.125rem);
-}
+/* CTA 使用首頁原版 Glass Button On Dark，保留原生外觀與 hover。 */
 .richtext .cms-security_banner [data-security-logos]:hover [data-security-tile] {
   border-color: var(--neutral--white-50) !important;
 }
-.richtext .cms-security_banner [data-security-cta]:focus-visible,
+.richtext .cms-security_banner [data-security-glass-cta]:focus-visible,
 .richtext .cms-security_banner [data-security-logos]:focus-visible {
   outline: .125rem solid var(--neutral--white);
   outline-offset: .25rem;
-}
-@media (prefers-reduced-motion: reduce) {
-  .richtext .cms-security_banner [data-security-cta] { transition: none !important; }
-  .richtext .cms-security_banner [data-security-cta]:hover { transform: none; }
 }
 </style>

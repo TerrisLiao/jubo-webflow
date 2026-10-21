@@ -1,5 +1,19 @@
 # 部署紀錄
 
+## 2026-10-21 備份風險與復原文案
+
+- 即時 CMS item `6ad58c06a97067448a667937` 為來源，保留後續人工修改；只寫入 `content` 與 `schema-plain-text`。更新後讀回逐字一致，updated `2026-10-21T13:00:16.414Z`，lastPublished 仍為 `2026-10-20T10:26:37.138Z`。未發布。
+- 備份風險列、表後補充、FAQ Q3 與醫院案例結語補上隔離／防刪除／復原驗證及公開資訊界線，新增 CISA 2023 指引與資通安全署 2026-07-27 公告。未加入兩院付贖金或備份皆被加密等未確認敘述。
+- HTML 結構驗證通過；法規、智齡整段／banner、所有圖像及表格／FAQ 的標記屬性未變。只改文字，不另動模板 CSS／JS。前後快照、差異與更新 payload 位於本機工作區 `outputs/ai-nis-security-2026-10-19/`，檔名含 `backup-revision-2026-10-21`。
+
+
+## 2026-10-20 小標移除、文字對齊與首頁玻璃 CTA（現行）
+
+- banner 只移除「資安與隱私」小標、四個主標章增加相同 3.5rem 高圖框，並將 CTA 換回從首頁已讀回之原始 Glass Button On Dark DOM（variant 94f2df64-8404-b60f-e647-56842c977af1）。沒有修改共用元件定義、首頁或 Slater。
+- CTA 使用 data-security-glass-cta，news head 的 style#cms-home-security-banner 移除前版白色 CTA hover 背景覆寫，只保留標章 hover 與 scoped keyboard focus。已讀回逐字比對。
+- CMS item 6ad58c06a97067448a667937 已儲存，updated 2026-10-20T09:08:57.693Z；lastPublished 仍為 2026-10-20T08:35:00.966Z。全文只有 banner 此三處改動，標題、封面、其他段落、FAQ 問答／圖示均未改，未執行發布。
+- 本機 1280／991／767／479／390 寬度檢查：每列說明文字位置差值 0；原版按鈕 rgba(255,255,255,.08)、blur(12px) saturate(1.4)、白字，無溢出且可鍵盤聚焦。測試證據與前後備份在本機 outputs/ai-nis-security-2026-10-19/，檔名含 glass-button-alignment。
+
 ## 2026-10-20 文章 banner 導流與 FAQ 配色修正（現行）
 
 - 使用者回報 banner 的 logo 不突出、按鈕不明顯，FAQ 紫色圓底錯誤。更新文章 banner 為行內自包含版型，保留首頁原始 8 個標章資產：四個主標章放大、其餘四個保留在下方，白色 CTA 與主標章區均指向 /security。首頁與共用 Component 未改。
