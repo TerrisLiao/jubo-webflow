@@ -26,13 +26,13 @@
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
 
-### 內文圖 WebP、左欄 Finsweet（2026-10-21，未發布）
+### 內文圖 WebP、左欄 Finsweet（2026-10-21，已發布）
 
 | 層次 | 狀態 |
 |---|---|
-| CMS | 11 篇 `content` 已改（43 張圖換成 WebP），重新匯出逐字比對通過；其他 13 篇與其他欄位未變。項目 `lastUpdated` 晚於 `lastPublished`，正式站仍是舊圖 |
+| CMS | 11 篇 `content` 已改（43 張圖換成 WebP），重新匯出逐字比對通過；其他 13 篇與其他欄位未變 |
 | Designer | 模板 footer 比例表已寫入並讀回一致；左欄清單 `e4df1f5b-…1c23` 已移除 `fs-list-*` |
-| staging／production | 未發布，等 Terris 授權 |
+| staging／production | 2026-10-21 Terris 授權後整站發布（publishTaskId `6ac5d86b-54b4-4ca9-a901-cbdbf1d2b619`），正式站 11 篇驗證通過 |
 
 細節與回退見 [方案一紀錄 §6](history/客戶故事單欄閱讀版面_方案一_研究與模擬.md)。
 
