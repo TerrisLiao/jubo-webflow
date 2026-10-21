@@ -1,9 +1,9 @@
 <style>
 /* ============================================================
    CMS 文章樣式（/customer-stories 模板）
-   2026-09-22 v13　決議者：Terris
+   2026-10-21 v14　決議者：Terris
    原始碼在 repo：custom-code/cms-article/
-   ※ 第 5 節（圖說玻璃條）只在本模板；沒有任何規則選到 img。
+   ※ 第 5 節（圖說玻璃條）、第 6 節（閱讀字級）只在本模板；沒有任何規則選到 img。
    ============================================================ */
 
 /* ---------- 1. 表格 ---------- */
@@ -145,5 +145,28 @@
     line-height: 1.65 !important;
     border-radius: .75rem !important;
   }
+}
+
+/* ---------- 6. 閱讀字級（只在 story 模板，2026-10-21） ---------- */
+/* 方案一單欄版面：白卡 56rem、內文 20px（字寬 768px ≈ 38 字／行，仍在 CJK 40 字上限內）。
+   p 的字級來自全站 p 標籤樣式，所以要直接選到 p；限定在 .customer-story_content-wrap 內，不影響 /news。
+   H4 跟著放大，避免跟內文同級。手機（≤767）還原成原本的大小。 */
+.customer-story_content-wrap .richtext p,
+.customer-story_content-wrap .richtext li {
+  font-size: 1.25rem !important;
+  line-height: 1.75 !important;
+}
+.customer-story_content-wrap .richtext h4 { font-size: 1.5rem !important; }
+.customer-story_content-wrap .richtext blockquote { font-size: 1.1875rem !important; }
+.customer-story_content-wrap .richtext figure.w-richtext-figure-type-image figcaption { font-size: 1.125rem !important; }
+@media screen and (max-width: 767px) {
+  .customer-story_content-wrap .richtext p,
+  .customer-story_content-wrap .richtext li {
+    font-size: 1.125rem !important;
+    line-height: 1.5 !important;
+  }
+  .customer-story_content-wrap .richtext h4 { font-size: 1.125rem !important; }
+  .customer-story_content-wrap .richtext blockquote { font-size: 1.0625rem !important; }
+  .customer-story_content-wrap .richtext figure.w-richtext-figure-type-image figcaption { font-size: 1rem !important; }
 }
 </style>
