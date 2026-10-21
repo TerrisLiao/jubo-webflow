@@ -87,3 +87,9 @@
 - 刪除方式：agent 環境的 Git 代理拒絕刪除遠端分支（HTTP 403），由使用者在 Mac 以暫存空 repo 執行 `git push <repo URL> --delete …`，三個分支均回傳 deleted。
 - GitHub 讀回：三個分支均不存在，遠端共 23 個分支。
 - `claude/gallant-einstein-3tvafg` 之後若因平台指定再出現，為新的短期工作分支，與上表刪除的版本無關。
+
+## 進行中分支（2026-10-21）
+
+| 分支 | 基底 | 用途 |
+|---|---|---|
+| `claude/friendly-einstein-1bqrn0` | master `6b84235` | 平台指定分支：AEO／SEO 現況總整理（[報告](../audits/aeo/AEO_SEO%E7%8F%BE%E6%B3%81%E7%B8%BD%E6%95%B4%E7%90%86_2026-10-21.md)），只有文件，未操作 Webflow |
