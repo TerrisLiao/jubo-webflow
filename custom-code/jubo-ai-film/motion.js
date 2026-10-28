@@ -1,7 +1,7 @@
 /* Jubo AI 原生頁動態（page settings → Before </body>）。來源：custom-code/jubo-ai-film/motion.js
  * 使用站上已載入的 GSAP 3.15＋ScrollTrigger（不重複載入、不初始化 Lenis）。
- * WebGL 只畫「思考光」與「長虹玻璃」：位置全部讀自 Webflow 元素（data-light／data-fin 錨點），
- * 所以在 Designer 移動錨點，玻璃就跟著動。IX3 負責進場與標題逐行出現；本檔負責捲動分鏡。 */
+ * WebGL 只畫「思考光」與半透明的光之花瓣：位置全部讀自 Webflow 元素（data-light／data-fin 錨點），
+ * 所以在 Designer 移動錨點，花瓣就跟著動。IX3 負責進場與標題逐行出現；本檔負責捲動分鏡。 */
 (() => {
  'use strict';
  const root = document.querySelector('[data-film-root]');
@@ -41,7 +41,7 @@
  });
  setPaused(paused);
 
- /* ---------- WebGL: thinking light behind reeded-glass fins ---------- */
+ /* ---------- WebGL: thinking light and translucent petals (positions from data-fin anchors) ---------- */
  const MAXF = 8;
  const canvas = document.createElement('canvas');
  canvas.className = 'jaf-gl'; canvas.setAttribute('aria-hidden', 'true');
@@ -49,14 +49,14 @@
  root.prepend(canvas);
  const FRAG = `precision highp float;
 uniform vec2 uRes;uniform float uTime;uniform vec4 uLight;uniform vec4 uLightB;uniform vec3 uPtr;uniform vec3 uRip;
-uniform vec4 uFin[${MAXF}];uniform vec4 uFinA[${MAXF}];
-const vec3 PAPER=vec3(.965,.961,.945);
+uniform vec4 uFin[${MAXF}];uniform vec4 uFinA[${MAXF}];uniform vec2 uRoot;
+const vec3 PAPER=vec3(.965,.961,.945);const vec3 PEARL=vec3(1.,.992,.982);const vec3 PEACH=vec3(1.,.84,.72);
 float sq(float x){return x*x;}
 float blob(vec2 p,vec2 c,vec2 s){vec2 v=(p-c)/s;return exp(-dot(v,v));}
 vec4 field(vec2 p){
  vec2 R=max(uLight.zw,vec2(1.));vec2 q=(p-uLight.xy)/R;float t=uTime;float h=uLightB.y;
- vec3 c1=vec3(.0,.69,.74);vec3 c2=mix(vec3(.47,.77,.96),vec3(.55,.9,.78),smoothstep(.2,.5,h));
- vec3 c3=mix(vec3(.98,.83,.6),vec3(.8,.93,.46),smoothstep(.3,.62,h));vec3 c4=mix(vec3(.6,.9,.82),vec3(.5,.8,.97),h);
+ vec3 c1=vec3(.36,.82,.84);vec3 c2=mix(vec3(.62,.83,.98),vec3(.66,.93,.84),smoothstep(.2,.5,h));
+ vec3 c3=mix(vec3(1.,.8,.66),vec3(.86,.95,.64),smoothstep(.3,.62,h));vec3 c4=mix(vec3(1.,.78,.8),vec3(.64,.86,.98),h);
  vec2 b1=vec2(-.42+.13*sin(t*.21),.05+.15*sin(t*.17+1.));vec2 b2=vec2(.4+.11*cos(t*.19),-.04+.16*cos(t*.23+.4));
  vec2 b3=vec2(.12*sin(t*.13),-.26+.1*sin(t*.29+2.));vec2 pp=(uPtr.xy-uLight.xy)/R;
  vec2 b4=mix(vec2(.22*cos(t*.11),.16*sin(t*.15)),pp,uPtr.z);vec2 s=vec2(.44,.56);
@@ -65,31 +65,60 @@ vec4 field(vec2 p){
  float a=clamp((w1+w2+w3+w4)*1.05,0.,1.)*smoothstep(1.4,.55,length(q*vec2(.82,1.)));
  return vec4(col,a*uLightB.x);
 }
+float capsule(vec2 p,float r1,float r2,float h){p.x=abs(p.x);float b=(r1-r2)/h;float a=sqrt(max(1.-b*b,0.));float k=dot(p,vec2(-b,a));
+ if(k<0.)return length(p)-r1;if(k>a*h)return length(p-vec2(0.,h))-r2;return dot(p,vec2(a,b))-r1;}
 void main(){
- vec2 p=gl_FragCoord.xy;vec4 f=field(p);vec3 col=mix(PAPER,f.rgb,f.a*.86);
+ vec2 p=gl_FragCoord.xy;vec4 f=field(p);vec3 col=mix(PAPER,f.rgb,f.a*.4);
  float rip=0.;if(uRip.z>.001){float d=length(p-uRip.xy);float rr=(1.-uRip.z)*uLight.w*1.6;rip=exp(-sq((d-rr)/(uLight.w*.05+1.)))*uRip.z;}
  col=mix(col,vec3(1.),rip*.22*f.a);
  for(int i=0;i<${MAXF};i++){
   vec4 r=uFin[i];vec4 A=uFinA[i];
   if(A.x<.003||r.z<2.||r.w<2.)continue;
-  vec2 lp=(p-r.xy)/r.zw;
-  if(lp.x<0.||lp.x>1.||lp.y<0.||lp.y>1.)continue;
-  float a=A.x*smoothstep(0.,.24,lp.y)*smoothstep(1.,.76,lp.y);
-  float fl=A.y;float sx=(p.x-r.x)/fl;float id=floor(sx);float fx=fract(sx)-.5;
   vec2 c=r.xy+r.zw*.5;
-  vec2 sp=vec2(c.x-(p.x-c.x)*.62-fx*fl*2.6,c.y+(p.y-c.y)*.9+fl*.45*sin(id*1.7+uTime*.35));
-  vec4 g=field(sp);
-  if(A.z>0.){g+=field(sp+vec2(0.,A.z))+field(sp-vec2(0.,A.z));g/=3.;}
-  vec3 gc=mix(vec3(dot(g.rgb,vec3(.333))),g.rgb,1.35);
-  vec3 gl=mix(PAPER*.985,gc,clamp(g.a*1.12,0.,1.));
-  gl*=1.-.3*fx*fx;
-  float crest=smoothstep(.4,.5,abs(fx));
-  float sweep=exp(-sq((lp.y-(fract(uTime*(.06+uLightB.z*.22)+A.w*.17)*1.5-.25))/.07));
+  bool lying=r.z>r.w*1.4;
+  vec2 B=uRoot,T=vec2(c.x,r.y+r.w);
+  if(lying){B=c-vec2(r.z*.5,0.);T=c+vec2(r.z*.5,0.);}
+  float R=lying?r.w*.62:A.z*.5;
+  vec2 lo=min(B,T)-R*1.8,hi=max(B,T)+R*1.8;
+  if(p.x<lo.x||p.x>hi.x||p.y<lo.y||p.y>hi.y)continue;
+  float sway=.04*sin(uTime*.42+A.w*1.7)+.018*sin(uTime*.9+A.w*3.1);
+  float rnd=fract(sin(A.w*12.9898+4.1)*43758.5453)-.5;
+  float d,t,side;
+  if(lying){ // horizontal anchor: a lying leaf
+   vec2 hw=vec2(r.z*.5,R);vec2 q=p-c;q.y-=q.x*sway*.6+hw.y*.25*sin(q.x/hw.x*3.1+uTime*.5);
+   float e=length(q/hw);d=(e-1.)*min(hw.x,hw.y);t=q.x/hw.x*.5+.5;side=clamp(q.y/hw.y,-1.,1.);
+  }else{ // petal growing from the shared root to the top of its anchor
+   vec2 v0=T-B;float L=length(v0);if(L<4.)continue;
+   float an=atan(v0.x,v0.y)+sway+rnd*.06;vec2 dir=vec2(sin(an),cos(an));
+   float r0=R*.12;vec2 v=p-B;vec2 q=vec2(dot(v,vec2(dir.y,-dir.x)),dot(v,dir));
+   float tt=clamp(q.y/L,0.,1.);
+   q.x-=(A.y*.7+rnd*.3)*q.y*tt*.55;q.x*=1.+rnd*.3*tt;
+   float top=smoothstep(.45,1.,tt);q.y+=top*(R*.22*rnd*q.x/R+R*.06);
+   float hh=max(L-R-r0,1.);d=capsule(q,r0,R,hh);
+   t=tt;d+=R*.07*sin(t*4.4+uTime*.5+A.w*2.1)+R*.04*sin(q.x/R*2.+uTime*.7+A.w);side=clamp(q.x/R,-1.,1.);
+  }
+  float a=A.x;
+  float soft=1.5+R*.06;
+  float inside=smoothstep(soft,-soft,d);
+  float depth=clamp(-d/(R*.8),0.,1.);
+  float stem=lying?1.:smoothstep(0.,.2,t);
+  float h=uLightB.y;
+  float k=fract(A.w*.618+.15);
+  vec3 deep=k<.34?vec3(.5,.84,.87):k<.67?vec3(.69,.82,.97):vec3(.62,.9,.82);
+  deep=mix(deep,vec3(1.,.8,.7),smoothstep(.55,1.,fract(A.w*.382+h))*.55);
+  vec4 g=field(p+vec2(side*R*.5,R*.3));deep=mix(deep,g.rgb,g.a*.3);
+  vec3 body=mix(PEARL,deep,pow(depth,.7)*(.55+.3*t));
+  body=mix(body,vec3(1.,.9,.8),sq(1.-t)*.75*(1.-depth*.3));
+  body*=1.-.07*side*depth;
+  float edge=smoothstep(.0,.35,depth);
+  float rim=exp(-sq(d/(soft*2.2)))*.55;
+  float sweep=exp(-sq((t-(fract(uTime*(.05+uLightB.z*.2)+A.w*.21)*1.4-.2))/.1));
   vec2 dp=(p-uPtr.xy)/(uLight.w*.35+1.);float near=uPtr.z*exp(-dot(dp,dp));
-  gl=mix(gl,vec3(1.),crest*(.14+.32*sweep+.34*near+.2*uLightB.z));
-  float ex=min(lp.x,1.-lp.x)*r.z;gl=mix(gl,vec3(1.),exp(-ex*ex*.5)*.8);
-  gl=mix(gl,gl*.92,exp(-sq(max(ex-1.5,0.)*.35))*.35);
-  col=mix(col,gl,a);
+  float halo=exp(-max(d,0.)/(R*.4+1.))*(1.-inside);
+  col=mix(col,vec3(1.,.97,.94),halo*.32*a*stem);
+  col=mix(col,body,inside*(.58+.3*edge)*a*stem);
+  col=mix(col,vec3(1.,.99,.975),inside*(1.-edge)*(.45+.25*sweep+.25*near+.15*uLightB.z)*a*stem);
+  col=mix(col,vec3(1.,.99,.975),rim*(.6+.4*sweep)*a*stem);
  }
  col+=(fract(sin(dot(floor(p),vec2(12.9898,78.233)))*43758.5453)-.5)*.02;
  gl_FragColor=vec4(col,1.);
@@ -106,7 +135,7 @@ void main(){
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(prog, 'a'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  for (const n of ['uRes', 'uTime', 'uLight', 'uLightB', 'uPtr', 'uRip', 'uFin', 'uFinA']) U[n] = gl.getUniformLocation(prog, n);
+  for (const n of ['uRes', 'uTime', 'uLight', 'uLightB', 'uPtr', 'uRip', 'uFin', 'uFinA', 'uRoot']) U[n] = gl.getUniformLocation(prog, n);
   canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); fallback(); });
   root.dataset.gl = 'on';
  } catch (err) { fallback(); }
@@ -193,10 +222,17 @@ void main(){
    return;
   }
   const H = canvas.height;
+  // Petals share one root under the middle of the cluster on screen and fan out to their anchors.
+  let sx = 0, sa = 0, sb = 0, spread = 1;
+  for (const c of cur) if (c.a > .02 && c.w <= c.h * 1.4) { sx += (c.x + c.w / 2) * c.a; sb += (c.y + c.h) * c.a; sa += c.a; }
+  const cx = sa ? sx / sa : vw / 2, by = sa ? sb / sa : vh;
+  for (const c of cur) if (c.a > .02) spread = Math.max(spread, Math.abs(c.x + c.w / 2 - cx));
+  gl.uniform2f(U.uRoot, cx * dpr, H - by * dpr);
   for (let i = 0; i < MAXF; i++) {
    const c = cur[i];
+   const lean = clamp((c.x + c.w / 2 - cx) / spread, -1, 1) * .36;
    finData.set([c.x * dpr, H - (c.y + c.h) * dpr, c.w * dpr, c.h * dpr], i * 4);
-   finA.set([clamp(c.a), Math.max(6, Math.min(16, c.w / 7)) * dpr, 0, i], i * 4);
+   finA.set([clamp(c.a), lean, Math.max(18, Math.min(c.h * .62, Math.max(c.w * 1.45, c.h * .32))) * dpr, i], i * 4);
   }
   gl.uniform2f(U.uRes, canvas.width, H);
   gl.uniform1f(U.uTime, time);
@@ -631,7 +667,7 @@ void main(){
    if (n >= t.length) { dir = -1; d = 2400; } else if (n <= 0) { dir = 1; qi = (qi + 1) % thinking.length; d = 300; }
    timer = setTimeout(tick, d); };
   loop($('.jubo-ai-film_think'), () => { timer = setTimeout(tick, 1800); }, () => clearTimeout(timer)); }
- const hint = $('[data-pointer-hint]'); if (hint && !fine.matches) hint.textContent = '輕觸光，玻璃後的光會回應你';
+ const hint = $('[data-pointer-hint]'); if (hint && !fine.matches) hint.textContent = '輕觸畫面，花瓣裡的光會回應你';
 
  /* ---------- Modes ---------- */
  const mm = gsap.matchMedia();

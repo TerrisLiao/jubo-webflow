@@ -7,8 +7,13 @@
    keyframes, reduced motion and the pinned desktop layout (data-film-mode="scrub"). */
 .jubo-ai-film_component{-webkit-font-smoothing:antialiased}
 .jubo-ai-film_component>section{position:relative;z-index:1}
-.jubo-ai-film_think,.jubo-ai-film_record,.jubo-ai-film_chat,.jubo-ai-film_pause,.jubo-ai-film_dialog{-webkit-backdrop-filter:blur(18px) saturate(1.4)}
-.jubo-ai-film_shield{-webkit-backdrop-filter:blur(7px) saturate(1.5)}
+.jubo-ai-film_think,.jubo-ai-film_pause,.jubo-ai-film_dialog{-webkit-backdrop-filter:blur(14px)}
+.jubo-ai-film_shield{-webkit-backdrop-filter:blur(10px)}
+/* White cards with a soft pastel glow inside (chat, record), like the Verba / AI popup references. */
+.jubo-ai-film_chat,.jubo-ai-film_record{isolation:isolate}
+.jubo-ai-film_chat::before,.jubo-ai-film_record::before{content:"";position:absolute;z-index:-1;left:-10%;right:-10%;bottom:-25%;height:85%;pointer-events:none;background:radial-gradient(42% 55% at 12% 70%,rgba(255,214,186,.55),transparent 70%),radial-gradient(40% 55% at 38% 92%,rgba(176,236,204,.5),transparent 70%),radial-gradient(42% 55% at 68% 88%,rgba(150,220,236,.55),transparent 70%),radial-gradient(40% 50% at 92% 62%,rgba(178,206,252,.5),transparent 70%);filter:blur(22px);animation:jaf-tint 12s ease-in-out infinite alternate}
+.jubo-ai-film_record::before{height:70%;opacity:.8}
+@keyframes jaf-tint{from{transform:translateX(-4%)}to{transform:translateX(4%)}}
 .jubo-ai-film_line-accent,.jubo-ai-film_say-key{background-image:linear-gradient(100deg,#007c85 0%,#00a3ae 45%,#3a9fcf 70%,#007c85 100%);background-size:220% 100%;background-position:0% 50%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .jubo-ai-film_stream-window{-webkit-mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 22%,#000 78%,transparent)}
 .jubo-ai-film_icon::before,.jubo-ai-film_cap-icon::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(20,224,212,.5),rgba(143,208,255,.25) 45%,transparent 70%);filter:blur(9px);animation:jaf-glow 7s ease-in-out infinite alternate}
@@ -59,8 +64,8 @@
 .jaf-review[disabled]{background:#007c85;cursor:default}
 @keyframes jaf-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-/* Fallback when WebGL is unavailable: CSS frosted glass on the same anchors. */
-.jubo-ai-film_component[data-gl="off"] [data-fin]{border-left:1px solid rgba(255,255,255,.9);border-right:1px solid rgba(255,255,255,.9);background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 2px,rgba(255,255,255,0) 2px 10px,rgba(0,124,133,.05) 12px,rgba(255,255,255,.45) 14px);-webkit-backdrop-filter:blur(14px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.5);-webkit-mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent);mask-image:linear-gradient(transparent,#000 24%,#000 76%,transparent)}
+/* Fallback when WebGL is unavailable: soft CSS petals on the same anchors. */
+.jubo-ai-film_component[data-gl="off"] [data-fin]{border-radius:50% 50% 46% 46%/58% 58% 42% 42%;background:linear-gradient(0deg,rgba(255,230,210,.6),rgba(255,255,255,.7) 45%,rgba(160,222,232,.55));box-shadow:0 0 40px rgba(255,236,220,.6),inset 0 0 0 1px rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(0deg,transparent,#000 35%);mask-image:linear-gradient(0deg,transparent,#000 35%)}
 .jaf-aura{position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(60px);background:radial-gradient(closest-side at 30% 45%,rgba(0,178,192,.55),transparent),radial-gradient(closest-side at 70% 55%,rgba(143,208,255,.55),transparent),radial-gradient(closest-side at 50% 75%,rgba(243,217,168,.5),transparent)}
 
 /* Pinned desktop layout. motion.js sets data-film-mode="scrub" only at ≥992×620 without reduced motion. */
@@ -84,7 +89,7 @@
 
 @media (max-height:760px){[data-film-mode="scrub"] .jubo-ai-film_chat-thread{height:11rem}[data-film-mode="scrub"] .jubo-ai-film_chat-zone{top:21vh}}
 @media (prefers-reduced-motion:reduce){
- .jubo-ai-film_icon::before,.jubo-ai-film_cap-icon::before,.jubo-ai-film_think-dot,.jubo-ai-film_caret{animation:none}
+ .jubo-ai-film_icon::before,.jubo-ai-film_cap-icon::before,.jubo-ai-film_think-dot,.jubo-ai-film_caret,.jubo-ai-film_chat::before,.jubo-ai-film_record::before{animation:none}
  .jubo-ai-film_stream{transition:none}
 }
 </style>

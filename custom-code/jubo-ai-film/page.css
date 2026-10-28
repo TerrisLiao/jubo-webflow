@@ -32,16 +32,16 @@
 .jubo-ai-film_line-accent{display:block;color:#007c85}
 .jubo-ai-film_lead{max-width:38rem;margin:1.5rem auto 0;color:rgba(21,23,23,.66);font-size:1.125rem;line-height:1.8}
 .jubo-ai-film_hero-glass{position:relative;width:100%;max-width:78rem;height:clamp(18rem,44vh,32rem)}
-.jubo-ai-film_hero-fin-a{position:absolute;left:5%;top:20%;width:8%;height:70%;transform-origin:50% 100%}
-.jubo-ai-film_hero-fin-b{position:absolute;left:20%;top:4%;width:12%;height:90%;transform-origin:50% 100%}
-.jubo-ai-film_hero-fin-c{position:absolute;left:41%;top:12%;width:10%;height:78%;transform-origin:50% 100%}
-.jubo-ai-film_hero-fin-d{position:absolute;left:60%;top:0%;width:14%;height:96%;transform-origin:50% 100%}
-.jubo-ai-film_hero-fin-e{position:absolute;left:83%;top:24%;width:8%;height:62%;transform-origin:50% 100%}
-.jubo-ai-film_think{position:absolute;left:0;right:0;top:42%;z-index:2;display:flex;width:fit-content;min-width:min(21rem,82vw);margin:0 auto;padding:.8rem 1.35rem;align-items:center;gap:.75rem;border:1px solid rgba(255,255,255,.95);border-radius:999px;background-color:rgba(255,255,255,.58);box-shadow:0 18px 50px rgba(0,124,133,.14),inset 0 1px 0 #ffffff;backdrop-filter:blur(18px) saturate(1.4);color:#151717;font-size:1rem;line-height:1.3;text-align:left}
+.jubo-ai-film_hero-fin-a{position:absolute;left:31%;top:34%;width:7%;height:58%;transform-origin:50% 100%}
+.jubo-ai-film_hero-fin-b{position:absolute;left:37.5%;top:8%;width:8%;height:84%;transform-origin:50% 100%}
+.jubo-ai-film_hero-fin-c{position:absolute;left:45.5%;top:0%;width:9%;height:92%;transform-origin:50% 100%}
+.jubo-ai-film_hero-fin-d{position:absolute;left:54.5%;top:6%;width:8%;height:86%;transform-origin:50% 100%}
+.jubo-ai-film_hero-fin-e{position:absolute;left:62%;top:30%;width:7%;height:62%;transform-origin:50% 100%}
+.jubo-ai-film_think{position:absolute;left:0;right:0;top:79%;z-index:2;display:flex;width:fit-content;min-width:min(26rem,86vw);margin:0 auto;padding:1rem 1.6rem;align-items:center;gap:.75rem;border:1px solid #ffffff;border-radius:999px;background-color:rgba(255,255,255,.86);box-shadow:0 26px 60px rgba(214,150,110,.18),0 2px 10px rgba(21,23,23,.05);backdrop-filter:blur(14px);color:#151717;font-size:1.0625rem;line-height:1.3;text-align:left}
 .jubo-ai-film_think-dots{display:inline-flex;gap:.3rem}
 .jubo-ai-film_think-dot{display:inline-block;width:.42rem;height:.42rem;border-radius:50%;background-color:#00a3ae}
 .jubo-ai-film_think-text{white-space:nowrap}
-.jubo-ai-film_hint{position:absolute;left:0;right:0;top:calc(42% + 4.25rem);z-index:2;margin:0;color:rgba(21,23,23,.55);font-size:.8125rem;line-height:1.4}
+.jubo-ai-film_hint{position:absolute;left:0;right:0;top:calc(79% + 4.4rem);z-index:2;margin:0;color:rgba(21,23,23,.55);font-size:.8125rem;line-height:1.4}
 
 /* Tech */
 .jubo-ai-film_tech{position:relative}
@@ -103,11 +103,11 @@
 .jubo-ai-film_vault{position:relative;display:flex;width:100%;max-width:30rem;padding:4rem 3.5rem;flex-direction:column;align-items:stretch;gap:1rem}
 .jubo-ai-film_vault-fin-a{position:absolute;left:0;top:0;width:9%;height:100%;transform-origin:50% 50%}
 .jubo-ai-film_vault-fin-b{position:absolute;right:0;top:0;width:9%;height:100%;transform-origin:50% 50%}
-.jubo-ai-film_record{position:relative;z-index:1;display:flex;margin:0;padding:1.6rem 1.6rem;flex-direction:column;gap:.95rem;overflow:hidden;border:1px solid rgba(255,255,255,.9);border-radius:1.1rem;background-color:rgba(255,255,255,.62);box-shadow:0 24px 60px rgba(0,80,90,.1);backdrop-filter:blur(10px);text-align:left}
+.jubo-ai-film_record{position:relative;z-index:1;display:flex;margin:0;padding:1.6rem 1.6rem;flex-direction:column;gap:.95rem;overflow:hidden;border:1px solid rgba(21,23,23,.05);border-radius:1.6rem;background-color:#ffffff;box-shadow:0 28px 70px rgba(120,100,80,.12);text-align:left}
 .jubo-ai-film_record-row{position:relative;display:flex;margin:0;justify-content:space-between;gap:1rem;font-size:.9375rem;line-height:1.4}
 .jubo-ai-film_record-key{color:rgba(21,23,23,.55)}
 .jubo-ai-film_record-val{position:relative;font-family:Poppins,"Noto Sans TC",sans-serif;font-weight:500;font-variant-numeric:tabular-nums}
-.jubo-ai-film_shield{position:absolute;left:0;top:-10%;z-index:2;display:flex;width:26%;height:120%;justify-content:center;align-items:center;border-left:1px solid rgba(255,255,255,.95);border-right:1px solid rgba(255,255,255,.95);background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.5) 0px,rgba(255,255,255,0) 2px,rgba(255,255,255,0) 9px,rgba(0,124,133,.05) 11px,rgba(255,255,255,.5) 12px);backdrop-filter:blur(7px) saturate(1.5);opacity:0;pointer-events:none}
+.jubo-ai-film_shield{position:absolute;left:0;top:-10%;z-index:2;display:flex;width:26%;height:120%;justify-content:center;align-items:center;border-radius:999px;background-image:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.8) 28%,rgba(255,232,214,.7) 62%,rgba(255,255,255,0) 100%);box-shadow:0 0 48px rgba(255,226,206,.65);backdrop-filter:blur(10px);opacity:0;pointer-events:none}
 .jubo-ai-film_shield-icon{display:inline-flex;width:2rem;height:2rem}
 .jubo-ai-film_vault-note{position:relative;z-index:1;margin:0;color:rgba(21,23,23,.5);font-size:.8125rem;line-height:1.6;text-align:left}
 
@@ -180,7 +180,7 @@
 .jubo-ai-film_chat-zone{position:relative;display:flex;width:100%;max-width:64rem;padding:2rem 0;justify-content:center}
 .jubo-ai-film_chat-fin-a{position:absolute;left:4%;top:0;width:12%;height:100%;transform-origin:50% 50%}
 .jubo-ai-film_chat-fin-b{position:absolute;right:4%;top:0;width:12%;height:100%;transform-origin:50% 50%}
-.jubo-ai-film_chat{position:relative;z-index:2;display:flex;width:100%;max-width:36rem;padding:1rem;flex-direction:column;gap:.85rem;border:1px solid rgba(255,255,255,.95);border-radius:1.6rem;background-color:rgba(255,255,255,.7);box-shadow:0 30px 80px rgba(0,80,90,.14),inset 0 1px 0 #ffffff;backdrop-filter:blur(22px) saturate(1.3);text-align:left}
+.jubo-ai-film_chat{position:relative;z-index:2;display:flex;width:100%;max-width:36rem;padding:1rem;flex-direction:column;gap:.85rem;overflow:hidden;border:1px solid rgba(21,23,23,.05);border-radius:2.2rem;background-color:#ffffff;box-shadow:0 34px 90px rgba(120,100,80,.14);text-align:left}
 .jubo-ai-film_chat-bar{display:flex;padding:.25rem .5rem;justify-content:space-between;align-items:center}
 .jubo-ai-film_chat-name{display:flex;margin:0;align-items:center;gap:.5rem;font-family:Poppins,sans-serif;font-size:.9375rem;font-weight:600}
 .jubo-ai-film_chat-logo{display:inline-flex;width:1.6rem;height:.8rem}
@@ -189,7 +189,7 @@
 .jubo-ai-film_chat-thread{display:flex;height:15rem;padding:.5rem;flex-direction:column;gap:.75rem;overflow-y:auto}
 .jubo-ai-film_chat-hello{margin:auto 0;font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Poppins,sans-serif;font-size:1.6rem;font-weight:700;line-height:1.3;text-align:center}
 .jubo-ai-film_chat-prompts{display:flex;justify-content:center;flex-wrap:wrap;gap:.5rem}
-.jubo-ai-film_prompt{padding:.5rem .9rem;border-radius:999px;border:1px solid rgba(21,23,23,.1);background-color:rgba(255,255,255,.75);color:#151717;font-size:.8125rem;line-height:1.2;text-decoration:none}
+.jubo-ai-film_prompt{padding:.55rem 1rem;border-radius:999px;border:1px solid rgba(21,23,23,0);background-color:rgba(21,23,23,.055);color:#151717;font-size:.8125rem;line-height:1.2;text-decoration:none}
 .jubo-ai-film_prompt:hover{border-color:#00a3ae}
 .jubo-ai-film_chat-input{display:flex;padding:.4rem .4rem .4rem 1rem;align-items:center;gap:.75rem;border-radius:999px;background-color:#ffffff;box-shadow:inset 0 0 0 1px rgba(21,23,23,.08)}
 .jubo-ai-film_chat-field{flex:1 1 auto;margin:0;color:rgba(21,23,23,.75);font-size:.875rem;line-height:1.4;text-align:left}
@@ -245,10 +245,15 @@
 .jubo-ai-film_source-f{left:16%}
 }
 @media screen and (max-width: 767px){
+.jubo-ai-film_hero-fin-a{left:22%;width:8%}
+.jubo-ai-film_hero-fin-b{left:33%;width:10%}
+.jubo-ai-film_hero-fin-c{left:45%;width:10%}
+.jubo-ai-film_hero-fin-d{left:57%;width:11%}
+.jubo-ai-film_hero-fin-e{left:70%;width:8%}
 .jubo-ai-film_stage{min-height:auto;padding:5.5rem 1.25rem 4.5rem}
 .jubo-ai-film_hero-glass{height:clamp(16rem,40vh,22rem)}
-.jubo-ai-film_think{top:38%;min-width:auto;padding:.7rem 1.1rem;font-size:.9375rem}
-.jubo-ai-film_hint{top:calc(38% + 3.6rem);padding:0 1rem}
+.jubo-ai-film_think{top:74%;min-width:auto;padding:.7rem 1.1rem;font-size:.9375rem}
+.jubo-ai-film_hint{top:calc(74% + 3.8rem);padding:0 1rem}
 .jubo-ai-film_map{display:grid;height:auto;grid-template-columns:1fr 1fr;gap:1.75rem 1rem}
 .jubo-ai-film_map-lines{display:none}
 .jubo-ai-film_core{position:relative;left:0%;top:0%;width:46%;height:13rem;margin:0 auto;grid-column:1 / 3}
