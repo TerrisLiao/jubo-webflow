@@ -1,6 +1,6 @@
 # Jubo AI：照護知識、資料與應用
 
-狀態：**Webflow Draft `/ai/jubo-ai-v2` 為原生動態頁；2026-10-28 主視覺由長虹玻璃改為光之花瓣（依 Bloom／Verba 參考），未 Publish，待 Terris 在 Designer 預覽目視**。
+狀態：**Webflow Draft `/ai/jubo-ai-v2` 為原生動態頁；2026-10-28 主視覺改為長虹玻璃後的 S 形流動光帶（依 Terris 參考），未 Publish，待 Terris 在 Designer 預覽目視**。
 
 - 工作分支：v1–v6 在 `claude/jubo-ai-agentic-redesign`（[Draft PR #24](https://github.com/TerrisLiao/jubo-webflow/pull/24)）；v7 在平台指定分支 `claude/confident-ramanujan-fivatw`，以 PR #24 head `e6a6c0e` 為基底接續，未改寫原分支。
 - **現行版本：原生動態頁**，來源 `custom-code/jubo-ai-film/`（sections、page.css、head.html、motion.js、build.py）；[分鏡、Webflow 實作、驗收與限制](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。驗收 `tools/verify-jubo-ai-film.js`。
@@ -13,7 +13,11 @@
 - v6 紀錄：[架構、參考與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。v2–v6 與品牌 SVG 保留未改；[v4 歷史驗收](reference/原型v4架構與驗收_2026-10-14.md)、[v3 原交接](reference/codex-v3-交接.md)、[原 Draft 承載紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。
 - 接手先讀 AGENTS.md → current-state → tasks → decisions。
 
-## 光之花瓣主視覺（2026-10-28）
+## 長虹玻璃 S 形光帶（2026-10-28，現行）
+
+Terris 指定主視覺動畫要像兩張參考：細密的長虹玻璃後方，一條粉、藍、青的 S 形柔光帶被折射成階梯狀，沒有面板邊框。WebGL 改為在可見錨點的範圍內畫這條光帶；光帶會呼吸、起伏，S 的方向會緩慢翻轉；游標會牽引光帶，點擊沿光帶送出波動。同日稍早的花瓣做法由此取代。[細節](reference/原生動態頁_IX3與GSAP_2026-10-19.md#9-2026-10-28主視覺改為長虹玻璃後的-s-形光帶)
+
+## 光之花瓣主視覺（2026-10-28，已取代）
 
 Terris 認為 Webflow 上的實際頁面好很多，但不喜歡玻璃設計，附 Bloom、Verba 等參考。長虹玻璃鰭片改為從共同根部長出的半透明花瓣；首屏改為直立花束，思考列放在花的根部；對話框與資料卡改為白卡內帶粉彩光暈。維持無紫色、無圓球。[細節](reference/原生動態頁_IX3與GSAP_2026-10-19.md#8-2026-10-28主視覺由長虹玻璃改為光之花瓣)
 
