@@ -2,6 +2,8 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（光之花瓣） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-28；`motion.js` 固定於 `c9d9086` | 遠端 head 以 push 後讀回為準 |
+| Webflow 頁面資料（光之花瓣） | Draft `/ai/jubo-ai-v2`：head、footer（jsDelivr `c9d9086`＋SRI，CDN 逐位元組一致）、class 樣式（hero-fin a–e、think、hint、shield、record、chat、prompt）、提示文字皆讀回確認 | 2026-10-28 | 畫布未目視；未 Publish |
 | Git（原生動態頁） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-19；`motion.js` 固定於 `4831e19` | 遠端 head 以 push 後讀回為準 |
 | 本機瀏覽器（原生動態頁） | `tools/verify-jubo-ai-film.js`：桌機 scrub 10 pin、1280×600／375 flow、減少動態、無 WebGL 全部通過 | 2026-10-19 | [紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)；IX3 為本機模擬器、WebGL 為軟體繪製 |
 | Webflow 頁面資料（原生動態頁） | **Draft `/ai/jubo-ai-v2` 已覆蓋**：元素結構、head／footer code、3 個 IX3、頁面設定皆讀回確認；footer 指向 jsDelivr `4831e19`＋SRI，CDN 內容逐位元組一致 | 2026-10-19；`6a8e58aec01bc6cda7004324` | [Designer](https://jubo-health.design.webflow.com/?pageId=6a8e58aec01bc6cda7004324)；畫布未目視 |

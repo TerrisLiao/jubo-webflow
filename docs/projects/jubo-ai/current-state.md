@@ -1,5 +1,12 @@
 # 現況
 
+- 文件更新：2026-10-28（Asia/Taipei）。
+- 主視覺：長虹玻璃已改為**光之花瓣**（WebGL 從共同根部長到各 `[data-fin]` 錨點；首屏直立花束、思考列在根部；白卡內粉彩光暈）。色調為青、天空、薄荷、蜜桃，無紫色、無圓球。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#8-2026-10-28主視覺由長虹玻璃改為光之花瓣)
+- Webflow Draft `/ai/jubo-ai-v2`：head、footer（jsDelivr `c9d9086`＋SRI）、18 項 class 樣式更新、首屏提示文字皆已讀回；元素結構與 IX3 未變。**未 Publish**。
+- 驗收：`tools/verify-jubo-ai-film.js` 全部通過；Designer 預覽與真機尚未驗證。
+
+## 原生動態頁（2026-10-19）
+
 - 文件更新：2026-10-19（Asia/Taipei）。
 - **現行版本：原生動態頁**，來源 `custom-code/jubo-ai-film/`。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。故事、文案、配色同 v9–v11。
 - Webflow：Draft `/ai/jubo-ai-v2`（`6a8e58aec01bc6cda7004324`）已依授權覆蓋：Navbar → 原生根元素（11 場景）→ 既有隱藏 legacy-archive → Footer；page head／footer code、3 個 IX3（`i-aaaf8f07`、`i-36b86400`、`i-266dec8e`）。footer 以 jsDelivr 固定 commit `4831e19`＋SRI 載入 `motion.js`。原 Codex v6 原生根元素與其 Three.js footer 已取代。**未 Publish**；`/jubo-ai-v3-preview` 與正式 `/ai/jubo-ai` 未動。

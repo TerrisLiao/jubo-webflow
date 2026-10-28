@@ -76,3 +76,7 @@ Terris 認為 v9 紫色過多、很醜，指示先用 Mobbin 研究現行 AI 公
 ## 原生動態頁（2026-10-19）
 
 Terris：原型的風格與 motion graphic 不夠好，要直接用 IX3／GSAP 在 Webflow 做到 After Effects 等級，並覆蓋 Draft。決定：Draft `/ai/jubo-ai-v2` 以原生元素重建 11 個場景；玻璃鰭片與光由頁面錨點元素定義，單一 WebGL canvas 依可見場景混合錨點並阻尼追隨（連續鏡頭）；IX3 負責 Designer 可見的進場，GSAP 負責 pin／scrub 與互動，目標不重疊；桌機 scrub、手機與矮視窗 flow、減少動態 still。`motion.js` 以 jsDelivr 固定 commit＋SRI 載入（內嵌過長）。取代 v7–v11 的 iframe 單檔原型做法與 Draft 上的 Codex v6 原生版本。未授權 Publish。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。
+
+## 光之花瓣主視覺（2026-10-28）
+
+Terris 不喜歡玻璃設計，附 Bloom、紫色光團節點、AI Popup、Verba 參考。決定取參考的形體語言：半透明層疊花瓣、柔和邊緣光、白卡內粉彩光暈、Bloom 式輸入列；配色維持 2026-10-19 的無紫色裁決（青、天空、薄荷、蜜桃），也不採用參考中的大圓球與虛線圓。取代 v11 以來的長虹玻璃鰭片與磨砂玻璃卡。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#8-2026-10-28主視覺由長虹玻璃改為光之花瓣)

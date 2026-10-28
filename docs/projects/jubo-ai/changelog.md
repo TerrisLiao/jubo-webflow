@@ -115,3 +115,10 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 來源 `custom-code/jubo-ai-film/`：`build.py` 產生 WHTML、head、footer（`--cdn`）、IX3 與本機 preview；新增 `tools/verify-jubo-ai-film.js`。
 - 驗收抓到無 WebGL 時 `fallback()` 暫時性死區錯誤會中斷整支動態；修正於 `4831e19`，footer 改指向該 commit，jsDelivr 內容與 SRI 讀回一致。
 - 未 Publish；`/jubo-ai-v3-preview`、正式 `/ai/jubo-ai` 未動；未改共用 Component 定義、utility、Variables、Slater、站台腳本。[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md)
+
+## 2026-10-28 — 主視覺改為光之花瓣
+
+- WebGL 長虹折射改為花瓣 shader（共同根部、彎曲、不對稱、暖色根部、柔和邊緣光）；背景光降低。
+- 首屏錨點收攏為直立花束，思考列移到根部並改為 Bloom 式輸入列；767 以下保持較寬花束。
+- 對話框與資料卡改為白卡＋粉彩光暈，提示按鈕改為淺灰 pill，資安遮蔽條改為柔光帶，fallback 改為 CSS 花瓣，提示文案改為花瓣。
+- Webflow Draft：head、footer（`c9d9086`＋SRI）、class 樣式、提示文字已更新並讀回；未 Publish。驗收腳本全部通過。

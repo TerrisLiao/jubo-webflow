@@ -13,6 +13,7 @@
 | P0 | **原型 v3：N.Copilot 沉浸式動態敘事**（精緻化 Hero live mode 與對話框、參考 lattice.com（Terris 修正）） | **Codex** | 依 `reference/codex-v3-交接.md` §8 驗收清單 | 完成 2026-10-14：`custom-code/poc/jubo-ai-agentic-v3.html`；[§8 驗收證據](reference/原型v3驗收_2026-10-14.md)、[Lattice 實際觀察](reference/lattice-觀察.md)。1440／991／375 無 JS 錯誤、無水平捲動；四情境與七節點鍵盤驗證、reduced-motion 已檢查。v2 未改；待 Terris 審閱及真機效能 |
 | P1 | 決定 Teal Air `#20EDF1` 等品牌 Webflow Variables 與 Gibson／官網字體策略 | Terris | 寫入 decisions | 待決定：原型暫用 CSS token 與 Poppins＋系統中文字；尚未新增 Variable 或載入 Gibson |
 | P0 | **原生動態頁：覆蓋 Draft `/ai/jubo-ai-v2`（Webflow 元素＋IX3＋GSAP＋WebGL 長虹玻璃）** | Claude | 結構讀回、IX3 與 head／footer 讀回、CDN 內容與 SRI 一致、四情境驗收、未 Publish | 完成 2026-10-19；`tools/verify-jubo-ai-film.js`；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md) |
+| P0 | **主視覺由長虹玻璃改為光之花瓣（Bloom／Verba 參考）** | Claude | 花瓣 shader、首屏花束、白卡粉彩光暈、fallback、Webflow head／footer／樣式讀回、驗收通過、未 Publish | 完成 2026-10-28；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#8-2026-10-28主視覺由長虹玻璃改為光之花瓣) |
 | P1 | 在 Designer 預覽目視原生動態頁並測真機 | Terris | 鏡頭感、IX3 進場、字體、jsDelivr 載入；真機 FPS／捲動 | 待辦 |
 | P1 | 決定頁面腳本長期承載方式 | Terris | jsDelivr 固定 commit 或 Webflow hosted script | 待決定；目前 jsDelivr＋SRI |
 | P1 | 確認 v11 視覺、故事與真機效能 | Terris | 審閱 v11，真機測 FPS／捲動流暢度 | 由原生動態頁取代；v10 技術圖與面板式主視覺不採用 |
