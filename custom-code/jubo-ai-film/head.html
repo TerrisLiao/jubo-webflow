@@ -64,8 +64,8 @@
 .jaf-review[disabled]{background:#007c85;cursor:default}
 @keyframes jaf-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-/* Fallback when WebGL is unavailable: soft CSS petals on the same anchors. */
-.jubo-ai-film_component[data-gl="off"] [data-fin]{border-radius:50% 50% 46% 46%/58% 58% 42% 42%;background:linear-gradient(0deg,rgba(255,230,210,.6),rgba(255,255,255,.7) 45%,rgba(160,222,232,.55));box-shadow:0 0 40px rgba(255,236,220,.6),inset 0 0 0 1px rgba(255,255,255,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);-webkit-mask-image:linear-gradient(0deg,transparent,#000 35%);mask-image:linear-gradient(0deg,transparent,#000 35%)}
+/* Fallback when WebGL is unavailable: CSS reeded stripes over a gradient on the same anchors. */
+.jubo-ai-film_component[data-gl="off"] [data-fin]{background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 1px,rgba(255,255,255,0) 1px 22px),linear-gradient(170deg,rgba(238,140,220,.45),rgba(96,140,245,.55) 50%,rgba(120,215,240,.45));-webkit-mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
 .jaf-aura{position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(60px);background:radial-gradient(closest-side at 30% 45%,rgba(0,178,192,.55),transparent),radial-gradient(closest-side at 70% 55%,rgba(143,208,255,.55),transparent),radial-gradient(closest-side at 50% 75%,rgba(243,217,168,.5),transparent)}
 
 /* Pinned desktop layout. motion.js sets data-film-mode="scrub" only at ≥992×620 without reduced motion. */
