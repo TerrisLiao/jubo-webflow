@@ -147,7 +147,7 @@ void main(){
  });
  // How strongly each scene shows the reeded glass: full in the hero, the questions and the close,
  // quieter behind dense content. data-glass-level on the section overrides this map.
- const LEVEL = { tech: .8, data: .42, secure: .6, caps: .55, suite: .6, amy: .85, ibee: .85, copilot: .62 };
+ const LEVEL = { tech: .8, data: .7, secure: .6, caps: .8, suite: .7, amy: .85, ibee: .85, copilot: .62 };
  scenes.forEach(s => { s.level = parseFloat(s.el.dataset.glassLevel) || LEVEL[s.name] || 1; });
  const cur = Array.from({ length: MAXF }, () => ({ x: 0, y: 0, w: 0, h: 0, a: 0 }));
  const light = { x: innerWidth / 2, y: innerHeight / 2, rx: innerWidth * .4, ry: innerHeight * .3, hue: 0, gain: 0 };
@@ -405,32 +405,34 @@ void main(){
  function data(pinned) {
   const s = sceneOf('data'), el = s.el;
   const count = $('[data-data="count"]', el), num = $('[data-count="30"]', el), unit = $('.jubo-ai-film_count-unit', el), label = $('.jubo-ai-film_count-label', el);
-  const streams = $$('[data-stream]', el), windows = $$('.jubo-ai-film_stream-window', el), tracks = $$('[data-stream-track]', el), labels = $$('.jubo-ai-film_stream-label', el);
+  const deck = $('[data-data="deck"]', el), recs = $$('[data-rec]', el), rows = $$('[data-rec-row]', el), chart = $$('[data-rec-chart] path', el)[0];
   const stats = $('[data-data="stats"]', el), statNums = $$('.jubo-ai-film_stat-num', el), note = $('[data-data="note"]', el);
+  const L = chart.getTotalLength ? chart.getTotalLength() : 200; chart.style.strokeDasharray = L;
+  // Cards are dealt like a hand: stacked in the middle, then spread into the row (offsetLeft ignores transforms).
+  const toMiddle = (i, r) => deck.clientWidth / 2 - (r.offsetLeft + r.offsetWidth / 2);
   if (pinned) {
-   gsap.set(streams, { scaleY: 0 }); gsap.set([...windows, ...labels], { opacity: 0 }); gsap.set([stats, note], { opacity: 0, y: 24 });
-   gsap.set(unit, { opacity: 0, scale: 1.5 }); gsap.set(label, { opacity: 0, yPercent: 40 });
-   const tl = pinTl('data', '340%');
+   gsap.set([stats, note], { opacity: 0, y: 24 }); gsap.set(unit, { opacity: 0, scale: 1.5 }); gsap.set(label, { opacity: 0, yPercent: 40 });
+   const tl = pinTl('data', '320%');
    counter(num, tl, 0, 1.8);
    tl.to(unit, { opacity: 1, scale: 1, duration: .7, ease: 'back.out(2)' }, 1.4)
     .to(label, { opacity: 1, yPercent: 0, duration: .7 }, 1.7)
     .to(count, { scale: .42, y: () => -(count.getBoundingClientRect().top - innerHeight * .02), duration: 1.2, ease: 'power3.inOut' }, 2.6)
     .fromTo(s.light, { '--light-gain': .2 }, { '--light-gain': 1.1, duration: 1.4 }, 2.8)
-    .to(streams, { scaleY: 1, duration: 1.3, stagger: .14, ease: 'expo.out' }, 3.0)
-    .to(windows, { opacity: 1, duration: .8, stagger: .1 }, 3.5)
-    .fromTo(tracks, { yPercent: 0 }, { yPercent: -50, duration: 5.5, ease: 'none' }, 3.5)
-    .to(labels, { opacity: 1, duration: .6, stagger: .12 }, 4.4)
-    .to(stats, { opacity: 1, y: 0, duration: .8 }, 6.2)
-    .to(note, { opacity: 1, y: 0, duration: .8 }, 7.4)
-    .to({}, { duration: .6 }, 8.4);
-   statNums.forEach(n => counter(n, tl, 6.3, 1.4));
+    .fromTo(recs, { opacity: 0, y: 90, x: toMiddle, rotation: i => (i - 2) * 5, scale: .9 }, { opacity: 1, y: 0, scale: 1, duration: .8, stagger: .08, ease: 'power3.out' }, 3.0)
+    .to(recs, { x: 0, rotation: 0, duration: 1.3, stagger: .05, ease: 'expo.inOut' }, 3.9)
+    .fromTo(rows, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .5, stagger: .04 }, 4.9)
+    .fromTo(chart, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1, ease: 'power2.inOut' }, 5.0)
+    .to(stats, { opacity: 1, y: 0, duration: .8 }, 6.1)
+    .to(note, { opacity: 1, y: 0, duration: .8 }, 7.0)
+    .to({}, { duration: .6 }, 7.8);
+   statNums.forEach(n => counter(n, tl, 6.2, 1.4));
   } else {
-   gsap.set(streams, { scaleY: 0 });
    const tl = playTl('data');
    counter(num, tl, 0, 1.6);
-   tl.to(streams, { scaleY: 1, duration: 1.1, stagger: .1, ease: 'expo.out' }, .3);
+   tl.fromTo(recs, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .8, stagger: .1 }, .3)
+    .fromTo(rows, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .4, stagger: .03 }, .8)
+    .fromTo(chart, { strokeDashoffset: L }, { strokeDashoffset: 0, duration: 1 }, 1);
    statNums.forEach(n => counter(n, tl, .8, 1.4));
-   tracks.forEach((t, i) => loop(t, () => { t.style.animation = `jaf-flow ${16 + i * 2}s linear infinite`; t.style.animationPlayState = 'running'; }, () => { t.style.animationPlayState = 'paused'; }));
   }
  }
 
@@ -471,31 +473,44 @@ void main(){
  }
 
  function caps(pinned) {
-  const s = sceneOf('caps'), el = s.el;
-  const items = $$('[data-cap]', el), descs = $$('.jubo-ai-film_cap-desc', el), scanner = $('[data-caps="scanner"]', el);
-  if (!pinned) { items.forEach(i => { i.dataset.on = 'true'; }); return; }
-  gsap.set(items, { opacity: .16 }); gsap.set(descs, { height: 0, opacity: 0, overflow: 'hidden' }); gsap.set(scanner, { scaleX: 0, opacity: 0 });
-  const tops = () => { let y = 0; return items.map(i => { const t = y; y += i.offsetHeight + 5.6; return t; }); };
-  let T = tops();
-  ST.addEventListener('refreshInit', () => { gsap.set(descs, { height: 0 }); T = tops(); });
-  const state = { i: -1 };
-  const tl = pinTl('caps', '380%');
-  tl.eventCallback('onUpdate', () => { const idx = Math.min(items.length - 1, Math.floor((tl.time() - 1.2) / 1.75)); if (idx !== state.i) { state.i = idx; items.forEach((it, k) => { it.dataset.on = String(k === idx); }); } });
-  tl.to(scanner, { scaleX: 1, opacity: 1, height: () => items[0].offsetHeight, duration: .9, ease: 'expo.out' }, .6);
-  items.forEach((it, i) => {
-   const at = 1.2 + i * 1.75;
-   if (i) tl.to(scanner, { y: () => T[i], height: () => items[i].offsetHeight, duration: .9, ease: 'power3.inOut' }, at);
-   tl.to(it, { opacity: 1, duration: .5 }, at + .1).to(descs[i], { height: 'auto', opacity: 1, duration: .7 }, at + .2);
-   if (i < items.length - 1) tl.to(it, { opacity: .16, duration: .5 }, at + 1.6).to(descs[i], { height: 0, opacity: 0, duration: .6 }, at + 1.55);
-  });
-  tl.to({}, { duration: .8 }, 10.2);
+  const s = sceneOf('caps'), el = s.el, items = $$('[data-cap]', el), panels = $$('[data-panel]', el), screen = $('[data-caps="screen"]', el);
+  const uiOf = p => $$('[data-ui]', p), chartOf = p => $$('[data-ui-chart] path', p)[1], barsOf = p => $$('[data-ui-bars] span', p);
+  panels.forEach(p => { const c = chartOf(p); if (c) { const L = c.getTotalLength ? c.getTotalLength() : 300; c.style.strokeDasharray = L; c.dataset.len = L; } });
+  const setOn = i => items.forEach((it, k) => { it.dataset.on = String(k === i); });
+  // One panel's entrance: the screen content builds piece by piece, like a UI demo in a product film.
+  const enter = (tl, p, at) => {
+   tl.fromTo(p, { opacity: 0, y: 24, filter: 'blur(8px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: .6 }, at)
+    .fromTo(uiOf(p), { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .45, stagger: .12 }, at + .2);
+   const c = chartOf(p); if (c) tl.fromTo(c, { strokeDashoffset: +c.dataset.len }, { strokeDashoffset: 0, duration: .9, ease: 'power2.inOut' }, at + .45);
+   const b = barsOf(p); if (b.length) tl.fromTo(b, { scaleY: 0 }, { scaleY: 1, duration: .7, stagger: .08, ease: 'power3.out' }, at + .4);
+   const d = $('[data-draft]', p); if (d) tl.fromTo(d, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: .9, ease: 'none' }, at + .4);
+  };
+  if (pinned) {
+   const tl = pinTl('caps', '380%'), GAP = 1.8, T0 = 1.0, st = { i: -1 };
+   tl.eventCallback('onUpdate', () => { const idx = clamp(Math.floor((tl.time() - T0) / GAP), 0, items.length - 1); if (idx !== st.i) { st.i = idx; setOn(idx); } });
+   tl.fromTo(screen, { opacity: 0, y: 60, scale: .94, filter: 'blur(10px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 1 }, .1);
+   panels.forEach((p, i) => {
+    const at = T0 + i * GAP; enter(tl, p, at);
+    if (i < panels.length - 1) tl.to(p, { opacity: 0, y: -16, filter: 'blur(6px)', duration: .45, ease: 'power2.in' }, at + GAP - .45);
+   });
+   tl.to({}, { duration: .8 }, T0 + panels.length * GAP);
+  } else {
+   // No pin: cycle through the panels while the screen is on screen.
+   let i = 0, timer = 0, cur = null;
+   gsap.set(panels, { opacity: 0 });
+   const show = k => { if (cur) cur.kill(); panels.forEach((p, n) => { if (n !== k) gsap.set(p, { opacity: 0 }); }); setOn(k); cur = gsap.timeline(); enter(cur, panels[k], 0); };
+   show(0);
+   loop(screen, () => { timer = setInterval(() => { i = (i + 1) % panels.length; show(i); }, 3600); }, () => clearInterval(timer));
+   items.forEach((it, k) => it.addEventListener('click', () => { i = k; show(k); }));
+  }
  }
 
  function suite(pinned) {
   const s = sceneOf('suite'), el = s.el, track = $('[data-suite="track"]', el), works = $$('[data-work]', el);
   const run = (tl, w, at) => {
-   const raw = $$('[data-raw] span', w), sum = $$('.jubo-ai-film_sum-item', w);
-   tl.to(raw, { x: () => w.offsetWidth * .2, opacity: 0, scaleX: .3, duration: .9, stagger: .07, ease: 'power2.in' }, at)
+   const raw = $$('[data-raw] span', w), sum = $$('.jubo-ai-film_sum-item', w), card = $('[data-sum-card]', w);
+   tl.fromTo(card, { opacity: 0, x: -30, scale: .95 }, { opacity: 1, x: 0, scale: 1, duration: .8, ease: 'power3.out' }, at + .4)
+    .fromTo(raw, { opacity: 1 }, { opacity: .35, duration: .6, stagger: .06, ease: 'power1.inOut' }, at)
     .fromTo(sum, { opacity: 0, x: -24, filter: 'blur(6px)' }, { opacity: 1, x: 0, filter: 'blur(0px)', duration: .8, stagger: .18 }, at + .7);
   };
   if (pinned) {
@@ -508,7 +523,7 @@ void main(){
  }
 
  function amy(pinned) {
-  const s = sceneOf('amy'), el = s.el, stage = $('[data-amy="stage"]', el), fin = $('[data-amy="fin"]', el), sources = $$('[data-source]', el), report = $$('[data-report]', el);
+  const s = sceneOf('amy'), el = s.el, stage = $('[data-amy="stage"]', el), card = $('[data-amy="card"]', el), fin = $('[data-amy="fin"]', el), sources = $$('[data-source]', el), report = $$('[data-report]', el);
   // Opening like a caregiver film: meet one (illustrative) person first, then see her scattered records become one page.
   const persona = document.createElement('div'); persona.className = 'jaf-persona'; persona.setAttribute('aria-hidden', 'true');
   persona.innerHTML = '<p class="jaf-persona-tag">示意個案</p><p class="jaf-persona-name"><span class="jaf-persona-who">這是林奶奶。'
@@ -519,7 +534,6 @@ void main(){
   arrows.forEach(pa => { const L = pa.getTotalLength ? pa.getTotalLength() : 80; pa.style.strokeDasharray = L; pa.style.strokeDashoffset = L; });
   // Report lines stack like a voice-over: the newest is dark, earlier ones step back, then all return together.
   const setPast = v => report.forEach((r, i) => { r.dataset.past = String(i + 1 <= v && v < report.length); });
-  const toFin = (src, axis) => () => { const a = src.getBoundingClientRect(), b = fin.getBoundingClientRect(); return axis === 'x' ? (b.left + b.width / 2) - (a.left + a.width / 2) : (b.top + b.height / 2) - (a.top + a.height / 2); };
   const build = (tl, t0, gap, intro) => {
    if (intro) {
     tl.fromTo(pTag, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5 }, t0)
@@ -533,10 +547,16 @@ void main(){
    } else tl.fromTo(persona, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .6 }, t0).to(arrows, { strokeDashoffset: 0, duration: .6, stagger: .2, ease: 'power2.inOut' }, t0 + .4);
    tl.fromTo(fin, { scaleY: 0 }, { scaleY: 1, duration: 1.1, ease: 'expo.out' }, t0)
     .fromTo(sources, { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: .6, stagger: .08 }, intro ? t0 - .2 : t0 + .3);
-   sources.forEach((src, i) => tl.to(src, { x: toFin(src, 'x'), y: toFin(src, 'y'), scale: .5, opacity: 0, duration: 1, ease: 'power3.in' }, t0 + 1.5 + i * gap));
+   // Each record card is read in turn: it nudges toward the glass, lights up, then steps back as "read".
+   sources.forEach((src, i) => {
+    const at = t0 + 1.4 + i * gap;
+    tl.to(src, { x: 16, duration: .35, ease: 'power2.out', onStart: () => { src.dataset.on = 'true'; }, onReverseComplete: () => { src.dataset.on = 'false'; } }, at)
+     .to(src, { x: 0, opacity: .55, duration: .5, ease: 'power2.inOut' }, at + .35);
+   });
    const g = gap * 1.4, st = { v: 0 };
    tl.fromTo(s.light, { '--light-gain': .8 }, { '--light-gain': 1.5, duration: .8, yoyo: true, repeat: 1 }, t0 + 1.8)
-    .fromTo(report, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .8, stagger: g }, t0 + 2.6);
+    .fromTo(card, { opacity: 0, y: 40, scale: .95, filter: 'blur(8px)' }, { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: .9 }, t0 + 2.1)
+    .fromTo(report, { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: .7, stagger: g }, t0 + 2.6);
    if (intro) tl.fromTo(st, { v: 0 }, { v: report.length, duration: report.length * g, ease: 'none', onUpdate: () => setPast(st.v) }, t0 + 2.6);
   };
   if (pinned) { const tl = pinTl('amy', '320%'); build(tl, .2, .22, true); tl.to({}, { duration: .8 }); }
@@ -547,7 +567,7 @@ void main(){
   const s = sceneOf('ibee'), el = s.el, from = $$('[data-from]', el), to = $$('[data-to]', el), steps = $$('[data-step]', el), fin = $('[data-ibee="fin"]', el), beam = $('[data-ibee="beam"]', el);
   const setStep = n => steps.forEach((st, i) => { st.dataset.on = String(i <= n); });
   const build = (tl, t0) => {
-   tl.fromTo(from, { opacity: .25 }, { opacity: 1, duration: .5, stagger: .2, onStart: () => setStep(0) }, t0)
+   tl.fromTo(from, { opacity: .25 }, { opacity: 1, duration: .5, stagger: .2, onStart: () => { setStep(0); from.forEach(f => { f.dataset.on = 'true'; }); }, onReverseComplete: () => from.forEach(f => { f.dataset.on = 'false'; }) }, t0)
     .fromTo(beam, { y: 0, opacity: 0 }, { y: () => fin.offsetHeight, opacity: 1, duration: 1.4, ease: 'power1.inOut', onStart: () => setStep(1) }, t0 + 1)
     .to(beam, { opacity: 0, duration: .3 }, t0 + 2.3)
     .fromTo(to, { opacity: .25 }, { opacity: 1, duration: .5, stagger: .25, onStart: () => { setStep(2); to.forEach(t => { t.dataset.on = 'true'; }); }, onReverseComplete: () => { setStep(1); to.forEach(t => { t.dataset.on = 'false'; }); } }, t0 + 2.4);
