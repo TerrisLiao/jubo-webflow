@@ -14,7 +14,7 @@
 | P1 | 決定 Teal Air `#20EDF1` 等品牌 Webflow Variables 與 Gibson／官網字體策略 | Terris | 寫入 decisions | 待決定：原型暫用 CSS token 與 Poppins＋系統中文字；尚未新增 Variable 或載入 Gibson |
 | P0 | **原生動態頁：覆蓋 Draft `/ai/jubo-ai-v2`（Webflow 元素＋IX3＋GSAP＋WebGL 長虹玻璃）** | Claude | 結構讀回、IX3 與 head／footer 讀回、CDN 內容與 SRI 一致、四情境驗收、未 Publish | 完成 2026-10-19；`tools/verify-jubo-ai-film.js`；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md) |
 | P0 | **帶入產品影片情境（Plaud／What Ships 研究）** | Claude | 人物開場、回答附來源、點陣漣漪、光帶層次；Webflow head／footer 讀回；驗收通過；未 Publish | 完成 2026-10-31；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#10-2026-10-31帶入產品影片情境人物開場回答附來源點陣漣漪) |
-| P1 | 能力場景改為功能滾輪、資料場景減少標籤密度 | Claude | 待 Terris 看過 2026-10-31 版後決定 | 提案 |
+| P0 | **五個場景改為產品畫面卡片（motion graphic 組裝）** | Claude | 資料、能力（含功能滾輪）、Suite、Amy、iBee；Webflow section 替換與讀回；驗收通過；未 Publish | 完成 2026-10-31；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#11-2026-10-31五個場景改為產品畫面卡片) |
 | P0 | **主視覺改為長虹玻璃 S 形光帶（Terris 2026-10-28 參考）** | Claude | 細密凹槽階梯折射、S 形光帶呼吸與翻轉、游標與點擊互動、fallback、Webflow head／footer／樣式讀回、驗收通過、未 Publish | 完成 2026-10-28；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#9-2026-10-28主視覺改為長虹玻璃後的-s-形光帶) |
 | P0 | **主視覺由長虹玻璃改為光之花瓣（Bloom／Verba 參考）** | Claude | 花瓣 shader、首屏花束、白卡粉彩光暈、fallback、Webflow head／footer／樣式讀回、驗收通過、未 Publish | 完成 2026-10-28，同日由 S 形光帶取代；[紀錄](reference/原生動態頁_IX3與GSAP_2026-10-19.md#8-2026-10-28主視覺由長虹玻璃改為光之花瓣) |
 | P1 | 在 Designer 預覽目視原生動態頁並測真機 | Terris | 鏡頭感、IX3 進場、字體、jsDelivr 載入；真機 FPS／捲動 | 待辦 |

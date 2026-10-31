@@ -2,6 +2,8 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
+| Git（產品畫面卡片） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-31；`motion.js` 固定於 `db02b60` | 遠端 head 以 push 後讀回為準 |
+| Webflow 頁面資料（產品畫面卡片） | Draft `/ai/jubo-ai-v2`：data、caps、suite、amy、ibee 五個 section 替換並讀回；81 個新 class；`sync`／`sync-fin` tiny 斷點；head、footer（jsDelivr `db02b60`＋SRI，CDN 逐位元組一致） | 2026-10-31 | 畫布未目視；未 Publish |
 | Git（產品影片情境） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-31；`motion.js` 固定於 `10cf693` | 遠端 head 以 push 後讀回為準 |
 | Webflow 頁面資料（產品影片情境） | Draft `/ai/jubo-ai-v2`：head、footer（jsDelivr `10cf693`＋SRI，CDN 逐位元組一致）皆讀回確認；元素、class 樣式、IX3 未變 | 2026-10-31 | 畫布未目視；未 Publish |
 | Git（S 形光帶） | 提交並推送至 `claude/confident-ramanujan-fivatw`；未開 PR | 2026-10-28；`motion.js` 固定於 `07e85d8` | 遠端 head 以 push 後讀回為準 |

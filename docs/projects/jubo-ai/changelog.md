@@ -138,3 +138,9 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 點擊光帶：點陣同心圓漣漪；內容密集的場景降低光帶強度（`data-glass-level` 可覆寫）。
 - Webflow Draft：head、footer（`10cf693`＋SRI）已更新並讀回；元素、class 樣式、IX3 未變；未 Publish。驗收腳本全部通過。
 
+## 2026-10-31 — 五個場景改為產品畫面卡片
+
+- 資料：五張紀錄卡由中央發牌攤開；能力：清單切換＋示意畫面逐項組裝；Suite：原始紀錄卡 → AI 摘要卡；Amy：來源小卡逐一被讀取＋一頁報告卡；iBee：兩張同步卡逐列打勾、膠囊進度條、手機上下排列。
+- page.css 清掉 30 個不再使用的 class 規則，head.html 改為卡片狀態規則。
+- Webflow Draft：五個 section 先插入新版、讀回後再移除舊版；新增 81 個 class；`sync`／`sync-fin` 的 tiny 斷點更新；head、footer（`db02b60`＋SRI）已讀回；未 Publish。驗收腳本全部通過。
+
