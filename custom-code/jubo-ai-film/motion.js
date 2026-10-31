@@ -84,7 +84,7 @@ vec4 ribbon(vec2 u,float t){
 }
 void main(){
  vec2 p=gl_FragCoord.xy;vec4 f=field(p);vec3 col=mix(PAPER,f.rgb,f.a*.16);
- float A=uRegA.x;
+ float A=uRegA.x,ga=0.;
  if(A>.003&&uReg.z>2.&&uReg.w>2.){
   float fw=uRegA.y;
   float sx=(p.x-uReg.x)/fw;float k=floor(sx);float fx=fract(sx)-.5;
@@ -97,10 +97,24 @@ void main(){
   float a=clamp(g.a*A*.92,0.,1.);
   float lip=smoothstep(.3,.5,-fx),edge=smoothstep(.34,.5,fx);
   vec3 rc=g.rgb*(1.+.06*lip)-.03*edge;rc=mix(rc,vec3(1.),.06*lip);
-  col=mix(col,rc,a);
+  col=mix(col,rc,a);ga=a;
   vec2 uo=(p-uReg.xy)/uReg.zw;
   float glass=smoothstep(0.,.2,uo.x)*smoothstep(1.,.8,uo.x)*smoothstep(0.,.2,uo.y)*smoothstep(1.,.8,uo.y);
   col+=(.018*lip-.014*edge)*glass*A;
+ }
+ // Press ripple: rings of fine dots spreading from a click, like a tactile button press.
+ if(uRip.z>.002){
+  float dp=max(uRegA.w,1.);vec2 dv=p-uRip.xy;float r=length(dv);float T=1.-uRip.z;
+  float sp=7.*dp,an=atan(dv.y,dv.x);
+  for(int i=0;i<3;i++){
+   float ri=(T*1.08-float(i)*.13)*.2*uRes.y;
+   if(ri>2.*dp){
+    float n=max(6.,floor(6.2832*ri/sp));float cell=(fract(an/6.2832*n)-.5)*6.2832*ri/n;
+    float dot1=smoothstep(2.1*dp,.7*dp,length(vec2(cell,r-ri)));
+    float fade=uRip.z*(1.-float(i)*.28)*smoothstep(0.,.08,T);
+    col=mix(col,mix(vec3(0.,.55,.6),vec3(1.),smoothstep(.12,.4,ga)),dot1*fade*.9);
+   }
+  }
  }
  col+=(fract(sin(dot(floor(p),vec2(12.9898,78.233)))*43758.5453)-.5)*.018;
  gl_FragColor=vec4(col,1.);
@@ -131,6 +145,10 @@ void main(){
   const fins = []; $$('[data-fin]', el).forEach(f => { fins[+f.dataset.fin] = f; });
   return { el, name: el.dataset.scene, stage: $('[data-stage]', el) || el, fins, light: $('[data-light]', el), w: 0 };
  });
+ // How strongly each scene shows the reeded glass: full in the hero, the questions and the close,
+ // quieter behind dense content. data-glass-level on the section overrides this map.
+ const LEVEL = { tech: .8, data: .42, secure: .6, caps: .55, suite: .6, amy: .85, ibee: .85, copilot: .62 };
+ scenes.forEach(s => { s.level = parseFloat(s.el.dataset.glassLevel) || LEVEL[s.name] || 1; });
  const cur = Array.from({ length: MAXF }, () => ({ x: 0, y: 0, w: 0, h: 0, a: 0 }));
  const light = { x: innerWidth / 2, y: innerHeight / 2, rx: innerWidth * .4, ry: innerHeight * .3, hue: 0, gain: 0 };
  const ptr = { x: innerWidth / 2, y: innerHeight / 2, on: 0, tx: innerWidth / 2, ty: innerHeight / 2, ton: 0 };
@@ -169,7 +187,7 @@ void main(){
     const el = s.fins[i]; if (!el || s.w <= 0) continue;
     const r = el.getBoundingClientRect(); if (r.width < 1 || r.height < 1) continue;
     const o = opacityOf(el, s.el);
-    sw += s.w; x += r.left * s.w; y += r.top * s.w; w += r.width * s.w; h += r.height * s.w; a += o * s.w;
+    sw += s.w; x += r.left * s.w; y += r.top * s.w; w += r.width * s.w; h += r.height * s.w; a += o * s.w * s.level;
    }
    const c = cur[i];
    if (sw > 0) {
@@ -217,7 +235,7 @@ void main(){
   }
   const H = canvas.height;
   gl.uniform4f(U.uReg, reg.x * dpr, H - (reg.y + reg.h) * dpr, reg.w * dpr, reg.h * dpr);
-  gl.uniform4f(U.uRegA, clamp(reg.a), Math.max(12, Math.min(30, reg.w / 26)) * dpr, light.hue, 0);
+  gl.uniform4f(U.uRegA, clamp(reg.a), Math.max(12, Math.min(30, reg.w / 26)) * dpr, light.hue, dpr);
   gl.uniform2f(U.uRes, canvas.width, H);
   gl.uniform1f(U.uTime, time);
   gl.uniform4f(U.uLight, light.x * dpr, H - light.y * dpr, light.rx * dpr, light.ry * dpr);
@@ -233,7 +251,7 @@ void main(){
   think += (thinkTarget - think) * (1 - Math.exp(-dt * 3));
   ptr.x += (ptr.tx - ptr.x) * (1 - Math.exp(-dt * 6)); ptr.y += (ptr.ty - ptr.y) * (1 - Math.exp(-dt * 6));
   ptr.on += (ptr.ton - ptr.on) * (1 - Math.exp(-dt * 4));
-  rip.v = Math.max(0, rip.v - dt * .9);
+  rip.v = Math.max(0, rip.v - dt * .62);
   const moving = direct(dt);
   draw();
   const r = root.getBoundingClientRect(), onScreen = r.bottom > 0 && r.top < vh;
@@ -490,17 +508,39 @@ void main(){
  }
 
  function amy(pinned) {
-  const s = sceneOf('amy'), el = s.el, fin = $('[data-amy="fin"]', el), sources = $$('[data-source]', el), report = $$('[data-report]', el);
+  const s = sceneOf('amy'), el = s.el, stage = $('[data-amy="stage"]', el), fin = $('[data-amy="fin"]', el), sources = $$('[data-source]', el), report = $$('[data-report]', el);
+  // Opening like a caregiver film: meet one (illustrative) person first, then see her scattered records become one page.
+  const persona = document.createElement('div'); persona.className = 'jaf-persona'; persona.setAttribute('aria-hidden', 'true');
+  persona.innerHTML = '<p class="jaf-persona-tag">示意個案</p><p class="jaf-persona-name"><span class="jaf-persona-who">這是林奶奶。'
+   + '<span class="jaf-persona-age">82 歲</span><svg class="jaf-persona-arrow" viewBox="0 0 64 44" fill="none"><path d="M60 6C40 2 20 8 12 34"/><path d="M5 26l7 9 9-6"/></svg></span></p>'
+   + '<p class="jaf-persona-line">她的紀錄，散在六個地方。</p>';
+  stage.prepend(persona);
+  const pName = $('.jaf-persona-name', persona), pLine = $('.jaf-persona-line', persona), pTag = $('.jaf-persona-tag', persona), pAge = $('.jaf-persona-age', persona), arrows = $$('path', persona);
+  arrows.forEach(pa => { const L = pa.getTotalLength ? pa.getTotalLength() : 80; pa.style.strokeDasharray = L; pa.style.strokeDashoffset = L; });
+  // Report lines stack like a voice-over: the newest is dark, earlier ones step back, then all return together.
+  const setPast = v => report.forEach((r, i) => { r.dataset.past = String(i + 1 <= v && v < report.length); });
   const toFin = (src, axis) => () => { const a = src.getBoundingClientRect(), b = fin.getBoundingClientRect(); return axis === 'x' ? (b.left + b.width / 2) - (a.left + a.width / 2) : (b.top + b.height / 2) - (a.top + a.height / 2); };
-  const build = (tl, t0, gap) => {
+  const build = (tl, t0, gap, intro) => {
+   if (intro) {
+    tl.fromTo(pTag, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .5 }, t0)
+     .fromTo(pName, blurIn, { ...clear, duration: .8 }, t0 + .1)
+     .fromTo(pAge, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: .5 }, t0 + .5)
+     .to(arrows, { strokeDashoffset: 0, duration: .6, stagger: .25, ease: 'power2.inOut' }, t0 + .55)
+     .fromTo(pName, { color: '#151717' }, { color: 'rgba(21,23,23,.32)', duration: .4 }, t0 + 1.25)
+     .fromTo(pLine, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .6 }, t0 + 1.25)
+     .to(persona, { opacity: 0, filter: 'blur(10px)', scale: .96, duration: .6, ease: 'power2.in' }, t0 + 2.2);
+    t0 += 2.3;
+   } else tl.fromTo(persona, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .6 }, t0).to(arrows, { strokeDashoffset: 0, duration: .6, stagger: .2, ease: 'power2.inOut' }, t0 + .4);
    tl.fromTo(fin, { scaleY: 0 }, { scaleY: 1, duration: 1.1, ease: 'expo.out' }, t0)
-    .fromTo(sources, { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: .6, stagger: .08 }, t0 + .3);
+    .fromTo(sources, { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: .6, stagger: .08 }, intro ? t0 - .2 : t0 + .3);
    sources.forEach((src, i) => tl.to(src, { x: toFin(src, 'x'), y: toFin(src, 'y'), scale: .5, opacity: 0, duration: 1, ease: 'power3.in' }, t0 + 1.5 + i * gap));
+   const g = gap * 1.4, st = { v: 0 };
    tl.fromTo(s.light, { '--light-gain': .8 }, { '--light-gain': 1.5, duration: .8, yoyo: true, repeat: 1 }, t0 + 1.8)
-    .fromTo(report, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .8, stagger: gap * 1.4 }, t0 + 2.6);
+    .fromTo(report, { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: .8, stagger: g }, t0 + 2.6);
+   if (intro) tl.fromTo(st, { v: 0 }, { v: report.length, duration: report.length * g, ease: 'none', onUpdate: () => setPast(st.v) }, t0 + 2.6);
   };
-  if (pinned) { const tl = pinTl('amy', '250%'); build(tl, .2, .22); tl.to({}, { duration: .8 }); }
-  else { const tl = playTl('amy'); build(tl, 0, .12); }
+  if (pinned) { const tl = pinTl('amy', '320%'); build(tl, .2, .22, true); tl.to({}, { duration: .8 }); }
+  else { const tl = playTl('amy'); build(tl, 0, .12, false); }
  }
 
  function ibee(pinned) {
@@ -537,9 +577,37 @@ void main(){
  const wait = (ms, sig) => new Promise((res, rej) => { const t = setTimeout(res, paused ? 0 : ms); sig.addEventListener('abort', () => { clearTimeout(t); rej(new DOMException('Aborted', 'AbortError')); }, { once: true }); });
  const setState = (st, txt) => { chat.dataset.status = st; status.textContent = txt; thinkTarget = st === 'working' ? 1 : 0; wake(); };
  const scrollChat = () => thread.scrollTo({ top: thread.scrollHeight, behavior: paused ? 'auto' : 'smooth' });
+ // Evidence cards: on wide screens the sources an answer used step out beside the chat and are wired to it,
+ // so "AI organises, people judge" is visible as "every point has a source". Illustrative only.
+ const zone = $('[data-copilot="zone"]');
+ let evidence = null;
+ function clearEvidence() { if (evidence) { evidence.forEach(n => n.remove()); evidence = null; } }
+ function showEvidence(names, anchor) {
+  clearEvidence();
+  if (!zone || zone.clientWidth < 900 || chat.getBoundingClientRect().left - zone.getBoundingClientRect().left < 190) return;
+  const NS = 'http://www.w3.org/2000/svg', zr = zone.getBoundingClientRect(), cr = chat.getBoundingClientRect(), ar = anchor.getBoundingClientRect();
+  const svg = document.createElementNS(NS, 'svg'); svg.setAttribute('class', 'jaf-evi-lines'); svg.setAttribute('aria-hidden', 'true');
+  svg.setAttribute('viewBox', `0 0 ${zr.width} ${zr.height}`);
+  const cards = names.map((n, i) => {
+   const c = document.createElement('div'); c.className = 'jaf-evi'; c.setAttribute('aria-hidden', 'true');
+   c.innerHTML = `<span class="jaf-evi-k">來源 ${i + 1}</span><span class="jaf-evi-n"></span><span class="jaf-evi-bar"></span><span class="jaf-evi-bar jaf-evi-bar-s"></span>`;
+   c.querySelector('.jaf-evi-n').textContent = n;
+   c.style.top = (18 + i * (62 / Math.max(names.length - 1, 1))) + '%';
+   zone.append(c); return c;
+  });
+  zone.append(svg); evidence = [...cards, svg];
+  const tx = cr.left - zr.left - 2, ty = ar.top - zr.top + ar.height / 2;
+  const paths = cards.map(c => {
+   const r = c.getBoundingClientRect(), x0 = r.right - zr.left, y0 = r.top - zr.top + r.height / 2, mx = (x0 + tx) / 2;
+   const pa = document.createElementNS(NS, 'path'); pa.setAttribute('d', `M${x0} ${y0}C${mx} ${y0} ${mx} ${ty} ${tx} ${ty}`); svg.append(pa); return pa;
+  });
+  if (paused || reduced.matches) return;
+  gsap.fromTo(cards, { opacity: 0, x: 40, filter: 'blur(8px)' }, { opacity: 1, x: 0, filter: 'blur(0px)', duration: .7, stagger: .12, ease: 'power3.out' });
+  paths.forEach((pa, i) => { const L = pa.getTotalLength(); gsap.fromTo(pa, { strokeDasharray: L, strokeDashoffset: L }, { strokeDashoffset: 0, duration: .8, delay: .25 + i * .12, ease: 'power2.inOut' }); });
+ }
  async function converse() {
   if (ctl) ctl.abort(); ctl = new AbortController(); const sig = ctl.signal; chatRan = true;
-  const c = prompts[selected]; thread.replaceChildren();
+  const c = prompts[selected]; thread.replaceChildren(); clearEvidence();
   const u = document.createElement('p'); u.className = 'jaf-msg-user'; u.textContent = c.q; thread.append(u);
   const ai = document.createElement('div'); ai.className = 'jaf-msg-ai'; ai.innerHTML = markSvg; const body = document.createElement('div'); ai.append(body); thread.append(ai);
   const st = document.createElement('p'); st.textContent = '正在讀取示意資料…'; body.append(st);
@@ -548,14 +616,20 @@ void main(){
    await wait(900, sig); st.textContent = c.reply;
    const det = document.createElement('details'); const sm = document.createElement('summary'); sm.textContent = '參考資料・' + c.src.length;
    const ul = document.createElement('ul'); c.src.forEach(x => { const li = document.createElement('li'); li.textContent = x; ul.append(li); }); det.append(sm, ul); body.append(det);
+   scrollChat(); await wait(250, sig); showEvidence(c.src, sm);
    await wait(600, sig);
    const out = document.createElement('div'); out.className = 'jaf-out'; const tt = document.createElement('strong'); tt.textContent = c.title; const ol = document.createElement('ol'); out.append(tt, ol); body.append(out);
-   for (const x of c.items) { await wait(420, sig); const li = document.createElement('li'); li.textContent = x; ol.append(li); scrollChat(); }
+   for (const [i, x] of c.items.entries()) {
+    await wait(420, sig); const li = document.createElement('li'); li.textContent = x;
+    const cite = document.createElement('span'); cite.className = 'jaf-cite'; cite.textContent = String(i % c.src.length + 1); cite.title = '來源：' + c.src[i % c.src.length];
+    li.append(cite); ol.append(li); scrollChat();
+   }
    const rv = document.createElement('button'); rv.type = 'button'; rv.className = 'jaf-review'; rv.textContent = '標記為已確認';
    rv.addEventListener('click', () => { rv.textContent = '已由你確認'; rv.disabled = true; setState('reviewed', '已確認'); });
    out.append(rv); setState('ready', '等待你確認'); scrollChat();
   } catch (err) { if (err.name !== 'AbortError') throw err; }
  }
+ addEventListener('resize', clearEvidence, { passive: true });
  $$('[data-prompt]').forEach(btn => btn.addEventListener('click', e => {
   e.preventDefault(); selected = btn.dataset.prompt; field.textContent = prompts[selected].q;
   $$('[data-prompt]').forEach(b => b.setAttribute('aria-pressed', String(b === btn))); converse();
