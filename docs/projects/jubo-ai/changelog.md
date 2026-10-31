@@ -129,3 +129,12 @@ Terris 回覆「有看到 v3」，確認新 Draft 的首屏與對話框可見。
 - 首屏錨點改為較寬分布；fallback 改為 CSS 條紋＋漸層；提示文案改回「玻璃後的光」。
 - 修正：WebGL1 沒有 `tanh`，改用自寫函式（否則 shader 會靜默退回 fallback）。
 - Webflow Draft：head、footer（`07e85d8`＋SRI）、`hero-fin` 的 main 樣式、提示文字已更新並讀回；未 Publish。驗收腳本全部通過。
+
+## 2026-10-31 — 帶入產品影片情境
+
+- 研究 Plaud NotePin S 產品頁 4 支影片與 What Ships 9 支影片（逐格截圖），整理可帶入與不帶入的手法。
+- Amy：示意個案人物開場（手寫箭頭註記年齡）、報告逐段堆疊；pin 改為 320%。
+- N.Copilot：寬螢幕在回答旁展開來源卡片並連線，重點附來源編號。
+- 點擊光帶：點陣同心圓漣漪；內容密集的場景降低光帶強度（`data-glass-level` 可覆寫）。
+- Webflow Draft：head、footer（`10cf693`＋SRI）已更新並讀回；元素、class 樣式、IX3 未變；未 Publish。驗收腳本全部通過。
+

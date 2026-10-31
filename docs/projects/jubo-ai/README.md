@@ -1,6 +1,6 @@
 # Jubo AI：照護知識、資料與應用
 
-狀態：**Webflow Draft `/ai/jubo-ai-v2` 為原生動態頁；2026-10-28 主視覺改為長虹玻璃後的 S 形流動光帶（依 Terris 參考），未 Publish，待 Terris 在 Designer 預覽目視**。
+狀態：**Webflow Draft `/ai/jubo-ai-v2` 為原生動態頁；2026-10-28 主視覺改為長虹玻璃後的 S 形流動光帶；2026-10-31 依 Plaud／What Ships 影片研究加入 Amy 人物開場、N.Copilot 來源卡片、點陣漣漪，未 Publish，待 Terris 在 Designer 預覽目視**。
 
 - 工作分支：v1–v6 在 `claude/jubo-ai-agentic-redesign`（[Draft PR #24](https://github.com/TerrisLiao/jubo-webflow/pull/24)）；v7 在平台指定分支 `claude/confident-ramanujan-fivatw`，以 PR #24 head `e6a6c0e` 為基底接續，未改寫原分支。
 - **現行版本：原生動態頁**，來源 `custom-code/jubo-ai-film/`（sections、page.css、head.html、motion.js、build.py）；[分鏡、Webflow 實作、驗收與限制](reference/原生動態頁_IX3與GSAP_2026-10-19.md)。驗收 `tools/verify-jubo-ai-film.js`。
@@ -12,6 +12,10 @@
 - **Webflow Draft**：[`/ai/jubo-ai-v2` Designer](https://jubo-health.design.webflow.com/?pageId=6a8e58aec01bc6cda7004324) 已依授權覆蓋為原生動態頁，未發布。隔離預覽 `/jubo-ai-v3-preview` 仍為 v6 iframe，未動。
 - v6 紀錄：[架構、參考與驗收](reference/原型v6極簡質感與驗收_2026-10-15.md)。v2–v6 與品牌 SVG 保留未改；[v4 歷史驗收](reference/原型v4架構與驗收_2026-10-14.md)、[v3 原交接](reference/codex-v3-交接.md)、[原 Draft 承載紀錄](reference/Webflow原型預覽草稿_2026-10-14.md)。
 - 接手先讀 AGENTS.md → current-state → tasks → decisions。
+
+## 產品影片情境（2026-10-31，現行）
+
+研究 Plaud NotePin S 產品頁影片與 What Ships 上 9 支穿戴式 AI、照護與健康類發表影片後，帶入三個情境：Amy 先介紹示意個案「這是林奶奶，82 歲」再整理紀錄（Lifelong），N.Copilot 回答旁展開來源卡片並畫線連到回答（Auday），點擊光帶擴散點陣漣漪（Plaud 按鍵）。內容密集的場景降低光帶強度。[研究對照與細節](reference/原生動態頁_IX3與GSAP_2026-10-19.md#10-2026-10-31帶入產品影片情境人物開場回答附來源點陣漣漪)
 
 ## 長虹玻璃 S 形光帶（2026-10-28，現行）
 
