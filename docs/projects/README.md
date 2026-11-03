@@ -11,5 +11,6 @@
 - [新聞中心與內容治理](news/README.md)
 - [系統登入頁](login/README.md)
 - [設計系統維護](design-system/README.md)
+- [解決方案頁市佔數字](solutions-market-share/README.md)
 
 - [共用導覽](navigation/README.md)
