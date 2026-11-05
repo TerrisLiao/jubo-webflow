@@ -8,4 +8,9 @@
 | 2026-11-05 | 主要轉換目標＝開啟下一集直播提醒（YT 小鈴鐺／LINE） | 提案 | SOP 主系統 Banner CTA | — |
 | 2026-11-05 | 預覽使用官網語彙，不用組織預設的 Jubo Health Design System（產品 UI：Roboto／MUI） | 採用 | repo 規範為官網權威；產品 UI 系統與官網規範衝突（漸層、膠囊按鈕） | — |
 | 2026-11-05 | 加入 Email 訂閱：新集數公布時寄信；Hub Hero 與收尾區塊、單集頁簡報表單皆可訂閱 | 採用（使用者指示），寄信工具待定 | 使用者 2026-11-05：「add emails subscriptions … once we have new live events … send email」；[提案 §6-5](design-proposal.md) | — |
+| 2026-11-05 | Hero 日期第一、主題第二 | 採用（使用者指示） | 使用者：「The date is the most important thing, and the second is the theme」 | 第一版 Hero 以節目名為主、下一集為右側卡片 |
+| 2026-11-05 | 刪除「直播日期／接下來半年」區塊 | 採用（使用者指示） | 使用者：細節未定、不想增加維護負擔 | 第一版第 6 區塊 |
+| 2026-11-05 | 智齡同仁一律顯示「智齡科技團隊」，不列個人 | 採用（使用者指示） | 部分同仁已離職 | 第一版逐位列出同仁 |
+| 2026-11-05 | 講師彈窗：姓名、簡介、課程、Facebook／網站／其他課程連結 | 採用（使用者指示） | [提案 §6-2](design-proposal.md) | — |
+| 2026-11-05 | 講師與日期以 Canva 宣傳圖為準 | 採用 | 使用者指示講師資料在 Canva；EP22 日期因此更正為 11/18 | 先前由 YouTube 上架日推定的 10/21 |
 | 2026-11-05 | 四個主題系列分類 | 提案 | [集數資料](reference/集數資料.md) | — |

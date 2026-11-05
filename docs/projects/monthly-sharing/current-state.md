@@ -6,7 +6,8 @@
 - 採用版本與範圍：無；[設計提案](design-proposal.md) 待確認。
 - 來源分支、提交：`claude/christmas-sharing-page-3u67cr`。
 - 已驗證：預覽頁在本機 Chromium 1440px 與 390px 無水平溢出、無 console 錯誤（2026-11-05）。集數、講師、日期取自公開來源，見 [集數資料](reference/集數資料.md)。
-- 未驗證：Webflow 日期篩選行為、Email 寄信工具與表單／HubSpot 串接、預覽中「聊天室留言」文案、EP22 直播日（推定）。
+- 講師、單位、直播日：2026-11-05 由 Canva `DAGLvkPY5mw` 讀取，見 [集數資料](reference/集數資料.md)。
+- 未驗證：Webflow 日期篩選行為、Email 寄信工具與表單／HubSpot 串接、預覽中「聊天室留言」文案、講師照片授權與原圖、EP02 講師姓名。
 
 ## 目前網站上的三三分享會
 
