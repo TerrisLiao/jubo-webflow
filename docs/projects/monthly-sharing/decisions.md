@@ -7,4 +7,5 @@
 | 2026-11-05 | Hub＋CMS 單集頁兩層結構，集數與講師進 CMS | 提案 | SOP「官網專區」「每集 Landing page」；[提案 §6](design-proposal.md) | 每集一篇 news 文章 |
 | 2026-11-05 | 主要轉換目標＝開啟下一集直播提醒（YT 小鈴鐺／LINE） | 提案 | SOP 主系統 Banner CTA | — |
 | 2026-11-05 | 預覽使用官網語彙，不用組織預設的 Jubo Health Design System（產品 UI：Roboto／MUI） | 採用 | repo 規範為官網權威；產品 UI 系統與官網規範衝突（漸層、膠囊按鈕） | — |
+| 2026-11-05 | 加入 Email 訂閱：新集數公布時寄信；Hub Hero 與收尾區塊、單集頁簡報表單皆可訂閱 | 採用（使用者指示），寄信工具待定 | 使用者 2026-11-05：「add emails subscriptions … once we have new live events … send email」；[提案 §6-5](design-proposal.md) | — |
 | 2026-11-05 | 四個主題系列分類 | 提案 | [集數資料](reference/集數資料.md) | — |

@@ -7,4 +7,4 @@
 | staging | 未發布 | — | — |
 | production | 未發布 | — | — |
 
-預覽 Artifact：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>（Version 1，本機模擬；縮圖取自 YouTube，非 Webflow Assets）。預覽原始檔不進 repo（含 YouTube 縮圖素材），可由 Artifact 讀回。
+預覽 Artifact：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>（Version 2，本機模擬；縮圖取自 YouTube，非 Webflow Assets）。預覽原始檔不進 repo（含 YouTube 縮圖素材），可由 Artifact 讀回。
