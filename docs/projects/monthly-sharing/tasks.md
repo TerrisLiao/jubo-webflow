@@ -3,8 +3,9 @@
 | 優先級 | 工作 | 驗收條件 | 狀態／證據 |
 |---|---|---|---|
 | P0 | 在 Designer 把兩個 CMS Template page 設為 Draft（API 設定無效） | 讀回 `draft: true`；全站發布不會帶出未設計的單集頁 | 未開始，需 Designer |
-| P0 | Designer Preview 驗收 `/monthly-sharing` | 四斷點排版正常；Hero 顯示 EP22（11.18）；集數庫 9 筆＋分頁；講師卡片照片與文字正確；IX3 進場與 hover 有播放；**點一位講師只開他自己的彈窗**，×／背景可關閉 | 未開始（Designer App 未連線） |
-| P0 | 講師彈窗連結：三個連結設 Conditional Visibility（欄位 is set）後取消隱藏 | 智齡科技團隊顯示「網站」，其他講師不顯示空連結 | 未開始，需 Designer |
+| P0 | Designer Preview 驗收 `/jubo-33-live-stream` | 四斷點排版正常；Hero「11.18」底部不再被切；集數卡 EP 標籤在右上；分類顯示四項新名稱；集數庫 9 筆＋「上一頁／下一頁」玻璃按鈕可切頁（需 staging，Designer 預覽不跑腳本）；FAQ 可開合、樣式同首頁；講師照片置中 | 未開始（Designer App 未連線） |
+| P2 | 講師彈窗重新開啟（資料夠了再做）：面板取消隱藏、依備份重建 3 個 IX3、連結設 Conditional Visibility | 點一位講師只開他自己的彈窗 | 2026-11-06 使用者要求先關閉 |
+| P1 | 決定集數 Template page 網址是否改成 `/jubo-33-live-stream/epXX`（需 Designer 改 collection slug） | 使用者決定 | 未開始 |
 | P0 | 決定 Email 寄信工具（HubSpot 或替代），表單串接 | 提案 §6-5；送出後進名單 | 待審 |
 | P1 | 設計集數 Template page（`/monthly-sharing/ep19` 等） | 依預覽 Artifact 單集頁；含簡報索取表單 | 未開始 |
 | P1 | 講師照片原圖（≥400 px）與官網使用授權；講師簡介由講師提供後替換 CMS「簡介」 | 每位外部講師一筆完整資料 | 未開始（目前為 Canva 縮圖與依事實寫的一句話） |
