@@ -7,7 +7,7 @@
 | 2026-11-05 | Hub＋CMS 單集頁兩層結構，集數與講師進 CMS | 提案 | SOP「官網專區」「每集 Landing page」；[提案 §6](design-proposal.md) | 每集一篇 news 文章 |
 | 2026-11-05 | 主要轉換目標＝開啟下一集直播提醒（YT 小鈴鐺／LINE） | 提案 | SOP 主系統 Banner CTA | — |
 | 2026-11-05 | 預覽使用官網語彙，不用組織預設的 Jubo Health Design System（產品 UI：Roboto／MUI） | 採用 | repo 規範為官網權威；產品 UI 系統與官網規範衝突（漸層、膠囊按鈕） | — |
-| 2026-11-05 | 加入 Email 訂閱：新集數公布時寄信；Hub Hero 與收尾區塊、單集頁簡報表單皆可訂閱 | 採用（使用者指示），寄信工具待定 | 使用者 2026-11-05：「add emails subscriptions … once we have new live events … send email」；[提案 §6-5](design-proposal.md) | — |
+| 2026-11-05 | 加入 Email 訂閱：新集數公布時寄信；Hub Hero 與收尾區塊、單集頁簡報表單皆可訂閱 | **已取消**（2026-11-06 使用者：「email 這個幫我移除，我們沒有寄信，主要推廣到 LINE」） | 使用者 2026-11-05：「add emails subscriptions … once we have new live events … send email」；[提案 §6-5](design-proposal.md) | — |
 | 2026-11-05 | Hero 日期第一、主題第二 | 採用（使用者指示） | 使用者：「The date is the most important thing, and the second is the theme」 | 第一版 Hero 以節目名為主、下一集為右側卡片 |
 | 2026-11-05 | 刪除「直播日期／接下來半年」區塊 | 採用（使用者指示） | 使用者：細節未定、不想增加維護負擔 | 第一版第 6 區塊 |
 | 2026-11-05 | 智齡同仁一律顯示「智齡科技團隊」，不列個人 | 採用（使用者指示） | 部分同仁已離職 | 第一版逐位列出同仁 |
@@ -17,3 +17,7 @@
 | 2026-11-06 | 新 class 前綴用 `sansan-`（三三），取代提案 §5 的 `monthly-sharing_` | 採用 | 名稱短、全站唯一；符合 Client-First `folder_element` | 提案 §5 前綴 |
 | 2026-11-06 | 講師彈窗用 IX3 點擊互動＋隱藏面板 | 採用（技術限制） | 站上 Modal／Popover 未啟用（API 回「Modals are not enabled」「Popovers are not enabled」） | 預覽中的原生 dialog |
 | 2026-11-05 | 四個主題系列分類 | 提案 | [集數資料](reference/集數資料.md) | — |
+| 2026-11-06 | 移除 Email 訂閱，提醒管道改為 LINE 官方帳號（＋YouTube 小鈴鐺） | 採用（使用者指示） | 使用者：「email 這個幫我移除 我們沒有寄信 主要推廣到 line 就好」 | 2026-11-05 Email 訂閱 |
+| 2026-11-06 | 主題系列改為四個分類：機構經營管理／照護實務技巧／長照評鑑準備／AI與數位工具 | 採用（使用者指示） | 使用者截圖回饋 | 原四個主題系列名稱 |
+| 2026-11-06 | Hub 網址改為 `/jubo-33-live-stream`；單集頁也要一致（`/jubo-33-live-stream/epXX`） | 採用（使用者指示），單集頁待 Designer 改 collection slug | 使用者：「url 改為 jubo 33 live stream」「幫我改」 | `/monthly-sharing` |
+| 2026-11-06 | 講師彈窗先關閉 | 採用（使用者指示） | 使用者：現在還沒有太多資訊可以放 | 講師彈窗 |

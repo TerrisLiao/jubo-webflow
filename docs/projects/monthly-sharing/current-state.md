@@ -14,10 +14,10 @@
 - **分類篩選**：系列卡片連到集數庫，集數卡片上有系列標籤；不做互動篩選（需 Finsweet 或額外程式）。
 - **Hero 倒數天數與當月月曆**：改成不需維護的靜態「每月第三個週三」月曆卡；不做倒數。
 - **日期大字**：Webflow 日期格式做不出「11.18」，改用 CMS 欄位「日期大字」手填。
-- **Email 表單**：Webflow 原生表單收件，尚未串接寄信工具；placeholder 為保留屬性無法用 API 設定。送出的資料存在 Webflow 的表單紀錄（Site settings → Forms → Form submissions，可匯出 CSV），通知信寄到站台設定的收件信箱；不會自動進任何名單、也不會自動寄信。
+- **Email 訂閱已移除**（2026-11-06 使用者指示）：表單、Hero「Email 通知我」連結已刪；結尾區改為 LINE 優先（加入 LINE 按鈕在前、QR code、訂閱 YouTube），錨點改 `#line`；FAQ 第二題改為「怎麼收到開播提醒？」（LINE＋YouTube 小鈴鐺）。
 - **分頁按鈕**：Glass Button 依規範只能用 Component，而 Component 本身是 `<a>`，不能放進原生 Pagination 的 `<a>`。做法：原生 Pagination 加 `sansan-episodes_pagination-native`（display:none），下方放兩個 Glass Button，由頁面 footer 的 `sansan-pager` 腳本把原生分頁網址搬過去（正本 `custom-code/monthly-sharing/sansan-pager.js`）。
 - **FAQ**：沿用首頁的 `faq_component`／`solutions-basic-model_accordion`／`faq5_*` 結構，開合由全站 `jubo-faq.js`＋`jubo-motion.css` 處理。圖示用內嵌 SVG（DOM 元素），不是 HtmlEmbed；沒有 FAQPage schema。
-- **單集頁網址**：Hub 改名後，集數 Template page 仍是 `/monthly-sharing/ep22`（collection slug 無法用 API 改）。要一致需在 Designer 改 collection slug，或保留現狀。
+- **單集頁網址**：使用者要求改成 `/jubo-33-live-stream/epXX`。Data API 沒有改 collection slug 的動作，改 Template page slug 會被忽略（讀回仍 `/monthly-sharing`），需在 Designer：CMS → 三三分享會集數 → Settings → Collection URL 改為 `jubo-33-live-stream`。
 
 ## 網站上原有的三三分享會
 
