@@ -4,3 +4,4 @@
 - 2026-11-05：依使用者要求加入 Email 訂閱（Hub Hero、收尾區塊、單集頁勾選、FAQ、時間線）；提案新增 §6-5 名單工具選項與每集 Email 節奏。預覽 Artifact 更新為 Version 2。
 - 2026-11-05：依使用者回饋改第二版：Hero 日期第一、主題第二；刪除直播日期區塊；智齡同仁合併為「智齡科技團隊」；新增講師彈窗。從 Canva `DAGLvkPY5mw` 取得 EP01–EP22 講師、單位與日期，[集數資料](reference/集數資料.md) 全面更新；EP22 直播日更正為 2026-11-18。預覽 Artifact 更新為 Version 3（14 位外部講師大頭照取自 Canva 縮圖，裁成正方形）。
 - 2026-11-06：依使用者指示在 Webflow 建立草稿頁 `/monthly-sharing`（draft）、兩個 CMS collection（37 筆草稿項目）、34 個素材、8 個區塊與 18 個 IX3 互動；未 Publish。Designer App 未連線，僅 Data API 讀回，Preview 驗收待做。詳見 [deployment.md](deployment.md)。
+- 2026-11-06：使用者回報清單全空；原因為項目是草稿。37 筆改為可發布（未發布），隱藏三個預設空狀態；記錄 Template page 無法用 API 設 Draft 的風險。

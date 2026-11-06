@@ -2,6 +2,7 @@
 
 | 優先級 | 工作 | 驗收條件 | 狀態／證據 |
 |---|---|---|---|
+| P0 | 在 Designer 把兩個 CMS Template page 設為 Draft（API 設定無效） | 讀回 `draft: true`；全站發布不會帶出未設計的單集頁 | 未開始，需 Designer |
 | P0 | Designer Preview 驗收 `/monthly-sharing` | 四斷點排版正常；Hero 顯示 EP22（11.18）；集數庫 9 筆＋分頁；講師卡片照片與文字正確；IX3 進場與 hover 有播放；**點一位講師只開他自己的彈窗**，×／背景可關閉 | 未開始（Designer App 未連線） |
 | P0 | 講師彈窗連結：三個連結設 Conditional Visibility（欄位 is set）後取消隱藏 | 智齡科技團隊顯示「網站」，其他講師不顯示空連結 | 未開始，需 Designer |
 | P0 | 決定 Email 寄信工具（HubSpot 或替代），表單串接 | 提案 §6-5；送出後進名單 | 待審 |

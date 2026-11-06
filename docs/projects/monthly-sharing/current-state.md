@@ -2,7 +2,7 @@
 
 - 文件更新日期：2026-11-06
 - Webflow：**草稿頁已建立**（`/monthly-sharing`，Page ID `6aed901905a96260ffcc4595`，`draft: true`，未發布）。Data API 寫入並讀回；Designer App 未連線，未做 Preview 驗收。
-- CMS：「三三分享會講師」15 筆、「三三分享會集數」22 筆，全部草稿。集數 Template page 已自動產生但未設計。
+- CMS：「三三分享會講師」15 筆、「三三分享會集數」22 筆，2026-11-06 已由草稿改為可發布（Staged，未發布）。集數與講師 Template page 已自動產生、未設計，且 API 無法設為 Draft（見 deployment.md 風險）。
 - 來源分支：`claude/christmas-sharing-page-3u67cr`。
 - 設計依據：[設計提案](design-proposal.md) 第二版＋預覽 Artifact Version 3。
 - 詳細部署與限制：[deployment.md](deployment.md)；ID 與回退：[2026-11-06-build.json](../../../custom-code/monthly-sharing/2026-11-06-build.json)。
