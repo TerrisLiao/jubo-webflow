@@ -51,3 +51,9 @@
 - **移除 Email 訂閱**（使用者：「我們沒有寄信，主要推廣到 LINE」）：刪除表單 slot `893701ff-…6523`（含 Webflow 表單「Email Form」）與 Hero 連結「Email 通知我 →」；結尾區說明改為 LINE＋YouTube，「加入 LINE」玻璃按鈕移到第一顆，section DOM id `subscribe` → `line`；Hero 空狀態文字改為加入 LINE；FAQ「Email 會寄些什麼？」改為「怎麼收到開播提醒？」。讀回全頁已無「Email」字樣。`sansan-subscribe_form`／`_input`／`_note`、`.form-submit-btn.is-inline` 已無元素使用，保留未刪。
 - **單集頁網址未改成**：`update_page_settings` 對集數 Template page 改 slug 被忽略（讀回 `publishedPath: /monthly-sharing`）；designer_tool 也沒有 collection 設定動作。需在 Designer 手動改 Collection URL。
 
+## 2026-11-06 第四輪：連結無反應、eyebrow 靠左
+
+- **集數卡片／最新一集按鈕點了沒反應**：建頁時 WHTML 的 `href="#"` 被存成自訂屬性，與 CMS 連結綁定並存（對照 `/news` 正常的 CMS 卡片，attributes 為空）。已把 `sansan-ep_card`、`sansan-feat_media`、`sansan-feat_link` 的自訂屬性換成 `target=_blank`、`rel=noopener`，並重新綁定「直播／回放連結」；隱藏中的講師彈窗三個連結同樣處理。分類卡片改用 Webflow「Page section」連結指向 `#episodes` 區塊，行事曆與播放清單改為正式 URL 連結（新分頁）。讀回全頁已無殘留的 `href` 自訂屬性。
+- **分頁玻璃按鈕**：腳本邏輯用 Playwright 模擬 Webflow 分頁 HTML 測過四種情況（只有下一頁／兩者／只有上一頁／單頁），結果正確。Designer 與 Preview 不執行頁面／全站自訂程式碼，所以在 Designer 裡點分頁按鈕與 FAQ 都不會有反應，必須發布到 staging 才能驗證；頁面為 draft 時 staging 也看不到。
+- **FAQ eyebrow 靠左**：FAQ 標題區由 `section-header_wrapper`（全站共用、置中）改用 `sansan-faq_head`（靠左），h2 移除 `text-align-center`。其他區塊的 eyebrow 原本就靠左。
+
