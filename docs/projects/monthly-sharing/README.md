@@ -1,6 +1,6 @@
 # 三三分享會節目專區
 
-狀態：**設計提案，待 Terris 確認**；未動 Webflow，未發布。
+狀態：**Webflow 草稿頁已建立**（`/monthly-sharing`，draft，未發布），待 Designer Preview 驗收。
 
 三三分享會（每月第三個週三 12:00 YouTube 直播）的官網節目專區（Hub）＋每集 CMS 單集頁。依使用者 2026-11-05 提供的 [行銷 SOP](reference/行銷執行SOP.md)「事前宣傳」第一、二項建立。
 

@@ -1,16 +1,22 @@
 # 現況
 
-- 文件更新日期：2026-11-05
-- Webflow 驗證日期與方式：未讀回 Designer。正式站以 HTTP 讀取 `/`、`/community`、`/news/monthly-third-wednesday-sharing-202607`、2025 Q1–Q3 活動頁（2026-11-05），只作視覺語彙與內容來源。
-- 頁面 slug／Page ID：尚未建立。提案 `/monthly-sharing`（Hub）與 `/monthly-sharing/<ep>`（CMS Template）。
-- 採用版本與範圍：無；[設計提案](design-proposal.md) 待確認。
-- 來源分支、提交：`claude/christmas-sharing-page-3u67cr`。
-- 已驗證：預覽頁在本機 Chromium 1440px 與 390px 無水平溢出、無 console 錯誤（2026-11-05）。集數、講師、日期取自公開來源，見 [集數資料](reference/集數資料.md)。
-- 講師、單位、直播日：2026-11-05 由 Canva `DAGLvkPY5mw` 讀取，見 [集數資料](reference/集數資料.md)。
-- 未驗證：Webflow 日期篩選行為、Email 寄信工具與表單／HubSpot 串接、預覽中「聊天室留言」文案、講師照片授權與原圖、EP02 講師姓名。
+- 文件更新日期：2026-11-06
+- Webflow：**草稿頁已建立**（`/monthly-sharing`，Page ID `6aed901905a96260ffcc4595`，`draft: true`，未發布）。Data API 寫入並讀回；Designer App 未連線，未做 Preview 驗收。
+- CMS：「三三分享會講師」15 筆、「三三分享會集數」22 筆，全部草稿。集數 Template page 已自動產生但未設計。
+- 來源分支：`claude/christmas-sharing-page-3u67cr`。
+- 設計依據：[設計提案](design-proposal.md) 第二版＋預覽 Artifact Version 3。
+- 詳細部署與限制：[deployment.md](deployment.md)；ID 與回退：[2026-11-06-build.json](../../../custom-code/monthly-sharing/2026-11-06-build.json)。
 
-## 目前網站上的三三分享會
+## 與設計稿的差異（Webflow 限制或刻意簡化）
 
-- 每集是一篇 news 文章，分類「活動講座」（例：EP19 `/news/monthly-third-wednesday-sharing-202607`），直播連結指向 `jubo-health.tw/monthly-sharing-*` 短網址。
-- EP19 頁沒有簡報索取表單，講師資訊只有一行。
-- 沒有節目總頁；`/community` 的 YouTube 卡寫「三三分享會／每月直播」，連到頻道。
+- **講師彈窗**：站上未開啟 Webflow Modal／Popover 功能，改用 IX3 點擊互動開關每張卡片旁的隱藏面板（`filterContext` 相對於被點的元素）。沒有焦點鎖定與 Esc 關閉；點背景或 × 關閉。
+- **講師彈窗外部連結**（Facebook／網站／其他課程）已綁欄位但**先隱藏**：API 無法設定「欄位有值才顯示」的條件可見性，需在 Designer 對三個連結各設 Conditional Visibility（欄位 is set）後再打開。
+- **彈窗未列「在三三分享會的課程」**：需反向參照或巢狀清單，維護成本高，先不做。
+- **主題系列篩選**：系列卡片連到集數庫，集數卡片上有系列標籤；不做互動篩選（需 Finsweet 或額外程式）。
+- **Hero 倒數天數與當月月曆**：改成不需維護的靜態「每月第三個週三」月曆卡；不做倒數。
+- **日期大字**：Webflow 日期格式做不出「11.18」，改用 CMS 欄位「日期大字」手填。
+- **Email 表單**：Webflow 原生表單收件，尚未串接寄信工具；placeholder 為保留屬性無法用 API 設定。
+
+## 網站上原有的三三分享會
+
+每集仍是一篇 news 文章（例：EP19 `/news/monthly-third-wednesday-sharing-202607`），未調整、未轉址。

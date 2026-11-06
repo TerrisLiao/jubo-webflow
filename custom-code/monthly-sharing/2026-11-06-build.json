@@ -1,0 +1,172 @@
+{
+ "round": "2026-11-06 第一版：/monthly-sharing 草稿頁、CMS、IX3",
+ "site": "69ec2b02daa2e79f1da8772a",
+ "page": {
+  "id": "6aed901905a96260ffcc4595",
+  "slug": "/monthly-sharing",
+  "title": "三三分享會（草稿）",
+  "draft": true,
+  "createdBy": "create_page duplicateOf 6acde90ba4c1734c0e94b297（/community），刪除 section_community-hero，新增 Footer instance 49dc6ac9-f5d9-94a6-8605-1575b510cd83"
+ },
+ "authorization": "使用者 2026-11-06：「現在幫我新增一頁到 webflow 然後使用 ix3 等等專業的設計來製作」。未授權 Publish；頁面 draft:true，CMS 項目 isDraft:true。",
+ "method": "Data API（Designer App 未連線）：data_pages_tool、data_cms_tool、data_assets_tool（S3 presigned upload）、data_whtml_builder、data_element_builder、data_element_settings_tool、data_component_tool/props、data_style_tool、data_interactions_tool。",
+ "cms": {
+  "speakers": {
+   "id": "6aed903bb9132d6f3c23721b",
+   "slug": "monthly-sharing-speakers",
+   "items": 15,
+   "fields": {
+    "照片": "zhao-pian",
+    "職稱": "zhi-cheng",
+    "單位": "dan-wei",
+    "簡介": "jian-jie",
+    "Facebook": "facebook",
+    "網站": "wang-zhan",
+    "其他課程": "qi-ta-ke-cheng",
+    "智齡團隊": "zhi-ling-tuan-dui",
+    "排序": "pai-xu"
+   }
+  },
+  "episodes": {
+   "id": "6aed903bb9132d6f3c237251",
+   "slug": "monthly-sharing",
+   "items": 22,
+   "fields": {
+    "集數": "ji-shu",
+    "直播時間": "zhi-bo-shi-jian",
+    "日期大字": "ri-qi-da-zi",
+    "主題系列": "zhu-ti-xi-lie",
+    "狀態": "zhuang-tai",
+    "封面圖": "feng-mian-tu",
+    "講師": "jiang-shi",
+    "直播／回放連結": "zhi-bo-hui-fang-lian-jie",
+    "一句話介紹": "yi-ju-hua-jie-shao",
+    "卡關情境": "qia-guan-qing-jing",
+    "講綱": "jiang-gang",
+    "段落摘要": "duan-luo-zhai-yao",
+    "開放簡報": "kai-fang-jian-bao",
+    "簡報下載連結": "jian-bao-xia-zai-lian-jie",
+    "精華文章": "jing-hua-wen-zhang"
+   },
+   "options": {
+    "狀態": {
+     "預告": "5f7be9c832d42aa3bea4721bda7667d9",
+     "已播出": "9d7147a1853fa9c3ceaa64763a5609da"
+    },
+    "主題系列": {
+     "評鑑準備": "62a2d0c201d374303ba521452835b339",
+     "照護實務": "fb86678966c9c37656acc8df618860f4",
+     "AI 與數位工具": "f61caf2803dea1189a22423fd52fdbc2",
+     "經營管理與職場": "fd624fbfc269a80133e2132c4b7a252f"
+    }
+   }
+  },
+  "itemsDraft": true
+ },
+ "collectionLists": {
+  "hero-next": {
+   "wrapper": "efa9ba81-11ee-2fff-f354-628912259159",
+   "query": "狀態=預告，直播時間升冪，limit 1"
+  },
+  "hero-cover": {
+   "wrapper": "59ce2b82-7e26-78f0-6468-eb5fbedb1ab6",
+   "query": "同上；空狀態隱藏"
+  },
+  "latest": {
+   "wrapper": "9e27b2f6-5b92-d642-d6e8-65c74019c269",
+   "query": "狀態=已播出＋封面圖已設定，直播時間降冪，limit 1"
+  },
+  "archive": {
+   "wrapper": "6168230b-91c6-a7cf-4ff9-ef97d7f4337f",
+   "query": "同上，offset 1，每頁 9 筆"
+  },
+  "speakers": {
+   "wrapper": "5400a87e-952a-c3e4-fa56-0031b5d0e46c",
+   "query": "排序降冪"
+  }
+ },
+ "sections": {
+  "hero": "0da436bd-e55c-8bdc-7cea-eab28a45bba3",
+  "about": "a1795f9c-9d9a-5d0d-906b-08a2f2a45530",
+  "tracks": "81b00c09-59ed-ed94-e8ab-0c04a13a174d",
+  "episodes": "e597718c-f586-69fc-4cb7-125443444661",
+  "speakers": "e7abb5bd-7635-011d-ce06-20a33ee725d6",
+  "how": "2fcbed6e-0c0d-9aa4-a7a7-682eb6d017e1",
+  "faq": "537d5df3-5726-0853-04d0-0222852e7ef6",
+  "subscribe": "893701ff-9251-bbfa-dfd3-d699322c652e"
+ },
+ "form": {
+  "wrapper": "6b6adaec-7b98-7ea6-a20c-11c745b54aa3",
+  "name": "Email Form（Webflow 原生；寄信工具未串接）"
+ },
+ "componentsUsed": {
+  "Navbar": "24d484de-b8de-0ddb-97f8-bf58fc68c6bf",
+  "Footer": "bf559d46-0de7-0e5d-3110-35684e2ba87f",
+  "CTA Button": "d130d393-247a-e6a4-a154-913119716033",
+  "Glass Button": "71b87018-1f96-f193-c4a1-6b778017a800",
+  "Section Tag": "d7f8ec62-5aab-2d51-89d6-cbdddcf80ff7",
+  "Page Gradient BG": "028a66b0-ce4b-3582-1f1f-ec3c73bf47fd"
+ },
+ "newStyles": "所有新 class 皆為 sansan-* 前綴（section_sansan-*、sansan-hero_*、sansan-about_*、sansan-tracks_*、sansan-episodes_*、sansan-feat_*、sansan-ep_*、sansan-speakers_*、sansan-sp_*、sansan-how_*、sansan-faq_*、sansan-subscribe_*）＋ combo .form-submit-btn.is-inline。未修改既有 class、Variables、Component。",
+ "interactions": {
+  "i-609a616a": "Hero intro（load）",
+  "i-5aaee669": "About cards",
+  "i-0450ce34": "Series cards",
+  "i-784be094": "Latest episode",
+  "i-acf1c11d": "Episode grid",
+  "i-2ad9416e": "Speaker wall",
+  "i-e69645b9": "About head",
+  "i-888b7d81": "Series head",
+  "i-a8d961ad": "Episodes head",
+  "i-115db423": "Speakers head",
+  "i-83083b2a": "Timeline",
+  "i-fa9a7307": "FAQ",
+  "i-ad4d2972": "Subscribe",
+  "i-e08736e9": "Speaker popup open（click，next-sibling-of trigger）",
+  "i-f7b576c4": "Speaker popup close button（contains trigger）",
+  "i-9bc35d93": "Speaker popup backdrop close（direct-parent-of trigger）",
+  "i-47b72cde": "Card hover lift"
+ },
+ "assets": {
+  "monthly-sharing-ep01-cover.jpg": "6aed90d805a96260ffcc983a",
+  "monthly-sharing-ep03-cover.jpg": "6aed90d9911888308db68c93",
+  "monthly-sharing-ep04-cover.jpg": "6aed90d9911888308db68ce7",
+  "monthly-sharing-ep06-cover.jpg": "6aed90da596c9a4aa2e40c11",
+  "monthly-sharing-ep07-cover.jpg": "6aed90da315e5bef05723c4c",
+  "monthly-sharing-ep08-cover.jpg": "6aed90da315e5bef05723c5d",
+  "monthly-sharing-ep09-cover.jpg": "6aed90da5aa41c41688331ab",
+  "monthly-sharing-ep10-cover.jpg": "6aed90da911888308db68ec8",
+  "monthly-sharing-ep11-cover.jpg": "6aed90db218b52d7afeb28e0",
+  "monthly-sharing-ep12-cover.jpg": "6aed90dca98409def8f30096",
+  "monthly-sharing-ep13-cover.jpg": "6aed90dcb9132d6f3c23b57e",
+  "monthly-sharing-ep14-cover.jpg": "6aed90dcb9132d6f3c23b5a3",
+  "monthly-sharing-ep15-cover.jpg": "6aed90dc05a96260ffcc9976",
+  "monthly-sharing-ep16-cover.jpg": "6aed90ddb61bf95900e047fa",
+  "monthly-sharing-ep17-cover.jpg": "6aed90dd218b52d7afeb2aee",
+  "monthly-sharing-ep18-cover.jpg": "6aed90dd4e19093d74d9daf7",
+  "monthly-sharing-ep19-cover.jpg": "6aed90dd8d1d49add4b6b7be",
+  "monthly-sharing-ep20-cover.jpg": "6aed90dd596c9a4aa2e40ecf",
+  "monthly-sharing-ep21-cover.jpg": "6aed90dd4758bb44c776f961",
+  "monthly-sharing-ep22-cover.jpg": "6aed90de4758bb44c776f994",
+  "monthly-sharing-speaker-chen.jpg": "6aed90de6c596876702c81e6",
+  "monthly-sharing-speaker-cheng.jpg": "6aed90de27ba772aa888b067",
+  "monthly-sharing-speaker-ho.jpg": "6aed90de8d1d49add4b6b86f",
+  "monthly-sharing-speaker-hou.jpg": "6aed90de4e19093d74d9dbac",
+  "monthly-sharing-speaker-hsu.jpg": "6aed90de4e19093d74d9dbbd",
+  "monthly-sharing-speaker-hsuLT.jpg": "6aed90de8d1d49add4b6b8c4",
+  "monthly-sharing-speaker-kao.jpg": "6aed90df5bb64f287e3b434a",
+  "monthly-sharing-speaker-lin.jpg": "6aed90df911888308db6925b",
+  "monthly-sharing-speaker-linYS.jpg": "6aed90e0b61bf95900e04a20",
+  "monthly-sharing-speaker-liu.jpg": "6aed90e0b61bf95900e04a4d",
+  "monthly-sharing-speaker-wang.jpg": "6aed90e0b61bf95900e04a98",
+  "monthly-sharing-speaker-wu.jpg": "6aed90e027ba772aa888b352",
+  "monthly-sharing-speaker-wuMZ.jpg": "6aed90e05380ece151b84845",
+  "monthly-sharing-speaker-yang.jpg": "6aed90e121cb7ce7103780e1"
+ },
+ "assetsNote": "封面取自 YouTube 縮圖（Jubo 自有頻道）；講師照為 Canva DAGLvkPY5mw 縮圖裁切（約 240px），需原圖與授權。智齡科技團隊使用既有 asset 6ace01c72f27502d08c10e27。",
+ "verification": {
+  "readBack": "頁面 metadata draft:true；樣式四斷點讀回；CMS 建立回應即讀回；18 個 IX3 建立回應讀回",
+  "notVerified": "Designer App 未連線，element snapshot 失敗；未經 Preview／staging，無法確認實際排版、CMS 渲染、IX3 播放、講師彈窗 filterContext 範圍是否只開一張、表單送出。"
+ },
+ "rollback": "刪除 page 6aed901905a96260ffcc4595；刪除 18 個 interaction；刪除兩個 collection（會連同 Template page 與項目）；刪除 34 個 monthly-sharing-* assets；移除 sansan-* class 與 .form-submit-btn.is-inline combo。不影響其他頁面。"
+}

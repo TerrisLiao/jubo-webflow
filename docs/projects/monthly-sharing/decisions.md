@@ -13,4 +13,7 @@
 | 2026-11-05 | 智齡同仁一律顯示「智齡科技團隊」，不列個人 | 採用（使用者指示） | 部分同仁已離職 | 第一版逐位列出同仁 |
 | 2026-11-05 | 講師彈窗：姓名、簡介、課程、Facebook／網站／其他課程連結 | 採用（使用者指示） | [提案 §6-2](design-proposal.md) | — |
 | 2026-11-05 | 講師與日期以 Canva 宣傳圖為準 | 採用 | 使用者指示講師資料在 Canva；EP22 日期因此更正為 11/18 | 先前由 YouTube 上架日推定的 10/21 |
+| 2026-11-06 | 實作為 Webflow 草稿頁 `/monthly-sharing`＋兩個 CMS collection，IX3 動效 | 採用（使用者指示） | 使用者：「新增一頁到 webflow 然後使用 ix3」 | — |
+| 2026-11-06 | 新 class 前綴用 `sansan-`（三三），取代提案 §5 的 `monthly-sharing_` | 採用 | 名稱短、全站唯一；符合 Client-First `folder_element` | 提案 §5 前綴 |
+| 2026-11-06 | 講師彈窗用 IX3 點擊互動＋隱藏面板 | 採用（技術限制） | 站上 Modal／Popover 未啟用（API 回「Modals are not enabled」「Popovers are not enabled」） | 預覽中的原生 dialog |
 | 2026-11-05 | 四個主題系列分類 | 提案 | [集數資料](reference/集數資料.md) | — |

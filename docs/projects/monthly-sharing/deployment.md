@@ -2,9 +2,23 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
-| Git commit／PR | 提案文件已提交至 `claude/christmas-sharing-page-3u67cr`；未開 PR | 2026-11-05 | 本分支提交紀錄 |
-| Webflow Designer | 未修改、未讀回 | — | — |
+| Git commit／PR | 提案與實作紀錄已提交至 `claude/christmas-sharing-page-3u67cr`；未開 PR | 2026-11-06 | 本分支提交紀錄 |
+| Webflow Designer | **已建立草稿頁與 CMS**（Data API 寫入，Designer App 未連線） | 2026-11-06 | 見下方 |
 | staging | 未發布 | — | — |
 | production | 未發布 | — | — |
 
-預覽 Artifact：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>（Version 3，本機模擬；縮圖取自 YouTube，非 Webflow Assets；講師大頭照取自 Canva `DAGLvkPY5mw` 縮圖，只用於預覽）。預覽原始檔不進 repo（含 YouTube 縮圖素材），可由 Artifact 讀回。
+## 2026-11-06 第一版：草稿頁、CMS、IX3
+
+- 授權：使用者 2026-11-06「現在幫我新增一頁到 webflow 然後使用 ix3 等等專業的設計來製作」。**未授權 Publish**。
+- 頁面：`/monthly-sharing`，Page ID `6aed901905a96260ffcc4595`，**`draft: true`**（讀回確認）。以 `/community` 複製取得 Global Style、Cookies、Navbar、Page Gradient BG 骨架，刪除原 hero，加入全站 Footer。
+- CMS：新增「三三分享會講師」(`6aed903bb9132d6f3c23721b`，15 筆) 與「三三分享會集數」(`6aed903bb9132d6f3c237251`，22 筆，網址 `/monthly-sharing/ep22`)。**所有項目 `isDraft: true`**。同時自動產生集數 Template page，尚未設計。
+- 素材：34 個（20 張集數封面、14 張講師大頭照），以 S3 presigned upload 上傳，全部回 201。
+- 區塊：Hero（CMS 下一集）、關於節目、主題系列、最新一集＋集數庫（每頁 9 筆）、講師陣容（CMS＋點擊彈窗）、每一集的時間線、FAQ（原生 details）、Email 訂閱（Webflow 原生表單）。
+- IX3：18 個互動，全部 `scope: pages`、加 `prefers-reduced-motion`。
+- 設定、ID 與回退步驟：[custom-code/monthly-sharing/2026-11-06-build.json](../../../custom-code/monthly-sharing/2026-11-06-build.json)。
+
+### 驗證與限制
+
+- 已讀回：頁面 metadata、四斷點樣式、CMS 建立回應、18 個 IX3 建立回應。
+- **未驗證**：Designer App 未連線，element snapshot 失敗；沒有 Preview／staging，**無法確認實際排版、CMS 渲染、IX3 是否播放、講師彈窗是否只開被點的那一張、表單送出**。下一步需在 Designer Preview 驗收（見 tasks.md）。
+- 預覽 Artifact（設計稿）：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>（Version 3）。
