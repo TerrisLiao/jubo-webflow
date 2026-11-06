@@ -57,3 +57,17 @@
 - **分頁玻璃按鈕**：腳本邏輯用 Playwright 模擬 Webflow 分頁 HTML 測過四種情況（只有下一頁／兩者／只有上一頁／單頁），結果正確。Designer 與 Preview 不執行頁面／全站自訂程式碼，所以在 Designer 裡點分頁按鈕與 FAQ 都不會有反應，必須發布到 staging 才能驗證；頁面為 draft 時 staging 也看不到。
 - **FAQ eyebrow 靠左**：FAQ 標題區由 `section-header_wrapper`（全站共用、置中）改用 `sansan-faq_head`（靠左），h2 移除 `text-align-center`。其他區塊的 eyebrow 原本就靠左。
 
+## 2026-11-06 第五輪：分類篩選卡片＋YouTube CTA（仍未發布）
+
+使用者指示：主題系列改成四個按鈕，點了才出現該分類課程，按鈕要漸層、參考 Mobbin、要有代表各面向的小動畫且持續循環；樣式比照資安頁卡片（上方淺色漸層＋漸層細線圖示）。「全部集數」改成一個 section，CTA 到 YouTube 看完整播放清單。
+
+- **Mobbin 參考**：Customer.io／incident.io／Mural 的資源庫分類切換（分類在上、結果在下、一次只看一類）。
+- **為什麼不用 Webflow Tabs**：用 API 建立的 Tabs 只有 3 個分頁，無法新增第 4 個，已刪除。改用 IX3 點擊互動切換 class（Designer 預覽也會跑 IX3，不需自訂程式碼）。
+- **結構**：`.sansan-filter_component` > `.sansan-filter_menu`（4 張卡）＋ 4 個 `.sansan-filter_pane`（第 2–4 個帶 `is-hidden`）。卡片 `.sansan-filter_btn` = `.sansan-filter_fill`（底部 4px 漸層條，`is-active` 時顯示）＋ `.sansan-filter_visual`（沿用全站 `gradient-bg` ＋ `is-bento-color-1/2`，與資安頁同一組）＋ `.sansan-filter_icon`（`.sansan-filter_part` 遮罩漸層細線圖示，漸層值同 `security-layer_icon-tile`）＋文字。
+- **圖示**：機構經營管理＝長條圖（長條循環伸縮）、照護實務技巧＝心形＋心電線（心跳＋線條明滅）、長照評鑑準備＝板夾＋勾勾（勾勾縮放）、AI與數位工具＝星芒（呼吸＋小星閃爍）。IX3 `i-1616db2c`，timeline `settings: {repeat: -1, yoyo: true}`，捲到分類區開始無限循環；減少動態偏好時不播。
+- **點擊切換**：`i-7ab8ee1c`（機構經營管理）、`i-98e3de9f`（照護實務技巧）、`i-160375b4`（長照評鑑準備）、`i-14e6e3c4`（AI與數位工具）。每個：移除所有 `is-active`→加到自己的漸層條；所有 pane 加 `is-hidden`→自己的 pane 移除；pane 淡入上移。所有 Set 動作放在 0.01s 之後，避免頁面載入時被提前套用。卡片 hover 浮起 `i-848df746`；進場 `i-0450ce34`（改指向新卡片）。
+- **分類清單**：每個 pane 一個 Collection List（`sansan-filter_list` 三欄網格），條件＝分類＋狀態「已播出」＋封面已設定，直播時間新到舊。卡片連結綁「直播／回放連結」、新分頁開啟。清單 ID：機構經營管理 `15968067-…beca`、照護 `a4606375-…8445`、評鑑 `e23fd11d-…b63d`、AI `96c1096e-…6998`。
+- **API 問題紀錄**：新建清單若先只寫 `source`、之後再寫 `filters`，會一直回 `[Conflict] The operation could not be applied to the component map`；同一個操作裡一次寫 `source`＋`filters`＋`sort` 才成功。舊的 latest／archive 清單也是同一問題，這可能是第一版 latest／archive 篩選條件消失的原因。
+- **全部集數 → YouTube CTA**：刪除最新一集卡、集數庫清單、分頁玻璃按鈕與頁面 footer 的 `sansan-pager` 腳本（已清空）；改為 `.sansan-replay_card`（`gradient-bg is-bento-color-1` 背景）＋ Section Tag「全部集數」＋標題＋說明＋ CTA Button「到 YouTube 看完整播放清單」（新分頁）＋漸層細線播放圖示（`i-c43be322` 循環呼吸）。進場 `i-a8d961ad`。刪除 `i-784be094`、`i-acf1c11d`。
+- `custom-code/monthly-sharing/sansan-pager.js` 已不再部署，保留為紀錄。
+
