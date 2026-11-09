@@ -119,3 +119,4 @@
 - **換頭像方式**：使用者提供假人圖片後，上傳成素材，把每位的 `.sansan-chat_avatar` div 換成 `img.sansan-chat_avatar-img`（兩組都要換，共 12 個）。
 - **動畫**：`i-7b864ebe` 改為 32 秒一輪（原 16 秒），讓文字讀得完；兩組內容相同，yPercent 0→-50 無縫循環。
 - 刪除不再使用的 `sansan-chat_lines`、`sansan-chat_name`、`sansan-chat_msg` 樣式。
+- **假人頭像（2026-11-09）**：使用者提供 AI 生成的虛構人物頭像（200×200 WebP），上傳為素材：林護理師 `6af129169fa8955d9c01a2b1`、陳社工 `6af129169fa8955d9c01a297`、王主任 `6af12916c3a6bb9fb5ee3bb8`、小美 `6af12916b88c3212ce727a73`、黃督導 `6af12916434edee758f928cc`。兩組共 10 個姓氏圓形已換成 `img.sansan-chat_avatar-img`。張照服員的圖片未收到檔案，兩個位置（`3d7db775-…8e79`、`3891271a-…6b8d`）仍為姓氏圓形。
