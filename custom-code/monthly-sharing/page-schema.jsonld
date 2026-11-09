@@ -1,0 +1,103 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#webpage",
+      "url": "https://www.jubo-health.com/resources/jubo-33-live-stream",
+      "name": "智齡三三分享會｜每月第三個週三中午免費長照直播｜Jubo 智齡科技",
+      "description": "利用中午午休時間，增強長照知識！智齡三三分享會每月第三個星期三 12:00 在 YouTube 免費直播，邀請業界講者分享機構經營、照護實務、評鑑準備與 AI 工具，每集都有回放可複習。",
+      "inLanguage": "zh-Hant-TW",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.jubo-health.com/#website",
+        "name": "Jubo 智齡科技",
+        "url": "https://www.jubo-health.com/"
+      },
+      "about": { "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#series" },
+      "mainEntity": { "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#series" },
+      "breadcrumb": { "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#breadcrumb" },
+      "publisher": { "@id": "https://www.jubo-health.com/#organization" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "首頁", "item": "https://www.jubo-health.com/" },
+        { "@type": "ListItem", "position": 2, "name": "長照專業成長", "item": "https://www.jubo-health.com/resources/education" },
+        { "@type": "ListItem", "position": 3, "name": "智齡三三分享會", "item": "https://www.jubo-health.com/resources/jubo-33-live-stream" }
+      ]
+    },
+    {
+      "@type": "EventSeries",
+      "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#series",
+      "name": "智齡三三分享會",
+      "description": "智齡科技每月第三個星期三中午 12:00 舉辦的 YouTube 免費直播，邀請長照機構院長、執行長、督導與醫療專家，分享機構經營管理、照護實務技巧、長照評鑑準備與 AI 數位工具的實務經驗。",
+      "url": "https://www.jubo-health.com/resources/jubo-33-live-stream",
+      "inLanguage": "zh-Hant-TW",
+      "isAccessibleForFree": true,
+      "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+      "location": {
+        "@type": "VirtualLocation",
+        "url": "https://www.youtube.com/@Jubo-health"
+      },
+      "eventSchedule": {
+        "@type": "Schedule",
+        "repeatFrequency": "P1M",
+        "byDay": "https://schema.org/Wednesday",
+        "byMonthWeek": 3,
+        "startTime": "12:00:00",
+        "endTime": "13:00:00",
+        "scheduleTimezone": "Asia/Taipei"
+      },
+      "audience": {
+        "@type": "Audience",
+        "audienceType": "長照機構主任、護理師、社工、居服督導、照顧服務員、個案管理師"
+      },
+      "organizer": {
+        "@type": "Organization",
+        "@id": "https://www.jubo-health.com/#organization",
+        "name": "智齡科技 Jubo",
+        "url": "https://www.jubo-health.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/69f92fb3b1e42e2e1d20a6bb_Frame-1.png"
+        }
+      },
+      "sameAs": [
+        "https://www.youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.jubo-health.com/resources/jubo-33-live-stream#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "需要報名或付費嗎？",
+          "acceptedAnswer": { "@type": "Answer", "text": "不用。直播在智齡科技 YouTube 頻道公開播出，打開連結就能看。" }
+        },
+        {
+          "@type": "Question",
+          "name": "怎麼收到開播提醒？",
+          "acceptedAnswer": { "@type": "Answer", "text": "加入 LINE 官方帳號，新集數公布和開播前都會收到提醒訊息；在 YouTube 頻道按下小鈴鐺，開播時也會通知你。" }
+        },
+        {
+          "@type": "Question",
+          "name": "錯過直播怎麼辦？",
+          "acceptedAnswer": { "@type": "Answer", "text": "每一集都會保留回放，整理在上方「過去直播」和 YouTube 播放清單，隨時可以回來複習。" }
+        },
+        {
+          "@type": "Question",
+          "name": "簡報可以下載嗎？",
+          "acceptedAnswer": { "@type": "Answer", "text": "可以。直播最後會提供課後問卷，填寫後會拿到通關暗號，到智齡科技 LINE 官方帳號輸入暗號，就能取得當月分享會簡報。" }
+        },
+        {
+          "@type": "Question",
+          "name": "想推薦主題或講師？",
+          "acceptedAnswer": { "@type": "Answer", "text": "主題每半年規劃一次。歡迎在 LINE 官方帳號留言告訴我們，你最近遇到的問題可能就是下一集的題目。" }
+        }
+      ]
+    }
+  ]
+}

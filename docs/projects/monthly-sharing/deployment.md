@@ -155,3 +155,21 @@
 - **顏色收斂成 teal＋白**：「直播中」標籤由 teal→紫漸層改 teal 純色；聊天室送出鈕由漸層改 teal。跑馬燈維持 teal 底白字。
 - **動畫**：`i-15c4768f` 只保留兩個視窗的漂浮。
 - **清理樣式**：刪除 `is-slides`、`is-slides-b`、`is-mini`、`sansan-live_bar`、`_bar-title`、`_dots`、`_dot`，以及先前已不用的 loading 系列（`sansan-live_loading`、`_spinner`、`_loading-text`、`_loading-dots`、`_ldot`）。簡報截圖素材保留在素材庫未刪。
+
+## 2026-11-09 第九輪：Slug、SEO、Schema 與上線前檢查（仍未發布）
+
+使用者：寫好 slug 與 schema，準備上線；張照服員維持姓氏圓形頭像即可。
+
+- **Slug**：維持 `jubo-33-live-stream`，在 resources 資料夾下，完整網址 `https://www.jubo-health.com/resources/jubo-33-live-stream`。
+- **SEO title**：「智齡三三分享會｜每月第三個週三中午免費長照直播｜Jubo 智齡科技」。
+- **Meta description**：「利用中午午休時間，增強長照知識！智齡三三分享會每月第三個星期三 12:00 在 YouTube 免費直播，邀請業界講者分享機構經營、照護實務、評鑑準備與 AI 工具，每集都有回放可複習。」
+- **Open Graph**：title「智齡三三分享會｜午休一小時，增強長照知識」；description「每月第三個星期三中午 YouTube 免費直播，業界講者分享機構經營、照護實務、評鑑準備與 AI 工具，錯過也能看回放。」；圖片暫用全站預設 OG 圖（`6a82c57be33c51d36b51d332`），之後可換三三分享會專屬分享圖。
+- **JSON-LD**（Page Settings schema，API 寫入並讀回確認；正本 `custom-code/monthly-sharing/page-schema.jsonld`）：`@graph` 含 WebPage（`#webpage`）、BreadcrumbList（首頁 → 長照專業成長 `/resources/education` → 智齡三三分享會）、EventSeries（`#series`：每月第三個週三 12:00–13:00 Asia/Taipei、線上、免費、VirtualLocation＝YouTube 頻道、organizer `#organization`、sameAs 播放清單）、FAQPage（5 題，與頁面文字逐字一致）。網址全為 www 絕對網址、`inLanguage` zh-Hant-TW、`#organization`／`#website` 與首頁串接。不放單集 Event，避免每月過期。
+- **FAQ 內容修正**：「錯過直播怎麼辦？」原寫「全部集數」（已移除）改為「過去直播」；「簡報可以下載嗎？」原寫單集頁索取表單（單集頁未上線）改為直播回放中的實際流程：填課後問卷 → 拿通關暗號 → LINE 官方帳號輸入取得簡報（來源：EP AI part2 與感染管制集聊天室回放）。**請行銷確認此流程現在仍適用。**
+- **頁面狀態**：讀回 `draft: false`，下次全站 Publish 會一起上線。
+
+### 上線前必做（Publish 前）
+
+1. **兩個 CMS Template 頁設為 Draft（Designer）**：「三三分享會集數 Template」`6aed903cb9132d6f3c237287`（/monthly-sharing/*）、「三三分享會講師 Template」`6aed903bb9132d6f3c237221`。API `bulk_update_pages draft:true` 仍被忽略（讀回 false）。不設的話，37 筆 CMS 項目會產生沒設計過的單集／講師頁並進 sitemap。
+2. Designer Preview 走一遍：hero 兩個視窗、最新消息卡（右側背景／講師／白字講綱）、底部釘選條滑入／收回／✕、分類篩選、FAQ 開合、手機版。
+3. 取得明確 Publish 授權後再發布；發布後抓線上 HTML 驗證 JSON-LD 並跑 Rich Results Test。
