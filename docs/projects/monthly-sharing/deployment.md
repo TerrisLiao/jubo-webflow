@@ -173,3 +173,4 @@
 1. **兩個 CMS Template 頁設為 Draft（Designer）**：「三三分享會集數 Template」`6aed903cb9132d6f3c237287`（/monthly-sharing/*）、「三三分享會講師 Template」`6aed903bb9132d6f3c237221`。API `bulk_update_pages draft:true` 仍被忽略（讀回 false）。不設的話，37 筆 CMS 項目會產生沒設計過的單集／講師頁並進 sitemap。
 2. Designer Preview 走一遍：hero 兩個視窗、最新消息卡（右側背景／講師／白字講綱）、底部釘選條滑入／收回／✕、分類篩選、FAQ 開合、手機版。
 3. 取得明確 Publish 授權後再發布；發布後抓線上 HTML 驗證 JSON-LD 並跑 Rich Results Test。
+- **2026-11-09 補充**：使用者截圖仍見白色標題列與簡報視窗，為舊畫面（Data API 讀回只剩主畫面＋聊天室兩個視窗、無標題列）；請 Designer 重新整理後再看。另移除 `sansan-live_window` 的白色底色，避免圖片邊緣透出白邊（聊天室 `.sansan-chat` 自帶白底）。
