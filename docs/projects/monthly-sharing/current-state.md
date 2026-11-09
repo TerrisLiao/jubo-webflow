@@ -5,6 +5,7 @@
 - CMS：「三三分享會講師」15 筆、「三三分享會集數」22 筆，2026-11-06 已由草稿改為可發布（Staged，未發布）。集數與講師 Template page 已自動產生、未設計，且 API 無法設為 Draft（見 deployment.md 風險）。
 - 2026-11-06 第二輪修改：分類改為四項（新欄位「分類」）、Hero 日期修正裁切、集數卡 EP 標籤移右上、講師彈窗先關閉、刪除「每一集的時間線」區塊、FAQ 改用首頁結構、分頁按鈕改玻璃按鈕＋中文。
 - 2026-11-09 第六輪：Hero 改為統一 banner（介紹節目＋直播視窗拼貼＋單一「最新直播資訊」按鈕）；結構改為 關於直播 → 最新消息（高亮卡）→ 過去直播 → 講師 → FAQ → 制式 CTA Section #1；移除全部集數與自訂 LINE 區。
+- 2026-11-09 第六輪追加：hero 主視窗有智齡科技置頂留言輪播與 Jubo teal 跑馬燈，右上為線條式 YouTube 留言區無限捲動；H1 第二行「利用中午午休時間，增強長照知識！」。
 - 來源分支：`claude/christmas-sharing-page-3u67cr`。
 - 設計依據：[設計提案](design-proposal.md) 第二版＋預覽 Artifact Version 3。
 - 詳細部署與限制：[deployment.md](deployment.md)；ID 與回退：[2026-11-06-build.json](../../../custom-code/monthly-sharing/2026-11-06-build.json)。

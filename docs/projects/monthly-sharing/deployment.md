@@ -96,3 +96,15 @@
 - **Loading**：左上小視窗蓋上 `.sansan-live_loading`（白霧＋轉圈＋「下一集直播準備中」＋三點），IX3 `i-55053d74` 轉圈與三點循環，並讓主視窗「直播中」燈號明滅。
 - 以上循環都在減少動態偏好時不播放；手機版小視窗隱藏、留言字級縮小。
 
+
+## 2026-11-09 第六輪追加二：留言區、teal 跑馬燈、hero 文案（仍未發布）
+
+使用者：置頂留言名稱與縮圖都改智齡科技；移除「下一集直播準備中」卡片；跑馬燈改 Jubo teal 底＋白字；右上角卡片改成 YouTube 觀看時的留言區，用線條呈現、持續 loop；hero 文字改「利用中午午休時間，增強長照知識！」。
+
+- **Hero H1**：第二行（`gradient-headline` span）改為「利用中午午休時間，增強長照知識！」。
+- **置頂留言**：兩則 `.sansan-live_comment` 名稱改「智齡科技」；頭像由漸層「三」字改為 Image，使用 Jubo logo 素材 `6ace01c72f27502d08c10e27`。
+- **移除**：左上 loading 小視窗（`.sansan-live_loading`，含轉圈與三點）整個視窗刪除；`i-15c4768f` 漂浮循環同步移除該視窗動作；`i-55053d74` 改為只做主視窗「直播中」燈號明滅。
+- **跑馬燈**：`.sansan-live_ticker` 背景綁 primary accent（Jubo teal，`variable-d240906f-…`），文字綁白色（`variable-987d0d75-…`）；左側標籤改為半透明深 teal（rgba(23,94,94,0.55)）。
+- **留言區（右上視窗）**：原講師入鏡截圖視窗改為 `.sansan-chat`：標題列（「即時聊天室」＋ teal「LIVE」膠囊）→ `.sansan-chat_viewport`（overflow hidden）→ `.sansan-chat_track`（12 列 `.sansan-chat_row`：彩色圓形頭像＋名稱線＋訊息線，長度以 `is-wNN` 變化，6 列內容重複一次）→ 底部假輸入框。沒有實際文字，只用線條表現。視窗高度 17rem（手機 11rem）。
+- **留言 loop**：新增 IX3 `i-7b864ebe`，track yPercent 0→-50，線性 16 秒，repeat -1（因內容重複一次，無縫循環）；減少動態偏好時不播。
+- 講師入鏡截圖（`6af118259fa8955d9cfd12e9`）已不在 hero 使用，素材保留未刪。
