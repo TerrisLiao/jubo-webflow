@@ -138,3 +138,10 @@
 - **Canva 無字版**：複製 `DAGLvkPY5mw` 第 23 頁為新設計 `DAHaYmRDTEA`「三三分享會 EP22 官網卡片背景（無字版）」，刪除所有文字、logo、講師照，只留手部照片（Canva 圖庫素材 `MAD6rruvVvs`）與 teal 疊層；原設計未修改。匯出 1600×900 → WebP 上傳為素材 `6af12e77412b20cb89ec0b6b`。之後每集：複製當集宣傳頁 → 刪字 → 匯出 → 上傳到該集「卡片背景圖」。
 - **底部釘選條**：`.sansan-pin`（fixed、底部置中、最寬 52rem）放在 main-wrapper 最後，內含 Collection List（同上篩選）→ `.sansan-pin_inner` 白色膠囊：teal 點＋「下一集」、日期（綁「日期大字」，手機隱藏）、主題（綁 Name，超出省略）、「開啟提醒」（綁「直播／回放連結」，新分頁）、✕ 關閉。IX3 `i-f14efd31`：最新消息卡底部捲過視窗 15% 時滑入，往回捲到卡片時收回；`i-08956636`：點 ✕ 滑出並隱藏（本次瀏覽不再出現）。
 - **動畫**：`i-609a616a` 移除月曆與舊封面動作，改為面板淡入上升、背景照 1.08→1 慢放、講師與重點依序淡入。
+
+## 2026-11-09 第七輪追加：最新消息卡精簡（仍未發布）
+
+- **區塊標題**：H2 改「11月份**最新直播**」（後半漸層）。**每月要手動改月份**（標題在 Collection List 外，無法綁 CMS）。
+- **卡片左邊**：移除「● 下一集直播」狀態標籤、「EP22」字樣（保留分類標籤）、「加入行事曆」連結、Glass Button「加 LINE，當天提醒」。只留一顆 CTA Button「加 LINE，開啟直播提醒」→ `https://lin.ee/Clf7lXr`（新分頁）。刪除不再使用的 `sansan-hero_kicker`、`_status`、`_ep`、`_links`、`_link` 樣式；`i-609a616a` 同步移除這些目標。
+- **卡片右邊講師放大成主視覺**：`sansan-hero_speaker-name.is-panel` 2.5rem（平板 2.125rem、手機 1.75rem）、`_speaker-org.is-panel` 1.125rem、`_avatar.is-panel` 5.5rem（手機 4rem）；講師區塊底部對齊，手機改上下排列。
+- **講綱白字**：全站 `li`／`p` 標籤樣式固定 neutral/black，class 無法用 API 設子層選擇器，改在頁面 head freeform code 加 `<style id="sansan-latest-points">`，正本 `custom-code/monthly-sharing/latest-points.css`。

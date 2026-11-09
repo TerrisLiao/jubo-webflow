@@ -1,0 +1,11 @@
+/*
+ * 三三分享會 /jubo-33-live-stream 最新消息卡右側「這集你會聽到」(RichText .sansan-latest_points)
+ * 部署位置：該頁 Page Settings → Custom Code → Inside <head>（freeform head，包在 <style id="sansan-latest-points">）
+ * 本檔是正本。
+ *
+ * 為什麼需要：全站 li / p 標籤樣式把文字固定成 neutral/black，class 無法用 API 寫子層選擇器，
+ * 深色照片上的講綱會變黑字。這裡讓清單繼承面板的白字與字級。
+ */
+.sansan-latest_points li,.sansan-latest_points p{color:inherit;font-size:inherit;line-height:inherit}
+.sansan-latest_points ul{margin:0;padding-left:1.15em}
+.sansan-latest_points li+li{margin-top:.35em}
