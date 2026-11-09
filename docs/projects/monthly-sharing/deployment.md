@@ -71,3 +71,18 @@
 - **全部集數 → YouTube CTA**：刪除最新一集卡、集數庫清單、分頁玻璃按鈕與頁面 footer 的 `sansan-pager` 腳本（已清空）；改為 `.sansan-replay_card`（`gradient-bg is-bento-color-1` 背景）＋ Section Tag「全部集數」＋標題＋說明＋ CTA Button「到 YouTube 看完整播放清單」（新分頁）＋漸層細線播放圖示（`i-c43be322` 循環呼吸）。進場 `i-a8d961ad`。刪除 `i-784be094`、`i-acf1c11d`。
 - `custom-code/monthly-sharing/sansan-pager.js` 已不再部署，保留為紀錄。
 
+## 2026-11-09 第六輪：統一 banner hero、結構重排、制式 CTA（仍未發布）
+
+使用者指示：hero 要做成統一 banner，用多個直播視窗＋三三分享會畫面截圖，主要介紹三三分享會是什麼，只放一個「最新直播資訊」按鈕；下方結構為 關於直播 → 最新消息（特別 highlight）→ 過去直播；移除「全部集數」卡片；最後的 CTA 用制式元件；整體版面要更像官網。
+
+- **「聖誕」來源**：頁面內容沒有任何聖誕字樣（全頁搜尋 0 筆）；只有 git 分支名 `claude/christmas-sharing-page-3u67cr` 帶 christmas（第一次對話時依「聖誕分享會」自動命名，依 repo 規則不更換分支）。Claude 工作階段標題已改為「智齡三三分享會專區頁 /jubo-33-live-stream」。
+- **直播截圖素材**：取自 Jubo 自有 YouTube 頻道影片的自動畫格截圖（`i.ytimg.com/vi/<id>/maxres1-3.jpg`），轉成 webp 上傳：`6af1182545f9805188b40137`（開場畫面，EP19）、`6af118259fa8955d9cfd12e9`（講師入鏡，EP16）、`6af118259fa8955d9cfd12fa`（吞嚥簡報＋講師小窗，EP18）、`6af1182504d34e6a4a56d713`（簡報＋多人視窗，EP19）、`6af1182504d34e6a4a56d759`（急救簡報，EP15）。畫面含講師與少數線上參與者小視窗，皆為已公開影片內容；正式上線前建議行銷確認。
+- **Hero（`section_sansan-hero` 內重建）**：`.sansan-banner_component`（0.85fr 1fr，同 Tier B product hero 比例；平板以下單欄）。左：Section Tag「每月直播節目」、H1「智齡三三分享會／把照護現場的難題，講清楚」（後半 `gradient-headline`）、介紹文、單一 CTA Button「最新直播資訊」→ `#latest`、三個事實膠囊。右：`.sansan-live_window` ×5 直播視窗拼貼（主視窗有視窗列與漸層「直播中」標籤），手機隱藏兩個小視窗。IX3：載入 `i-02c482e7`（文字逐行上升、視窗逐一放大淡入）、`i-15c4768f`（視窗緩慢上下漂浮，無限循環）。
+- **最新消息（新 `section_sansan-latest`，id 錨點 `#latest`）**：Section Tag「最新消息」＋ H2「下一集，第三個週三中午見」＋高亮卡 `.sansan-latest_card`（白卡＋`gradient-bg is-bento-color-1`＋大陰影），原 hero 的下一集區塊（大字日期、EP、分類、主題、講師、提醒按鈕、行事曆、封面、月曆卡）整組搬入。原 H1「智齡三三分享會」移到新 hero。原 hero 載入動畫 `i-609a616a` 改為捲到此卡時播放。`set_dom_id` 對新 section 再次遇到 MPS conflict，改用卡片前的錨點 div（`id="latest"`）。
+- **關於直播**：Section Tag 改「關於直播」，H2 改為帶 `gradient-headline` 的版本。
+- **過去直播**：Section Tag 改「過去直播」，H2「依主題，找到你需要的那一集」（漸層強調）；分類篩選卡維持第五輪。
+- **講師、FAQ**：保留在過去直播之後；講師 H2 改漸層強調。
+- **移除**：「全部集數／YouTube CTA」整段（`e597718c-…`）、自訂 LINE 收尾區（`893701ff-…`）；刪除 `i-a8d961ad`、`i-c43be322`、`i-ad4d2972`。
+- **結尾 CTA**：改用全站 `CTA Section #1` 元件，Title「每月第三個週三，中午見」、Text「加入 LINE 官方帳號，新集數公布和開播前都會傳訊息提醒你」、按鈕「加入 LINE，開播提醒」→ `https://lin.ee/Clf7lXr`（新分頁）。
+- **頁面順序**：Hero → 關於直播 → 最新消息 → 過去直播 → 講師 → FAQ → CTA Section #1 → Footer。
+
