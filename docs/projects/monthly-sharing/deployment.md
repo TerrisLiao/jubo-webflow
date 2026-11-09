@@ -108,3 +108,14 @@
 - **留言區（右上視窗）**：原講師入鏡截圖視窗改為 `.sansan-chat`：標題列（「即時聊天室」＋ teal「LIVE」膠囊）→ `.sansan-chat_viewport`（overflow hidden）→ `.sansan-chat_track`（12 列 `.sansan-chat_row`：彩色圓形頭像＋名稱線＋訊息線，長度以 `is-wNN` 變化，6 列內容重複一次）→ 底部假輸入框。沒有實際文字，只用線條表現。視窗高度 17rem（手機 11rem）。
 - **留言 loop**：新增 IX3 `i-7b864ebe`，track yPercent 0→-50，線性 16 秒，repeat -1（因內容重複一次，無縫循環）；減少動態偏好時不播。
 - 講師入鏡截圖（`6af118259fa8955d9cfd12e9`）已不在 hero 使用，素材保留未刪。
+
+## 2026-11-09 第六輪追加三：留言區改真實文字（仍未發布）
+
+使用者：線條留言區不好看，改成真實文字，參考我們影片的聊天室回放；之後會提供假人頭像。
+
+- **聊天室回放來源**：用 YouTube innertube API 讀取。有回放的集數只有三集：`HXzyILy2D2U`（AI part2）、`FZHWfRv8xTQ`（評鑑 B 計畫：感染管制）、`N1K2UCAa2fg`（EP22，讀不到內容）。其餘影片顯示「不支援聊天室訊息重播」。真實留言以「簽到／午安」、主持人提醒提問與回放、「請問影片可以回放嗎？」、「AI好方便」、「notebookLM超好用」、「很棒的內容👍」為主。
+- **去識別化**：回放中的真實機構名稱與個人姓名都不使用；顯示名稱改為虛構的職稱暱稱（林護理師、陳社工、王主任、小美、張照服員、黃督導），留言內容依真實留言改寫。主持人留言以「智齡科技」名義發出（Jubo logo 頭像＋teal 名稱膠囊）。
+- **結構**：`.sansan-chat_track` > 兩個相同的 `.sansan-chat_group`（各 8 則）> `.sansan-chat_row`（頭像＋`p.sansan-chat_text` 內含 `span.sansan-chat_author`，主持人加 `is-host`）。頭像暫時用彩色圓形＋姓氏（`.sansan-chat_avatar` 改為 1.5rem、置中白字），主持人用 `img.sansan-chat_avatar-img`（logo `6ace01c72f27502d08c10e27`）。
+- **換頭像方式**：使用者提供假人圖片後，上傳成素材，把每位的 `.sansan-chat_avatar` div 換成 `img.sansan-chat_avatar-img`（兩組都要換，共 12 個）。
+- **動畫**：`i-7b864ebe` 改為 32 秒一輪（原 16 秒），讓文字讀得完；兩組內容相同，yPercent 0→-50 無縫循環。
+- 刪除不再使用的 `sansan-chat_lines`、`sansan-chat_name`、`sansan-chat_msg` 樣式。
