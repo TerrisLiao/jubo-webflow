@@ -134,7 +134,7 @@
 - **分工**：左邊只放「時間與行動」（下一集直播標籤、大字日期、EP＋分類、主題、提醒按鈕、加入行事曆）；右邊只放「這集在講什麼」（無字背景照＋講師＋這集你會聽到）。主題、日期不再在右邊重複；講師只出現在右邊。
 - **移除**：左邊講師膠囊（搬到右邊）、右下「每個月的這一天」月曆卡；刪除 `sansan-hero_cal*`（含 `is-wed` combo）與 `sansan-hero_cover` 樣式。`sansan-hero_visual` 的 padding-bottom 改 0、align-self stretch。
 - **右側面板**：右側 Collection List（狀態＝預告、直播時間升冪、1 筆）的 item 內放 `.sansan-latest_panel`：`img.sansan-latest_panel-bg`（綁新欄位「卡片背景圖」）→ `.sansan-latest_panel-shade`（深 teal 由上而下漸層）→ `.sansan-latest_panel-body`：「主講人」標籤、講師區塊（原 `sansan-hero_speaker` 搬入，加 `is-panel` combo：透明底、頭像 4rem 白框、名字 1.25rem、單位白字 82%）、分隔線、「這集你會聽到」標籤、RichText `.sansan-latest_points`（綁「講綱」）。面板底色 teal（無背景圖時的備援）、最小高度 27rem（手機 24rem）。
-- **CMS**：集數新增 Image 欄位「卡片背景圖」`qia-pian-bei-jing-tu`（`1d61744a530bc438dafd620ab7df1a8e`）。EP22 已填：背景圖、講綱三點（**草稿，待講師／行銷確認**）：長照現場常見的性騷擾情境；照護時如何劃出專業界線並適時拒絕與回應；事件發生後的通報流程與機構保護措施。
+- **CMS**：集數新增 Image 欄位「卡片背景圖」`qia-pian-bei-jing-tu`（`1d61744a530bc438dafd620ab7df1a8e`）。EP22 已填：背景圖、講綱三點（2026-11-09 使用者確認）：長照現場常見的性騷擾情境；照護時如何劃出專業界線並適時拒絕與回應；事件發生後的通報流程與機構保護措施。
 - **Canva 無字版**：複製 `DAGLvkPY5mw` 第 23 頁為新設計 `DAHaYmRDTEA`「三三分享會 EP22 官網卡片背景（無字版）」，刪除所有文字、logo、講師照，只留手部照片（Canva 圖庫素材 `MAD6rruvVvs`）與 teal 疊層；原設計未修改。匯出 1600×900 → WebP 上傳為素材 `6af12e77412b20cb89ec0b6b`。之後每集：複製當集宣傳頁 → 刪字 → 匯出 → 上傳到該集「卡片背景圖」。
 - **底部釘選條**：`.sansan-pin`（fixed、底部置中、最寬 52rem）放在 main-wrapper 最後，內含 Collection List（同上篩選）→ `.sansan-pin_inner` 白色膠囊：teal 點＋「下一集」、日期（綁「日期大字」，手機隱藏）、主題（綁 Name，超出省略）、「開啟提醒」（綁「直播／回放連結」，新分頁）、✕ 關閉。IX3 `i-f14efd31`：最新消息卡底部捲過視窗 15% 時滑入，往回捲到卡片時收回；`i-08956636`：點 ✕ 滑出並隱藏（本次瀏覽不再出現）。
 - **動畫**：`i-609a616a` 移除月曆與舊封面動作，改為面板淡入上升、背景照 1.08→1 慢放、講師與重點依序淡入。
@@ -145,3 +145,13 @@
 - **卡片左邊**：移除「● 下一集直播」狀態標籤、「EP22」字樣（保留分類標籤）、「加入行事曆」連結、Glass Button「加 LINE，當天提醒」。只留一顆 CTA Button「加 LINE，開啟直播提醒」→ `https://lin.ee/Clf7lXr`（新分頁）。刪除不再使用的 `sansan-hero_kicker`、`_status`、`_ep`、`_links`、`_link` 樣式；`i-609a616a` 同步移除這些目標。
 - **卡片右邊講師放大成主視覺**：`sansan-hero_speaker-name.is-panel` 2.5rem（平板 2.125rem、手機 1.75rem）、`_speaker-org.is-panel` 1.125rem、`_avatar.is-panel` 5.5rem（手機 4rem）；講師區塊底部對齊，手機改上下排列。
 - **講綱白字**：全站 `li`／`p` 標籤樣式固定 neutral/black，class 無法用 API 設子層選擇器，改在頁面 head freeform code 加 `<style id="sansan-latest-points">`，正本 `custom-code/monthly-sharing/latest-points.css`。
+
+## 2026-11-09 第八輪：hero 視覺簡化（仍未發布）
+
+使用者：EP22 講綱確認 OK；hero 還是太亂，右邊卡片不要邊框、移除白邊，顏色少一點、簡單一點。
+
+- **視窗數量**：4 個 → 2 個。刪除兩張簡報截圖視窗（`is-slides`、`is-slides-b`），只留主直播畫面（左下、寬 74%）與聊天室（右上、寬 36%、高 20rem；手機 42%／12rem）。`sansan-banner_visual` 最小高度 32rem → 26rem（手機 16rem）。
+- **去白邊**：`sansan-live_window` 移除 1px 白色外框；陰影改淡 `0 20px 48px -20px rgba(21,23,23,.22)`。主視窗頂端白色標題列（三個圓點＋標題）刪除，「直播中」標籤改為浮在畫面左上角。
+- **顏色收斂成 teal＋白**：「直播中」標籤由 teal→紫漸層改 teal 純色；聊天室送出鈕由漸層改 teal。跑馬燈維持 teal 底白字。
+- **動畫**：`i-15c4768f` 只保留兩個視窗的漂浮。
+- **清理樣式**：刪除 `is-slides`、`is-slides-b`、`is-mini`、`sansan-live_bar`、`_bar-title`、`_dots`、`_dot`，以及先前已不用的 loading 系列（`sansan-live_loading`、`_spinner`、`_loading-text`、`_loading-dots`、`_ldot`）。簡報截圖素材保留在素材庫未刪。
