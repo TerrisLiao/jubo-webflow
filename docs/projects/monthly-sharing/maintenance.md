@@ -57,9 +57,10 @@
 
 現行流程（2026-11-10 更新）：**看完直播 → 到單集頁填課後問卷 → 送出後直接出現「下載本集簡報」按鈕**。不再用通關密語，也不用到 LINE 領簡報；LINE 卡只負責「加好友收最新資訊與直播提醒」。課後問卷用單集頁上的 Webflow 表單，不再每月開 MS Forms。
 
-1. 簡報轉 PDF，上傳 OneDrive「三三分享會簡報」資料夾，分享權限選「**擁有連結的任何人都可以檢視**」（沒有這個選項要請 IT 開放外部分享），複製連結。
-2. CMS 該集：填「**簡報下載連結**」、打開「**開放簡報**」→ Save → Publish。
-3. 直播結尾，聊天室貼**該集單集頁網址**（例：`https://www.jubo-health.com/jubo-33-live-stream/ep22`）請大家填問卷，取代以前的 MS Forms 連結。
+1. 簡報轉 PDF（單檔 **30MB 以內**；太大先用 Acrobat「縮小檔案」或 ilovepdf 壓縮）。
+2. 上傳到 Webflow：Designer 左側 **Assets** → 上傳 PDF（或把 PDF 傳給 Claude 代為上傳）。點檔案 → 複製網址（`https://cdn.prod.website-files.com/…pdf`）。不必用 OneDrive，也不用逐檔設定分享。
+3. CMS 該集：填「**簡報下載連結**」、打開「**開放簡報**」→ Save → Publish。
+4. 直播結尾，聊天室貼**該集單集頁網址**（例：`https://www.jubo-health.com/jubo-33-live-stream/ep22`）請大家填問卷，取代以前的 MS Forms 連結。
 
 注意：下載連結寫在單集頁的 HTML 裡（送出前隱藏），懂得看原始碼的人不填問卷也拿得到。簡報本來就是公開分享連結，可接受；若某集簡報不能外流，就不要開放。
 
@@ -75,7 +76,7 @@
 
 ## 一次性設定（上線前，在 Designer）
 
-1. 單集頁 Template 的課程簡報區塊（`section_sansan-deck`）設 **Conditional visibility：開放簡報 is ON**。API 寫入會被拒（component map conflict），只能在 Designer 設。
+1. 單集頁 Template 的課程簡報區塊（`section_sansan-deck`）已用 visibility 綁「開放簡報」（2026-11-10 以 API 完成），不需再設 Conditional visibility。
 2. 隱藏欄位「索取集數」已由頁尾 script 填入，不需在 Designer 修 Embed。Embed 裡的 `{{wf …}}` 文字會被 script 覆蓋，可保留。
 3. Collection URL 改 `jubo-33-live-stream`（單集頁網址變 `/jubo-33-live-stream/ep22`）。
 4. 單集頁其他區塊尚未設計前，Template 先維持 Draft；要上線簡報索取時再取消 Draft。

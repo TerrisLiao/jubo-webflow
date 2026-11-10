@@ -229,3 +229,17 @@
   - 顯示：visibility 綁 CMS「開放簡報」，只有打開的集數才出現。卡片本身仍連 YouTube 回放（`<a>` 不能巢狀，所以放在卡片外）。
 - **單集頁 `section_sansan-deck`**：visibility 綁「開放簡報」（Conditional visibility API 會被拒，改用 visibility 綁定成功）。目前 23 集「開放簡報」全關，staging 重新發布後單集頁的問卷區塊會隱藏；要測試時先打開 EP22 的「開放簡報」。
 - 未發布。
+
+## 2026-11-10 第十三輪：過去集數簡報改放 Webflow Assets（測試 EP18–EP21）
+
+- Microsoft 365 連線只有讀取權限（Files.Read／Sites.Read.All），無法複製或建分享連結；改由使用者把 PDF 傳進對話，Claude 用 Data API `create_asset`＋S3 POST 上傳。S3 policy 上限 31,457,280 bytes（30MB）。
+- 已上傳（CDN 皆 200、`application/pdf`、大小相符）：
+  - EP18 `6af2cff0cccbe0e5d3ae6a89`（8.5MB）
+  - EP19 `6af2d0078f2eeccf9ee12e63`（5.6MB，講師版）
+  - EP20 `6af2d00732f37deb8f65cabb`（29.5MB，圖片型 PDF）
+  - EP21 `6af2d00789eaf366097e2c8c`（10.7MB）
+  - 顯示名稱改為「三三分享會簡報_EPxx_主題.pdf」；放在 Assets 根目錄（API 建的資料夾無法刪除，故未建）。
+- CMS EP18–EP21：填「簡報下載連結」＝上述 CDN 網址、「開放簡報」打開（staged，未 Publish）。
+- 上傳前以 pdftotext 檢查無身分證、存摺、領款字樣（EP20 為圖片無法檢查，內容為講師投影片）。
+- [每月維護手冊](maintenance.md) 改為上傳 Webflow Assets；[簡報檔清單](reference/簡報檔清單.md) 加「Webflow 網址」欄。
+- 未發布。
