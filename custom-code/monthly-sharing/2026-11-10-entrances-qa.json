@@ -1,0 +1,194 @@
+{
+  "checkedAt": "2026-11-10T11:05:26.214Z",
+  "results": [
+    {
+      "base": "https://www.jubo-health.com",
+      "path": "/",
+      "status": 200,
+      "footerLinkCount": 1,
+      "footerHref": "/resources/jubo-33-live-stream",
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 991,
+          "overflow": false
+        },
+        {
+          "width": 767,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "resourcesColumn": [
+        "新聞中心",
+        "長照專業成長",
+        "三三分享會",
+        "系統教學報名",
+        "長照機構媒合平台",
+        "IoT 設備列表"
+      ],
+      "footerStyleMatchesNeighbor": true,
+      "footerNavigationPassed": true
+    },
+    {
+      "base": "https://www.jubo-health.com",
+      "path": "/resources/education",
+      "status": 200,
+      "footerLinkCount": 1,
+      "footerHref": "/resources/jubo-33-live-stream",
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 991,
+          "overflow": false
+        },
+        {
+          "width": 767,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "resourcesColumn": [
+        "新聞中心",
+        "長照專業成長",
+        "三三分享會",
+        "系統教學報名",
+        "長照機構媒合平台",
+        "IoT 設備列表"
+      ],
+      "footerStyleMatchesNeighbor": true,
+      "ctaCount": 1,
+      "ctaHref": "/resources/jubo-33-live-stream",
+      "ctaNavigationPassed": true
+    },
+    {
+      "base": "https://www.jubo-health.com",
+      "path": "/resources/jubo-33-live-stream",
+      "status": 200,
+      "footerLinkCount": 1,
+      "footerHref": "/resources/jubo-33-live-stream",
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 991,
+          "overflow": false
+        },
+        {
+          "width": 767,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "resourcesColumn": [
+        "新聞中心",
+        "長照專業成長",
+        "三三分享會",
+        "系統教學報名",
+        "長照機構媒合平台",
+        "IoT 設備列表"
+      ],
+      "footerStyleMatchesNeighbor": true
+    },
+    {
+      "base": "https://www.jubo-health.com",
+      "path": "/news/monthly-third-wednesday-sharing-202612",
+      "status": 200,
+      "footerLinkCount": 1,
+      "footerHref": "/resources/jubo-33-live-stream",
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 991,
+          "overflow": false
+        },
+        {
+          "width": 767,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "resourcesColumn": [
+        "新聞中心",
+        "長照專業成長",
+        "三三分享會",
+        "系統教學報名",
+        "長照機構媒合平台",
+        "IoT 設備列表"
+      ],
+      "footerStyleMatchesNeighbor": true
+    },
+    {
+      "base": "https://jubo-health.webflow.io",
+      "path": "/resources/education",
+      "status": 200,
+      "footerLinkCount": 1,
+      "footerHref": "/resources/jubo-33-live-stream",
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 991,
+          "overflow": false
+        },
+        {
+          "width": 767,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "resourcesColumn": [
+        "新聞中心",
+        "長照專業成長",
+        "三三分享會",
+        "系統教學報名",
+        "長照機構媒合平台",
+        "IoT 設備列表"
+      ],
+      "footerStyleMatchesNeighbor": true,
+      "ctaCount": 1,
+      "ctaHref": "/resources/jubo-33-live-stream",
+      "ctaNavigationPassed": true
+    }
+  ],
+  "publication": {
+    "taskId": "9de59f8f-6ad3-447f-8f72-041d614e48ef",
+    "wwwLastPublished": "2026-11-10T11:03:04.349Z",
+    "apexLastPublished": "2026-11-10T11:03:04.349Z"
+  },
+  "existingFooterTreePreserved": true,
+  "glassButtonDefinitionChanged": false
+}

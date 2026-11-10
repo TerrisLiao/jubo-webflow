@@ -69,3 +69,10 @@
 - News 移除「活動前公布」說明，改為活動當天點擊連結免費參加；連結文字「點此觀看 12 月三三分享會直播」。保留歷屆播放清單。
 - 已正式發布，www／apex lastPublished＝2026-11-10T10:43:25.548Z。正式站及 staging HTTP 200，連結 href、舊說明移除、歷屆入口與 1440／390 無溢出均驗證；CMS 讀回相符。
 - 證據：`custom-code/monthly-sharing/2026-11-10-ep23-link-qa.json`。網址來源為使用者，未宣稱 YouTube 實際播放測試通過。
+
+## 2026-11-10 第二十一輪：Footer 與資源頁入口
+
+- 使用者明確要求在 Footer「資源」新增三三分享會，並指定長照專業成長頁的 CTA 改為「了解更多三三分享會」、連到節目專區。
+- 共用 Footer definition `bf559d46-0de7-0e5d-3110-35684e2ba87f`：在「長照專業成長」後新增 `88d97a56-e3b4-4044-a064-a371269ceb55`，文字「三三分享會」、`footer-link`、`data-underline-link`，URL `/resources/jubo-33-live-stream`。前後完整樹比對，扣除此新增子樹後完全一致。
+- `/resources/education`（page `6a2e38cda77c1ee08c7f8ba1`）Glass Button instance `2179076d-4294-fc5f-f4b8-650f613dd46d`：只覆寫 CTA Text 與 CTA Links，不改 Glass Button definition、樣式與其他實例。
+- 已正式發布 task `9de59f8f-6ad3-447f-8f72-041d614e48ef`，www／apex lastPublished 均 `2026-11-10T11:03:04.349Z`，並發布 staging。驗證見 `custom-code/monthly-sharing/2026-11-10-entrances-qa.json`。

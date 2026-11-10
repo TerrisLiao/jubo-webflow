@@ -343,3 +343,16 @@
 - CMS 單獨發布動作被 connector schema 拒絕，未產生發布；改用已授權的 `publish_site`，task `0a8e0707-34e2-4421-812d-0effccea913e`，www／apex 與 Webflow subdomain。兩正式網域 lastPublished 均讀回 `2026-11-10T10:43:25.548Z`。
 - 真實正式站／staging 均 HTTP 200，正確直播入口一個、舊公布說明已移除、歷屆入口仍在；1440／390 無橫向溢出、無 JS pageerror。證據 `2026-11-10-ep23-link-qa.json`。不重送問卷，YouTube 播放未在雲端驗證。
 - 回退：直播欄位原為 null；News 對照前一版 `news-ep23.html`。若網址需換，兩處一起更新並發布。
+
+## 2026-11-10 第二十一輪：Footer 與資源頁入口
+
+- 使用者明確要求在 Footer「資源」新增三三分享會，並指定長照專業成長頁的 CTA 改為「了解更多三三分享會」、連到節目專區。
+- 共用 Footer definition `bf559d46-0de7-0e5d-3110-35684e2ba87f`：在「長照專業成長」後新增 `88d97a56-e3b4-4044-a064-a371269ceb55`，文字「三三分享會」、`footer-link`、`data-underline-link`，URL `/resources/jubo-33-live-stream`。前後完整樹比對，扣除此新增子樹後完全一致。
+- `/resources/education`（page `6a2e38cda77c1ee08c7f8ba1`）Glass Button instance `2179076d-4294-fc5f-f4b8-650f613dd46d`：只覆寫 CTA Text 與 CTA Links，不改 Glass Button definition、樣式與其他實例。
+- 已正式發布 task `9de59f8f-6ad3-447f-8f72-041d614e48ef`，www／apex lastPublished 均 `2026-11-10T11:03:04.349Z`，並發布 staging。驗證見 `custom-code/monthly-sharing/2026-11-10-entrances-qa.json`。
+
+- 共用元件修改依本次 Footer 明確要求進行；Navbar 未修改。
+- 工具維護：讀取／新增 definition 內元素需 `scope_component_id`；寫 instance props 使用 `set_component_instance_prop_values.values[]` 的 `prop_id`、`type` 與型別專屬欄位，link 為 `type:"link", link_mode:"url", link_to:"/..."`。一般 `set_link` 不接受 ComponentInstance。
+- 回退：刪除新增 Footer link；資源頁 CTA Text 改回「觀看分享會」、CTA Links 改回 `https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt&si=2ZuDFQ9xyAeJLM-9`，再發布。
+
+驗證完成：正式站首頁、資源頁、三三專區與 12 月 News，以及 staging 資源頁，每頁僅一個 Footer 新入口；點擊 Footer／資源頁 CTA 均到專區，四尺寸無橫向溢出、無 JS pageerror，Footer 新連結字色／字級／行高與相鄰連結一致。
