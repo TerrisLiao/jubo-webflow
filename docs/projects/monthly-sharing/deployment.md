@@ -356,3 +356,12 @@
 - 回退：刪除新增 Footer link；資源頁 CTA Text 改回「觀看分享會」、CTA Links 改回 `https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt&si=2ZuDFQ9xyAeJLM-9`，再發布。
 
 驗證完成：正式站首頁、資源頁、三三專區與 12 月 News，以及 staging 資源頁，每頁僅一個 Footer 新入口；點擊 Footer／資源頁 CTA 均到專區，四尺寸無橫向溢出、無 JS pageerror，Footer 新連結字色／字級／行高與相鄰連結一致。
+
+## 2026-11-10 第二十二輪：下載 FAQ 補上網站入口提示
+
+- 使用者指出網站已有簡報入口，要求 FAQ 多提供提示；「簡報可以下載嗎？」改為引導本頁「過去直播」→集數卡片「下載簡報」→填寫並送出課後問卷→下載按鈕，並說明沒有入口的集數目前未開放下載、簡報須經講師同意。
+- 只改該題答案與 FAQPage acceptedAnswer，其他四題及 schema graph 節點維持；Git 維護來源 `custom-code/monthly-sharing/page-schema.jsonld`。
+- 正式發布 task `7873257a-5964-4e31-b4e8-2d12ea3e0ee3`，www／apex lastPublished 均 `2026-11-10T11:54:28.478Z`，同步 staging。
+- 答案原 String element `beeb6a21-04e6-044e-60a5-e3ebd4606dd8`，以 set_text 更新；schema 用 bulk_update_pages_schema_markup，寫入後獨立讀回整份一致。
+- 回退：還原上一提交中該題答案與 JSON-LD acceptedAnswer，再發布。不要回退其他 FAQ 或整頁改動。
+- 發布後正式站／staging 都已核對新答案、FAQ 展開及完整 JSON-LD 與 Git 一致；1440／390 無橫向溢出、無 JS pageerror。證據 `custom-code/monthly-sharing/2026-11-10-download-faq-qa.json`。首次檢查發生於發布編譯完成前而讀到舊版；等待 lastPublished 更新後重新驗證通過。

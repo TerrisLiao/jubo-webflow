@@ -1,0 +1,46 @@
+{
+  "checkedAt": "2026-11-10T11:55:14.733Z",
+  "results": [
+    {
+      "base": "https://www.jubo-health.com",
+      "status": 200,
+      "answer": "可以。到本頁上方的「過去直播」，找到想看的集數，點選卡片下方的「下載簡報」。填寫並送出課後問卷後，就會出現該集簡報的下載按鈕。僅提供經講師同意公開的簡報；若卡片沒有「下載簡報」，表示該集目前未開放下載。",
+      "expanded": true,
+      "schemaMatch": true,
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "base": "https://jubo-health.webflow.io",
+      "status": 200,
+      "answer": "可以。到本頁上方的「過去直播」，找到想看的集數，點選卡片下方的「下載簡報」。填寫並送出課後問卷後，就會出現該集簡報的下載按鈕。僅提供經講師同意公開的簡報；若卡片沒有「下載簡報」，表示該集目前未開放下載。",
+      "expanded": true,
+      "schemaMatch": true,
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "publication": {
+    "taskId": "7873257a-5964-4e31-b4e8-2d12ea3e0ee3",
+    "wwwLastPublished": "2026-11-10T11:54:28.478Z",
+    "apexLastPublished": "2026-11-10T11:54:28.478Z"
+  }
+}

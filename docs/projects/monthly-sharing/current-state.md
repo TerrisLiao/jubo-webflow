@@ -76,3 +76,10 @@
 - 共用 Footer definition `bf559d46-0de7-0e5d-3110-35684e2ba87f`：在「長照專業成長」後新增 `88d97a56-e3b4-4044-a064-a371269ceb55`，文字「三三分享會」、`footer-link`、`data-underline-link`，URL `/resources/jubo-33-live-stream`。前後完整樹比對，扣除此新增子樹後完全一致。
 - `/resources/education`（page `6a2e38cda77c1ee08c7f8ba1`）Glass Button instance `2179076d-4294-fc5f-f4b8-650f613dd46d`：只覆寫 CTA Text 與 CTA Links，不改 Glass Button definition、樣式與其他實例。
 - 已正式發布 task `9de59f8f-6ad3-447f-8f72-041d614e48ef`，www／apex lastPublished 均 `2026-11-10T11:03:04.349Z`，並發布 staging。驗證見 `custom-code/monthly-sharing/2026-11-10-entrances-qa.json`。
+
+## 2026-11-10 第二十二輪：下載 FAQ 補上網站入口提示
+
+- 使用者指出網站已有簡報入口，要求 FAQ 多提供提示；「簡報可以下載嗎？」改為引導本頁「過去直播」→集數卡片「下載簡報」→填寫並送出課後問卷→下載按鈕，並說明沒有入口的集數目前未開放下載、簡報須經講師同意。
+- 只改該題答案與 FAQPage acceptedAnswer，其他四題及 schema graph 節點維持；Git 維護來源 `custom-code/monthly-sharing/page-schema.jsonld`。
+- 正式發布 task `7873257a-5964-4e31-b4e8-2d12ea3e0ee3`，www／apex lastPublished 均 `2026-11-10T11:54:28.478Z`，同步 staging。
+- 發布後正式站／staging 都已核對新答案、FAQ 展開及完整 JSON-LD 與 Git 一致；1440／390 無橫向溢出、無 JS pageerror。證據 `custom-code/monthly-sharing/2026-11-10-download-faq-qa.json`。首次檢查發生於發布編譯完成前而讀到舊版；等待 lastPublished 更新後重新驗證通過。

@@ -24,3 +24,5 @@
 12 月 EP23 直播網址已依使用者提供於 2026-11-10 更新並發布，維護來源 `news-ep23.html`，驗證見 `2026-11-10-ep23-link-qa.json`。
 
 `2026-11-10-entrances.json` 保存 Footer「資源」新增入口與長照專業成長頁 CTA 覆寫的 ID、目標及回退值；`2026-11-10-entrances-qa.json` 為發布後驗證。
+
+`2026-11-10-download-faq-qa.json` 保存下載 FAQ 網站入口提示的發布後驗證，答案與 `page-schema.jsonld` 保持一致。
