@@ -274,3 +274,14 @@
   | 林玉秀 | 感染管制中心組長 | 柳營奇美醫院 |
 
   部門移到職稱、單位只留機構名，讓每張卡片的單位都在一到兩行內。鍾清惠項目仍為草稿（EP23 用），未改狀態。
+
+## 2026-11-10 第十五輪：staging 驗證與入口連結保底
+
+- staging 驗證（Playwright 1440px）：講師卡片 15 張、「講師介紹」與彈窗已移除、姓名 20px、照片 72px，單位無一被截斷；EP18–EP21 單集頁有問卷且下載連結為壓縮版 asset、「索取集數」正確；EP22 無問卷區塊；無 JS 錯誤。
+- **問題**：「填問卷下載簡報 →」發布後 `href="#"`，`{"mode":"collectionPage"}` 由 API 寫入時不會解析（新聞中心卡片同寫法可用，推測 Designer 寫入帶有 API 看不到的資料）。
+- **處理**：
+  - 四個連結加 `data-sansan-slug`（綁 CMS Slug）。
+  - 試兩種寫法：`30b6ff5f…`＝`{"mode":"page","to":{"pageId":Template}}`、`8002f9a5…`＝`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`；另兩個維持 `collectionPage`。
+  - 頁尾新增保底 `<script id="sansan-deck-links">`（正本 [`sansan-deck-links.js`](../../../custom-code/monthly-sharing/sansan-deck-links.js)）：連結不是站內路徑時改為「前綴＋slug」，前綴優先從已正確解析的連結推得，否則用 `/monthly-sharing/`。本機三種情境測試通過。
+- 講師卡片 head CSS 加 `text-wrap: balance`，避免單一字掉行。
+- 未發布。
