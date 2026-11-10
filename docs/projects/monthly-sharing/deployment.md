@@ -174,3 +174,21 @@
 2. Designer Preview 走一遍：hero 兩個視窗、最新消息卡（右側背景／講師／白字講綱）、底部釘選條滑入／收回／✕、分類篩選、FAQ 開合、手機版。
 3. 取得明確 Publish 授權後再發布；發布後抓線上 HTML 驗證 JSON-LD 並跑 Rich Results Test。
 - **2026-11-09 補充**：使用者截圖仍見白色標題列與簡報視窗，為舊畫面（Data API 讀回只剩主畫面＋聊天室兩個視窗、無標題列）；請 Designer 重新整理後再看。另移除 `sansan-live_window` 的白色底色，避免圖片邊緣透出白邊（聊天室 `.sansan-chat` 自帶白底）。
+
+## 2026-11-10 第十輪：單集頁「課程簡報」區塊與表單（未發布）
+
+使用者：採 Webflow 原生表單；以加 LINE 為主、表單為備用；同一人每月重填可看出固定參加者；需說明每月維護方式。
+
+- **單集 Template 頁**（`6aed903cb9132d6f3c237287`，原本空白）：建立站台骨架 `page-wrapper` > Global Style、`main-wrapper` > Navbar、Page Gradient BG、`all-sections-wrapper` > `section_sansan-deck`、Footer（皆用既有共用元件）。
+- **`section_sansan-deck`**（`69928143-…a7`）：兩欄 `.sansan-deck_component`（0.85fr／1.15fr，平板以下單欄）。
+  - 左 `.sansan-deck_info`（sticky）：Section Tag「三三分享會課程簡報」、EP＋集數（綁「集數」）、分類（`sansan-hero_track`，綁「分類」）、H1（綁 Name）、說明、講師膠囊（沿用 `sansan-hero_speaker`，綁講師照片／名字／單位）。
+  - 右上 LINE 卡（沿用 `sansan-latest_card`＋`gradient-bg is-bento-color-1`）：「加入 LINE，領取本集簡報」、三步驟（關鍵字 `簡報EP`＋集數綁定）、CTA Button「加入 LINE，領取簡報」→ `lin.ee/Clf7lXr`（新分頁）、QR code（素材 `6af2bdd78871e347179e6e2d`，自行產生，小螢幕隱藏）。
+  - 右下 `.sansan-deck_form-card`：「不方便用 LINE？填表單下載」＋Webflow 原生表單「**三三分享會簡報索取**」（POST）。欄位：索取簡報（顯示主題；HTML Embed 隱藏欄位 `索取集數` = `EP{集數} {Name}`）、姓名＊、Email＊（type email）、機構名稱＊、職稱＊（7 選 1）、機構類型（5 選 1）、目前有使用智齡系統嗎＊（有／沒有／不確定）、想了解智齡系統（勾選）、個資同意＊（勾選）。送出鈕「送出並下載簡報」。
+  - 成功畫面：「收到了！可以下載本集簡報」＋「下載簡報」（綁「簡報下載連結」，新分頁）＋「加入 LINE，下一集開播前提醒你 →」。錯誤訊息改中文。
+- **API 限制與改法**：
+  - Select 下拉的選項無法用 API 設定，三題改用 radio 膠囊（`sansan-deck_choice`）。
+  - input 的 `value`／`placeholder` 屬性被 API 視為保留字：無法加 placeholder；索取集數改用 HTML Embed `<input type="hidden">` 搭 CMS token，**需在 Designer 確認 token 有被辨識**。
+  - Span 不能綁 CMS 文字，EP 數字與關鍵字數字改用 div。
+  - 區塊的 Conditional visibility（開放簡報）寫入被拒（component map conflict），**需在 Designer 設定**；目前每一集都會顯示此區塊。
+- **版面預覽**：Designer 未連線無法截圖，依相同樣式數值重繪桌機／手機預覽給使用者；LINE 卡標題字級由 1.75rem 調為 1.5rem 避免斷字。
+- **維護說明**：新增 [每月維護手冊](maintenance.md)。

@@ -7,8 +7,9 @@
 先讀：
 
 1. [設計提案](design-proposal.md)：七項定義、Section Flow、Mobbin 參考、元件對照、CMS 模型、每月維護節奏、待確認事項
-2. [現況](current-state.md)、[待辦](tasks.md)、[決策](decisions.md)、[部署](deployment.md)、[歷程](changelog.md)
-3. 參考資料：[行銷 SOP 原文](reference/行銷執行SOP.md)、[集數資料](reference/集數資料.md)
+2. [每月維護手冊](maintenance.md)：新增集數、切換最新一集、移到過去直播、開放簡報、查看表單名單
+3. [現況](current-state.md)、[待辦](tasks.md)、[決策](decisions.md)、[部署](deployment.md)、[歷程](changelog.md)
+4. 參考資料：[行銷 SOP 原文](reference/行銷執行SOP.md)、[集數資料](reference/集數資料.md)
 
 預覽 Artifact（本機模擬，非 Webflow）：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>
 

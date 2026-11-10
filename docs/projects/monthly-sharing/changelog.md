@@ -20,3 +20,4 @@
 - 2026-11-09：最新消息標題改「11月份最新直播」；卡片移除「下一集直播」、EP22、加入行事曆與第二顆按鈕，只留「加 LINE，開啟直播提醒」；右側講師姓名與職稱放大為主視覺；講綱改白字（頁面 head 加 scoped CSS）。未發布。
 - 2026-11-09：EP22 講綱經使用者確認。hero 簡化：只留主直播畫面與聊天室兩個視窗，移除白框與白色標題列，「直播中」與送出鈕改 teal 純色。未發布。
 - 2026-11-09：寫入 SEO title／description、Open Graph 與 JSON-LD（WebPage、BreadcrumbList、EventSeries、FAQPage），slug 維持 `/resources/jubo-33-live-stream`；修正兩題 FAQ（過去直播、簡報取得流程）。張照服員維持姓氏頭像。CMS Template 頁仍需在 Designer 設 Draft 才能上線。未發布。
+- 2026-11-10：單集頁 Template 建立「課程簡報」區塊：加 LINE 領簡報（關鍵字「簡報EP＋集數」、QR code）為主，Webflow 原生表單「三三分享會簡報索取」為備用，成功後顯示 CMS 簡報下載連結；新增每月維護手冊。未發布；Conditional visibility 與隱藏欄位 token 需在 Designer 確認。
