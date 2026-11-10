@@ -22,3 +22,4 @@
 - 2026-11-09：寫入 SEO title／description、Open Graph 與 JSON-LD（WebPage、BreadcrumbList、EventSeries、FAQPage），slug 維持 `/resources/jubo-33-live-stream`；修正兩題 FAQ（過去直播、簡報取得流程）。張照服員維持姓氏頭像。CMS Template 頁仍需在 Designer 設 Draft 才能上線。未發布。
 - 2026-11-10：單集頁 Template 建立「課程簡報」區塊：加 LINE 領簡報（關鍵字「簡報EP＋集數」、QR code）為主，Webflow 原生表單「三三分享會簡報索取」為備用，成功後顯示 CMS 簡報下載連結；新增每月維護手冊。未發布；Conditional visibility 與隱藏欄位 token 需在 Designer 確認。
 - 2026-11-10：依直播回放確認簡報流程為「課後問卷 → 通關密語 → LINE @jubohealth」，單集頁改為 Webflow 課後問卷（含滿意度、幫助程度、收穫、想聽主題）＋送出後顯示 CMS「通關密語」＋LINE 領簡報；移除公開關鍵字與直接下載。未發布。
+- 2026-11-10：單集頁改為問卷送出後直接下載簡報（綁 CMS「簡報下載連結」），停用通關密語；LINE 卡改為直播提醒與最新資訊；講師膠囊放大（combo `is-deck`）；修正 radio 無法互斥／取消（頁尾 script 統一 name），「索取集數」改由 script 帶入；節目專區 FAQ 與 JSON-LD 同步。未發布。

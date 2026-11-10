@@ -3,7 +3,8 @@
 | 優先級 | 工作 | 驗收條件 | 狀態／證據 |
 |---|---|---|---|
 | P0 | 在 Designer 把兩個 CMS Template page 設為 Draft（API 設定無效） | 讀回 `draft: true`；全站發布不會帶出未設計的單集頁 | 未開始，需 Designer |
-| P0 | Designer：單集頁 `section_sansan-deck` 設 Conditional visibility「開放簡報 is ON」；確認表單 HTML Embed 的 `{{wf}}` token 被辨識 | 開放簡報關閉的集數不顯示區塊；表單送出記錄「EP22 主題」 | 未開始，需 Designer（API 被拒） |
+| P0 | Designer：單集頁 `section_sansan-deck` 設 Conditional visibility「開放簡報 is ON」 | 開放簡報關閉的集數不顯示區塊 | 未開始，需 Designer（API 被拒）；「索取集數」已改由頁尾 script 帶入，不需修 Embed |
+| P0 | staging 驗證第十一輪：同題 radio 只能選一個且可改選；送一筆標明「測試」的問卷，Forms 記到「EP22 長照職場性騷擾與照護界線」與「Q1 機構類型」等欄；成功後出現下載按鈕 | 讀回 staging 與 Forms 紀錄 | 待使用者重新發布 staging；EP22 尚未填「簡報下載連結」 |
 | P1 | 表單通知信收件信箱、個資同意文字（法務）、官網用的 LINE 連結（`lin.ee/Clf7lXr` 或 `sB2lGRH`）、官方 LINE QR 圖（課後問卷題目已改為與 MS Forms 原題一致） | 使用者／行銷提供後替換 | 待確認 |
 | P1 | 節目專區連到單集頁（最新消息卡或過去直播卡加「索取簡報」入口） | 有入口可到達單集頁 | 未開始 |
 | P0 | Designer Preview 驗收 `/jubo-33-live-stream` | 四斷點排版；Hero 日期不被切；四張分類卡圖示持續循環、點選後漸層底條移到該卡且下方只出現該分類回放；YouTube CTA 新分頁開播放清單；FAQ 樣式同首頁（開合需 staging） | 未開始（Designer App 未連線） |

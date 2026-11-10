@@ -90,7 +90,7 @@
         {
           "@type": "Question",
           "name": "簡報可以下載嗎？",
-          "acceptedAnswer": { "@type": "Answer", "text": "可以。直播最後會提供課後問卷，填寫後會拿到通關暗號，到智齡科技 LINE 官方帳號輸入暗號，就能取得當月分享會簡報。" }
+          "acceptedAnswer": { "@type": "Answer", "text": "可以。講師同意公開的集數，直播最後會提供課後問卷連結，填寫送出後就能直接下載當月分享會簡報。" }
         },
         {
           "@type": "Question",
