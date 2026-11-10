@@ -89,3 +89,9 @@
 - 講師 Template 不支援 Draft；以 head `noindex`＋暫時返回處理，完成講師模板後再移除。
 - EP23 已提前公開，直播網址已於 2026-11-10 依使用者提供填入 CMS 與 News：https://www.youtube.com/watch?v=tuOSh2o2qi0。
 - 表單送出需 Cloudflare Turnstile；不要為了測試移除／繞過驗證或硬把 disabled 按鈕啟用。2026-11-10 已由使用者一般瀏覽器送出／下載成功、Forms 入庫核對並完成正式發布；後續改表單流程時應重新驗證。
+
+## 分類圖示動態與 LINE 背景（2026-11-10）
+
+- 分類動態為原生 IX3 `i-1616db2c`，6 秒循環，37 個 cue；遮罩分層 ID 與來源見 `2026-11-10-motion-design.json`。不要再對同一圖層加第二組循環，以免 transform 互相覆寫。
+- 新增圖層僅裝飾用途，分類卡片與回放篩選的既有 ID 保留。減少動態時應保留三根長條、心電線、勾勾與兩顆小星。
+- LINE 背景使用 `gradient-bg is-sansan-line`，不要改共用 `is-bento-color-1/2`，以免影響官網其他區塊。

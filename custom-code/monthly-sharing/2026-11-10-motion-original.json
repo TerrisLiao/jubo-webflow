@@ -1,0 +1,302 @@
+{
+  "interaction": {
+    "id": "i-1616db2c",
+    "name": "Monthly Sharing · Filter icons loop (IX3)",
+    "pageId": "6aed901905a96260ffcc4595",
+    "scope": {
+      "type": "pages",
+      "value": [
+        "6aed901905a96260ffcc4595"
+      ]
+    },
+    "triggers": [
+      {
+        "extensionKey": "wf:scroll",
+        "config": {
+          "controlType": "scroll",
+          "scrollTriggerConfig": {
+            "start": "top bottom",
+            "end": "bottom top",
+            "enter": "play",
+            "leave": "none",
+            "enterBack": "none",
+            "leaveBack": "none"
+          }
+        },
+        "target": {
+          "extensionKey": "wf:class",
+          "value": [
+            "0405eda0-edd0-e2f5-d1d8-8e60d6cbfff2"
+          ],
+          "filterContext": {
+            "relationship": "none",
+            "filterBy": [
+              "wf:class",
+              []
+            ],
+            "firstMatchOnly": false
+          }
+        }
+      }
+    ],
+    "timelines": [
+      {
+        "id": "t-8014a5ce",
+        "name": "Icons loop",
+        "pageId": "6aed901905a96260ffcc4595",
+        "actions": [
+          {
+            "id": "bars",
+            "name": "Bars breathe",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "68a57b90-a274-9d94-1f9e-d475f68e342b"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": [
+                  null,
+                  0.55
+                ]
+              }
+            }
+          },
+          {
+            "id": "heart",
+            "name": "Heart beat",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.1
+                ]
+              }
+            }
+          },
+          {
+            "id": "pulse",
+            "name": "Pulse fade",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "63c1de74-348a-4ade-c95c-6b1022b8f9ac"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "30%"
+                ],
+                "x": [
+                  null,
+                  3
+                ]
+              }
+            }
+          },
+          {
+            "id": "check",
+            "name": "Check pop",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "23b31064-87f7-bd5d-775a-c042d35593bc"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "35%"
+                ],
+                "scale": [
+                  null,
+                  0.7
+                ]
+              }
+            }
+          },
+          {
+            "id": "spark",
+            "name": "Spark breathe",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "e2c54300-6354-71b8-ecc1-aa6476c58838"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  15
+                ],
+                "scale": [
+                  null,
+                  0.86
+                ]
+              }
+            }
+          },
+          {
+            "id": "spark-sm",
+            "name": "Small sparks twinkle",
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "06be68ba-fc74-6f9c-8db0-a91a7fa45140"
+                ],
+                "filterContext": {
+                  "relationship": "none",
+                  "filterBy": [
+                    "wf:class",
+                    []
+                  ],
+                  "firstMatchOnly": false
+                }
+              }
+            ],
+            "timing": {
+              "duration": 1.1,
+              "position": 0,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "20%"
+                ],
+                "scale": [
+                  null,
+                  1.15
+                ]
+              }
+            }
+          }
+        ],
+        "settings": {
+          "repeat": -1,
+          "yoyo": true
+        },
+        "version": 1
+      }
+    ],
+    "conditionalPlayback": [
+      {
+        "type": "prefers-reduced-motion",
+        "behavior": "dont-animate",
+        "breakpoints": []
+      }
+    ],
+    "version": 1
+  },
+  "masks": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"label\":\"Save the two original icon masks before splitting motion layers\",\"action\":\"query_styles\",\"result\":[{\"matches\":[{\"id\":\"f5c1a148-c531-8f46-308a-3f483e1b29ee\",\"name\":\"is-bars\",\"isFromLibrary\":false,\"isComboClass\":true,\"type\":\"combo\",\"selector\":\".sansan-filter_part.is-bars\",\"properties\":{\"base\":{\"properties\":{\"transform-origin\":\"50% 71%\",\"mask-image\":\"url(\\\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M8%2017v-3%22%2F%3E%3Cpath%20d%3D%22M13%2017V9%22%2F%3E%3Cpath%20d%3D%22M18%2017V5%22%2F%3E%3C%2Fsvg%3E\\\")\"}}}}],\"truncated\":false},{\"matches\":[{\"id\":\"f7715379-6915-ca79-4b90-a0984b793c63\",\"name\":\"is-spark-sm\",\"isFromLibrary\":false,\"isComboClass\":true,\"type\":\"combo\",\"selector\":\".sansan-filter_part.is-spark-sm\",\"properties\":{\"base\":{\"properties\":{\"mask-image\":\"url(\\\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M20%203v4%22%2F%3E%3Cpath%20d%3D%22M22%205h-4%22%2F%3E%3Cpath%20d%3D%22M4%2017v2%22%2F%3E%3Cpath%20d%3D%22M5%2018H3%22%2F%3E%3C%2Fsvg%3E\\\")\"}}}}],\"truncated\":false}]}"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "lineBg": {
+    "elementId": "41107dec-e64c-017e-006f-e6ff88cb2c93",
+    "styleNames": [
+      "gradient-bg",
+      "is-bento-color-1"
+    ]
+  }
+}

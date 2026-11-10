@@ -26,3 +26,5 @@
 `2026-11-10-entrances.json` 保存 Footer「資源」新增入口與長照專業成長頁 CTA 覆寫的 ID、目標及回退值；`2026-11-10-entrances-qa.json` 為發布後驗證。
 
 `2026-11-10-download-faq-qa.json` 保存下載 FAQ 網站入口提示的發布後驗證，答案與 `page-schema.jsonld` 保持一致。
+
+`2026-11-10-motion-design.json` 是四分類原生 IX3 動態與 LINE 綠色漸層的定義／新增節點 ID；`2026-11-10-motion-original.json` 是回退來源。發布驗證在 `2026-11-10-motion-qa.json`；驗收 GIF／錄影只留 scratch，不進 Git。

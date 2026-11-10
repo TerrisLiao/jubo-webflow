@@ -1,0 +1,1233 @@
+{
+  "description": "Native Webflow IX3 motion and scoped LINE gradient; no animation video or extra JavaScript.",
+  "newElements": {
+    "bar2": "cd10ac7a-01ac-9725-3937-24ee3fa0615c",
+    "bar3": "f3b6c275-fc93-975e-8f1c-14248011d757",
+    "pulseReveal": "abf0484c-1726-8294-9653-2b7e579d2165",
+    "checkReveal": "228cefbf-71eb-6487-9e88-e3d98ac727b9",
+    "sparkLow": "87cce479-ee3b-6392-eb68-16f238a4d8c0"
+  },
+  "newElementBuild": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[{\"build_label\":\"pulseTrace\",\"status\":\"success\",\"message\":\"Element created successfully\",\"data\":{\"id\":{\"component\":\"6aed901905a96260ffcc4595\",\"element\":\"c17649cf-8393-64a4-b77c-6a0485921729\"},\"type\":\"Block\",\"styleNames\":[\"sansan-filter_part\",\"is-pulse-trace\"],\"settings\":{\"tag\":\"div\",\"visibility\":true,\"block\":{\"tag\":\"div\"}}}},{\"build_label\":\"checkTrace\",\"status\":\"success\",\"message\":\"Element created successfully\",\"data\":{\"id\":{\"component\":\"6aed901905a96260ffcc4595\",\"element\":\"21942815-9361-fc3f-d8e2-20a4d944ad3c\"},\"type\":\"Block\",\"styleNames\":[\"sansan-filter_part\",\"is-check-trace\"],\"settings\":{\"tag\":\"div\",\"visibility\":true,\"block\":{\"tag\":\"div\"}}}}]"
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "styles": [
+    {
+      "name": "sansan-filter_reveal",
+      "props": {
+        "position": "absolute",
+        "left": "0",
+        "top": "0",
+        "width": "100%",
+        "height": "100%",
+        "overflow": "hidden",
+        "opacity": "0",
+        "pointer-events": "none",
+        "z-index": "2"
+      }
+    },
+    {
+      "name": "is-bar-2",
+      "parent": [
+        "sansan-filter_part"
+      ],
+      "props": {
+        "mask-image": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M13%2017V9%22%2F%3E%3C%2Fsvg%3E\")",
+        "transform-origin": "54.17% 70.83%"
+      }
+    },
+    {
+      "name": "is-bar-3",
+      "parent": [
+        "sansan-filter_part"
+      ],
+      "props": {
+        "mask-image": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M18%2017V5%22%2F%3E%3C%2Fsvg%3E\")",
+        "transform-origin": "75% 70.83%"
+      }
+    },
+    {
+      "name": "is-pulse-trace",
+      "parent": [
+        "sansan-filter_part"
+      ],
+      "props": {
+        "mask-image": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3.22%2012H9.5l.5-1%202%204.5%202-7%201.5%203.5h5.27%22%2F%3E%3C%2Fsvg%3E\")",
+        "width": "3.5rem",
+        "height": "3.5rem",
+        "right": "auto",
+        "bottom": "auto"
+      }
+    },
+    {
+      "name": "is-check-trace",
+      "parent": [
+        "sansan-filter_part"
+      ],
+      "props": {
+        "mask-image": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m9%2014%202%202%204-4%22%2F%3E%3C%2Fsvg%3E\")",
+        "width": "3.5rem",
+        "height": "3.5rem",
+        "right": "auto",
+        "bottom": "auto"
+      }
+    },
+    {
+      "name": "is-spark-low",
+      "parent": [
+        "sansan-filter_part"
+      ],
+      "props": {
+        "mask-image": "url(\"data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221.6%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%2017v2%20M5%2018H3%22%2F%3E%3C%2Fsvg%3E\")",
+        "transform-origin": "16.67% 75%"
+      }
+    }
+  ],
+  "lineGradient": "radial-gradient(circle farthest-corner at 100% 100%, hsla(184.4, 100%, 37.65%, 0.48), hsla(60, 100%, 75.1%, 0.72))",
+  "interaction": {
+    "id": "i-1616db2c",
+    "name": "Monthly Sharing · Four editorial icon stories (IX3)",
+    "triggers": [
+      {
+        "extensionKey": "wf:scroll",
+        "config": {
+          "scrollTriggerConfig": {
+            "start": "top 85%",
+            "end": "bottom top",
+            "enter": "play",
+            "leave": "pause",
+            "enterBack": "play",
+            "leaveBack": "pause"
+          }
+        },
+        "target": {
+          "extensionKey": "wf:inst",
+          "value": [
+            "6aed901905a96260ffcc4595",
+            "0405eda0-edd0-e2f5-d1d8-8e60d6cbffea"
+          ]
+        }
+      }
+    ],
+    "timelines": [
+      {
+        "name": "Six-second staggered icon stories",
+        "actions": [
+          {
+            "id": "sansan-film-1",
+            "name": "Reset three independent chart strokes",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "68a57b90-a274-9d94-1f9e-d475f68e342b"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "cd10ac7a-01ac-9725-3937-24ee3fa0615c"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "f3b6c275-fc93-975e-8f1c-14248011d757"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": 0.16,
+                "opacity": "65%"
+              }
+            }
+          },
+          {
+            "id": "sansan-film-2",
+            "name": "Chart stroke grows 1",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "68a57b90-a274-9d94-1f9e-d475f68e342b"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0.12,
+              "duration": 0.76,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": [
+                  null,
+                  1
+                ],
+                "opacity": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-3",
+            "name": "Chart stroke grows 2",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "cd10ac7a-01ac-9725-3937-24ee3fa0615c"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0.3,
+              "duration": 0.76,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": [
+                  null,
+                  1
+                ],
+                "opacity": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-4",
+            "name": "Chart stroke grows 3",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "f3b6c275-fc93-975e-8f1c-14248011d757"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0.48,
+              "duration": 0.76,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": [
+                  null,
+                  1
+                ],
+                "opacity": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-5",
+            "name": "Chart quietly returns to baseline",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "68a57b90-a274-9d94-1f9e-d475f68e342b"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "cd10ac7a-01ac-9725-3937-24ee3fa0615c"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "f3b6c275-fc93-975e-8f1c-14248011d757"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 5.55,
+              "duration": 0.45,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scaleY": [
+                  null,
+                  0.68
+                ],
+                "opacity": [
+                  null,
+                  "75%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-6",
+            "name": "Resting heartbeat and signal",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": 1
+              }
+            }
+          },
+          {
+            "id": "sansan-film-7",
+            "name": "Signal ghost stays legible",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "63c1de74-348a-4ade-c95c-6b1022b8f9ac"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": "28%",
+                "x": 0
+              }
+            }
+          },
+          {
+            "id": "sansan-film-8",
+            "name": "Reset signal reveal",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "abf0484c-1726-8294-9653-2b7e579d2165"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "width": "0%",
+                "opacity": "0%"
+              }
+            }
+          },
+          {
+            "id": "sansan-film-9",
+            "name": "Start signal sweep",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "abf0484c-1726-8294-9653-2b7e579d2165"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.1,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "width": "0%",
+                "opacity": "100%"
+              }
+            }
+          },
+          {
+            "id": "sansan-film-10",
+            "name": "Signal travels through heart",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "abf0484c-1726-8294-9653-2b7e579d2165"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.1,
+              "duration": 1.05,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "width": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-11",
+            "name": "Heartbeat first accent",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.35,
+              "duration": 0.14,
+              "ease": 2
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.095
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-12",
+            "name": "Heartbeat release",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.49,
+              "duration": 0.17,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-13",
+            "name": "Heartbeat second accent",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.68,
+              "duration": 0.11,
+              "ease": 2
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.045
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-14",
+            "name": "Heartbeat settles",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "0db6294b-e547-b3b8-f72b-c270f2812a6f"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 1.79,
+              "duration": 0.25,
+              "ease": 5
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-15",
+            "name": "Signal trail dissolves",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "abf0484c-1726-8294-9653-2b7e579d2165"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 2.4,
+              "duration": 0.65,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "0%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-16",
+            "name": "Reset checklist panel",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "8840d6c7-f39f-bf6c-f6a1-5fda32887fea"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": 0,
+                "y": 0
+              }
+            }
+          },
+          {
+            "id": "sansan-film-17",
+            "name": "Checklist guide stays visible",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "23b31064-87f7-bd5d-775a-c042d35593bc"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": "25%",
+                "scale": 1
+              }
+            }
+          },
+          {
+            "id": "sansan-film-18",
+            "name": "Reset check reveal",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "width": "0%",
+                "opacity": "0%",
+                "scale": 1
+              }
+            }
+          },
+          {
+            "id": "sansan-film-19",
+            "name": "Checklist anticipates",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "8840d6c7-f39f-bf6c-f6a1-5fda32887fea"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 2.15,
+              "duration": 0.25,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  -3
+                ],
+                "y": [
+                  null,
+                  -1.5
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-20",
+            "name": "Checklist settles into place",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "8840d6c7-f39f-bf6c-f6a1-5fda32887fea"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 2.4,
+              "duration": 0.55,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  0
+                ],
+                "y": [
+                  null,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-21",
+            "name": "Start check stroke",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 2.4,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "width": "0%",
+                "opacity": "100%",
+                "scale": 1
+              }
+            }
+          },
+          {
+            "id": "sansan-film-22",
+            "name": "Check writes across",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 2.4,
+              "duration": 0.66,
+              "ease": 5
+            },
+            "properties": {
+              "wf:transform": {
+                "width": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-23",
+            "name": "Check confirmation accent",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.06,
+              "duration": 0.16,
+              "ease": 2
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.12
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-24",
+            "name": "Check confirmation settles",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.22,
+              "duration": 0.3,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-25",
+            "name": "Check base receives completion",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "23b31064-87f7-bd5d-775a-c042d35593bc"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.5,
+              "duration": 0.3,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "100%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-26",
+            "name": "Check overlay fades",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "228cefbf-71eb-6487-9e88-e3d98ac727b9"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 4.5,
+              "duration": 0.5,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "0%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-27",
+            "name": "Check returns to quiet guide",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "23b31064-87f7-bd5d-775a-c042d35593bc"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 5.55,
+              "duration": 0.45,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "opacity": [
+                  null,
+                  "25%"
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-28",
+            "name": "Reset central star",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "e2c54300-6354-71b8-ecc1-aa6476c58838"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": 0,
+                "scale": 1
+              }
+            }
+          },
+          {
+            "id": "sansan-film-29",
+            "name": "Reset two independent satellite sparks",
+            "tt": 3,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "06be68ba-fc74-6f9c-8db0-a91a7fa45140"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "87cce479-ee3b-6392-eb68-16f238a4d8c0"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 0,
+              "duration": 0,
+              "ease": 0
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": 0.75,
+                "opacity": "60%",
+                "rotation": 0
+              }
+            }
+          },
+          {
+            "id": "sansan-film-30",
+            "name": "Central star winds up",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "e2c54300-6354-71b8-ecc1-aa6476c58838"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.25,
+              "duration": 0.3,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  -7
+                ],
+                "scale": [
+                  null,
+                  0.91
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-31",
+            "name": "Central star opens",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "e2c54300-6354-71b8-ecc1-aa6476c58838"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.55,
+              "duration": 0.55,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  6
+                ],
+                "scale": [
+                  null,
+                  1.075
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-32",
+            "name": "Central star settles",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "e2c54300-6354-71b8-ecc1-aa6476c58838"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 4.1,
+              "duration": 0.75,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "rotation": [
+                  null,
+                  0
+                ],
+                "scale": [
+                  null,
+                  1
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-33",
+            "name": "Upper sparkle lights",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "06be68ba-fc74-6f9c-8db0-a91a7fa45140"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.65,
+              "duration": 0.24,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.22
+                ],
+                "opacity": [
+                  null,
+                  "100%"
+                ],
+                "rotation": [
+                  null,
+                  12
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-34",
+            "name": "Upper sparkle trails",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "06be68ba-fc74-6f9c-8db0-a91a7fa45140"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.89,
+              "duration": 0.65,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1
+                ],
+                "opacity": [
+                  null,
+                  "65%"
+                ],
+                "rotation": [
+                  null,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-35",
+            "name": "Lower sparkle lights",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "87cce479-ee3b-6392-eb68-16f238a4d8c0"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 3.94,
+              "duration": 0.24,
+              "ease": 14
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1.28
+                ],
+                "opacity": [
+                  null,
+                  "100%"
+                ],
+                "rotation": [
+                  null,
+                  -12
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-36",
+            "name": "Lower sparkle trails",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "87cce479-ee3b-6392-eb68-16f238a4d8c0"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 4.18,
+              "duration": 0.65,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  1
+                ],
+                "opacity": [
+                  null,
+                  "65%"
+                ],
+                "rotation": [
+                  null,
+                  0
+                ]
+              }
+            }
+          },
+          {
+            "id": "sansan-film-37",
+            "name": "Satellites rest before next sequence",
+            "tt": 0,
+            "targets": [
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "06be68ba-fc74-6f9c-8db0-a91a7fa45140"
+                ]
+              },
+              {
+                "extensionKey": "wf:inst",
+                "value": [
+                  "6aed901905a96260ffcc4595",
+                  "87cce479-ee3b-6392-eb68-16f238a4d8c0"
+                ]
+              }
+            ],
+            "timing": {
+              "position": 5.55,
+              "duration": 0.45,
+              "ease": 6
+            },
+            "properties": {
+              "wf:transform": {
+                "scale": [
+                  null,
+                  0.75
+                ],
+                "opacity": [
+                  null,
+                  "60%"
+                ],
+                "rotation": [
+                  null,
+                  0
+                ]
+              }
+            }
+          }
+        ],
+        "settings": {
+          "repeat": -1,
+          "yoyo": false
+        }
+      }
+    ],
+    "conditionalPlayback": [
+      {
+        "type": "prefers-reduced-motion",
+        "behavior": "dont-animate"
+      }
+    ]
+  }
+}

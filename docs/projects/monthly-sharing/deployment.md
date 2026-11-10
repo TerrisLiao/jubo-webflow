@@ -365,3 +365,16 @@
 - 答案原 String element `beeb6a21-04e6-044e-60a5-e3ebd4606dd8`，以 set_text 更新；schema 用 bulk_update_pages_schema_markup，寫入後獨立讀回整份一致。
 - 回退：還原上一提交中該題答案與 JSON-LD acceptedAnswer，再發布。不要回退其他 FAQ 或整頁改動。
 - 發布後正式站／staging 都已核對新答案、FAQ 展開及完整 JSON-LD 與 Git 一致；1440／390 無橫向溢出、無 JS pageerror。證據 `custom-code/monthly-sharing/2026-11-10-download-faq-qa.json`。首次檢查發生於發布編譯完成前而讀到舊版；等待 lastPublished 更新後重新驗證通過。
+
+## 2026-11-10 第二十三輪：分類圖示動態與 LINE 綠色漸層
+
+- 使用者要求四個分類圖示有接近 After Effects 的細緻節奏，並提供 LINE 卡片黃綠／薄荷綠漸層參考，要求融入品牌色。
+- 分類圖示拆為獨立圖層，保留原圖示輪廓：三根長條依序生長、雙心跳＋心電線掃描、勾選描線＋確認回彈、大小星光依序出現並收尾。原生 IX3 `i-1616db2c` 改為 6 秒、37 個 cue，loop 不再整段 yoyo；進入視窗播放，離開暫停，prefers-reduced-motion 時保留完整靜態圖示。
+- 新增 7 個裝飾 DOM 節點與 7 個專案範圍樣式（含 LINE combo）；原三根長條／雙小星的遮罩拆層，其餘排版、分類切換、連結與共用元件維持。
+- 單集 Template 的 LINE 背景改為 `.gradient-bg.is-sansan-line`。漸層使用 Jubo `#00b2c0` 的透明色與既有 bento-ai 黃色方向；瀏覽器實際讀回 `rgba(0,178,192,0.48)`→`rgba(255,255,128,0.72)`。獨立 combo，未改共用 is-bento-color-1/2、Variable 或按鈕。
+- 測試站發布 task `a197817c-38c6-4ef3-bd37-b2353982be1b`；正式發布 task `4f93cd41-e5ae-4752-8f6e-e46fe3cc14ea`。www／apex lastPublished 均 `2026-11-10T12:12:07.592Z`。
+
+- 回退來源：`2026-11-10-motion-original.json`（舊 interaction、兩個原遮罩、LINE 舊樣式）。新定義／ID 在 `2026-11-10-motion-design.json`。先還原舊 timeline、兩個遮罩與 LINE 背景 class，再移除新增圖層；確定無使用後才移除本輪樣式並發布。
+- 動態為原生 IX3／遮罩圖層，沒有新增外部動畫程式、影片、Lottie 或改共用 Component。影片／GIF 僅作驗收錄影，不進 Git。
+- GitHub PR 說明更新遭自動核准檢查拒絕執行：工作區額度用盡，屬審查失敗，非動作安全性判定。未以替代工具繞過；待管理員補充額度後同步 `pr-description-pending.md`。先前下載 FAQ 的 PR 說明同步也一併待補。
+- 驗證：真實 staging／production 採樣一個完整循環，10 組圖層樣本均有變化；離屏暫停、減少動態靜態、品牌 teal 色值、主頁與單集頁四斷點無溢出通過，主頁無 JS pageerror。正式站四分類切換仍各顯示一個 pane。證據 `2026-11-10-motion-qa.json`。

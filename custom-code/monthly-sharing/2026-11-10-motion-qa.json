@@ -1,0 +1,153 @@
+{
+  "staging": {
+    "checkedAt": "2026-11-10T12:11:08.612Z",
+    "base": "https://jubo-health.webflow.io",
+    "distinct": {
+      "bar1": 10,
+      "bar2": 9,
+      "bar3": 11,
+      "heart": 4,
+      "pulseReveal": 17,
+      "clip": 5,
+      "check": 6,
+      "spark": 9,
+      "sparkHigh": 8,
+      "sparkLow": 9
+    },
+    "offscreenPaused": true,
+    "reducedStatic": true,
+    "lineBg": "radial-gradient(circle at 100% 100%, rgba(0, 178, 192, 0.48), rgba(255, 255, 128, 0.72))",
+    "lineClass": "gradient-bg is-sansan-line",
+    "widths": [
+      {
+        "page": "hub",
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 991,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 767,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 390,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 991,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 767,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 390,
+        "overflow": false
+      }
+    ],
+    "errors": []
+  },
+  "production": {
+    "checkedAt": "2026-11-10T12:12:43.249Z",
+    "base": "https://www.jubo-health.com",
+    "distinct": {
+      "bar1": 10,
+      "bar2": 10,
+      "bar3": 10,
+      "heart": 4,
+      "pulseReveal": 16,
+      "clip": 5,
+      "check": 5,
+      "spark": 9,
+      "sparkHigh": 8,
+      "sparkLow": 9
+    },
+    "offscreenPaused": true,
+    "reducedStatic": true,
+    "filterChecks": [
+      {
+        "index": 0,
+        "visiblePanes": 1
+      },
+      {
+        "index": 1,
+        "visiblePanes": 1
+      },
+      {
+        "index": 2,
+        "visiblePanes": 1
+      },
+      {
+        "index": 3,
+        "visiblePanes": 1
+      }
+    ],
+    "lineBg": "radial-gradient(circle at 100% 100%, rgba(0, 178, 192, 0.48), rgba(255, 255, 128, 0.72))",
+    "lineClass": "gradient-bg is-sansan-line",
+    "widths": [
+      {
+        "page": "hub",
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 991,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 767,
+        "overflow": false
+      },
+      {
+        "page": "hub",
+        "width": 390,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 1440,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 991,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 767,
+        "overflow": false
+      },
+      {
+        "page": "download",
+        "width": 390,
+        "overflow": false
+      }
+    ],
+    "errors": []
+  },
+  "publication": {
+    "stagingTaskId": "a197817c-38c6-4ef3-bd37-b2353982be1b",
+    "productionTaskId": "4f93cd41-e5ae-4752-8f6e-e46fe3cc14ea",
+    "wwwLastPublished": "2026-11-10T12:12:07.592Z",
+    "apexLastPublished": "2026-11-10T12:12:07.592Z"
+  },
+  "verification": "Native browser playback sampled for a full six-second cycle; no runtime mocking or timeline forcing."
+}
