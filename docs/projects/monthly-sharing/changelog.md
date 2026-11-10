@@ -23,3 +23,5 @@
 - 2026-11-10：單集頁 Template 建立「課程簡報」區塊：加 LINE 領簡報（關鍵字「簡報EP＋集數」、QR code）為主，Webflow 原生表單「三三分享會簡報索取」為備用，成功後顯示 CMS 簡報下載連結；新增每月維護手冊。未發布；Conditional visibility 與隱藏欄位 token 需在 Designer 確認。
 - 2026-11-10：依直播回放確認簡報流程為「課後問卷 → 通關密語 → LINE @jubohealth」，單集頁改為 Webflow 課後問卷（含滿意度、幫助程度、收穫、想聽主題）＋送出後顯示 CMS「通關密語」＋LINE 領簡報；移除公開關鍵字與直接下載。未發布。
 - 2026-11-10：單集頁改為問卷送出後直接下載簡報（綁 CMS「簡報下載連結」），停用通關密語；LINE 卡改為直播提醒與最新資訊；講師膠囊放大（combo `is-deck`）；修正 radio 無法互斥／取消（頁尾 script 統一 name），「索取集數」改由 script 帶入；節目專區 FAQ 與 JSON-LD 同步。未發布。
+
+- 2026-11-10：Codex 接手，讀回 Webflow 主頁與單集頁、檢查測試站。更新兩題已核准 FAQ，四分類簡報入口改「下載簡報」；修正缺集數 href 的 fallback。補回 Hero 原生 SVG 送出圖示，加寬主直播卡；LINE 卡移到單集頁左欄講師下方。修正成功訊息提前顯示與清除 Example Text。四尺寸本機模擬、連結與 radio 驗證通過；未發布、未送出表單。其餘十項文案提案在 tasks.md，待使用者核准。FAQ schema Git 已改，Webflow 同步待完成。

@@ -285,3 +285,18 @@
   - 頁尾新增保底 `<script id="sansan-deck-links">`（正本 [`sansan-deck-links.js`](../../../custom-code/monthly-sharing/sansan-deck-links.js)）：連結不是站內路徑時改為「前綴＋slug」，前綴優先從已正確解析的連結推得，否則用 `/monthly-sharing/`。本機三種情境測試通過。
 - 講師卡片 head CSS 加 `text-wrap: balance`，避免單一字掉行。
 - 未發布。
+
+## 2026-11-10 第十六輪：Codex 接手、FAQ 與入口、Hero、下載頁左欄
+
+- 授權：使用者核准前輪兩題 FAQ；要求全頁文案審核、入口改「下載簡報」、Hero 紙飛機恢復／主卡加寬、下載頁 LINE 移到講師下方、檢查 404。未授權發布。
+- Webflow 連線：末碼 92905b01 可讀寫目標 Jubo 站；不必再試第二個同名連線。
+- 主頁 `6aed901905a96260ffcc4595`：兩題 FAQ 及四個清單 TextLink 已 set_text 並讀回；完整 footer 原有單一 script 已替換為維護源碼，head 原樣保留。
+- Hero：`.sansan-live_window.is-main` main width 74%→82%，tiny 78%→84%；`sansan-chat_send` 新增 flex 置中、禁止縮小與官方 white Variable；原本空容器內新增原生 SVG `ce9df77b-a2f4-c8ba-3ce2-6bcaad3ae98c`／path `014b0cfb-5963-1901-5722-1da9270d031e`，非 Embed。
+- 單集 Template `6aed903cb9132d6f3c237287`：LINE 卡 `41107dec-…2cb1` 移到左欄 `.sansan-deck_info`、講師膠囊後；新增 `.sansan-latest_card.is-deck-line`（寬 100%、padding 1.5rem），`.sansan-deck_line` 改單欄、row gap 1.5rem、寬 100%，QR justify-self:start。
+- 表單成功訊息原 `.sansan-deck_success` 的 display:flex 覆蓋 `.w-form-done` 隱藏狀態，使未送出就出現下載鈕。移除該 display，原三個子元素順序不變移到新內層 `.sansan-deck_success-content`（元素 `8d7bf273-0bcf-3d2b-c331-5d5f70af0912`），內層保留 flex column 與 1rem gap。原生送出機制與成功連結 CMS 綁定不變。
+- 單集完整 footer 保留 radio 分組、索取集數處理，加上只移除 Example Text 的 placeholder 清理；不改已撰寫提示。
+- 404 HTTP 證據：測試站主頁與 ep18/19/20/21＝200；測試站 `/monthly-sharing`、`/jubo-33-live-stream/ep18`＝404。正式站主頁、四個單集頁＝404，正式網域最後發布仍為 2026-11-05；不能用測試站存在推定正式站已上線。
+- 證據界線：Webflow 讀回證明 Designer 修改；四尺寸（1440/991/767/390）驗證為已發布 staging HTML 套用同值修改的本機瀏覽器模擬，兩頁皆無橫向溢出。三組 fallback 邊界案例通過、radio 可改選且同題互斥；未對外送出問卷，不宣稱 Forms 入庫成功。
+- SEO schema：Git `page-schema.jsonld` 已同步核准 FAQ；本輪工具只曝露 unknown action schemas，嘗試讀取 schema 的動作均被 connector schema 驗證拒絕，尚未成功同步 Webflow 的專用 schema 設定。發布前需完成。
+- 其餘文案僅審核，tasks.md 完整十項待核准；未變更課程正式名稱、講師資料、必填規則、共用 Navbar／Footer 定義。
+- 本輪未 Publish，含 staging。

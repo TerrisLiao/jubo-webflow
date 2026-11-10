@@ -1,6 +1,6 @@
 # 三三分享會節目專區
 
-狀態：**Webflow 草稿頁已建立**（`/jubo-33-live-stream`，draft，未發布），待 Designer Preview 驗收。
+狀態：測試站已有主頁與 EP18–EP21 下載頁；正式站仍為 404。本輪修正已寫入 Webflow Designer、未發布，詳見 [現況](current-state.md)。
 
 三三分享會（每月第三個週三 12:00 YouTube 直播）的官網節目專區（Hub）＋每集 CMS 單集頁。依使用者 2026-11-05 提供的 [行銷 SOP](reference/行銷執行SOP.md)「事前宣傳」第一、二項建立。
 
