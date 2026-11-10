@@ -60,7 +60,7 @@
 1. 簡報轉 PDF（單檔 **30MB 以內**；太大先用 Acrobat「縮小檔案」或 ilovepdf 壓縮）。
 2. 上傳到 Webflow：Designer 左側 **Assets** → 上傳 PDF（或把 PDF 傳給 Claude，會先壓縮再上傳）。點檔案 → 複製網址（`https://cdn.prod.website-files.com/…pdf`）。不必用 OneDrive，也不用逐檔設定分享。
 3. CMS 該集：填「**簡報下載連結**」、打開「**開放簡報**」→ Save → Publish。
-4. 直播結尾，聊天室貼**該集單集頁網址**（例：`https://www.jubo-health.com/jubo-33-live-stream/ep22`）請大家填問卷，取代以前的 MS Forms 連結。
+4. 直播結尾，聊天室貼**該集單集頁網址**（例：`https://www.jubo-health.com/monthly-sharing/ep22`）請大家填問卷，取代以前的 MS Forms 連結。
 
 注意：下載連結寫在單集頁的 HTML 裡（送出前隱藏），懂得看原始碼的人不填問卷也拿得到。簡報本來就是公開分享連結，可接受；若某集簡報不能外流，就不要開放。
 
@@ -79,7 +79,7 @@
 1. 單集頁 Template 的課程簡報區塊（`section_sansan-deck`）已用 visibility 綁「開放簡報」（2026-11-10 以 API 完成），不需再設 Conditional visibility。
 2. 隱藏欄位「索取集數」已由頁尾 script 填入，不需在 Designer 修 Embed。Embed 裡的 `{{wf …}}` 文字會被 script 覆蓋，可保留。
 3. Collection URL 改 `jubo-33-live-stream`（單集頁網址變 `/jubo-33-live-stream/ep22`）。
-4. 單集頁其他區塊尚未設計前，Template 先維持 Draft；要上線簡報索取時再取消 Draft。
+4. CMS Template 無法設為 Draft。現行已發布簡報索取頁；未開放簡報會返回專區，講師獨立頁暫 noindex 並返回專區。
 5. LINE QR code 目前是用 `lin.ee/Clf7lXr` 自己產生的；若行銷有官方 QR 圖，換掉 `sansan-line-qr.png`。
 6. 單集頁在哪裡：Designer 左側 **Pages → CMS Collection pages →「三三分享會集數 Template」**，右上可切換要預覽的集數。
 
@@ -88,4 +88,4 @@
 - 講師獨立頁與沒有開放簡報的單集網址，目前暫時返回節目專區；在正式設計前不要建立這些網址的對外入口。
 - 講師 Template 不支援 Draft；以 head `noindex`＋暫時返回處理，完成講師模板後再移除。
 - EP23 已依使用者同意提前公開預告，但直播網址尚未提供；上架後回填該集 CMS 與 News 的直接直播連結。
-- 表單送出需 Cloudflare Turnstile；不要為了測試移除／繞過驗證或硬把 disabled 按鈕啟用。一般瀏覽器送出驗證完成，才可完成本輪正式發布。
+- 表單送出需 Cloudflare Turnstile；不要為了測試移除／繞過驗證或硬把 disabled 按鈕啟用。2026-11-10 已由使用者一般瀏覽器送出／下載成功、Forms 入庫核對並完成正式發布；後續改表單流程時應重新驗證。

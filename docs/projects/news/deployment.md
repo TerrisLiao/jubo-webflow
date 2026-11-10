@@ -22,3 +22,10 @@
 - 使用者授權審核後正式發布，另核准 EP23 提前公開；兩篇 isDraft:false、日期 2026-11-10，保留原內容並補三三專區連結。
 - staging：兩個 `/news/monthly-third-wednesday-sharing-202611`／`202612` 均 HTTP 200，一個 H1、日期正確、課程重點圖片載入、專區連結正常，1440／991／767／390 無橫向溢出。
 - production：尚未發布；三三專區問卷送出因執行環境 Cloudflare 連線失敗，等待使用者一般瀏覽器驗證後再依既有授權發布。
+
+## 2026-11-10：EP22／EP23 正式發布
+
+- 使用者成功完成 EP12 問卷下載，Forms 入庫核對後，依既有授權正式發布。
+- Webflow task `4e3ef6b6-d85f-4c6f-b47d-9be692311ca5`；www／apex lastPublished `2026-11-10T10:30:53.018Z`。
+- 正式站兩篇 `/news/monthly-third-wednesday-sharing-202611`／`202612` 均 HTTP 200；標題、日期、課程重點圖片、專區連結正確，1440／991／767／390 無橫向溢出。EP23 已提前公開。
+- 證據：`custom-code/monthly-sharing/2026-11-10-production-qa.json`。EP23 直播網址待活動前補上；雲端環境未驗證 YouTube 實際播放。

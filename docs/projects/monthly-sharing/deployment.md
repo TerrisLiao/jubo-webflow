@@ -2,10 +2,10 @@
 
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
-| Git commit／PR | 提案與實作紀錄已提交至 `claude/christmas-sharing-page-3u67cr`；未開 PR | 2026-11-06 | 本分支提交紀錄 |
-| Webflow Designer | **已建立草稿頁與 CMS**（Data API 寫入，Designer App 未連線） | 2026-11-06 | 見下方 |
-| staging | 未發布 | — | — |
-| production | 未發布 | — | — |
+| Git commit／PR | 同分支實作與發布證據；Draft PR #27，尚未合併 | 2026-11-10 | https://github.com/TerrisLiao/jubo-webflow/pull/27 |
+| Webflow Designer | 主頁、模板、CMS 與自訂程式已寫入並讀回 | 2026-11-10 | 各輪部署紀錄 |
+| staging | 已發布，人工送出／下載及 Forms 入庫通過 | 2026-11-10 | staging QA 與第十九輪紀錄 |
+| production | www／apex 已發布並完成動線與 schema 驗證 | 2026-11-10T10:30:53.018Z | production QA 與兩網域 lastPublished 讀回 |
 
 ## 2026-11-06 第一版：草稿頁、CMS、IX3
 
@@ -325,3 +325,13 @@
 - 尚未通過的發布閘門：Cloudflare challenge 主機在執行環境 CONNECT 403；submit disabled，沒有真的按出／POST，也沒有測試入庫。未繞過驗證，已請使用者一般瀏覽器試填後回報。
 - YouTube 直接存取同樣被環境代理拒絕，連結依既有官方來源，未宣稱實播通過。
 - **未正式發布**。待使用者成功送出下載＋Forms 入庫證據後，依既有授權發布，不必再次詢問發布許可。
+
+## 2026-11-10 第十九輪：正式發布
+
+- 問卷閘門：使用者一般瀏覽器實測回覆「有成功送出並下載」。Forms submission `6af2f205bf580b58a27be867`、時間 `2026-11-10T10:29:24.880Z`、form `6af2c6b687691ffaaed10851`，EP12 與欄名核對通過；不保存個資與填答內容。
+- 使用者既有授權為全部確認後正式發布，EP23 已明確同意提前公開；未另增批准流程。
+- `publish_site` task `4e3ef6b6-d85f-4c6f-b47d-9be692311ca5`，customDomains 為 www `6a4390245cde825dcadb2ecc`／apex `6a4390225cde825dcadb2e64`，並發布 Webflow subdomain。
+- `get_site` 獨立讀回：兩網域與全站 lastPublished 均 `2026-11-10T10:30:53.018Z`。
+- 真實 production 驗證：主頁、EP22／23 News、七個新簡報頁及四個既有簡報頁 HTTP 200；十一個卡片入口正確，FAQ／分類／提醒條／圖示、四尺寸無溢出、七頁問卷初始狀態與 LINE 位置正確；未開放簡報與講師獨立頁返回專區。www JSON-LD 與 Git 正本一致，apex 導向 www。
+- 證據：`2026-11-10-production-qa.json`。自動化未重複送出表單；真實送出證據為上列人工測試及 Forms 讀回。YouTube 播放未驗證，EP23 直接網址活動前待補。
+- 回退：先讀回即時狀態，僅還原本輪元素／程式／CMS；PDF 原檔與較小版本公開索引在 `pdf-batch-2026-11-10.json`。若停用某集簡報，關閉「開放簡報」後再發布，單集會返回專區。不要直接改回第一版草稿快照或刪除可能已被使用的資產。
