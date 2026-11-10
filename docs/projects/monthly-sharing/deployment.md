@@ -250,3 +250,8 @@
 - 結果：EP18 8.5→5.4MB、EP20 30.9→10.5MB、EP21 10.7→8.4MB；EP19 5.6MB 無變化，沿用原檔。
 - 新 asset：EP18 `6af2d2050c0c7844bfd3b8e3`、EP20 `6af2d20590b081f8ba560745`、EP21 `6af2d205851b2285116e5576`（CDN 200、大小相符），CMS 連結已改指向新檔；先前未壓縮的三個 asset（`6af2cff0…`、`6af2d00732f3…`、`6af2d00789ea…`）已刪除（未被引用）。
 - CMS 變更為 staged，需重新發布 staging 才生效。
+
+### 第十二輪修正：過去直播入口連結格式
+
+- staging 讀回發現 4 個「填問卷下載簡報 →」的 `href` 是字面的 Template page ID（`collectionPage`＋`to` 不會解析）。比照新聞中心卡片（`news-card_wrap`）的寫法改為 `{"mode":"collectionPage"}`（不帶 `to`），即連到目前項目的單集頁。待重新發布 staging 驗證。
+- staging 讀回確認：單集頁問卷區塊只在 EP18–EP21（開放簡報）出現，EP22、EP05 不出現；visibility 綁定有效。
