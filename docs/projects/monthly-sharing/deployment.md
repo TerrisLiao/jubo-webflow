@@ -255,3 +255,10 @@
 
 - staging 讀回發現 4 個「填問卷下載簡報 →」的 `href` 是字面的 Template page ID（`collectionPage`＋`to` 不會解析）。比照新聞中心卡片（`news-card_wrap`）的寫法改為 `{"mode":"collectionPage"}`（不帶 `to`），即連到目前項目的單集頁。待重新發布 staging 驗證。
 - staging 讀回確認：單集頁問卷區塊只在 EP18–EP21（開放簡報）出現，EP22、EP05 不出現；visibility 綁定有效。
+
+## 2026-11-10 第十四輪：講師卡片
+
+- 移除卡片上的「講師介紹 ›」（`.sansan-sp_more`，彈窗互動早已關閉，點了沒反應）與未使用的講師彈窗 `.sansan-sp_panel`（`fe3643b8-…add5`）。CMS「簡介」欄位保留。
+- 放大：講師清單欄寬 `minmax(19rem, 1fr)`、間距 1.25rem；卡片 padding 1.25/1.5rem；照片 4.5rem；姓名 1.25rem；職稱 0.9375rem/500；單位 0.9375rem。
+- 長單位：head 新增 `<style id="sansan-speaker-card">` 讓 `.sansan-sp_org` 最多兩行（正本 [`speaker-card.css`](../../../custom-code/monthly-sharing/speaker-card.css)）；單位元素加 `title` 屬性綁 CMS「單位」。以本機 mock 測：吳孟姿的單位會被截斷，其他都在兩行內。
+- 未發布。
