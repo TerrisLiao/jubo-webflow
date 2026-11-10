@@ -335,3 +335,11 @@
 - 真實 production 驗證：主頁、EP22／23 News、七個新簡報頁及四個既有簡報頁 HTTP 200；十一個卡片入口正確，FAQ／分類／提醒條／圖示、四尺寸無溢出、七頁問卷初始狀態與 LINE 位置正確；未開放簡報與講師獨立頁返回專區。www JSON-LD 與 Git 正本一致，apex 導向 www。
 - 證據：`2026-11-10-production-qa.json`。自動化未重複送出表單；真實送出證據為上列人工測試及 Forms 讀回。YouTube 播放未驗證，EP23 直接網址活動前待補。
 - 回退：先讀回即時狀態，僅還原本輪元素／程式／CMS；PDF 原檔與較小版本公開索引在 `pdf-batch-2026-11-10.json`。若停用某集簡報，關閉「開放簡報」後再發布，單集會返回專區。不要直接改回第一版草稿快照或刪除可能已被使用的資產。
+
+## 2026-11-10 第二十輪：EP23 直播連結
+
+- 授權與來源：使用者要求換上 12 月直播網址並提供 https://www.youtube.com/watch?v=tuOSh2o2qi0；沿用活動頁更新後發布的授權。
+- News `6af2c91814b089835b99d460`：只改參加方式說明、直播入口 href 與文字；歷屆播放清單保留。集數 `6af2c86454a66655c555262b` 的 `zhi-bo-hui-fang-lian-jie` 同步設定。寫入後獨立讀回相符。
+- CMS 單獨發布動作被 connector schema 拒絕，未產生發布；改用已授權的 `publish_site`，task `0a8e0707-34e2-4421-812d-0effccea913e`，www／apex 與 Webflow subdomain。兩正式網域 lastPublished 均讀回 `2026-11-10T10:43:25.548Z`。
+- 真實正式站／staging 均 HTTP 200，正確直播入口一個、舊公布說明已移除、歷屆入口仍在；1440／390 無橫向溢出、無 JS pageerror。證據 `2026-11-10-ep23-link-qa.json`。不重送問卷，YouTube 播放未在雲端驗證。
+- 回退：直播欄位原為 null；News 對照前一版 `news-ep23.html`。若網址需換，兩處一起更新並發布。

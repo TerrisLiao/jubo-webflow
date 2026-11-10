@@ -1,0 +1,47 @@
+{
+  "checkedAt": "2026-11-10T10:43:39.006Z",
+  "youtubeUrlSource": "User supplied EP23 live URL in chat",
+  "cmsNewsReadbackMatches": true,
+  "cmsEpisodeReadbackMatches": true,
+  "results": [
+    {
+      "base": "https://www.jubo-health.com",
+      "status": 200,
+      "liveLinkCount": 1,
+      "liveHref": "https://www.youtube.com/watch?v=tuOSh2o2qi0",
+      "oldAnnouncementRemoved": true,
+      "historyPlaylistRetained": true,
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": []
+    },
+    {
+      "base": "https://jubo-health.webflow.io",
+      "status": 200,
+      "liveLinkCount": 1,
+      "liveHref": "https://www.youtube.com/watch?v=tuOSh2o2qi0",
+      "oldAnnouncementRemoved": true,
+      "historyPlaylistRetained": true,
+      "widths": [
+        {
+          "width": 1440,
+          "overflow": false
+        },
+        {
+          "width": 390,
+          "overflow": false
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "youtubePlaybackTested": false
+}

@@ -12,4 +12,4 @@
 
 已用 Webflow CMS 與真實 staging 檢查兩篇新 Landing Page：`monthly-third-wednesday-sharing-202611`、`monthly-third-wednesday-sharing-202612`。日期（11/18、12/16 均週三）、12:00–13:00、講師及主題一致，未見需要重寫的明顯文案錯誤；圖片載入、標題、專區連結及四斷點無橫向溢出已驗證。
 
-使用者指定 EP23 本次提前公開，News 日期由 12/1 改 11/10，兩篇設可發布並已上 staging；只補三三專區連結，其他文案保留。專區問卷人工送出／下載與 Forms 入庫通過後，已於 2026-11-10T10:30:53.018Z 一起正式發布；兩篇正式網址 HTTP 200、圖片與日期／專區連結核對正確、四尺寸無橫向溢出。CMS HTML 維護來源在 `custom-code/monthly-sharing/news-ep22.html`／`news-ep23.html`。EP23 直播連結尚未提供，頁面已明確寫活動前公告。
+使用者指定 EP23 本次提前公開，News 日期由 12/1 改 11/10，兩篇設可發布並已上 staging；只補三三專區連結，其他文案保留。專區問卷人工送出／下載與 Forms 入庫通過後，已於 2026-11-10T10:30:53.018Z 一起正式發布；兩篇正式網址 HTTP 200、圖片與日期／專區連結核對正確、四尺寸無橫向溢出。CMS HTML 維護來源在 `custom-code/monthly-sharing/news-ep22.html`／`news-ep23.html`。EP23 直播連結已於 2026-11-10 依使用者提供更新為 https://www.youtube.com/watch?v=tuOSh2o2qi0，移除活動前公告說明，正式發布時間 2026-11-10T10:43:25.548Z；正式站與 staging 連結驗證通過。
