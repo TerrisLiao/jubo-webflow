@@ -243,3 +243,10 @@
 - 上傳前以 pdftotext 檢查無身分證、存摺、領款字樣（EP20 為圖片無法檢查，內容為講師投影片）。
 - [每月維護手冊](maintenance.md) 改為上傳 Webflow Assets；[簡報檔清單](reference/簡報檔清單.md) 加「Webflow 網址」欄。
 - 未發布。
+
+### 第十三輪補充：壓縮後重新上傳
+
+- 用 PyMuPDF（scratchpad venv）`doc.rewrite_images(dpi_threshold=160, dpi_target=150, quality=70)`＋`save(garbage=4, deflate=True, clean=True)`，只重壓圖片、文字保留。逐頁抽樣比對 EP20 p21、p46、EP21 p13，字與圖清楚。
+- 結果：EP18 8.5→5.4MB、EP20 30.9→10.5MB、EP21 10.7→8.4MB；EP19 5.6MB 無變化，沿用原檔。
+- 新 asset：EP18 `6af2d2050c0c7844bfd3b8e3`、EP20 `6af2d20590b081f8ba560745`、EP21 `6af2d205851b2285116e5576`（CDN 200、大小相符），CMS 連結已改指向新檔；先前未壓縮的三個 asset（`6af2cff0…`、`6af2d00732f3…`、`6af2d00789ea…`）已刪除（未被引用）。
+- CMS 變更為 staged，需重新發布 staging 才生效。

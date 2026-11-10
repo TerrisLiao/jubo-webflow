@@ -58,7 +58,7 @@
 現行流程（2026-11-10 更新）：**看完直播 → 到單集頁填課後問卷 → 送出後直接出現「下載本集簡報」按鈕**。不再用通關密語，也不用到 LINE 領簡報；LINE 卡只負責「加好友收最新資訊與直播提醒」。課後問卷用單集頁上的 Webflow 表單，不再每月開 MS Forms。
 
 1. 簡報轉 PDF（單檔 **30MB 以內**；太大先用 Acrobat「縮小檔案」或 ilovepdf 壓縮）。
-2. 上傳到 Webflow：Designer 左側 **Assets** → 上傳 PDF（或把 PDF 傳給 Claude 代為上傳）。點檔案 → 複製網址（`https://cdn.prod.website-files.com/…pdf`）。不必用 OneDrive，也不用逐檔設定分享。
+2. 上傳到 Webflow：Designer 左側 **Assets** → 上傳 PDF（或把 PDF 傳給 Claude，會先壓縮再上傳）。點檔案 → 複製網址（`https://cdn.prod.website-files.com/…pdf`）。不必用 OneDrive，也不用逐檔設定分享。
 3. CMS 該集：填「**簡報下載連結**」、打開「**開放簡報**」→ Save → Publish。
 4. 直播結尾，聊天室貼**該集單集頁網址**（例：`https://www.jubo-health.com/jubo-33-live-stream/ep22`）請大家填問卷，取代以前的 MS Forms 連結。
 
