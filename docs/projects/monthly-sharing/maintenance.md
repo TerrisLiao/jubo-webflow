@@ -70,7 +70,7 @@
 
 - Webflow：**Site settings → Forms**，表單名稱「**三三分享會簡報索取**」（每一集共用同一份表單）。
 - 欄位（與原本 MS Forms 滿意度問卷相同順序）：索取集數（例「EP22 長照職場性騷擾與照護界線」）、Q1 機構類型、Q2 是否為智齡科技客戶、機構（公司）名稱、Q4 所在區域、姓名、職稱、Email、電話、Q9 內容實用程度（1–5 顆星）、建議或提問、得知管道（每個選項一欄）、期待主題或想說的話；另加「想了解智齡系統」與「個資同意」。單選題欄名前面的 Q 編號是技術需要（讓同一題選項互斥），不要改。
-- 「索取集數」與單選題分組靠 Template 頁尾的 script（`<script id="sansan-deck-form">`，正本 `custom-code/monthly-sharing/sansan-deck-form.js`），不要刪。
+- 「索取集數」與單選題分組靠 Template 頁尾的 script（`<script id="sansan-deck-form-helper">`，正本 `custom-code/monthly-sharing/sansan-deck-form.js`），不要刪。
 - 可匯出 CSV。同一人每集都會再填一次，用 Email 篩可看出**固定參加的人**；業務名單篩「是否為智齡科技客戶＝否」，優先看「想了解智齡系統」有勾的人。
 - 表單通知信收件人：在 Site settings → Forms 設定。
 
@@ -82,3 +82,10 @@
 4. 單集頁其他區塊尚未設計前，Template 先維持 Draft；要上線簡報索取時再取消 Draft。
 5. LINE QR code 目前是用 `lin.ee/Clf7lXr` 自己產生的；若行銷有官方 QR 圖，換掉 `sansan-line-qr.png`。
 6. 單集頁在哪裡：Designer 左側 **Pages → CMS Collection pages →「三三分享會集數 Template」**，右上可切換要預覽的集數。
+
+## 2026-11-10 發布前補充
+
+- 講師獨立頁與沒有開放簡報的單集網址，目前暫時返回節目專區；在正式設計前不要建立這些網址的對外入口。
+- 講師 Template 不支援 Draft；以 head `noindex`＋暫時返回處理，完成講師模板後再移除。
+- EP23 已依使用者同意提前公開預告，但直播網址尚未提供；上架後回填該集 CMS 與 News 的直接直播連結。
+- 表單送出需 Cloudflare Turnstile；不要為了測試移除／繞過驗證或硬把 disabled 按鈕啟用。一般瀏覽器送出驗證完成，才可完成本輪正式發布。

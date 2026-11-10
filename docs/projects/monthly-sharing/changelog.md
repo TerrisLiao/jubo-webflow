@@ -27,3 +27,5 @@
 - 2026-11-10：Codex 接手，讀回 Webflow 主頁與單集頁、檢查測試站。更新兩題已核准 FAQ，四分類簡報入口改「下載簡報」；修正缺集數 href 的 fallback。補回 Hero 原生 SVG 送出圖示，加寬主直播卡；LINE 卡移到單集頁左欄講師下方。修正成功訊息提前顯示與清除 Example Text。四尺寸本機模擬、連結與 radio 驗證通過；未發布、未送出表單。其餘十項文案提案在 tasks.md，待使用者核准。FAQ schema Git 已改，Webflow 同步待完成。
 
 - 2026-11-10：使用者核准十項文案，主頁五處、問卷四處與 SEO 描述已套用並讀回。完成前輪待辦的 Webflow FAQ schema 同步，整份 JSON-LD 與 Git 正本、五題可見 FAQ 和 SEO 描述核對一致。未發布。
+
+- 2026-11-10：七份 PDF 優化並上傳、補 EP05 封面，11 集下載入口 staging 驗證。審核 EP22／23 News，EP23 依使用者同意提前公開；補專區連結。修正 form/script 同 id 與空白模板的返回處理，完成真實四斷點與動線檢查。正式發布仍待一般瀏覽器的 Cloudflare／問卷送出與 Forms 入庫驗證。

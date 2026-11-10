@@ -1,6 +1,6 @@
 /*
  * 三三分享會單集頁（CMS Template「三三分享會集數 Template」）課後問卷修正
- * 部署位置：該 Template 的 Page Settings → Custom Code → Before </body>（freeform footer，<script id="sansan-deck-form">）
+ * 部署位置：該 Template 的 Page Settings → Custom Code → Before </body>（freeform footer，<script id="sansan-deck-form-helper">；與 form 的 id 分開）
  * 本檔是正本。
  *
  * 為什麼需要：
@@ -14,7 +14,13 @@
 (function () {
   function init() {
     var form = document.getElementById('sansan-deck-form');
-    if (!form) return;
+    if (!form) {
+      // 未開放簡報時 CMS 會隱藏整段內容，避免獨立網址顯示空白頁。
+      if (!document.querySelector('.sansan-deck_title')) {
+        window.location.replace('/resources/jubo-33-live-stream');
+      }
+      return;
+    }
     form.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(function (field) {
       if ((field.getAttribute('placeholder') || '').trim() === 'Example Text') {
         field.removeAttribute('placeholder');

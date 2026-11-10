@@ -15,3 +15,10 @@
 - master 合併提交：`fcbb26d8d4d190676e71a9542c97221365affeb6`。
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
+
+## 2026-11-10：EP22／EP23 活動頁 staging
+
+- CMS IDs：EP22 `6af2c8c0a69eb6564dfddd4c`；EP23 `6af2c91814b089835b99d460`。
+- 使用者授權審核後正式發布，另核准 EP23 提前公開；兩篇 isDraft:false、日期 2026-11-10，保留原內容並補三三專區連結。
+- staging：兩個 `/news/monthly-third-wednesday-sharing-202611`／`202612` 均 HTTP 200，一個 H1、日期正確、課程重點圖片載入、專區連結正常，1440／991／767／390 無橫向溢出。
+- production：尚未發布；三三專區問卷送出因執行環境 Cloudflare 連線失敗，等待使用者一般瀏覽器驗證後再依既有授權發布。

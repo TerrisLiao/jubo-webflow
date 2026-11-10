@@ -311,3 +311,17 @@
 - JSON-LD 原四個 graph 節點保留，僅同步兩題已核准 FAQ 與 WebPage 描述。寫入後另一次讀回，與 Git JSON-LD 正本完全一致；五題可見 FAQ 的題目／答案逐字核對通過，SEO description 與 WebPage.description 相同。
 - 驗證：九個文字節點逐一讀回確認，SEO 與 schema 獨立讀回；JSON 語法與 git diff --check。純文案修改沒有新增鏡像測試，未重新發布、未送出問卷。
 - 未 Publish（含 staging）。
+
+## 2026-11-10 第十八輪：PDF 批次、News 審核、staging 實測
+
+- 使用者條件式授權正式發布（全部頁面／動線正常後），另明確允許 EP23 提前公開。
+- 七份 PDF 共 366 頁，26.57→24.57 MB，壓縮與 CDN 驗證證據在 `custom-code/monthly-sharing/pdf-batch-2026-11-10.json`。以 S3 POST 上傳；工具 uploadDetails 需把 camelCase 欄位還原為 S3 的 X-Amz-*、Content-Type、Cache-Control 與 success_action_status；簽名只存在 scratch，不進 Git。
+- 已填 CMS「簡報下載連結」並開啟「開放簡報」：EP05／06／07／08／12／13／14。EP05 舊封面寫入讀回仍 null，改以使用者 PDF 首頁原樣渲染 1600×900 WebP（46 KB），上傳原 ID `6af2f0c9a69eb6564d04c20e`，CMS 自動鏡像至 `6af2f0e262af48799befc712`，已讀回確認並於 staging 看見入口。
+- News EP22 `6af2c8c0a69eb6564dfddd4c`、EP23 `6af2c91814b089835b99d460`：isDraft:false，EP23 publish-date 改 2026-11-10；保留文案，補節目專區連結；EP23 episode 與 lecturer 同時改為可發布。HTML 維護來源為 `news-ep22.html`／`news-ep23.html`。
+- 講師 Template `6aed903bb9132d6f3c237221` 的 draft 寫入回 400（Collection template pages can't be drafted）；改為 head noindex＋meta refresh，Body 加原生專區名稱連結 `b317af69-349f-0ce0-c808-fba34316c1f1` 作為無自動跳轉時的返回入口。
+- 單集 Template head 加 noindex，footer 在無 form／title 時導回專區；script id 原本與 form 重複，已改為 sansan-deck-form-helper。
+- 測試站發布 task：`621691bf-6a78-45f1-9fe6-65ec049d3e68`、`482d0eb8-4b3e-445b-b513-e51b736a09a0`、`a949089a-fed1-465e-9571-0d8ee3d7e0b9`。只發 Webflow subdomain，customDomains:[]；最新狀態 readback staging lastPublished=2026-11-10T10:24:50.880Z。正式域名最後發布仍 2026-11-05T08:12:18.912Z。
+- `2026-11-10-staging-qa.json`：真實 staging 的四斷點、主頁／兩篇 News／七個新增下載頁、11 個連結與 EP05入口、FAQ、篩選、圖示、提醒條關閉、問卷初始隱藏與 radio、返回專區皆驗證。無 JS pageerror。
+- 尚未通過的發布閘門：Cloudflare challenge 主機在執行環境 CONNECT 403；submit disabled，沒有真的按出／POST，也沒有測試入庫。未繞過驗證，已請使用者一般瀏覽器試填後回報。
+- YouTube 直接存取同樣被環境代理拒絕，連結依既有官方來源，未宣稱實播通過。
+- **未正式發布**。待使用者成功送出下載＋Forms 入庫證據後，依既有授權發布，不必再次詢問發布許可。

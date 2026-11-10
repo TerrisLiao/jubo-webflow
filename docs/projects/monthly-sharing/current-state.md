@@ -1,7 +1,7 @@
 # 現況
 
 - 文件更新日期：2026-11-10
-- Webflow：節目專區 Page ID `6aed901905a96260ffcc4595`，路徑 `/resources/jubo-33-live-stream`，2026-11-10 即時讀回 `draft: false`。測試站主頁及 `/monthly-sharing/ep18`–`ep21` 為 HTTP 200；正式站同路徑仍為 404。最後一次全站測試發布為 2026-11-10T09:12:11.846Z；正式網域最後發布為 2026-11-05。這次修改已寫入 Designer，未發布。
+- Webflow：節目專區 Page ID `6aed901905a96260ffcc4595`，路徑 `/resources/jubo-33-live-stream`，2026-11-10 即時讀回 `draft: false`。測試站主頁及 `/monthly-sharing/ep18`–`ep21` 為 HTTP 200；正式站同路徑仍為 404。最後一次全站測試發布為 2026-11-10T09:12:11.846Z；正式網域最後發布為 2026-11-05。第十八輪已發布測試站；正式站仍待問卷人工送出驗證。
 - CMS：「三三分享會講師」15 筆、「三三分享會集數」22 筆，2026-11-06 已由草稿改為可發布（Staged，未發布）。集數與講師 Template page 已自動產生、未設計，且 API 無法設為 Draft（見 deployment.md 風險）。
 - 2026-11-06 第二輪修改：分類改為四項（新欄位「分類」）、Hero 日期修正裁切、集數卡 EP 標籤移右上、講師彈窗先關閉、刪除「每一集的時間線」區塊、FAQ 改用首頁結構、分頁按鈕改玻璃按鈕＋中文。
 - 2026-11-09 第六輪：Hero 改為統一 banner（介紹節目＋直播視窗拼貼＋單一「最新直播資訊」按鈕）；結構改為 關於直播 → 最新消息（高亮卡）→ 過去直播 → 講師 → FAQ → 制式 CTA Section #1；移除全部集數與自訂 LINE 區。
@@ -41,3 +41,16 @@
 - 主頁五處說明、單集問卷四處及 SEO 描述開頭共十項已套用；其他文字、CMS 欄名與必填規則維持。
 - Webflow schema 已透過 `bulk_update_pages_schema_markup` 完成同步；`query_pages_schema_markup` 獨立讀回與 Git 正本完全一致，五題可見 FAQ 與 schema 答案逐字相同，WebPage description 與 SEO 描述相同。
 - Designer 修改完成，未 Publish，含 staging；線上仍為上次發布版本。
+
+## 2026-11-10 第十八輪：七份 PDF、兩篇 News、正式發布前驗證
+
+- 使用者授權：壓縮與上傳七份 PDF，審查兩篇 News 與專區，全部正常後正式發布；另明確指定 EP23 這次一起提前公開。
+- EP05／06／07／08／12／13／14 已上傳、CDN 雜湊回讀及 CMS 開關／連結核對；加上既有 EP18–21，專區共 **11 個「下載簡報」入口**，全數連到對應單集頁。EP05 封面改用使用者 PDF 的原始第一頁，修正舊資產寫入後仍為 null 的問題。
+- 兩篇 News（EP22 性騷擾與界線、EP23 安寧療護）已核對日期、時間、主題、講師、圖片與參加方式，未見須重寫的明顯錯誤；補專區連結，EP23 News 發布日依授權提前為 2026-11-10。
+- 尚未設計的講師獨立頁：Webflow 明確回覆 Collection template pages can't be drafted，因此改為 noindex＋暫時 meta refresh 返回專區；加入同名原生文字連結作為 fallback。
+- 未開放簡報的單集網址：頁尾 helper 導回專區，避免只有 Navbar／Footer。下載問卷頁暫 noindex，專區為索引入口。
+- 修正 form 與 script 的重複 id，腳本改用 `sansan-deck-form-helper`。
+- 真實 staging 驗證通過：主頁、兩篇 News、七個新下載頁 HTTP 200；11 個入口；四個斷點無橫向溢出；FAQ 開合、四分類只顯示一個 pane、底部提醒條關閉；紙飛機圖示；問卷初始成功區隱藏、無 Example Text、radio 互斥、LINE 卡在左欄。
+- Cookie 提示在腳本尚未初始化時點擊不會關閉；等待初始化後「拒絕全部」可關閉，無 JS 錯誤，提醒條亦可關閉，非本輪未解功能缺陷。
+- **正式發布尚未執行**：Cloudflare Turnstile 驗證主機在執行環境 CONNECT 403／ERR_TUNNEL_CONNECTION_FAILED，送出鈕維持 disabled；沒有繞過驗證、沒有實際 POST、Forms 無測試入庫紀錄。已請使用者在正常瀏覽器完成一次標示測試的問卷，成功後再正式發布。
+- YouTube 亦遭執行環境代理 403；影片網址以既有官方 News／CMS 為來源，未聲稱實播已驗證。EP23 尚無直播網址，News 已明確說明活動前公告。
