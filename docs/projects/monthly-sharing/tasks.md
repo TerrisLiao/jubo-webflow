@@ -4,7 +4,7 @@
 |---|---|---|---|
 | P0 | 在 Designer 把兩個 CMS Template page 設為 Draft（API 設定無效） | 讀回 `draft: true`；全站發布不會帶出未設計的單集頁 | 未開始，需 Designer |
 | P0 | Designer：單集頁 `section_sansan-deck` 設 Conditional visibility「開放簡報 is ON」；確認表單 HTML Embed 的 `{{wf}}` token 被辨識 | 開放簡報關閉的集數不顯示區塊；表單送出記錄「EP22 主題」 | 未開始，需 Designer（API 被拒） |
-| P1 | 表單通知信收件信箱、個資同意文字（法務）、官網用的 LINE 連結（`lin.ee/Clf7lXr` 或 `sB2lGRH`）、官方 LINE QR 圖、課後問卷題目是否要沿用 MS Forms 原題 | 使用者／行銷提供後替換 | 待確認 |
+| P1 | 表單通知信收件信箱、個資同意文字（法務）、官網用的 LINE 連結（`lin.ee/Clf7lXr` 或 `sB2lGRH`）、官方 LINE QR 圖（課後問卷題目已改為與 MS Forms 原題一致） | 使用者／行銷提供後替換 | 待確認 |
 | P1 | 節目專區連到單集頁（最新消息卡或過去直播卡加「索取簡報」入口） | 有入口可到達單集頁 | 未開始 |
 | P0 | Designer Preview 驗收 `/jubo-33-live-stream` | 四斷點排版；Hero 日期不被切；四張分類卡圖示持續循環、點選後漸層底條移到該卡且下方只出現該分類回放；YouTube CTA 新分頁開播放清單；FAQ 樣式同首頁（開合需 staging） | 未開始（Designer App 未連線） |
 | P0 | 在 Designer 把「三三分享會集數」Collection URL 改為 `jubo-33-live-stream` | 讀回 Template page `publishedPath: /jubo-33-live-stream`；單集頁為 `/jubo-33-live-stream/ep22` | 使用者已同意；API 無此動作，需 Designer |
