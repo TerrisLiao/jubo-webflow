@@ -18,7 +18,7 @@
 - **Email 訂閱已移除**（2026-11-06 使用者指示）：表單、Hero「Email 通知我」連結已刪；結尾區改為 LINE 優先（加入 LINE 按鈕在前、QR code、訂閱 YouTube），錨點改 `#line`；FAQ 第二題改為「怎麼收到開播提醒？」（LINE＋YouTube 小鈴鐺）。
 - **分類篩選**：四張分類卡（資安頁卡片樣式、漸層細線圖示循環動畫），點了只顯示該分類已播出的集數；用 IX3 切換 class 實作，Designer 預覽可直接點。
 - **全部集數**：改為 YouTube 播放清單 CTA，不再在頁面上分頁列出所有集數。
-- **FAQ**：沿用首頁的 `faq_component`／`solutions-basic-model_accordion`／`faq5_*` 結構，開合由全站 `jubo-faq.js`＋`jubo-motion.css` 處理。圖示用內嵌 SVG（DOM 元素），不是 HtmlEmbed；已有 FAQPage schema；本輪已核准兩題 FAQ 的可見文案更新，Git JSON-LD 同步完成，Webflow schema 同步仍待完成（工具未提供可用的明確動作參數）。
+- **FAQ**：沿用首頁的 `faq_component`／`solutions-basic-model_accordion`／`faq5_*` 結構，開合由全站 `jubo-faq.js`＋`jubo-motion.css` 處理。圖示用內嵌 SVG（DOM 元素），不是 HtmlEmbed；已有 FAQPage schema；已核准兩題 FAQ 的可見文案與 Webflow JSON-LD 已同步，五題 FAQ 和 SEO 描述均與 Git 正本一致（2026-11-10 獨立讀回驗證）。
 - **單集頁網址**：使用者要求改成 `/jubo-33-live-stream/epXX`。Data API 沒有改 collection slug 的動作，改 Template page slug 會被忽略（讀回仍 `/monthly-sharing`），需在 Designer：CMS → 三三分享會集數 → Settings → Collection URL 改為 `jubo-33-live-stream`。
 
 ## 網站上原有的三三分享會
@@ -34,4 +34,10 @@
 - 修正表單成功畫面提前顯示：移除 `.sansan-deck_success` 的 display:flex，將 flex 版面移到內層 `.sansan-deck_success-content`。
 - 表單 helper 清除預設 Example Text placeholder，保留 radio 分組與索取集數處理。
 - 驗證：Webflow 寫入與元素／樣式讀回；已發布 staging HTML 的本機模擬，非重新發布後驗收。未實際送出問卷或查驗 Forms 入庫。
-- 其餘文案審核見 tasks.md 的完整清單，未核准的修改尚未套用。
+- 其餘十項文案已經使用者核准、寫入 Webflow 並逐項讀回；原句及套用版本見 tasks.md。
+
+## 2026-11-10 第十七輪：核准文案套用
+
+- 主頁五處說明、單集問卷四處及 SEO 描述開頭共十項已套用；其他文字、CMS 欄名與必填規則維持。
+- Webflow schema 已透過 `bulk_update_pages_schema_markup` 完成同步；`query_pages_schema_markup` 獨立讀回與 Git 正本完全一致，五題可見 FAQ 與 schema 答案逐字相同，WebPage description 與 SEO 描述相同。
+- Designer 修改完成，未 Publish，含 staging；線上仍為上次發布版本。

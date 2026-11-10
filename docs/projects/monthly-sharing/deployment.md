@@ -300,3 +300,14 @@
 - SEO schema：Git `page-schema.jsonld` 已同步核准 FAQ；本輪工具只曝露 unknown action schemas，嘗試讀取 schema 的動作均被 connector schema 驗證拒絕，尚未成功同步 Webflow 的專用 schema 設定。發布前需完成。
 - 其餘文案僅審核，tasks.md 完整十項待核准；未變更課程正式名稱、講師資料、必填規則、共用 Navbar／Footer 定義。
 - 本輪未 Publish，含 staging。
+
+## 2026-11-10 第十七輪：十項核准文案、FAQ schema 同步
+
+- 使用者：「ok修改」，核准前輪完整十項文案。
+- 主頁五項：關於直播介紹、業界專業講者說明、主題說明、過去直播介紹、講師介紹（移除已不存在的點卡片功能敘述）。
+- 單集 Template 四項：問卷說明移除未驗證的兩分鐘承諾；實用程度與講師回饋改為本集；未來主題題改為自然完整的問句。只改可見文案，原 input name、必填與 CMS 綁定不變。
+- 第十項：SEO description 開頭改「善用午休時間，增強長照知識！」，其餘描述保持；JSON-LD 的 WebPage.description 同步。
+- 官網 MCP 文件入口：<https://developers.webflow.com/mcp/tools/data-tools.md>。schema 讀取使用 `query_pages_schema_markup`，寫入使用 `bulk_update_pages_schema_markup`，`pages` 為 `[{id: pageId, jsonLdSchema: object}]`；讀取時省略 jsonLdSchema。前輪同步阻礙已排除。
+- JSON-LD 原四個 graph 節點保留，僅同步兩題已核准 FAQ 與 WebPage 描述。寫入後另一次讀回，與 Git JSON-LD 正本完全一致；五題可見 FAQ 的題目／答案逐字核對通過，SEO description 與 WebPage.description 相同。
+- 驗證：九個文字節點逐一讀回確認，SEO 與 schema 獨立讀回；JSON 語法與 git diff --check。純文案修改沒有新增鏡像測試，未重新發布、未送出問卷。
+- 未 Publish（含 staging）。
