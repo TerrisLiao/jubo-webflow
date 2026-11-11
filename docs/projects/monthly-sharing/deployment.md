@@ -378,3 +378,18 @@
 - 動態為原生 IX3／遮罩圖層，沒有新增外部動畫程式、影片、Lottie 或改共用 Component。影片／GIF 僅作驗收錄影，不進 Git。
 - GitHub PR 說明更新遭自動核准檢查拒絕執行：工作區額度用盡，屬審查失敗，非動作安全性判定。未以替代工具繞過；待管理員補充額度後同步 `pr-description-pending.md`。先前下載 FAQ 的 PR 說明同步也一併待補。
 - 驗證：真實 staging／production 採樣一個完整循環，10 組圖層樣本均有變化；離屏暫停、減少動態靜態、品牌 teal 色值、主頁與單集頁四斷點無溢出通過，主頁無 JS pageerror。正式站四分類切換仍各顯示一個 pane。證據 `2026-11-10-motion-qa.json`。
+
+## 2026-11-11 第二十四輪：最新一集下載入口自動出現、手機版問卷上移
+
+使用者：最新消息卡與釘選條加「看完直播？填問卷下載簡報」，時間自動處理，並要能在不懂程式的情況下手動控制；手機版問卷移到 LINE 卡前。
+
+- **CMS**：集數新增 Option「下載入口」`xia-zai-ru-kou`（`1323083fb2f1c2afc63ebb97f72edb08`）：自動 `2944720a…`／立即顯示 `1c192d3c…`／先不顯示 `3283dc26…`；空白視同自動。
+- **節目專區元素**：
+  - 最新消息卡（「預告」清單 item `efa9ba81-…915b` 內，`sansan-hero_next` 之後）TextLink `26a4cb5f-83a1-6e42-af8d-6e39458553d4`「看完直播？填問卷下載簡報 →」，新樣式 `.sansan-hero_deck-cta`（teal 外框白底膠囊，變數 `d240906f`／`987d0d75`）。
+  - 釘選條 TextLink `f1370609-89f0-08cf-bdc4-26dfdff2598c`「下載簡報」（沿用 `.sansan-pin_cta`），放在「開啟提醒」之後。
+  - 兩者 visibility 綁「開放簡報」；屬性 `data-sansan-gate`（latest／pin）、`data-sansan-slug`（Slug）、`data-sansan-start`（直播時間）、`data-sansan-mode`（下載入口）；link 設 `collectionPage`，實際網址由 script 依 slug 補上。
+- **程式**：head `<style id="sansan-latest-deck-css">`（正本 [`latest-deck.css`](../../../custom-code/monthly-sharing/latest-deck.css)）在判斷前隱藏；footer 追加 `<script id="sansan-latest-deck">`（正本 [`sansan-latest-deck.js`](../../../custom-code/monthly-sharing/sansan-latest-deck.js)，既有 `sansan-deck-links` 保留）。規則：先不顯示→隱藏；立即顯示→顯示；自動／空白→直播時間到才顯示，每分鐘重查。時間格式支援 ISO（含時區）、只有日期（視為台北 12:00）、日期＋時間無時區（視為台北時間）；解析失敗維持隱藏。開放時釘選條隱藏「開啟提醒」、「下一集」改「本集」。`?sansan-gate=open` 可預覽。
+- **本機測試**：Playwright 固定時鐘 11 種情境（三種模式、三種日期格式、開播前後、壞資料、空值、紐約時區訪客計時器 11:59:30→12:00 翻轉）全數通過。**直播時間綁到屬性後的實際輸出格式待 staging 讀回確認。**
+- **單集頁手機版**（Template 樣式，medium 以下）：`.sansan-deck_info` `display: contents`；`.sansan-deck_component` row-gap 1.25rem、justify-items start；`.sansan-deck_stack` order 1、width 100%、margin-top .75rem；`.sansan-latest_card.is-deck-line` order 2、margin-top .75rem。以正式站 EP21 注入相同規則模擬：390px 問卷卡由 794px 上移到 537px（第一屏可見第一題），LINE 卡移到問卷後；820px 同樣；1440px 位置不變；三尺寸無橫向溢出。
+- [每月維護手冊](maintenance.md) 新增「四之一、最新一集」與「下載入口」欄位說明。
+- 未發布。

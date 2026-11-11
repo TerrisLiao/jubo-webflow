@@ -6,6 +6,7 @@
 - [sansan-deck-form.js](sansan-deck-form.js)：單集 Template 頁尾 script 正本（radio 分組、索取集數帶入）。
 - [speaker-card.css](speaker-card.css)：節目專區講師卡片單位兩行截斷（head `<style id="sansan-speaker-card">`）。
 - [sansan-deck-links.js](sansan-deck-links.js)：節目專區「下載簡報」連結保底（footer `<script id="sansan-deck-links">`）。
+- [sansan-latest-deck.js](sansan-latest-deck.js)＋[latest-deck.css](latest-deck.css)：最新消息卡／釘選條下載按鈕依 CMS「下載入口」與直播時間顯示（footer `sansan-latest-deck`、head `sansan-latest-deck-css`）。
 - [專案文件](../../docs/projects/monthly-sharing/README.md)：提案、現況、待辦、部署。
 
 第一版建立時使用草稿；目前已於 2026-11-10 正式發布，詳見專案部署紀錄。執行回退前先即時讀回，只還原本輪範圍。
