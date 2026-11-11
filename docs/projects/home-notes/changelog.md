@@ -18,6 +18,11 @@
 11. 移除「2026 Q4・本季新增 14 則」那一行與兩個不再使用的 class。
 12. Terris 問卡片能不能點進下一層：目前不能，卡片不是連結，也沒有詳細頁。
 
+第三輪（同日）：
+
+13. Terris 回報成功故事與本區之間有一條交界線。原因：`section_cases-slider` 有 `neutral/white-30` 底色，`section_home-notes` 原本透明。已把 `section_home-notes` 的 background-color 綁到同一個 Variable（`variable-a8daff70-…`），讀回確認。交界線改落在本區與資安卡之間，與正式首頁原本「成功故事→資安卡」的交界相同。
+14. Terris 要求重新構想版面變化與文案；本輪只提方案，尚未改動。
+
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
 - whtml 的 css 支援 `var(--…)` 並綁成 Variable；`border`、`padding`、`border-radius` 簡寫會被展開。

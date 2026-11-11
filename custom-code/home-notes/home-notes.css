@@ -2,7 +2,8 @@
    以 data_whtml_builder 的 css 參數寫入，Webflow 讀回才是部署現況。
    限制：只用 class／combo 選擇器、Webflow 三個斷點、無 @keyframes。漸層內不放 var()。 */
 
-.section_home-notes { position: relative; }
+/* 底色與上方 section_cases-slider 相同（neutral/white-30），兩段證言之間不出現交界線 */
+.section_home-notes { position: relative; background-color: var(--neutral--white-30); }
 
 /* 大卡：淺色玻璃，尺寸與下方 home-security_card 成對（container-large、2rem 圓角） */
 .home-notes_card {

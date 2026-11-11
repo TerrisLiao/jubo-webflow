@@ -36,6 +36,7 @@ section_home-notes
 - 新增 class：`section_home-notes` 與 22 個 `home-notes_*`，另有 17 個 combo（`home-notes_spark.is-1`～`is-10`、`home-notes_avatar.is-small`／`.is-more`、`home-notes_blob.is-teal`／`is-sky`／`is-lavender`／`is-blue`／`is-violet`）。`home-notes_footer`、`home-notes_season` 已隨季度那行一併刪除。定義見 [`home-notes.css`](../../../custom-code/home-notes/home-notes.css)。
 - 沿用既有 class：`padding-global`、`padding-section-small`、`container-large`、`section_tag`、`text-size-tiny`、`h2-graident-wrap`、`text-align-center`、`gradient-headline`。沒有修改任何共用 class、Component 或 Variable。
 - 標籤用 `section_tag` > `text-size-tiny` 兩個既有 class 直接組成（同產品頁 FAQ 的做法），不是 `Section Tag` Component 實例。
+- `section_home-notes` 的底色與 `section_cases-slider` 綁同一個 Variable（`neutral/white-30`），兩段之間沒有交界線。
 - 顏色綁既有 Variables（讀回為 variable id）；漸層內為寫死色碼（MCP 寫入漸層時 `var()` 會被吃掉，見設計變數文件）。
 - 14 張卡片是靜態元素，**不是 CMS**。頭像是姓氏字；只有職稱、沒有名字的兩張用 inline SVG 人形（讀回為 DOM `svg`／`circle`／`path`）。
 
