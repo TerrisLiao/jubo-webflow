@@ -1,100 +1,40 @@
-<!-- 首頁「現場小紙條」：弧形走帶。放在 .section_home-notes 內、走帶之後的 HTML Embed。
-     只負責「卡片越靠近中間越高」與慢速漂移；進場、hover、光暈等動畫都在 IX3。
-     Webflow 樣式面板做不到的幾條 CSS（隱藏捲軸、手機 snap、文字平衡）由程式注入。 -->
+<!-- 首頁「夥伴回饋」：兩排對話泡泡的慢速移動。放在 .section_home-notes 內最後的 HTML Embed。
+     負責：複製一組做無縫循環、兩排反向移動（第二排以 data-direction="reverse" 標記）、滑鼠停留暫停、拖曳；
+     手機與「減少動態」不自動走，改 scroll-snap。進場、漸層漂移、hover 在 IX3。
+     Webflow 樣式面板做不到的幾條 CSS（隱藏捲軸、手機 snap、文字斷行）由程式注入。 -->
 <script>
 (function () {
-  var css = '.home-notes_track{scrollbar-width:none;-webkit-overflow-scrolling:touch}.home-notes_track::-webkit-scrollbar{display:none}.home-notes_track.is-dragging{cursor:grabbing;user-select:none}.home-notes_item{will-change:transform}.home-notes_quote{text-wrap:balance}.home-notes_track.is-static{scroll-snap-type:x mandatory;padding-left:max(1.25rem,calc(50% - 8.75rem));padding-right:max(1.25rem,calc(50% - 8.75rem))}.home-notes_track.is-static .home-notes_item{scroll-snap-align:center}';
-  if (!document.getElementById('home-notes-style')) {
-    var st = document.createElement('style'); st.id = 'home-notes-style'; st.textContent = css;
-    document.head.appendChild(st);
-  }
+  var css = '.home-notes_track{scrollbar-width:none;-webkit-overflow-scrolling:touch}.home-notes_track::-webkit-scrollbar{display:none}.home-notes_track.is-dragging{cursor:grabbing;user-select:none}.home-notes_bubble{text-wrap:pretty}.home-notes_track.is-static{scroll-snap-type:x mandatory;padding-left:1.25rem;padding-right:1.25rem}.home-notes_track.is-static .home-notes_item{scroll-snap-align:start;scroll-margin-left:1.25rem}';
+  if (!document.getElementById('home-notes-style')) { var st = document.createElement('style'); st.id = 'home-notes-style'; st.textContent = css; document.head.appendChild(st); }
   var section = (document.currentScript && document.currentScript.closest('.section_home-notes')) || document.querySelector('.section_home-notes');
-  if (!section) return;
-  var track = section.querySelector('.home-notes_track');
-  if (!track || track.dataset.homeNotesReady) return;
-  track.dataset.homeNotesReady = '1';
-
-  var originals = Array.prototype.slice.call(track.children);
-  var count = originals.length;
-  if (!count) return;
-
+  if (!section || section.dataset.homeNotesReady) return;
+  section.dataset.homeNotesReady = '1';
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var coarse = window.matchMedia('(pointer: coarse)').matches;
-  var auto = !reduce && !coarse;          // 手機與「減少動態」：不自動走，改手指滑
-  var SPEED = 30;                         // 每秒 30px
-  var DROP_REM = auto ? 3.75 : 1.375;     // 面板邊緣的卡片比中央低多少
-
-  if (auto) {
-    // 複製一組接在後面，做出無縫循環。同步執行，IX3 初始化時複本已存在。
-    originals.forEach(function (el) {
-      var c = el.cloneNode(true);
-      c.setAttribute('aria-hidden', 'true');
-      track.appendChild(c);
-    });
-  } else {
-    track.classList.add('is-static');
-  }
-
-  var items = Array.prototype.slice.call(track.children);
-  var centers = [], half = 0, pos = 0, last = 0, drop = 60;
-  var hover = false, drag = null, visible = true, started = false;
-
-  function measure() {
-    var rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
-    drop = DROP_REM * rem;
-    centers = items.map(function (i) { return i.offsetLeft + i.offsetWidth / 2; });
-    half = auto ? items[count].offsetLeft - items[0].offsetLeft : 0;
-  }
-  function shape() {
-    var w = track.clientWidth, mid = track.scrollLeft + w / 2, span = w / 2;
-    for (var i = 0; i < items.length; i++) {
-      var d = Math.min(Math.abs(centers[i] - mid) / span, 1.25);
-      items[i].style.transform = 'translate3d(0,' + (drop * d * d).toFixed(1) + 'px,0)';
-    }
-  }
-  function wrap() {
-    if (!auto || !half) return;
-    if (pos >= half) pos -= half; else if (pos < 0) pos += half;
-  }
+  var auto = !reduce && !coarse, SPEED = 20, visible = true, last = 0;
+  var rows = Array.prototype.map.call(section.querySelectorAll('.home-notes_track'), function (track, idx) {
+    var originals = Array.prototype.slice.call(track.children), row = { track: track, dir: track.getAttribute('data-direction') === 'reverse' ? -1 : 1, half: 0, pos: 0, hover: false, drag: null, count: originals.length };
+    if (auto) originals.forEach(function (el) { var c = el.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
+    else track.classList.add('is-static');
+    track.addEventListener('pointerenter', function () { row.hover = true; });
+    track.addEventListener('pointerleave', function () { row.hover = false; });
+    track.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse') return; row.drag = { x: e.clientX, s: track.scrollLeft }; track.classList.add('is-dragging'); });
+    track.addEventListener('scroll', function () { if (Math.abs(track.scrollLeft - row.pos) > 1.5) { row.pos = track.scrollLeft; wrap(row); } }, { passive: true });
+    return row;
+  });
+  function wrap(r) { if (!auto || !r.half) return; if (r.pos >= r.half) { r.pos -= r.half; r.track.scrollLeft = r.pos; } else if (r.pos <= 0) { r.pos += r.half; r.track.scrollLeft = r.pos; } }
+  function measure() { rows.forEach(function (r) { if (!auto) return; var k = r.track.children; r.half = k[r.count].offsetLeft - k[0].offsetLeft; if (!r.started) { r.started = true; r.pos = r.dir > 0 ? r.half * 0.1 : r.half * 0.6; r.track.scrollLeft = r.pos; } }); }
   function tick(t) {
     var dt = last ? Math.min(t - last, 64) : 16; last = t;
-    if (visible) {
-      if (auto && !hover && !drag) { pos += SPEED * dt / 1000; wrap(); track.scrollLeft = pos; }
-      shape();
-    }
+    if (visible && auto) rows.forEach(function (r) { if (r.hover || r.drag || !r.half) return; r.pos += r.dir * SPEED * dt / 1000; if (r.pos >= r.half) r.pos -= r.half; else if (r.pos < 0) r.pos += r.half; r.track.scrollLeft = r.pos; });
     requestAnimationFrame(tick);
   }
-  function init() {
-    measure();
-    if (auto && !started) { started = true; pos = centers[2] - track.clientWidth / 2; wrap(); track.scrollLeft = pos; }
-    shape();
-  }
-
-  track.addEventListener('scroll', function () {
-    if (Math.abs(track.scrollLeft - pos) > 1.5) {
-      pos = track.scrollLeft;
-      if (auto && half && (pos >= half || pos <= 0)) { wrap(); track.scrollLeft = pos; }
-    }
-  }, { passive: true });
-  track.addEventListener('pointerenter', function () { hover = true; });
-  track.addEventListener('pointerleave', function () { hover = false; });
-  track.addEventListener('pointerdown', function (e) {
-    if (e.pointerType !== 'mouse') return;
-    drag = { x: e.clientX, s: track.scrollLeft };
-    track.classList.add('is-dragging');
-  });
-  window.addEventListener('pointermove', function (e) {
-    if (!drag) return;
-    pos = drag.s - (e.clientX - drag.x); wrap(); track.scrollLeft = pos;
-  });
-  window.addEventListener('pointerup', function () { drag = null; track.classList.remove('is-dragging'); });
-  window.addEventListener('resize', init);
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { rootMargin: '200px' }).observe(section);
-  }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(init);
-  window.addEventListener('load', init);
-  init();
-  requestAnimationFrame(tick);
+  window.addEventListener('pointermove', function (e) { rows.forEach(function (r) { if (!r.drag) return; r.pos = r.drag.s - (e.clientX - r.drag.x); if (r.pos >= r.half) r.pos -= r.half; else if (r.pos < 0) r.pos += r.half; r.track.scrollLeft = r.pos; }); });
+  window.addEventListener('pointerup', function () { rows.forEach(function (r) { r.drag = null; r.track.classList.remove('is-dragging'); }); });
+  window.addEventListener('resize', measure);
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }, { rootMargin: '200px' }).observe(section);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+  window.addEventListener('load', measure);
+  measure(); requestAnimationFrame(tick);
 })();
 </script>

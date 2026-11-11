@@ -12,12 +12,12 @@
 
 | 檔案 | 部署位置 | 版本 |
 |---|---|---|
-| `custom-code/home-notes/home-notes-embed.html` | 草稿頁 HtmlEmbed `e6229fa6-cdf2-b738-7b24-b248206da9b0`（`section_home-notes` 最後一個子元素） | 2026-11-11；Webflow 上是去掉註解與縮排的同一份程式 |
+| `custom-code/home-notes/home-notes-embed.html` | 草稿頁 HtmlEmbed `c85b8868-4624-6379-19d8-02c2b23fe785`（`section_home-notes` 最後一個子元素） | 2026-11-11；Webflow 上是去掉註解與縮排的同一份程式 |
 | `custom-code/home-notes/home-notes.css` | Webflow Style（非 Embed）；class 定義的來源紀錄 | 2026-11-11 |
 
 ## IX3
 
-`i-667c58c2`（進場）、`i-bec9fa2c`（漸層漂移，第二輪已改為五個 blob）、`i-9451ac8f`（hover）。scope 皆為草稿頁。
+第四輪重建後：`i-01561aa9`（進場）、`i-c6a6fd0a`（漸層漂移）、`i-3516cd82`（hover）。前三輪的 `i-667c58c2`、`i-bec9fa2c`、`i-9451ac8f` 已刪除。scope 皆為草稿頁。
 
 ## 發布前必須滿足
 
