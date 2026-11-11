@@ -98,7 +98,7 @@
 - 欄位（與原本 MS Forms 滿意度問卷相同順序）：索取集數（例「EP22 長照職場性騷擾與照護界線」）、Q1 機構類型、Q2 是否為智齡科技客戶、機構（公司）名稱、Q4 所在區域、姓名、職稱、Email、電話、Q9 內容實用程度（1–5 顆星）、建議或提問、得知管道（每個選項一欄）、期待主題或想說的話；另加「想了解智齡系統」與「個資同意」。單選題欄名前面的 Q 編號是技術需要（讓同一題選項互斥），不要改。
 - 「索取集數」與單選題分組靠 Template 頁尾的 script（`<script id="sansan-deck-form-helper">`，正本 `custom-code/monthly-sharing/sansan-deck-form.js`），不要刪。
 - 可匯出 CSV。同一人每集都會再填一次，用 Email 篩可看出**固定參加的人**；業務名單篩「是否為智齡科技客戶＝否」，優先看「想了解智齡系統」有勾的人。
-- 表單通知信收件人：在 Site settings → Forms 設定。
+- 表單通知信收件人：使用者 2026-11-11 要求每筆問卷同步寄給 James Huang。API 無法設定收件人，需在 Designer 選取表單「三三分享會簡報索取」→ Settings → Form settings → **Send to** 加入（只影響這份表單）；全站設定在 Site settings → Forms → Form notifications（會影響所有表單，不建議）。改完要 Publish，並送一筆測試確認收到。
 
 ## 一次性設定（上線前，在 Designer）
 
