@@ -1,6 +1,6 @@
 # 解決方案頁市佔數字
 
-狀態：Webflow Designer 已修改並讀回；**尚未發布**（staging／production 皆未 Publish）。
+狀態：**已上線**。Designer 修改於 2026-11-03 讀回；production 2026-11-11 以 curl 確認四頁皆為新文案（站點 Last Published 2026-11-10 14:01:16 UTC），推斷隨 2026-11-10 三三分享會全站發布一起上線，非本專案 agent 發布。staging 同日確認一致。
 
 先讀 [現況](current-state.md)，再看 [待辦](tasks.md)、[決策](decisions.md)、[歷程](changelog.md)、[部署](deployment.md)。
 

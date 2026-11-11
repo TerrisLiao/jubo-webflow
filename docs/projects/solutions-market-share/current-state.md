@@ -1,16 +1,19 @@
 # 現況
 
-- 文件更新日期：2026-11-03
-- Webflow 驗證日期與方式：2026-11-03，Webflow MCP `query_elements` 讀回 Designer 元素樹與 `fb-count-target` 屬性；發布站點仍是舊文案（未 Publish）。
+- 文件更新日期：2026-11-11
+- Webflow 驗證日期與方式：
+  - Designer：2026-11-03，Webflow MCP `query_elements` 讀回元素樹與 `fb-count-target` 屬性（本輪未重新讀回 Designer）。
+  - production：2026-11-11（台北 23:36）curl `https://www.jubo-health.com` 四頁，HTML 註解 `Last Published: Tue Nov 10 2026 14:01:16 GMT`；下表「現值」13 列逐字出現，舊文案（`700+`、「全台每 3 家居服」「超過700家住宿型機構都使用智齡」等）均不存在。
+  - staging：2026-11-11 curl `https://jubo-health.webflow.io` 四頁，Last Published 2026-11-11 13:50:12 UTC，`fb-count-target` 44／46／65 與 CTA 同 production。
 - 頁面：`/solutions/residential-care`（Page `6a0d669af7fa369c6e79942f`）、`/solutions/day-care`（Page `6a0d66ac9cbdf126cd1e7e4a`）、`/solutions/home-care`（Page `6a0d66bf1177b147f53bfbf9`）、`/products/residential-care`（Page `6a029fcea88ff7b9b69bceec`）。
 
 ## 寫法
 
 對外主打數字一律用市佔率（月報值四捨五入到整數：住宿型 44%、日照 46%、居服 65%），含統計卡大字、CTA 副標與住宿型產品頁。唯一保留機構數的地方是統計卡大字下方的描述行（「全台超過 700／500／1,400 家…」），作為市佔率的實際數字佐證。標題（`stats-h3`）不變。
 
-## Designer 目前文案
+## 目前文案（Designer 2026-11-03 讀回＝production 2026-11-11 curl）
 
-| 頁面 | 位置 | 發布版原文 | 現值 |
+| 頁面 | 位置 | 舊文案（回退值） | 現值 |
 |---|---|---|---|
 | residential | 數字＋`fb-count-target` | `700` | `44` |
 | residential | 單位 | `+` | `%` |
@@ -48,5 +51,5 @@
 
 ## 未驗證
 
-- 未在瀏覽器實測四斷點下百分比大字的寬度與換行。
-- 未發布，正式站仍顯示舊文案。
+- 未在瀏覽器實測四斷點下百分比大字的寬度與換行；curl 只證明 HTML 內容，不證明版面與計數動畫。
+- 發布紀錄：本專案沒有自己的 Publish 紀錄。2026-11-10 三三分享會專案（分支 `claude/christmas-sharing-page-3u67cr`，`docs/projects/monthly-sharing/changelog.md`）記錄當天多次正式發布（最早 10:30:53 UTC），哪一次最先帶上本專案修改未查證。

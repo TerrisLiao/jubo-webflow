@@ -9,6 +9,21 @@
 
 下次部署另記時間、提交、Page／Embed ID、內容比對及回退方式。
 
+## 2026-11-11 §12-66 ISO/IEC 29191 上線確認
+
+| 層次 | 狀態 | 證據 |
+|---|---|---|
+| Git | §12-66 只在 `claude/beautiful-lovelace-x8dv2l` @ `b0ac499e0960e643d8a645c701f98baa97506fb7`（PR #18 未合併）；本輪在 master 專案文件記錄上線狀態，未匯入歷史正文 | 來源紀錄寫「2026-11-09，未 Publish」 |
+| Designer | 2026-11-09 修改並讀回（來源 §12-66）；本輪未重新讀回 | 新格 `51c24456-…5eb6`，Page `6aaa6709b9f4c19aae5a5d4f` |
+| staging | 已發布（含 29191 格） | 2026-11-11 curl；站點 Last Published 2026-11-11 13:50:12 UTC |
+| production | **已上線**（非本專案 agent 發布；推斷隨 2026-11-10 三三分享會全站發布） | 2026-11-11 curl `/security`，Last Published 2026-11-10 14:01:16 UTC：8 格、29191 格、說明段落、meta／OG／JSON-LD 皆符合 §12-66，medium 2 欄 CSS 已發布；細節見 [現況](current-state.md) |
+
+§12-66 之前 §12-61～§12-65 的修改是否也一併上線，本輪沒有逐項比對；不要由本表推定。
+
+回退：刪除 29191 格、Bluetooth 格加回 `is-center`、medium 改回 3 欄、說明段落與 SEO／JSON-LD 改回不含 29191，再另取發布授權。
+
+首頁資安卡片的 29191 徽章不屬本頁：staging 已有、production 尚無（2026-11-11 curl），見 `claude/wizardly-euler-pkb3in` 的 `docs/projects/home-notes/deployment.md`。
+
 ## 文件整理合併證據
 
 - PR：[#20](https://github.com/TerrisLiao/jubo-webflow/pull/20)，2026-10-13 已合併。

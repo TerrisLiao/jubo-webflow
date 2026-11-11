@@ -21,7 +21,7 @@
 | 層次 | 狀態 | 證據 |
 |---|---|---|
 | Designer／CMS | 已修改並讀回 | CMS item `6a1d494769e6b56a2019e801` lastUpdated `2026-11-05T08:10:58Z`；page `6a029cadbc58c46b16389346` JSON-LD lastUpdated `2026-11-05T08:11:06Z` |
-| staging | 未發布 | 未取得發布授權 |
-| production | 未發布 | 2026-11-05 線上 `/contact` 仍為舊址與 (07) 9623-566 |
+| staging | 已發布（內容同 production） | 2026-11-11 curl staging `/contact` 有 06-703-2166、無 9623-566；站點 Last Published 2026-11-11 13:50:12 UTC |
+| production | **已上線**（非本專案 agent 發布；推斷隨 2026-11-10 三三分享會全站發布） | 2026-11-05 線上仍為舊址與 (07) 9623-566；2026-11-11 curl `/contact`（Last Published 2026-11-10 14:01:16 UTC）卡片、地圖連結與 JSON-LD 皆為新址新電話，舊值不存在，見 [現況](current-state.md) |
 
 回退：CMS 與 JSON-LD 改回 [現況](current-state.md) 表格的舊值。發布時需同時發布 CMS item 與網站（JSON-LD 為頁面設定）。

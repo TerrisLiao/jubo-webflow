@@ -87,3 +87,15 @@
 - 刪除方式：agent 環境的 Git 代理拒絕刪除遠端分支（HTTP 403），由使用者在 Mac 以暫存空 repo 執行 `git push <repo URL> --delete …`，三個分支均回傳 deleted。
 - GitHub 讀回：三個分支均不存在，遠端共 23 個分支。
 - `claude/gallant-einstein-3tvafg` 之後若因平台指定再出現，為新的短期工作分支，與上表刪除的版本無關。
+
+## 上線狀態補記（2026-11-11）
+
+正式站 2026-11-10 全站發布（三三分享會）後，三條分支記錄為「未發布」的修改已在 production，2026-11-11 curl 確認。狀態更新在 `claude/awesome-keller-cz6e8g`（從 master `6b84235d9db02e098422bf9cc4192ebba4edf164` 開出）：
+
+| 分支 | 固定 head | 處理 |
+|---|---|---|
+| `claude/clever-ride-c8mw09` | `279a1898ef71c88bcf9ff432fc91b51ca75c4961` | 解決方案頁市佔數字；0 behind master，整條以 merge commit 併入 `claude/awesome-keller-cz6e8g`。該分支合併 master 後可列為清理候選（刪除前重查 head） |
+| `claude/laughing-ritchie-glda6g` | `7c7798aa0de1732ea5a46b556e4b3a0d80e8e11f` | 台南辦公室新址新電話；同上併入，同上可列清理候選 |
+| `claude/beautiful-lovelace-x8dv2l` | `b0ac499e0960e643d8a645c701f98baa97506fb7` | 比 10/13 盤點多一個提交（§12-66 ISO/IEC 29191）；舊目錄結構、PR #18 未合併，不併入。只在 `docs/projects/security/` 記錄上線狀態，保留分支 |
+
+首頁 ISO/IEC 29191 徽章在 `claude/wizardly-euler-pkb3in`（`97c5e1b6c9a373b90b74af776066d1a54bf0dcb6`）記錄，只發布到 staging；正式站首頁尚無，本輪不改。
