@@ -8,6 +8,7 @@
 | 資安工具／程式 | [security-mg](security-mg/README.md) | 源分支工具，本輪未部署 |
 | 無障礙工具 | [a11y-audit](a11y-audit/README.md) | 原始 baseline 另見外部索引 |
 | 品牌 SVG | [n-copilot](brand/n-copilot/README.md) | SVG 保留；AI／PDF 來源另見外部索引 |
+| 首頁現場小紙條 | [home-notes](home-notes/README.md) | 已部署到 Webflow 草稿頁，未發布 |
 | POC | poc/ | 實驗；不是全站已採用程式 |
 | archive/ | 舊版本 | 只作追溯，不直接復原 |
 

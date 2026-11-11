@@ -11,5 +11,6 @@
 - [新聞中心與內容治理](news/README.md)
 - [系統登入頁](login/README.md)
 - [設計系統維護](design-system/README.md)
+- [首頁現場小紙條](home-notes/README.md)
 
 - [共用導覽](navigation/README.md)
