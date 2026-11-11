@@ -1,8 +1,9 @@
 /* 首頁「夥伴回饋」區塊（對話泡泡版）：Webflow 上 section_home-notes 與 home-notes_* class 的原始定義。
    以 data_whtml_builder 的 css 參數寫入，Webflow 讀回才是部署現況。
    限制：只用 class／combo 選擇器、Webflow 三個斷點、無 @keyframes。漸層內不放 var()。 */
-.section_home-notes{position:relative;overflow:hidden;padding-top:5rem;padding-bottom:7rem;background-color:var(--neutral--white-30)}
-.home-notes_aura{position:absolute;left:0%;top:0%;right:0%;bottom:0%;z-index:0;pointer-events:none;mask-image:radial-gradient(70% 62% at 50% 50%,#000 30%,transparent 100%)}
+/* 底色：上段與成功故事相同的 30% 白，往下淡出成透明，接資安卡那段時不出現交界線 */
+.section_home-notes{position:relative;overflow:hidden;padding-top:5rem;padding-bottom:7rem;background-image:linear-gradient(180deg,hsla(0,0%,100%,.3) 0%,hsla(0,0%,100%,.3) 72%,hsla(0,0%,100%,0) 100%)}
+.home-notes_aura{position:absolute;left:0%;top:0%;right:0%;bottom:0%;z-index:0;pointer-events:none;mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 78%,transparent 100%)}
 .home-notes_blob{position:absolute;border-radius:50%}
 .home-notes_blob.is-teal{left:-6%;top:-12%;width:54%;height:80%;background-image:radial-gradient(closest-side,rgba(0,181,194,.30),rgba(0,181,194,0))}
 .home-notes_blob.is-sky{left:26%;top:-26%;width:52%;height:78%;background-image:radial-gradient(closest-side,rgba(58,188,248,.26),rgba(58,188,248,0))}
@@ -24,10 +25,12 @@
 .home-notes_spark.is-9{left:90.4%;top:65.8%;width:3.5rem;background-color:var(--gradient--announce-bar-purple);transform:rotate(11deg)}
 .home-notes_spark.is-10{left:89.3%;top:85.8%;width:3.1rem;background-color:var(--gradient--announce-bar-purple);transform:rotate(27deg)}
 .home-notes_rows{position:relative;z-index:1;display:flex;flex-direction:column;grid-row-gap:2.5rem;margin-top:4rem;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
-.home-notes_track{display:flex;align-items:flex-start;grid-column-gap:5rem;padding-top:.75rem;padding-bottom:1rem;overflow-x:auto;overflow-y:hidden;cursor:grab}
-.home-notes_item{display:flex;flex-direction:column;align-items:flex-start;grid-row-gap:1rem;flex-grow:0;flex-shrink:0;flex-basis:auto;max-width:26rem}
-.home-notes_bubble{padding:1.25rem 1.5rem 1.375rem;border:1px solid var(--neutral--line);border-radius:1.5rem 1.5rem 1.5rem .375rem;background-color:var(--neutral--white);box-shadow:0 .5rem 1.5rem -.75rem hsla(186,81%,17%,.2);font-size:1.125rem;line-height:1.7}
-.home-notes_meta{display:flex;align-items:center;grid-column-gap:.75rem;padding-left:.375rem}
+.home-notes_track{display:flex;align-items:stretch;grid-column-gap:5rem;padding-top:.75rem;padding-bottom:1rem;overflow-x:auto;overflow-y:hidden;cursor:grab}
+.home-notes_item{display:flex;flex-direction:column;align-items:flex-start;grid-row-gap:0rem;flex-grow:0;flex-shrink:0;flex-basis:auto;width:24rem}
+.home-notes_bubble{display:flex;flex-direction:column;flex-grow:1;width:100%;padding:1.5rem 1.75rem 1.5rem;border:1px solid var(--neutral--line);border-radius:1.5rem 1.5rem 1.5rem .375rem;background-color:var(--neutral--white);box-shadow:0 .5rem 1.5rem -.75rem hsla(186,81%,17%,.2);font-size:1.125rem;line-height:1.7}
+.home-notes_quote-mark{align-self:flex-start;height:2.25rem;margin-bottom:.25rem;background-image:linear-gradient(90deg,#00b2c0,#b15dff);background-clip:text;color:transparent;font-family:Georgia,"Times New Roman",serif;font-size:4.5rem;line-height:1}
+.home-notes_text{flex-grow:1;font-size:1.125rem;line-height:1.7}
+.home-notes_meta{display:flex;align-items:center;grid-column-gap:.75rem;margin-top:1.25rem;padding-top:1rem;padding-left:0rem;border-top:1px solid var(--neutral--line)}
 .home-notes_avatar{display:flex;justify-content:center;align-items:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:1000px;border:2px solid var(--neutral--white);background-image:linear-gradient(135deg,#dcf5f7,#ebe6ff);color:var(--primary--ocean);font-size:.9375rem;font-weight:500;line-height:1}
 .home-notes_who{font-size:.9375rem;font-weight:500;line-height:1.5;white-space:nowrap}
 .home-notes_org{margin-left:.5rem;color:var(--neutral--black-60);font-weight:400}
@@ -43,8 +46,11 @@
 @media screen and (max-width:767px) {
   .home-notes_track{grid-column-gap:1.5rem}
   .home-notes_rows{grid-row-gap:1.5rem}
-  .home-notes_bubble{font-size:1.0625rem;padding:1rem 1.25rem 1.125rem}
-  .home-notes_item{max-width:17.5rem}
+  .home-notes_bubble{font-size:1.0625rem;padding:1.25rem 1.25rem 1.25rem}
+  .home-notes_item{width:17.5rem}
+  .home-notes_quote-mark{height:1.875rem;font-size:3.75rem}
+  .home-notes_text{font-size:1.0625rem}
+  .home-notes_org{display:block;margin-left:0rem}
   .home-notes_who{white-space:normal}
   .home-notes_from{white-space:normal}
 }

@@ -30,6 +30,13 @@
 17. Terris 指示直接做到 Webflow。草稿頁上：刪除舊區塊、三個舊 interaction、全部舊 class（41 個，含 combo），以同一份 css 重建新版；兩排各 7 則；新 HtmlEmbed；三個新 interaction。寫入後逐則讀回 14 則引言與署名，全部相符。
 18. 大玻璃卡、底部玻璃帶、弧線、頭像疊排與人數列在這個版面都不存在了。
 
+第五輪（同日）：
+
+19. Terris 回報中間仍有格線。把區塊插進正式首頁實際截圖後找到兩個原因：(a) 背景光暈的徑向遮罩在區塊上緣仍有約三成不透明，被 `overflow: hidden` 硬切；(b) 本區有 30% 白底、下方資安卡那段沒有。修正：遮罩改為上下線性淡出；底色改成 `background-image` 由 30% 白往下淡到透明（移除 background-color）。
+20. 人物資訊收進卡片、加引號：`home-notes_bubble` 改為直排卡片（引號 → 引言 → 細線 → 頭像與署名），同排等高、固定寬 24rem；新增 `home-notes_quote-mark`（Georgia「“」青→紫漸層）與 `home-notes_text`。刪除兩排後重建，逐則讀回 14 則引言與署名，全部相符。
+21. whtml 把 `font-family` 截成 `Georgia`，已用 style API 補回 `Georgia, "Times New Roman", serif`。
+22. 進場動畫：原「署名列上浮」改為「引號依序跳出」。
+
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
 - whtml 的 css 支援 `var(--…)` 並綁成 Variable；`border`、`padding`、`border-radius` 簡寫會被展開。
