@@ -56,6 +56,7 @@
 31. 上傳為 asset `6af471398e5b13707f905cc1`（`jubo-cert-iso-29191-slate-v3.webp`），CDN 回 200。
 32. **正式首頁**（page `69ec2b03daa2e79f1da8772e`）資安卡片 logo 列：在 ISO 13485 之後新增 Image `51f5ef32-28b6-cace-289e-3bf4a7ef85d5`，class `home-security_logo` + `is-badge`，alt「ISO/IEC 29191」。草稿頁同位置也加了一張（`067819e5-17dc-c919-77fa-0b7a7c32de3d`）。
 33. 用 Playwright 在正式首頁注入同一張圖量測：1280／1440／1920 寬下 logo 列都沒有溢出（最後一個 logo 右緣等於容器右緣）；手機 390 寬會換成三列。未 Publish。
+34. Terris 授權先放 staging：只發布 webflow.io 子網域（`customDomains: []`），正式網域未動。發布前確認草稿頁 `draft: true` 會被排除；發布後 `/home-notes-draft` 在 staging 回 404，首頁 logo 列出現 ISO/IEC 29191。
 
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。

@@ -5,7 +5,7 @@
 | Git commit／PR | 已提交於 `claude/wizardly-euler-pkb3in`，未開 PR | 2026-11-11 | 本分支 |
 | Webflow Designer | 已寫入**草稿頁** `/home-notes-draft`（page `6af435313191d17e194df8e1`） | 2026-11-11 | Data API 讀回元素、樣式、Embed code、IX3 |
 | 正式首頁（Designer） | 夥伴回饋區未放上；資安卡片 logo 列新增 ISO/IEC 29191 徽章（Image `51f5ef32-28b6-cace-289e-3bf4a7ef85d5`，asset `6af471398e5b13707f905cc1`） | 2026-11-11 | Data API 建立後回傳元素；Playwright 注入量測 |
-| staging | 未發布 | — | — |
+| staging | 已發布（Terris 授權，只發 webflow.io 子網域；整站發布，含正式首頁的 ISO/IEC 29191 徽章） | 2026-11-11，publish task `cb31f809-f9f2-4135-ab02-a26bc21f57c5` | staging 首頁 logo 列讀到 ISO/IEC 29191（排在 13485 之後）並截圖；草稿頁為 draft，`/home-notes-draft` 在 staging 回 404 |
 | production | 未發布 | — | — |
 
 ## 客製程式

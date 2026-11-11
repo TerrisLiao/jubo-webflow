@@ -4,7 +4,7 @@
 |---|---|---|
 | P0 | Terris 在 Designer Preview 看草稿頁 `/home-notes-draft` | 進場、光暈、hover、弧形漂移都有播放；四個斷點版面正常 |
 | P0 | 客戶授權（確認表已交 Terris 轉給顧問，2026-11-11） | CS 逐則確認引言文字、是否同意具名、機構正式名稱；不同意具名改為「地區＋機構類型｜職稱」 |
-| P0 | 首頁 ISO/IEC 29191 徽章上線 | 已放進正式首頁 Designer、未發布；Terris 在 Designer 確認後明確授權 Publish（發布會連同正式首頁其他未發布變更一起上線，發布前先確認） |
+| P0 | 首頁 ISO/IEC 29191 徽章上線 | 已上 staging（2026-11-11）；production 待 Terris 在 staging 確認後明確授權（發布會連同正式首頁其他未發布變更一起上線，發布前先確認） |
 | P1 | 搬進正式首頁 | 見 [部署](deployment.md) 的搬移步驟；需 Terris 明確授權 |
 | P1 | 草稿頁善後 | 搬移完成後刪除草稿頁與只屬於它的三個 interaction，避免重複首頁被發布 |
 | P2 | 改成 CMS | 建「現場小紙條」集合，首頁走帶改 Collection List；每季由行銷在 CMS 更新 |
