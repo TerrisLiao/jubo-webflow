@@ -1,5 +1,5 @@
 /*
- * 三三分享會節目專區：最新消息卡與底部釘選條的「看完直播？填問卷下載簡報」按鈕
+ * 三三分享會節目專區：最新消息卡與底部釘選條的「下載簡報」按鈕（共用 Glass Button）
  * 部署位置：/resources/jubo-33-live-stream 的 Page Settings → Custom Code → Before </body>（freeform footer，<script id="sansan-latest-deck">）
  * 搭配 head 的 <style id="sansan-latest-deck-css">（未開啟前先隱藏，避免閃現）。本檔是正本。
  *
