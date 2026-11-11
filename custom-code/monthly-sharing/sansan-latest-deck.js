@@ -11,8 +11,9 @@
  * 讀不到時間或程式出錯時，按鈕維持隱藏（不會提早曝光）。
  * 測試用：網址加 ?sansan-gate=open 可在不改 CMS 的情況下預覽按鈕。
  *
- * 按鈕元素的屬性（Webflow 綁定）：data-sansan-gate（latest／pin）、data-sansan-slug（Slug）、
- * data-sansan-start（直播時間）、data-sansan-mode（下載入口）。
+ * 按鈕外層容器（包住共用 Glass Button 元件，元件本身不改）的屬性（Webflow 綁定）：data-sansan-gate（latest／pin）、
+ * data-sansan-slug（Slug）、data-sansan-start（直播時間，Webflow 輸出只有日期，例 November 18, 2026）、data-sansan-mode（下載入口）。
+ * 網址寫到容器內的第一個 <a>（Glass Button）；容器本身若就是 <a> 也可。
  */
 (function () {
   var DEFAULT_BASE = '/monthly-sharing/';
@@ -58,13 +59,17 @@
   }
 
   function update() {
-    var gates = document.querySelectorAll('a[data-sansan-gate][data-sansan-slug]');
+    var gates = document.querySelectorAll('[data-sansan-gate][data-sansan-slug]');
     if (!gates.length) return false;
     var b = base(), now = Date.now(), pending = false;
     [].forEach.call(gates, function (a) {
       var slug = a.getAttribute('data-sansan-slug');
-      var href = a.getAttribute('href') || '';
-      if (slug && href.slice(-slug.length - 1) !== '/' + slug) a.setAttribute('href', b + slug);
+      var link = a.tagName === 'A' ? a : a.querySelector('a');
+      var href = link ? link.getAttribute('href') || '' : '';
+      if (link && slug && href.slice(-slug.length - 1) !== '/' + slug) {
+        link.setAttribute('href', b + slug);
+        link.removeAttribute('target');
+      }
       var open = shouldOpen(a, now);
       if (open) a.setAttribute('data-sansan-gate-open', '');
       else { a.removeAttribute('data-sansan-gate-open'); pending = true; }

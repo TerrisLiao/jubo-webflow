@@ -402,3 +402,15 @@
 - 連結寫法實測（staging 原生 href）：`{"mode":"collectionPage"}`→`#`；`{"mode":"page","to":Template}`→`/monthly-sharing`；`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`→`detail_monthly-sharing`。三種都不會解析到單集頁，入口網址實際由 `sansan-deck-links`／`sansan-latest-deck` 依 slug 補上（正式站 11 個入口已驗證正常）。
 - **直播時間格式（2026-11-11 staging 讀回）**：屬性綁定輸出只有日期，例 `data-sansan-start="September 16, 2026"`，不含時間與時區。`sansan-latest-deck.js` 的「只有日期 → 台北 12:00」分支即為實際路徑。以此格式在 Asia/Taipei、America/Los_Angeles、Europe/London、Pacific/Auckland、Asia/Tokyo 各測開播前 1 分鐘、開播當下、前一天深夜、隔天，20 組全數正確，href 皆補為 `/monthly-sharing/ep22`。限制：非 12:00 開播的集數需用「下載入口」手動控制（已寫入維護手冊）。
 - 過去直播兩個入口上的 `data-sansan-start` 保留（無畫面影響，日後可再讀格式）。
+
+### 第二十四輪修正：改用 Glass Button、文字統一「下載簡報」（2026-11-11）
+
+- 使用者：按鈕改玻璃，兩處文字都用「下載簡報」。
+- 依規範不仿製 Glass Button 內部 class，改放共用元件 **Glass Button**（`71b87018-1f96-f193-c4a1-6b778017a800`，Base variant，CTA Text「下載簡報」，CTA Links 維持 `#`）。元件不能加 CMS 屬性，所以外包容器承載屬性與顯示條件：
+  - 最新消息卡：容器 `8bcabc47-55ab-0139-f1c8-e8f11b93ae4b`（新樣式 `.sansan-hero_deck-gate`：flex、margin-top 1rem、靠左；Glass Button 本身是滿版 flex，不包會靠右），內含 instance `9275fd01-4417-f9d9-6bfd-7a033702c2f3`。
+  - 釘選條：容器 `e9395499-f3d2-f177-7131-84b0aabb0293`（新樣式 `.sansan-pin_gate`：flex、不伸縮、置中），內含 instance `6f4e3df7-70c9-3c63-9267-b1e630549ee8`。
+  - 兩個容器：visibility 綁「開放簡報」；屬性 `data-sansan-gate`／`data-sansan-slug`／`data-sansan-start`／`data-sansan-mode`。
+- 刪除前一版的兩個 TextLink（`26a4cb5f…`、`f1370609…`）與已不使用的 `.sansan-hero_deck-cta` 樣式。
+- `sansan-latest-deck.js` 改為選取 `[data-sansan-gate]` 容器，網址寫到容器內第一個 `<a>`（Glass Button）並移除 target；footer 已更新。Playwright 31 組（模式、日期格式、計時器、五時區）以「容器＋Glass Button」結構重測全數通過。
+- 預覽：staging 頁面複製站上既有 Glass Button 放入卡片與釘選條截圖確認（1440／390），按鈕靠左、尺寸 52／45px；釘選條「本集」＋「下載簡報」。
+- 未發布。
