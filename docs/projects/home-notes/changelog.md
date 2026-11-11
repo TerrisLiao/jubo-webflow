@@ -37,6 +37,13 @@
 21. whtml 把 `font-family` 截成 `Georgia`，已用 style API 補回 `Georgia, "Times New Roman", serif`。
 22. 進場動畫：原「署名列上浮」改為「引號依序跳出」。
 
+第六輪（同日）：
+
+23. Terris：交界線已消失；卡片間隔太大；機構名＋系統別＋功能名資訊太多，首頁不顯示系統別。
+24. 卡片左右間距 5rem → 2rem、兩排間距 2.5rem → 2rem。
+25. 移除系統別：重建兩排，`home-notes_from` 只放功能名（深青、粗體）；刪除 `home-notes_from-sep`、`home-notes_from-feature`。逐則讀回 14 則引言、署名、功能，全部相符。
+26. 引號改用 SVG：Terris 的 Designer 截圖中「“」字型引號相對引言向右偏約 55px，原因未確認（推測與字型或文字裁切有關）。改成 `background-image` data URI 的漸層 SVG，固定 2rem × 1.5rem、靠左，不再依賴字型；元素內不留文字。
+
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
 - whtml 的 css 支援 `var(--…)` 並綁成 Variable；`border`、`padding`、`border-radius` 簡寫會被展開。

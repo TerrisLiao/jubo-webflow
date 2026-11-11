@@ -24,19 +24,17 @@
 .home-notes_spark.is-8{left:91.1%;top:44.7%;width:3.4rem;background-color:var(--gradient--announce-bar-purple);transform:rotate(-13deg)}
 .home-notes_spark.is-9{left:90.4%;top:65.8%;width:3.5rem;background-color:var(--gradient--announce-bar-purple);transform:rotate(11deg)}
 .home-notes_spark.is-10{left:89.3%;top:85.8%;width:3.1rem;background-color:var(--gradient--announce-bar-purple);transform:rotate(27deg)}
-.home-notes_rows{position:relative;z-index:1;display:flex;flex-direction:column;grid-row-gap:2.5rem;margin-top:4rem;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
-.home-notes_track{display:flex;align-items:stretch;grid-column-gap:5rem;padding-top:.75rem;padding-bottom:1rem;overflow-x:auto;overflow-y:hidden;cursor:grab}
+.home-notes_rows{position:relative;z-index:1;display:flex;flex-direction:column;grid-row-gap:2rem;margin-top:4rem;mask-image:linear-gradient(90deg,transparent 0%,#000 7%,#000 93%,transparent 100%)}
+.home-notes_track{display:flex;align-items:stretch;grid-column-gap:2rem;padding-top:.75rem;padding-bottom:1rem;overflow-x:auto;overflow-y:hidden;cursor:grab}
 .home-notes_item{display:flex;flex-direction:column;align-items:flex-start;grid-row-gap:0rem;flex-grow:0;flex-shrink:0;flex-basis:auto;width:24rem}
 .home-notes_bubble{display:flex;flex-direction:column;flex-grow:1;width:100%;padding:1.5rem 1.75rem 1.5rem;border:1px solid var(--neutral--line);border-radius:1.5rem 1.5rem 1.5rem .375rem;background-color:var(--neutral--white);box-shadow:0 .5rem 1.5rem -.75rem hsla(186,81%,17%,.2);font-size:1.125rem;line-height:1.7}
-.home-notes_quote-mark{align-self:flex-start;height:2.25rem;margin-bottom:.25rem;background-image:linear-gradient(90deg,#00b2c0,#b15dff);background-clip:text;color:transparent;font-family:Georgia,"Times New Roman",serif;font-size:4.5rem;line-height:1}
+.home-notes_quote-mark{width:2rem;height:1.5rem;margin-bottom:1rem;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 24'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='0'%3E%3Cstop offset='0' stop-color='%2300b2c0'/%3E%3Cstop offset='1' stop-color='%23b15dff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0 24V14C0 6 4.5 1.5 12 0l1.5 3.2C9 4.6 7 7.4 6.7 11H13v13H0zM18 24V14C18 6 22.5 1.5 30 0l1.5 3.2C27 4.6 25 7.4 24.7 11H31v13H18z'/%3E%3C/svg%3E");background-position:0% 50%;background-size:contain;background-repeat:no-repeat}
 .home-notes_text{flex-grow:1;font-size:1.125rem;line-height:1.7}
 .home-notes_meta{display:flex;align-items:center;grid-column-gap:.75rem;margin-top:1.25rem;padding-top:1rem;padding-left:0rem;border-top:1px solid var(--neutral--line)}
 .home-notes_avatar{display:flex;justify-content:center;align-items:center;flex-shrink:0;width:2.5rem;height:2.5rem;border-radius:1000px;border:2px solid var(--neutral--white);background-image:linear-gradient(135deg,#dcf5f7,#ebe6ff);color:var(--primary--ocean);font-size:.9375rem;font-weight:500;line-height:1}
 .home-notes_who{font-size:.9375rem;font-weight:500;line-height:1.5;white-space:nowrap}
 .home-notes_org{margin-left:.5rem;color:var(--neutral--black-60);font-weight:400}
-.home-notes_from{color:var(--primary--tag-text);font-size:.8125rem;line-height:1.5;white-space:nowrap}
-.home-notes_from-sep{margin-left:.35em;margin-right:.35em;opacity:.6}
-.home-notes_from-feature{color:var(--primary--ocean);font-weight:500}
+.home-notes_from{color:var(--primary--ocean);font-size:.8125rem;font-weight:500;line-height:1.5;white-space:nowrap}
 @media screen and (max-width:991px) {
   .section_home-notes{padding-top:3.5rem;padding-bottom:4rem}
   .home-notes_title-wrap{padding-left:0rem;padding-right:0rem}
@@ -48,7 +46,7 @@
   .home-notes_rows{grid-row-gap:1.5rem}
   .home-notes_bubble{font-size:1.0625rem;padding:1.25rem 1.25rem 1.25rem}
   .home-notes_item{width:17.5rem}
-  .home-notes_quote-mark{height:1.875rem;font-size:3.75rem}
+  .home-notes_quote-mark{width:1.75rem;height:1.3125rem;margin-bottom:.75rem}
   .home-notes_text{font-size:1.0625rem}
   .home-notes_org{display:block;margin-left:0rem}
   .home-notes_who{white-space:normal}
