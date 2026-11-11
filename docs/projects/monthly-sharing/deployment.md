@@ -421,3 +421,9 @@
 - Webflow asset `6af442706bbd073c9ec7d79f`（顯示名稱「三三分享會簡報_EP22_長照職場性騷擾與照護界線.pdf」），CDN `…/6af442706bbd073c9ec7d79f_jubo-33-ep22-slides.pdf` HTTP 200、application/pdf、843,857 bytes，MD5 與原檔一致。
 - CMS EP22：簡報下載連結＝上述 CDN、開放簡報＝開、下載入口＝自動（staged，未 Publish）。發布後 `/monthly-sharing/ep22` 問卷頁即可開啟（noindex）；專區最新消息卡與釘選條的「下載簡報」依自動模式在 2026-11-18 台北 12:00 出現。
 - 未發布。
+- **staging 驗證（2026-11-11，使用者發布後）**：
+  - 專區 HTML 輸出兩個容器（latest／pin），屬性讀回 `slug=ep22`、`start=November 18, 2026`、`mode=自動`，Glass Button 文字「下載簡報」、href 由 script 補為 `/monthly-sharing/ep22`。
+  - 不帶參數（現在 11/11）：兩顆按鈕隱藏、釘選條維持「下一集＋開啟提醒」。`?sansan-gate=open`：兩顆顯示、「開啟提醒」隱藏、標籤「本集」。
+  - 固定時鐘（Asia/Taipei）11/18 11:59:20 開頁：隱藏；計時器推進 70 秒過 12:00：兩顆自動顯示，不需重新整理。
+  - 點最新消息卡的「下載簡報」→ 導向 `/monthly-sharing/ep22`：H1 正確、問卷存在、索取集數＝「EP22 長照職場性騷擾與照護界線」、4 組 radio 分組、成功區初始隱藏、下載連結為 EP22 asset、`noindex,follow`。PDF CDN 200、843,857 bytes。無 JS 錯誤。
+  - 未實際送出問卷（Cloudflare Turnstile 在雲端環境無法通過）。

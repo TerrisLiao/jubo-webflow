@@ -27,8 +27,8 @@
 
 | 優先級 | 工作 | 狀態 |
 |---|---|---|
-| P0 | staging 驗證：直播時間屬性實際輸出格式；EP22 開播前按鈕隱藏、`?sansan-gate=open` 可見且連到 /monthly-sharing/ep22；手機版問卷在 LINE 卡前 | 手機版問卷與時間格式（只有日期，視為台北 12:00，五時區 20 組測試通過）已驗證；按鈕實際畫面要等 EP22 打開「開放簡報」後才會輸出 |
-| P1 | EP22 直播前一天：上傳 PDF、填連結、打開開放簡報並發布；結尾投影片放單集頁 QR code | PDF 已上傳、CMS 已填並開放（2026-11-11，未發布）；待 staging 驗證按鈕與下載、正式發布、結尾 QR code |
+| P0 | staging 驗證：直播時間屬性實際輸出格式；EP22 開播前按鈕隱藏、`?sansan-gate=open` 可見且連到 /monthly-sharing/ep22；手機版問卷在 LINE 卡前 | 完成（2026-11-11）：Glass Button 真實輸出、時間翻轉、連結、手機版問卷均驗證 |
+| P1 | EP22 直播前一天：上傳 PDF、填連結、打開開放簡報並發布；結尾投影片放單集頁 QR code | PDF 已上傳、CMS 已開放；staging 驗證通過（按鈕時間、連結、問卷頁、PDF）；QR code 已交付；待正式發布 |
 | P1 | 決定單集頁網址是否改 `/jubo-33-live-stream/epXX`（要在印 QR code 前定案，需 Designer） | 待決定 |
 | P1 | 表單「三三分享會簡報索取」通知信加寄 James Huang（使用者 2026-11-11 要求） | API 不支援，已提供 Designer 步驟（Form settings → Send to）；待使用者設定、發布並送測試確認 |
 
