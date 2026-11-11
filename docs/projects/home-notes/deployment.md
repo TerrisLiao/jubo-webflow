@@ -17,7 +17,7 @@
 
 ## IX3
 
-`i-667c58c2`（進場）、`i-bec9fa2c`（光暈）、`i-9451ac8f`（hover）。scope 皆為草稿頁。
+`i-667c58c2`（進場）、`i-bec9fa2c`（漸層漂移，第二輪已改為五個 blob）、`i-9451ac8f`（hover）。scope 皆為草稿頁。
 
 ## 發布前必須滿足
 

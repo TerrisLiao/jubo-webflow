@@ -11,6 +11,13 @@
 7. 建三個 IX3 interaction。hover 第一次因 `triggerMetadata` 帶 `null` 欄位被拒，只留 `role` 後成功。
 8. 本輪未 Publish，未動正式首頁。
 
+第二輪（同日，Terris 看過草稿頁後的回饋）：
+
+9. 背景改成五團漸層各自漂移，做法與色系取自資安頁 hero 的 `security-hero_blob`（原本是單一靜態光暈整塊漂移）。沒有套 `blur()` 濾鏡，只動 transform。
+10. 底部玻璃重做：原本是一條有白色硬邊的直條紋帶，Terris 認為醜。改成較細的直條紋毛玻璃（`blur(16px) saturate(1.35)`，取自 `security-hero_glass`），上緣用 `mask-image` 淡入，加高到 5rem；卡片高度與下方留白各加 1rem 讓文字不被蓋到。
+11. 移除「2026 Q4・本季新增 14 則」那一行與兩個不再使用的 class。
+12. Terris 問卡片能不能點進下一層：目前不能，卡片不是連結，也沒有詳細頁。
+
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
 - whtml 的 css 支援 `var(--…)` 並綁成 Variable；`border`、`padding`、`border-radius` 簡寫會被展開。

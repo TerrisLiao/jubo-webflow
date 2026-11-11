@@ -14,11 +14,14 @@
   backdrop-filter: blur(12px);
   isolation: isolate;
 }
-.home-notes_aura {
-  position: absolute; left: -10%; top: -20%; right: -10%; bottom: -20%; z-index: -1;
-  background-image: radial-gradient(34% 40% at 14% 22%, rgba(0, 178, 192, 0.22) 0%, rgba(0, 178, 192, 0) 70%), radial-gradient(32% 40% at 86% 34%, rgba(177, 93, 255, 0.18) 0%, rgba(177, 93, 255, 0) 70%), radial-gradient(40% 36% at 50% 88%, rgba(157, 248, 255, 0.5) 0%, rgba(157, 248, 255, 0) 70%), radial-gradient(22% 30% at 96% 80%, rgba(59, 88, 255, 0.12) 0%, rgba(59, 88, 255, 0) 70%);
-  pointer-events: none;
-}
+/* 背景：五團各自漂移的漸層（IX3），做法取自資安頁 hero 的 security-hero_blob */
+.home-notes_aura { position: absolute; left: 0%; top: 0%; right: 0%; bottom: 0%; z-index: -1; pointer-events: none; }
+.home-notes_blob { position: absolute; border-radius: 50%; }
+.home-notes_blob.is-teal { left: -14%; top: -22%; width: 64%; height: 74%; background-image: radial-gradient(closest-side, rgba(0, 181, 194, 0.36), rgba(0, 181, 194, 0)); }
+.home-notes_blob.is-sky { left: 26%; top: -34%; width: 60%; height: 72%; background-image: radial-gradient(closest-side, rgba(58, 188, 248, 0.3), rgba(58, 188, 248, 0)); }
+.home-notes_blob.is-lavender { left: 56%; top: -10%; width: 60%; height: 76%; background-image: radial-gradient(closest-side, rgba(179, 92, 255, 0.26), rgba(179, 92, 255, 0)); }
+.home-notes_blob.is-blue { left: 4%; top: 52%; width: 58%; height: 72%; background-image: radial-gradient(closest-side, rgba(61, 90, 255, 0.18), rgba(61, 90, 255, 0)); }
+.home-notes_blob.is-violet { left: 46%; top: 58%; width: 54%; height: 70%; background-image: radial-gradient(closest-side, rgba(144, 26, 255, 0.16), rgba(144, 26, 255, 0)); }
 
 .home-notes_header {
   position: relative; z-index: 2;
@@ -84,8 +87,8 @@
 .home-notes_item { flex-grow: 0; flex-shrink: 0; flex-basis: auto; width: 20rem; }
 .home-notes_note {
   display: flex; flex-direction: column; align-items: center;
-  height: 30.5rem;
-  padding: 1.75rem 1.5rem 10rem;
+  height: 31.5rem;
+  padding: 1.75rem 1.5rem 11rem;
   border: 1px solid var(--neutral--line);
   border-radius: 1.5rem 1.5rem 0rem 0rem;
   background-color: var(--neutral--white);
@@ -105,19 +108,16 @@
 .home-notes_from-sep { margin-left: 0.35em; margin-right: 0.35em; opacity: 0.6; }
 .home-notes_from-feature { color: var(--primary--ocean); font-weight: 500; }
 
-/* 玻璃槽：淺色版的 home-security_glass-flutes 直條紋 */
+/* 玻璃帶：細直條紋毛玻璃（取自資安頁 hero 的 security-hero_glass），上緣用遮罩淡入，沒有硬邊 */
 .home-notes_slot {
   position: absolute; left: 0%; right: 0%; bottom: 2.25rem; z-index: 2;
-  height: 3.25rem;
-  border-top: 1px solid hsla(0, 0%, 100%, 0.9);
-  background-image: repeating-linear-gradient(90deg, hsla(0, 0%, 100%, 0.6) 0px, hsla(0, 0%, 100%, 0.2) 3px, hsla(0, 0%, 100%, 0) 14px, hsla(186, 60%, 40%, 0.04) 30px, hsla(186, 60%, 40%, 0.12) 44px, hsla(0, 0%, 100%, 0.6) 48px);
-  box-shadow: 0 -0.5rem 1rem -0.5rem hsla(186, 60%, 30%, 0.14);
-  backdrop-filter: blur(10px);
+  height: 5rem;
+  background-image: linear-gradient(180deg, hsla(0, 0%, 100%, 0) 30%, hsla(0, 0%, 100%, 0.5) 100%), repeating-linear-gradient(90deg, hsla(0, 0%, 100%, 0.34) 0px, hsla(0, 0%, 100%, 0.06) 7px, hsla(190, 60%, 30%, 0.05) 17px, hsla(0, 0%, 100%, 0.2) 22px);
+  backdrop-filter: blur(16px) saturate(1.35);
+  mask-image: linear-gradient(180deg, hsla(0, 0%, 0%, 0) 0%, hsla(0, 0%, 0%, 1) 55%);
   pointer-events: none;
 }
 
-.home-notes_footer { display: flex; justify-content: center; margin-top: 1.5rem; }
-.home-notes_season { color: var(--primary--tag-text); font-size: 0.875rem; line-height: 1.5; }
 
 @media screen and (max-width: 991px) {
   .home-notes_card { padding-top: 3.5rem; border-radius: 1.75rem; }
