@@ -15,3 +15,13 @@
 - master 合併提交：`fcbb26d8d4d190676e71a9542c97221365affeb6`。
 - 合併後 Documentation checks：success。
 - 本次合併只影響 Git；未修改／發布 Webflow，來源文件的網站驗證限制仍適用。
+
+## 2026-11-05 台南辦公室資訊
+
+| 層次 | 狀態 | 證據 |
+|---|---|---|
+| Designer／CMS | 已修改並讀回 | CMS item `6a1d494769e6b56a2019e801` lastUpdated `2026-11-05T08:10:58Z`；page `6a029cadbc58c46b16389346` JSON-LD lastUpdated `2026-11-05T08:11:06Z` |
+| staging | 未發布 | 未取得發布授權 |
+| production | 未發布 | 2026-11-05 線上 `/contact` 仍為舊址與 (07) 9623-566 |
+
+回退：CMS 與 JSON-LD 改回 [現況](current-state.md) 表格的舊值。發布時需同時發布 CMS item 與網站（JSON-LD 為頁面設定）。
