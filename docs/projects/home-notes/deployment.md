@@ -4,7 +4,7 @@
 |---|---|---|---|
 | Git commit／PR | 已提交於 `claude/wizardly-euler-pkb3in`，未開 PR | 2026-11-11 | 本分支 |
 | Webflow Designer | 已寫入**草稿頁** `/home-notes-draft`（page `6af435313191d17e194df8e1`） | 2026-11-11 | Data API 讀回元素、樣式、Embed code、IX3 |
-| 正式首頁（Designer） | 未改動 | — | — |
+| 正式首頁（Designer） | 夥伴回饋區未放上；資安卡片 logo 列新增 ISO/IEC 29191 徽章（Image `51f5ef32-28b6-cace-289e-3bf4a7ef85d5`，asset `6af471398e5b13707f905cc1`） | 2026-11-11 | Data API 建立後回傳元素；Playwright 注入量測 |
 | staging | 未發布 | — | — |
 | production | 未發布 | — | — |
 
@@ -34,4 +34,6 @@
 
 ## 回退
 
-刪除草稿頁上的 `section_home-notes`（含 Embed）與三個 interaction 即可；正式站不受影響。若要連 class 一起清掉，刪除 `section_home-notes` 與 `home-notes_*`（確認無其他頁面使用後）。
+ISO 29191 徽章：刪除正式首頁 Image `51f5ef32-28b6-cace-289e-3bf4a7ef85d5` 與草稿頁 Image `067819e5-17dc-c919-77fa-0b7a7c32de3d`；asset 可保留。
+
+夥伴回饋區：刪除草稿頁上的 `section_home-notes`（含 Embed）與三個 interaction 即可；正式站不受影響。若要連 class 一起清掉，刪除 `section_home-notes` 與 `home-notes_*`（確認無其他頁面使用後）。
