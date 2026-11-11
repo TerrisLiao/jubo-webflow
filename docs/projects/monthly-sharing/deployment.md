@@ -393,3 +393,10 @@
 - **單集頁手機版**（Template 樣式，medium 以下）：`.sansan-deck_info` `display: contents`；`.sansan-deck_component` row-gap 1.25rem、justify-items start；`.sansan-deck_stack` order 1、width 100%、margin-top .75rem；`.sansan-latest_card.is-deck-line` order 2、margin-top .75rem。以正式站 EP21 注入相同規則模擬：390px 問卷卡由 794px 上移到 537px（第一屏可見第一題），LINE 卡移到問卷後；820px 同樣；1440px 位置不變；三尺寸無橫向溢出。
 - [每月維護手冊](maintenance.md) 新增「四之一、最新一集」與「下載入口」欄位說明。
 - 未發布。
+
+### 第二十四輪 staging 驗證（2026-11-11）
+
+- 單集頁手機版：staging EP21 讀回 `.sansan-deck_info` 在 390／820px 為 `display: contents`、1440px 為 `flex`；問卷卡 390px 在 537px（講師 401px 之後），LINE 卡在問卷之後；三尺寸無橫向溢出。通過。
+- 最新消息卡／釘選條按鈕：staging HTML 無 `sansan-hero_deck-cta`，因 EP22「開放簡報」關閉，visibility 綁定使 Webflow 不輸出元素（預期行為）；head CSS 與 footer `sansan-latest-deck` 均在頁面上，無 JS 錯誤。因此 `?sansan-gate=open` 也無元素可顯示。
+- 為讀取「直播時間」綁到屬性後的實際格式（不動 EP22 設定），在「過去直播」兩個入口連結 `30b6ff5f…`、`8002f9a5…` 加上 `data-sansan-start`（綁直播時間，不影響畫面）。待下一次 staging 發布讀回。
+- 連結寫法實測（staging 原生 href）：`{"mode":"collectionPage"}`→`#`；`{"mode":"page","to":Template}`→`/monthly-sharing`；`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`→`detail_monthly-sharing`。三種都不會解析到單集頁，入口網址實際由 `sansan-deck-links`／`sansan-latest-deck` 依 slug 補上（正式站 11 個入口已驗證正常）。
