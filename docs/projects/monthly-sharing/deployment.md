@@ -414,3 +414,10 @@
 - `sansan-latest-deck.js` 改為選取 `[data-sansan-gate]` 容器，網址寫到容器內第一個 `<a>`（Glass Button）並移除 target；footer 已更新。Playwright 31 組（模式、日期格式、計時器、五時區）以「容器＋Glass Button」結構重測全數通過。
 - 預覽：staging 頁面複製站上既有 Glass Button 放入卡片與釘選條截圖確認（1440／390），按鈕靠左、尺寸 52／45px；釘選條「本集」＋「下載簡報」。
 - 未發布。
+
+## 2026-11-11 第二十五輪：EP22 簡報上傳、直播前開放
+
+- 使用者提供 EP22〈長照職場性騷擾與照護界線〉講師簡報 PDF（16 頁、824KB、16:9），未壓縮直接上傳。內容檢查：新聞案例僅「新北汐止日照中心」「20 多歲女性」未具名，引用公視／勞動部／衛福部公開來源，末頁有「非個案法律意見」聲明；無身分證、存摺、收據等個資。
+- Webflow asset `6af442706bbd073c9ec7d79f`（顯示名稱「三三分享會簡報_EP22_長照職場性騷擾與照護界線.pdf」），CDN `…/6af442706bbd073c9ec7d79f_jubo-33-ep22-slides.pdf` HTTP 200、application/pdf、843,857 bytes，MD5 與原檔一致。
+- CMS EP22：簡報下載連結＝上述 CDN、開放簡報＝開、下載入口＝自動（staged，未 Publish）。發布後 `/monthly-sharing/ep22` 問卷頁即可開啟（noindex）；專區最新消息卡與釘選條的「下載簡報」依自動模式在 2026-11-18 台北 12:00 出現。
+- 未發布。
