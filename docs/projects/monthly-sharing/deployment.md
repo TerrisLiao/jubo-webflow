@@ -400,3 +400,5 @@
 - 最新消息卡／釘選條按鈕：staging HTML 無 `sansan-hero_deck-cta`，因 EP22「開放簡報」關閉，visibility 綁定使 Webflow 不輸出元素（預期行為）；head CSS 與 footer `sansan-latest-deck` 均在頁面上，無 JS 錯誤。因此 `?sansan-gate=open` 也無元素可顯示。
 - 為讀取「直播時間」綁到屬性後的實際格式（不動 EP22 設定），在「過去直播」兩個入口連結 `30b6ff5f…`、`8002f9a5…` 加上 `data-sansan-start`（綁直播時間，不影響畫面）。待下一次 staging 發布讀回。
 - 連結寫法實測（staging 原生 href）：`{"mode":"collectionPage"}`→`#`；`{"mode":"page","to":Template}`→`/monthly-sharing`；`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`→`detail_monthly-sharing`。三種都不會解析到單集頁，入口網址實際由 `sansan-deck-links`／`sansan-latest-deck` 依 slug 補上（正式站 11 個入口已驗證正常）。
+- **直播時間格式（2026-11-11 staging 讀回）**：屬性綁定輸出只有日期，例 `data-sansan-start="September 16, 2026"`，不含時間與時區。`sansan-latest-deck.js` 的「只有日期 → 台北 12:00」分支即為實際路徑。以此格式在 Asia/Taipei、America/Los_Angeles、Europe/London、Pacific/Auckland、Asia/Tokyo 各測開播前 1 分鐘、開播當下、前一天深夜、隔天，20 組全數正確，href 皆補為 `/monthly-sharing/ep22`。限制：非 12:00 開播的集數需用「下載入口」手動控制（已寫入維護手冊）。
+- 過去直播兩個入口上的 `data-sansan-start` 保留（無畫面影響，日後可再讀格式）。

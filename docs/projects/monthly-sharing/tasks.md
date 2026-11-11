@@ -27,7 +27,7 @@
 
 | 優先級 | 工作 | 狀態 |
 |---|---|---|
-| P0 | staging 驗證：直播時間屬性實際輸出格式；EP22 開播前按鈕隱藏、`?sansan-gate=open` 可見且連到 /monthly-sharing/ep22；手機版問卷在 LINE 卡前 | 待使用者發布 staging |
+| P0 | staging 驗證：直播時間屬性實際輸出格式；EP22 開播前按鈕隱藏、`?sansan-gate=open` 可見且連到 /monthly-sharing/ep22；手機版問卷在 LINE 卡前 | 手機版問卷與時間格式（只有日期，視為台北 12:00，五時區 20 組測試通過）已驗證；按鈕實際畫面要等 EP22 打開「開放簡報」後才會輸出 |
 | P1 | EP22 直播前一天：上傳 PDF、填連結、打開開放簡報並發布；結尾投影片放單集頁 QR code | 待講師簡報 |
 | P1 | 決定單集頁網址是否改 `/jubo-33-live-stream/epXX`（要在印 QR code 前定案，需 Designer） | 待決定 |
 
