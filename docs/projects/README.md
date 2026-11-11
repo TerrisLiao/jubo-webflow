@@ -1,6 +1,7 @@
 # 專案列表
 
 - [社群追蹤頁](community/README.md)
+- [三三分享會節目專區](monthly-sharing/README.md)
 - [資安與隱私頁](security/README.md)
 - [日本市場頁面](jp/README.md)
 - [聯絡頁導流](contact/README.md)

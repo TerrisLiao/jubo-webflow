@@ -87,3 +87,9 @@
 - 刪除方式：agent 環境的 Git 代理拒絕刪除遠端分支（HTTP 403），由使用者在 Mac 以暫存空 repo 執行 `git push <repo URL> --delete …`，三個分支均回傳 deleted。
 - GitHub 讀回：三個分支均不存在，遠端共 23 個分支。
 - `claude/gallant-einstein-3tvafg` 之後若因平台指定再出現，為新的短期工作分支，與上表刪除的版本無關。
+
+## 進行中工作分支（2026-11-05 登記）
+
+| 分支 | 基底 | 用途 |
+|---|---|---|
+| `claude/christmas-sharing-page-3u67cr` | master `6b84235` | 平台自動命名。實際用途為 [三三分享會節目專區](../projects/monthly-sharing/README.md) 設計提案；與聖誕活動無關。 |

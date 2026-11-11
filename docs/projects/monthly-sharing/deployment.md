@@ -1,0 +1,429 @@
+# 部署紀錄
+
+| 層次 | 狀態 | 日期／版本 | 證據 |
+|---|---|---|---|
+| Git commit／PR | 同分支實作與發布證據；Draft PR #27，尚未合併 | 2026-11-10 | https://github.com/TerrisLiao/jubo-webflow/pull/27 |
+| Webflow Designer | 主頁、模板、CMS 與自訂程式已寫入並讀回 | 2026-11-10 | 各輪部署紀錄 |
+| staging | 已發布，人工送出／下載及 Forms 入庫通過 | 2026-11-10 | staging QA 與第十九輪紀錄 |
+| production | www／apex 已發布並完成動線與 schema 驗證 | 2026-11-10T10:30:53.018Z | production QA 與兩網域 lastPublished 讀回 |
+
+## 2026-11-06 第一版：草稿頁、CMS、IX3
+
+- 授權：使用者 2026-11-06「現在幫我新增一頁到 webflow 然後使用 ix3 等等專業的設計來製作」。**未授權 Publish**。
+- 頁面：`/monthly-sharing`，Page ID `6aed901905a96260ffcc4595`，**`draft: true`**（讀回確認）。以 `/community` 複製取得 Global Style、Cookies、Navbar、Page Gradient BG 骨架，刪除原 hero，加入全站 Footer。
+- CMS：新增「三三分享會講師」(`6aed903bb9132d6f3c23721b`，15 筆) 與「三三分享會集數」(`6aed903bb9132d6f3c237251`，22 筆，網址 `/monthly-sharing/ep22`)。**所有項目 `isDraft: true`**。同時自動產生集數 Template page，尚未設計。
+- 素材：34 個（20 張集數封面、14 張講師大頭照），以 S3 presigned upload 上傳，全部回 201。
+- 區塊：Hero（CMS 下一集）、關於節目、主題系列、最新一集＋集數庫（每頁 9 筆）、講師陣容（CMS＋點擊彈窗）、每一集的時間線、FAQ（原生 details）、Email 訂閱（Webflow 原生表單）。
+- IX3：18 個互動，全部 `scope: pages`、加 `prefers-reduced-motion`。
+- 設定、ID 與回退步驟：[custom-code/monthly-sharing/2026-11-06-build.json](../../../custom-code/monthly-sharing/2026-11-06-build.json)。
+
+### 2026-11-06 追加：CMS 項目改為可發布（Staged）
+
+- 原因：使用者回報 Hero、集數庫、講師牆都顯示「No items found.」。Collection List 不顯示 `isDraft: true` 的項目，這是第一版把 37 筆都設成草稿造成的。
+- 已改：37 筆項目 `isDraft: false`（讀回確認）。這**不是發布**；項目要等下一次 Publish 才會上線。
+- 已改：三個 Collection List 的預設灰色「No items found.」空狀態設為隱藏。
+- **風險（未解決）**：兩個 CMS Template page（集數 `6aed903cb9132d6f3c237287`、講師 `6aed903bb9132d6f3c237221`）用 API 設 `draft: true` 被忽略，讀回仍為 `false`。若有人做全站 Publish，`/monthly-sharing/ep22` 等未設計的單集頁與 `/monthly-sharing-speakers/*` 會跟著上線。需在 Designer 把兩個 Template page 設為 Draft，或在設計完成前不要全站發布。
+- 樞紐頁仍為 `draft: true`（2026-11-06 網址改為 `/jubo-33-live-stream`）。
+
+### 驗證與限制
+
+- 已讀回：頁面 metadata、四斷點樣式、CMS 建立回應、18 個 IX3 建立回應。
+- **未驗證**：Designer App 未連線，element snapshot 失敗；沒有 Preview／staging，**無法確認實際排版、CMS 渲染、IX3 是否播放、講師彈窗是否只開被點的那一張、表單送出**。下一步需在 Designer Preview 驗收（見 tasks.md）。
+- 預覽 Artifact（設計稿）：<https://claude.ai/artifact/3NqKptaKNGNQoGKdQABy5F>（Version 3）。
+
+## 2026-11-06 第二輪修改（仍未發布）
+
+授權：使用者截圖回饋與指示（分類改名、日期被切、EP 標籤右上、關閉講師彈窗、移除時間線、FAQ 依首頁、分頁改玻璃按鈕中文、網址改 jubo 33 live stream、講師臉置中）。
+
+- **網址**：Page slug `monthly-sharing` → `jubo-33-live-stream`（讀回 `publishedPath: /jubo-33-live-stream`）。CMS 集數 collection slug 仍是 `monthly-sharing`。
+- **分類**：新增 Option 欄位「分類」`fen-lei`（`c7b5e2f3997b0e08c559d295da0b1854`）：機構經營管理 `1e77f6707f328d328feb450ff6a57264`、照護實務技巧 `a223c85da253a7a2eba2498da2980a9a`、長照評鑑準備 `d453c11246651d4006e27b765f11c620`、AI與數位工具 `992a1575e754f01b2df64c0f02e1723b`。22 集一對一轉換（經營管理與職場→機構經營管理、照護實務→照護實務技巧、評鑑準備→長照評鑑準備、AI 與數位工具→AI與數位工具），讀回確認、`isDraft:false` 不變。Hero 與集數卡的分類標籤改綁新欄位後，刪除舊欄位「主題系列」`ae66529c…`。分類卡片改名並依使用者順序排列。
+- **Hero 日期**：`.sansan-hero_date` 加 `padding 0.08em/0.2em`＋同值負 margin（`background-clip:text` 只畫在元素框內，line-height 0.86 會切掉字腳；版面位置不變）。
+- **EP 標籤**：`.sansan-ep_badge` `left` → `right: 0.65rem`。
+- **講師彈窗**：面板 `fe3643b8-…add5` visibility false、「講師介紹 ›」隱藏、卡片移除 role/tabindex、cursor default；刪除 `i-e08736e9`、`i-f7b576c4`、`i-9bc35d93`（定義見 `custom-code/monthly-sharing/2026-11-06-removed-interactions.json`）。
+- **時間線區塊**：刪除 section `2fcbed6e-…17e1` 與 `i-83083b2a`。
+- **FAQ**：舊 `<details>` 版刪除，改為首頁結構 `faq_component > section-header_wrapper（Section Tag「FAQ」＋h2-graident-wrap）＋ solutions-basic-model_wrap > _list > _accordion × 5`，section 加 `section_faq`、`container-small`、`padding-section-large`。沿用既有 class，沒有產生 `-1` 重複 class（讀回確認）。刪除 `i-fa9a7307`。`sansan-faq_*` class 已無元素使用，保留未刪。
+- **分頁**：Pagination 加 `sansan-episodes_pagination-native`（display:none）；新增 `.sansan-episodes_pager` 內兩個 Glass Button instance（`‹ 上一頁`、`下一頁 ›`）；頁面 footer freeform code 寫入 `<script id="sansan-pager">`（正本 `custom-code/monthly-sharing/sansan-pager.js`）。Designer 預覽不會執行頁面腳本，切頁需在 staging 驗證。
+- **未驗證**：同前，Designer App 未連線，以上皆為 Data API 讀回，未經 Preview／staging。
+- **講師照片置中**：何憲欽、侯怡岑、吳淑芬三張改用 Canva `DAGLvkPY5mw` 第 16／4／6 頁高解析匯出（export-design，未修改設計）重新裁切成 480×480，臉部置中、含下巴與肩膀。新 asset：`6aed9e871f6b05e615d27836`（ho-v2）、`6aed9e871f6b05e615d27851`（hou-v2）、`6aed9e8832fd2e6ddc51401b`（wu-v2），CDN 讀回 200；三筆講師項目照片欄位已換、`isDraft:false` 不變。舊 asset 保留未刪。侯怡岑原圖頭頂本來就被切，圓形框內頭髮頂端仍會略切。其餘 11 位檢查後未重裁；成茵茵偏緊（臉約佔 85%）、劉旻宜原圖解析度低、王雪珮原圖背景含灰白格紋（需換來源照片）。
+
+## 2026-11-06 第三輪：移除 Email、單集頁網址
+
+- **移除 Email 訂閱**（使用者：「我們沒有寄信，主要推廣到 LINE」）：刪除表單 slot `893701ff-…6523`（含 Webflow 表單「Email Form」）與 Hero 連結「Email 通知我 →」；結尾區說明改為 LINE＋YouTube，「加入 LINE」玻璃按鈕移到第一顆，section DOM id `subscribe` → `line`；Hero 空狀態文字改為加入 LINE；FAQ「Email 會寄些什麼？」改為「怎麼收到開播提醒？」。讀回全頁已無「Email」字樣。`sansan-subscribe_form`／`_input`／`_note`、`.form-submit-btn.is-inline` 已無元素使用，保留未刪。
+- **單集頁網址未改成**：`update_page_settings` 對集數 Template page 改 slug 被忽略（讀回 `publishedPath: /monthly-sharing`）；designer_tool 也沒有 collection 設定動作。需在 Designer 手動改 Collection URL。
+
+## 2026-11-06 第四輪：連結無反應、eyebrow 靠左
+
+- **集數卡片／最新一集按鈕點了沒反應**：建頁時 WHTML 的 `href="#"` 被存成自訂屬性，與 CMS 連結綁定並存（對照 `/news` 正常的 CMS 卡片，attributes 為空）。已把 `sansan-ep_card`、`sansan-feat_media`、`sansan-feat_link` 的自訂屬性換成 `target=_blank`、`rel=noopener`，並重新綁定「直播／回放連結」；隱藏中的講師彈窗三個連結同樣處理。分類卡片改用 Webflow「Page section」連結指向 `#episodes` 區塊，行事曆與播放清單改為正式 URL 連結（新分頁）。讀回全頁已無殘留的 `href` 自訂屬性。
+- **分頁玻璃按鈕**：腳本邏輯用 Playwright 模擬 Webflow 分頁 HTML 測過四種情況（只有下一頁／兩者／只有上一頁／單頁），結果正確。Designer 與 Preview 不執行頁面／全站自訂程式碼，所以在 Designer 裡點分頁按鈕與 FAQ 都不會有反應，必須發布到 staging 才能驗證；頁面為 draft 時 staging 也看不到。
+- **FAQ eyebrow 靠左**：FAQ 標題區由 `section-header_wrapper`（全站共用、置中）改用 `sansan-faq_head`（靠左），h2 移除 `text-align-center`。其他區塊的 eyebrow 原本就靠左。
+
+## 2026-11-06 第五輪：分類篩選卡片＋YouTube CTA（仍未發布）
+
+使用者指示：主題系列改成四個按鈕，點了才出現該分類課程，按鈕要漸層、參考 Mobbin、要有代表各面向的小動畫且持續循環；樣式比照資安頁卡片（上方淺色漸層＋漸層細線圖示）。「全部集數」改成一個 section，CTA 到 YouTube 看完整播放清單。
+
+- **Mobbin 參考**：Customer.io／incident.io／Mural 的資源庫分類切換（分類在上、結果在下、一次只看一類）。
+- **為什麼不用 Webflow Tabs**：用 API 建立的 Tabs 只有 3 個分頁，無法新增第 4 個，已刪除。改用 IX3 點擊互動切換 class（Designer 預覽也會跑 IX3，不需自訂程式碼）。
+- **結構**：`.sansan-filter_component` > `.sansan-filter_menu`（4 張卡）＋ 4 個 `.sansan-filter_pane`（第 2–4 個帶 `is-hidden`）。卡片 `.sansan-filter_btn` = `.sansan-filter_fill`（底部 4px 漸層條，`is-active` 時顯示）＋ `.sansan-filter_visual`（沿用全站 `gradient-bg` ＋ `is-bento-color-1/2`，與資安頁同一組）＋ `.sansan-filter_icon`（`.sansan-filter_part` 遮罩漸層細線圖示，漸層值同 `security-layer_icon-tile`）＋文字。
+- **圖示**：機構經營管理＝長條圖（長條循環伸縮）、照護實務技巧＝心形＋心電線（心跳＋線條明滅）、長照評鑑準備＝板夾＋勾勾（勾勾縮放）、AI與數位工具＝星芒（呼吸＋小星閃爍）。IX3 `i-1616db2c`，timeline `settings: {repeat: -1, yoyo: true}`，捲到分類區開始無限循環；減少動態偏好時不播。
+- **點擊切換**：`i-7ab8ee1c`（機構經營管理）、`i-98e3de9f`（照護實務技巧）、`i-160375b4`（長照評鑑準備）、`i-14e6e3c4`（AI與數位工具）。每個：移除所有 `is-active`→加到自己的漸層條；所有 pane 加 `is-hidden`→自己的 pane 移除；pane 淡入上移。所有 Set 動作放在 0.01s 之後，避免頁面載入時被提前套用。卡片 hover 浮起 `i-848df746`；進場 `i-0450ce34`（改指向新卡片）。
+- **分類清單**：每個 pane 一個 Collection List（`sansan-filter_list` 三欄網格），條件＝分類＋狀態「已播出」＋封面已設定，直播時間新到舊。卡片連結綁「直播／回放連結」、新分頁開啟。清單 ID：機構經營管理 `15968067-…beca`、照護 `a4606375-…8445`、評鑑 `e23fd11d-…b63d`、AI `96c1096e-…6998`。
+- **API 問題紀錄**：新建清單若先只寫 `source`、之後再寫 `filters`，會一直回 `[Conflict] The operation could not be applied to the component map`；同一個操作裡一次寫 `source`＋`filters`＋`sort` 才成功。舊的 latest／archive 清單也是同一問題，這可能是第一版 latest／archive 篩選條件消失的原因。
+- **全部集數 → YouTube CTA**：刪除最新一集卡、集數庫清單、分頁玻璃按鈕與頁面 footer 的 `sansan-pager` 腳本（已清空）；改為 `.sansan-replay_card`（`gradient-bg is-bento-color-1` 背景）＋ Section Tag「全部集數」＋標題＋說明＋ CTA Button「到 YouTube 看完整播放清單」（新分頁）＋漸層細線播放圖示（`i-c43be322` 循環呼吸）。進場 `i-a8d961ad`。刪除 `i-784be094`、`i-acf1c11d`。
+- `custom-code/monthly-sharing/sansan-pager.js` 已不再部署，保留為紀錄。
+
+## 2026-11-09 第六輪：統一 banner hero、結構重排、制式 CTA（仍未發布）
+
+使用者指示：hero 要做成統一 banner，用多個直播視窗＋三三分享會畫面截圖，主要介紹三三分享會是什麼，只放一個「最新直播資訊」按鈕；下方結構為 關於直播 → 最新消息（特別 highlight）→ 過去直播；移除「全部集數」卡片；最後的 CTA 用制式元件；整體版面要更像官網。
+
+- **「聖誕」來源**：頁面內容沒有任何聖誕字樣（全頁搜尋 0 筆）；只有 git 分支名 `claude/christmas-sharing-page-3u67cr` 帶 christmas（第一次對話時依「聖誕分享會」自動命名，依 repo 規則不更換分支）。Claude 工作階段標題已改為「智齡三三分享會專區頁 /jubo-33-live-stream」。
+- **直播截圖素材**：取自 Jubo 自有 YouTube 頻道影片的自動畫格截圖（`i.ytimg.com/vi/<id>/maxres1-3.jpg`），轉成 webp 上傳：`6af1182545f9805188b40137`（開場畫面，EP19）、`6af118259fa8955d9cfd12e9`（講師入鏡，EP16）、`6af118259fa8955d9cfd12fa`（吞嚥簡報＋講師小窗，EP18）、`6af1182504d34e6a4a56d713`（簡報＋多人視窗，EP19）、`6af1182504d34e6a4a56d759`（急救簡報，EP15）。畫面含講師與少數線上參與者小視窗，皆為已公開影片內容；正式上線前建議行銷確認。
+- **Hero（`section_sansan-hero` 內重建）**：`.sansan-banner_component`（0.85fr 1fr，同 Tier B product hero 比例；平板以下單欄）。左：Section Tag「每月直播節目」、H1「智齡三三分享會／把照護現場的難題，講清楚」（後半 `gradient-headline`）、介紹文、單一 CTA Button「最新直播資訊」→ `#latest`、三個事實膠囊。右：`.sansan-live_window` ×5 直播視窗拼貼（主視窗有視窗列與漸層「直播中」標籤），手機隱藏兩個小視窗。IX3：載入 `i-02c482e7`（文字逐行上升、視窗逐一放大淡入）、`i-15c4768f`（視窗緩慢上下漂浮，無限循環）。
+- **最新消息（新 `section_sansan-latest`，id 錨點 `#latest`）**：Section Tag「最新消息」＋ H2「下一集，第三個週三中午見」＋高亮卡 `.sansan-latest_card`（白卡＋`gradient-bg is-bento-color-1`＋大陰影），原 hero 的下一集區塊（大字日期、EP、分類、主題、講師、提醒按鈕、行事曆、封面、月曆卡）整組搬入。原 H1「智齡三三分享會」移到新 hero。原 hero 載入動畫 `i-609a616a` 改為捲到此卡時播放。`set_dom_id` 對新 section 再次遇到 MPS conflict，改用卡片前的錨點 div（`id="latest"`）。
+- **關於直播**：Section Tag 改「關於直播」，H2 改為帶 `gradient-headline` 的版本。
+- **過去直播**：Section Tag 改「過去直播」，H2「依主題，找到你需要的那一集」（漸層強調）；分類篩選卡維持第五輪。
+- **講師、FAQ**：保留在過去直播之後；講師 H2 改漸層強調。
+- **移除**：「全部集數／YouTube CTA」整段（`e597718c-…`）、自訂 LINE 收尾區（`893701ff-…`）；刪除 `i-a8d961ad`、`i-c43be322`、`i-ad4d2972`。
+- **結尾 CTA**：改用全站 `CTA Section #1` 元件，Title「每月第三個週三，中午見」、Text「加入 LINE 官方帳號，新集數公布和開播前都會傳訊息提醒你」、按鈕「加入 LINE，開播提醒」→ `https://lin.ee/Clf7lXr`（新分頁）。
+- **頁面順序**：Hero → 關於直播 → 最新消息 → 過去直播 → 講師 → FAQ → CTA Section #1 → Footer。
+
+## 2026-11-09 第六輪追加：hero 直播意象（仍未發布）
+
+使用者：顏色太跳的簡報不要放 hero；加直播動畫（loading…）、參考 StreamYard 的釘選留言、跑馬燈。
+
+- **換圖**：橘紅食物照（EP18 簡報）與紅箭頭簡報（EP15）換成同色系青綠畫面：`6af11e57499a76ecfcb4124f`（EP18 封面＋講師與主持人視窗）、`6af11e57da6db872c21ba67f`（EP21 封面＋講師視窗）、`6af11e57da6db872c21ba6a2`（EP09 講師介紹頁）。舊的 slides-a／slides-c 素材保留未刪。
+- **置頂留言（StreamYard 風格）**：主視窗左下兩則 `.sansan-live_comment`（漸層頭像「三」＋「三三分享會」＋「置頂留言」標籤），內容是主持人提醒（聊天室提問、可看回放），不是虛構的觀眾留言。第二則帶 `is-next`（靜止時透明）。IX3 `i-ca6939e8` 每 10 秒輪流淡入淡出。
+- **跑馬燈**：主視窗底部 `.sansan-live_ticker`（漸層「三三分享會」標籤＋深色半透明條），四則真實資訊各重複一次；IX3 `i-01fea2ae` 以 xPercent 0→-50 線性 26 秒無限循環（無縫）。
+- **Loading**：左上小視窗蓋上 `.sansan-live_loading`（白霧＋轉圈＋「下一集直播準備中」＋三點），IX3 `i-55053d74` 轉圈與三點循環，並讓主視窗「直播中」燈號明滅。
+- 以上循環都在減少動態偏好時不播放；手機版小視窗隱藏、留言字級縮小。
+
+
+## 2026-11-09 第六輪追加二：留言區、teal 跑馬燈、hero 文案（仍未發布）
+
+使用者：置頂留言名稱與縮圖都改智齡科技；移除「下一集直播準備中」卡片；跑馬燈改 Jubo teal 底＋白字；右上角卡片改成 YouTube 觀看時的留言區，用線條呈現、持續 loop；hero 文字改「利用中午午休時間，增強長照知識！」。
+
+- **Hero H1**：第二行（`gradient-headline` span）改為「利用中午午休時間，增強長照知識！」。
+- **置頂留言**：兩則 `.sansan-live_comment` 名稱改「智齡科技」；頭像由漸層「三」字改為 Image，使用 Jubo logo 素材 `6ace01c72f27502d08c10e27`。
+- **移除**：左上 loading 小視窗（`.sansan-live_loading`，含轉圈與三點）整個視窗刪除；`i-15c4768f` 漂浮循環同步移除該視窗動作；`i-55053d74` 改為只做主視窗「直播中」燈號明滅。
+- **跑馬燈**：`.sansan-live_ticker` 背景綁 primary accent（Jubo teal，`variable-d240906f-…`），文字綁白色（`variable-987d0d75-…`）；左側標籤改為半透明深 teal（rgba(23,94,94,0.55)）。
+- **留言區（右上視窗）**：原講師入鏡截圖視窗改為 `.sansan-chat`：標題列（「即時聊天室」＋ teal「LIVE」膠囊）→ `.sansan-chat_viewport`（overflow hidden）→ `.sansan-chat_track`（12 列 `.sansan-chat_row`：彩色圓形頭像＋名稱線＋訊息線，長度以 `is-wNN` 變化，6 列內容重複一次）→ 底部假輸入框。沒有實際文字，只用線條表現。視窗高度 17rem（手機 11rem）。
+- **留言 loop**：新增 IX3 `i-7b864ebe`，track yPercent 0→-50，線性 16 秒，repeat -1（因內容重複一次，無縫循環）；減少動態偏好時不播。
+- 講師入鏡截圖（`6af118259fa8955d9cfd12e9`）已不在 hero 使用，素材保留未刪。
+
+## 2026-11-09 第六輪追加三：留言區改真實文字（仍未發布）
+
+使用者：線條留言區不好看，改成真實文字，參考我們影片的聊天室回放；之後會提供假人頭像。
+
+- **聊天室回放來源**：用 YouTube innertube API 讀取。有回放的集數只有三集：`HXzyILy2D2U`（AI part2）、`FZHWfRv8xTQ`（評鑑 B 計畫：感染管制）、`N1K2UCAa2fg`（EP22，讀不到內容）。其餘影片顯示「不支援聊天室訊息重播」。真實留言以「簽到／午安」、主持人提醒提問與回放、「請問影片可以回放嗎？」、「AI好方便」、「notebookLM超好用」、「很棒的內容👍」為主。
+- **去識別化**：回放中的真實機構名稱與個人姓名都不使用；顯示名稱改為虛構的職稱暱稱（林護理師、陳社工、王主任、小美、張照服員、黃督導），留言內容依真實留言改寫。主持人留言以「智齡科技」名義發出（Jubo logo 頭像＋teal 名稱膠囊）。
+- **結構**：`.sansan-chat_track` > 兩個相同的 `.sansan-chat_group`（各 8 則）> `.sansan-chat_row`（頭像＋`p.sansan-chat_text` 內含 `span.sansan-chat_author`，主持人加 `is-host`）。頭像暫時用彩色圓形＋姓氏（`.sansan-chat_avatar` 改為 1.5rem、置中白字），主持人用 `img.sansan-chat_avatar-img`（logo `6ace01c72f27502d08c10e27`）。
+- **換頭像方式**：使用者提供假人圖片後，上傳成素材，把每位的 `.sansan-chat_avatar` div 換成 `img.sansan-chat_avatar-img`（兩組都要換，共 12 個）。
+- **動畫**：`i-7b864ebe` 改為 32 秒一輪（原 16 秒），讓文字讀得完；兩組內容相同，yPercent 0→-50 無縫循環。
+- 刪除不再使用的 `sansan-chat_lines`、`sansan-chat_name`、`sansan-chat_msg` 樣式。
+- **假人頭像（2026-11-09）**：使用者提供 AI 生成的虛構人物頭像（200×200 WebP），上傳為素材：林護理師 `6af129169fa8955d9c01a2b1`、陳社工 `6af129169fa8955d9c01a297`、王主任 `6af12916c3a6bb9fb5ee3bb8`、小美 `6af12916b88c3212ce727a73`、黃督導 `6af12916434edee758f928cc`。兩組共 10 個姓氏圓形已換成 `img.sansan-chat_avatar-img`。張照服員的圖片未收到檔案，兩個位置（`3d7db775-…8e79`、`3891271a-…6b8d`）仍為姓氏圓形。
+
+## 2026-11-09 第六輪追加四：hero 與關於直播文案（仍未發布）
+
+- **Hero**：eyebrow（Section Tag）改「智齡三三分享會」；H1 移除「智齡三三分享會」與換行，只留漸層「利用中午午休時間，增強長照知識！」；說明改為「每月第三個星期三中午，智齡科技在 YouTube 免費直播。邀請長照現場的院長、督導與專家，分享評鑑準備、照護實務、機構經營與 AI 工具的實戰經驗，錯過也能隨時看回放。」；刪除三個灰色事實膠囊，同步刪除 `sansan-banner_facts`／`sansan-banner_fact` 樣式，並從 `i-02c482e7` 移除該目標。
+- **關於直播（section 2）**：H2「上班之餘，**也可以好好充實自己**」（後半漸層）；說明寫入理念：利用午休零碎時間累積實務能力、每月一主題一小時、業界講者把現場經驗整理成回去就能用的方法、不必請假打開 YouTube 就能參加、照護品質來自每位夥伴的持續成長。三點改為 01 業界專業講者／02 主題豐富多元／03 影片隨時可複習（各一句說明）。原「講師同意開放的集數可索取簡報」的說法一併拿掉。
+- **適合誰看**：每個 pill 一個職位：機構主任、護理師、社工、居服督導、照顧服務員、個案管理師。
+
+## 2026-11-09 第七輪：最新消息卡重新設計＋底部釘選條（仍未發布）
+
+使用者：最新消息卡左右資訊重複；希望捲過去時能「釘選」。使用者選擇：底部小橫條、右邊放講師＋本集重點、背景由 Canva 匯出無字版。
+
+- **分工**：左邊只放「時間與行動」（下一集直播標籤、大字日期、EP＋分類、主題、提醒按鈕、加入行事曆）；右邊只放「這集在講什麼」（無字背景照＋講師＋這集你會聽到）。主題、日期不再在右邊重複；講師只出現在右邊。
+- **移除**：左邊講師膠囊（搬到右邊）、右下「每個月的這一天」月曆卡；刪除 `sansan-hero_cal*`（含 `is-wed` combo）與 `sansan-hero_cover` 樣式。`sansan-hero_visual` 的 padding-bottom 改 0、align-self stretch。
+- **右側面板**：右側 Collection List（狀態＝預告、直播時間升冪、1 筆）的 item 內放 `.sansan-latest_panel`：`img.sansan-latest_panel-bg`（綁新欄位「卡片背景圖」）→ `.sansan-latest_panel-shade`（深 teal 由上而下漸層）→ `.sansan-latest_panel-body`：「主講人」標籤、講師區塊（原 `sansan-hero_speaker` 搬入，加 `is-panel` combo：透明底、頭像 4rem 白框、名字 1.25rem、單位白字 82%）、分隔線、「這集你會聽到」標籤、RichText `.sansan-latest_points`（綁「講綱」）。面板底色 teal（無背景圖時的備援）、最小高度 27rem（手機 24rem）。
+- **CMS**：集數新增 Image 欄位「卡片背景圖」`qia-pian-bei-jing-tu`（`1d61744a530bc438dafd620ab7df1a8e`）。EP22 已填：背景圖、講綱三點（2026-11-09 使用者確認）：長照現場常見的性騷擾情境；照護時如何劃出專業界線並適時拒絕與回應；事件發生後的通報流程與機構保護措施。
+- **Canva 無字版**：複製 `DAGLvkPY5mw` 第 23 頁為新設計 `DAHaYmRDTEA`「三三分享會 EP22 官網卡片背景（無字版）」，刪除所有文字、logo、講師照，只留手部照片（Canva 圖庫素材 `MAD6rruvVvs`）與 teal 疊層；原設計未修改。匯出 1600×900 → WebP 上傳為素材 `6af12e77412b20cb89ec0b6b`。之後每集：複製當集宣傳頁 → 刪字 → 匯出 → 上傳到該集「卡片背景圖」。
+- **底部釘選條**：`.sansan-pin`（fixed、底部置中、最寬 52rem）放在 main-wrapper 最後，內含 Collection List（同上篩選）→ `.sansan-pin_inner` 白色膠囊：teal 點＋「下一集」、日期（綁「日期大字」，手機隱藏）、主題（綁 Name，超出省略）、「開啟提醒」（綁「直播／回放連結」，新分頁）、✕ 關閉。IX3 `i-f14efd31`：最新消息卡底部捲過視窗 15% 時滑入，往回捲到卡片時收回；`i-08956636`：點 ✕ 滑出並隱藏（本次瀏覽不再出現）。
+- **動畫**：`i-609a616a` 移除月曆與舊封面動作，改為面板淡入上升、背景照 1.08→1 慢放、講師與重點依序淡入。
+
+## 2026-11-09 第七輪追加：最新消息卡精簡（仍未發布）
+
+- **區塊標題**：H2 改「11月份**最新直播**」（後半漸層）。**每月要手動改月份**（標題在 Collection List 外，無法綁 CMS）。
+- **卡片左邊**：移除「● 下一集直播」狀態標籤、「EP22」字樣（保留分類標籤）、「加入行事曆」連結、Glass Button「加 LINE，當天提醒」。只留一顆 CTA Button「加 LINE，開啟直播提醒」→ `https://lin.ee/Clf7lXr`（新分頁）。刪除不再使用的 `sansan-hero_kicker`、`_status`、`_ep`、`_links`、`_link` 樣式；`i-609a616a` 同步移除這些目標。
+- **卡片右邊講師放大成主視覺**：`sansan-hero_speaker-name.is-panel` 2.5rem（平板 2.125rem、手機 1.75rem）、`_speaker-org.is-panel` 1.125rem、`_avatar.is-panel` 5.5rem（手機 4rem）；講師區塊底部對齊，手機改上下排列。
+- **講綱白字**：全站 `li`／`p` 標籤樣式固定 neutral/black，class 無法用 API 設子層選擇器，改在頁面 head freeform code 加 `<style id="sansan-latest-points">`，正本 `custom-code/monthly-sharing/latest-points.css`。
+
+## 2026-11-09 第八輪：hero 視覺簡化（仍未發布）
+
+使用者：EP22 講綱確認 OK；hero 還是太亂，右邊卡片不要邊框、移除白邊，顏色少一點、簡單一點。
+
+- **視窗數量**：4 個 → 2 個。刪除兩張簡報截圖視窗（`is-slides`、`is-slides-b`），只留主直播畫面（左下、寬 74%）與聊天室（右上、寬 36%、高 20rem；手機 42%／12rem）。`sansan-banner_visual` 最小高度 32rem → 26rem（手機 16rem）。
+- **去白邊**：`sansan-live_window` 移除 1px 白色外框；陰影改淡 `0 20px 48px -20px rgba(21,23,23,.22)`。主視窗頂端白色標題列（三個圓點＋標題）刪除，「直播中」標籤改為浮在畫面左上角。
+- **顏色收斂成 teal＋白**：「直播中」標籤由 teal→紫漸層改 teal 純色；聊天室送出鈕由漸層改 teal。跑馬燈維持 teal 底白字。
+- **動畫**：`i-15c4768f` 只保留兩個視窗的漂浮。
+- **清理樣式**：刪除 `is-slides`、`is-slides-b`、`is-mini`、`sansan-live_bar`、`_bar-title`、`_dots`、`_dot`，以及先前已不用的 loading 系列（`sansan-live_loading`、`_spinner`、`_loading-text`、`_loading-dots`、`_ldot`）。簡報截圖素材保留在素材庫未刪。
+
+## 2026-11-09 第九輪：Slug、SEO、Schema 與上線前檢查（仍未發布）
+
+使用者：寫好 slug 與 schema，準備上線；張照服員維持姓氏圓形頭像即可。
+
+- **Slug**：維持 `jubo-33-live-stream`，在 resources 資料夾下，完整網址 `https://www.jubo-health.com/resources/jubo-33-live-stream`。
+- **SEO title**：「智齡三三分享會｜每月第三個週三中午免費長照直播｜Jubo 智齡科技」。
+- **Meta description**：「利用中午午休時間，增強長照知識！智齡三三分享會每月第三個星期三 12:00 在 YouTube 免費直播，邀請業界講者分享機構經營、照護實務、評鑑準備與 AI 工具，每集都有回放可複習。」
+- **Open Graph**：title「智齡三三分享會｜午休一小時，增強長照知識」；description「每月第三個星期三中午 YouTube 免費直播，業界講者分享機構經營、照護實務、評鑑準備與 AI 工具，錯過也能看回放。」；圖片暫用全站預設 OG 圖（`6a82c57be33c51d36b51d332`），之後可換三三分享會專屬分享圖。
+- **JSON-LD**（Page Settings schema，API 寫入並讀回確認；正本 `custom-code/monthly-sharing/page-schema.jsonld`）：`@graph` 含 WebPage（`#webpage`）、BreadcrumbList（首頁 → 長照專業成長 `/resources/education` → 智齡三三分享會）、EventSeries（`#series`：每月第三個週三 12:00–13:00 Asia/Taipei、線上、免費、VirtualLocation＝YouTube 頻道、organizer `#organization`、sameAs 播放清單）、FAQPage（5 題，與頁面文字逐字一致）。網址全為 www 絕對網址、`inLanguage` zh-Hant-TW、`#organization`／`#website` 與首頁串接。不放單集 Event，避免每月過期。
+- **FAQ 內容修正**：「錯過直播怎麼辦？」原寫「全部集數」（已移除）改為「過去直播」；「簡報可以下載嗎？」原寫單集頁索取表單（單集頁未上線）改為直播回放中的實際流程：填課後問卷 → 拿通關暗號 → LINE 官方帳號輸入取得簡報（來源：EP AI part2 與感染管制集聊天室回放）。**請行銷確認此流程現在仍適用。**
+- **頁面狀態**：讀回 `draft: false`，下次全站 Publish 會一起上線。
+
+### 上線前必做（Publish 前）
+
+1. **兩個 CMS Template 頁設為 Draft（Designer）**：「三三分享會集數 Template」`6aed903cb9132d6f3c237287`（/monthly-sharing/*）、「三三分享會講師 Template」`6aed903bb9132d6f3c237221`。API `bulk_update_pages draft:true` 仍被忽略（讀回 false）。不設的話，37 筆 CMS 項目會產生沒設計過的單集／講師頁並進 sitemap。
+2. Designer Preview 走一遍：hero 兩個視窗、最新消息卡（右側背景／講師／白字講綱）、底部釘選條滑入／收回／✕、分類篩選、FAQ 開合、手機版。
+3. 取得明確 Publish 授權後再發布；發布後抓線上 HTML 驗證 JSON-LD 並跑 Rich Results Test。
+- **2026-11-09 補充**：使用者截圖仍見白色標題列與簡報視窗，為舊畫面（Data API 讀回只剩主畫面＋聊天室兩個視窗、無標題列）；請 Designer 重新整理後再看。另移除 `sansan-live_window` 的白色底色，避免圖片邊緣透出白邊（聊天室 `.sansan-chat` 自帶白底）。
+
+## 2026-11-10 第十輪：單集頁「課程簡報」區塊與表單（未發布）
+
+使用者：採 Webflow 原生表單；以加 LINE 為主、表單為備用；同一人每月重填可看出固定參加者；需說明每月維護方式。
+
+- **單集 Template 頁**（`6aed903cb9132d6f3c237287`，原本空白）：建立站台骨架 `page-wrapper` > Global Style、`main-wrapper` > Navbar、Page Gradient BG、`all-sections-wrapper` > `section_sansan-deck`、Footer（皆用既有共用元件）。
+- **`section_sansan-deck`**（`69928143-…a7`）：兩欄 `.sansan-deck_component`（0.85fr／1.15fr，平板以下單欄）。
+  - 左 `.sansan-deck_info`（sticky）：Section Tag「三三分享會課程簡報」、EP＋集數（綁「集數」）、分類（`sansan-hero_track`，綁「分類」）、H1（綁 Name）、說明、講師膠囊（沿用 `sansan-hero_speaker`，綁講師照片／名字／單位）。
+  - 右上 LINE 卡（沿用 `sansan-latest_card`＋`gradient-bg is-bento-color-1`）：「加入 LINE，領取本集簡報」、三步驟（關鍵字 `簡報EP`＋集數綁定）、CTA Button「加入 LINE，領取簡報」→ `lin.ee/Clf7lXr`（新分頁）、QR code（素材 `6af2bdd78871e347179e6e2d`，自行產生，小螢幕隱藏）。
+  - 右下 `.sansan-deck_form-card`：「不方便用 LINE？填表單下載」＋Webflow 原生表單「**三三分享會簡報索取**」（POST）。欄位：索取簡報（顯示主題；HTML Embed 隱藏欄位 `索取集數` = `EP{集數} {Name}`）、姓名＊、Email＊（type email）、機構名稱＊、職稱＊（7 選 1）、機構類型（5 選 1）、目前有使用智齡系統嗎＊（有／沒有／不確定）、想了解智齡系統（勾選）、個資同意＊（勾選）。送出鈕「送出並下載簡報」。
+  - 成功畫面：「收到了！可以下載本集簡報」＋「下載簡報」（綁「簡報下載連結」，新分頁）＋「加入 LINE，下一集開播前提醒你 →」。錯誤訊息改中文。
+- **API 限制與改法**：
+  - Select 下拉的選項無法用 API 設定，三題改用 radio 膠囊（`sansan-deck_choice`）。
+  - input 的 `value`／`placeholder` 屬性被 API 視為保留字：無法加 placeholder；索取集數改用 HTML Embed `<input type="hidden">` 搭 CMS token，**需在 Designer 確認 token 有被辨識**。
+  - Span 不能綁 CMS 文字，EP 數字與關鍵字數字改用 div。
+  - 區塊的 Conditional visibility（開放簡報）寫入被拒（component map conflict），**需在 Designer 設定**；目前每一集都會顯示此區塊。
+- **版面預覽**：Designer 未連線無法截圖，依相同樣式數值重繪桌機／手機預覽給使用者；LINE 卡標題字級由 1.75rem 調為 1.5rem 避免斷字。
+- **維護說明**：新增 [每月維護手冊](maintenance.md)。
+
+## 2026-11-10 第十輪修正：改為「課後問卷 → 通關密語 → LINE」
+
+使用者：通關密語不是公開關鍵字；實際是直播最後填回饋問卷，送出後給密語，再到 LINE 輸入。MS Forms 每月由不同同事開，串連結不方便。
+
+- **查證**：直播聊天室回放（AI part2、感染管制集）：「一定要聽到最後，完成課後問卷調查，才會拿到通關密碼」「填寫課後問卷連結，可以拿到今天簡報下載的通關暗號，到智齡科技 LINE 好友帳號輸入通關暗號，即可獲得本月分享會簡報」（MS Forms `forms.office.com/r/C7F7jm3uSp`）；EP12 說明欄：「請加入智齡科技官方 Line 帳號：@jubohealth 並輸入通關密語」。
+- **決定**：Webflow 表單直接當課後問卷（單集 Template 共用，一份表單、資料集中、不必每月串 MS Forms）。
+- **CMS**：新增 PlainText「通關密語」`tong-guan-mi-yu`（`24a38f9ea16fb9adb91e740d42b5d6ff`）。
+- **版面**：表單卡移到 LINE 卡上方。表單卡標題「填寫課後問卷，領取通關密語」；新增回饋題：整體滿意度（5 級，必填）、內容對工作有幫助嗎（3 級，必填）、最有收穫的地方（textarea 選填）、下次想聽的主題或想問講師的問題（textarea 選填）；送出鈕「送出問卷，取得通關密語」。成功畫面：「感謝填寫！本集通關密語是」＋`.sansan-deck_pass`（綁「通關密語」）＋說明＋「加入 LINE，輸入通關密語」按鈕；移除直接下載按鈕。LINE 卡改「拿到密語後，到 LINE 領簡報」：①填上方問卷取得密語 ②加入 LINE 官方帳號 @jubohealth ③輸入密語自動收到簡報。移除公開的「簡報EP＋集數」關鍵字。錯誤訊息改為只提示必填欄位。
+- 左側說明改為描述問卷→密語→LINE 流程。
+- 新樣式：`sansan-deck_textarea`、`sansan-deck_pass`、`sansan-deck_success-text`。
+- 節目專區 FAQ「簡報可以下載嗎？」目前描述與此流程一致（填課後問卷→通關暗號→LINE），單集頁上線時可補「問卷在每一集的頁面上」。
+- **2026-11-10 補充：題目改為與原 MS Forms 滿意度問卷一致**（使用者提供 `「長照3.0智慧輔具租賃新制解碼」三三分享會滿意度問卷調查_11509` 題目）。順序：1 機構類型（4 選 1，含括號說明）＊／2 是否為智齡科技客戶（是／否）＊／3 機構（公司）名稱＊／4 所在區域（A–E 五區）＊／5 姓名＊／6 職稱（單行文字）＊／7 Email＊／8 電話（選填，type tel）／9 內容實用程度（★5–★1）＊／10 建議或想對講師提問＊／11 得知管道（8 個複選，各自一欄 `得知管道：…`，HTML 無法強制至少勾一個，故非必填）／12 期待主題或想說的話＊。保留「想了解智齡系統」選填勾選與「個資同意」必填。刪除先前自擬的職稱選項、機構類型「醫院」、「不確定」、幫助程度題。
+
+## 2026-11-10 第十一輪：送出問卷即下載簡報、LINE 改為訂閱提醒、radio 修正
+
+使用者：講師膠囊要放大；不再用通關密語，送出問卷就給簡報連結，LINE 只用來收最新資訊與直播提醒；表單選項點了取消不掉。
+
+- **radio 無法互斥（主因）**：API 建的 radio 每個選項的 `name` 都不同（`radio-8`、`radio-9`…，來自自動產生的 inputName，API 無法改；`groupName` 只寫進 `data-name`）。結果同一題可多選、點了無法換、必填會要求每個選項都勾；Webflow 送出時也用 `name` 找已選值。
+  - Group Name 改為「Q1 機構類型」「Q2 是否為智齡科技客戶」「Q4 所在區域」「Q9 內容實用程度」（共 16 個 radio）。
+  - Template 頁尾新增 `<script id="sansan-deck-form">`（正本 [`custom-code/monthly-sharing/sansan-deck-form.js`](../../../custom-code/monthly-sharing/sansan-deck-form.js)）：把 radio 的 `name` 改成 `data-name`；同時把隱藏欄位「索取集數」填成頁面上的「EP{集數} {標題}」，取代不會轉換的 `{{wf}}` token。以 staging HTML＋Playwright 測試：選 r9 後 r8 取消、索取集數＝「EP22 長照職場性騷擾與照護界線」。
+- **成功畫面**：「感謝填寫！本集簡報在這裡」→「下載本集簡報 ↗」（`e5831c61-…93b4`，link 綁 CMS「簡報下載連結」`f8ed0d07…6897`，新分頁）→ 小字「想在下一集開播前收到提醒，可以加入智齡科技 LINE 官方帳號 @jubohealth。」；刪除 `.sansan-deck_pass`。
+- **文案**：左側說明「看完直播後填寫課後問卷，送出就能直接下載本集簡報。」；表單卡「填寫課後問卷，下載本集簡報」「約 2 分鐘，送出後就會出現簡報下載按鈕。」；送出鈕「送出問卷，下載簡報」。
+- **LINE 卡**：標題「加入 LINE，不錯過下一集」；兩點 ✓「每集開播前提醒，準時上線」✓「第一手長照新知與活動消息」；刪除第三步與 `@jubohealth` 關鍵字膠囊；QR 說明「掃描加入 @jubohealth」；CTA Button「加 LINE，開啟直播提醒」。
+- **講師膠囊放大**：新增 combo `is-deck`（`.sansan-hero_speaker.is-deck` padding 0.75/2rem、gap 1.25rem；avatar 5rem；名字 1.375rem/600；單位 0.9375rem）。節目專區 hero 的講師膠囊不受影響。
+- **CMS**：「簡報下載連結」說明改為 OneDrive 公開連結、送出後顯示；「通關密語」標為已停用（欄位保留未刪）。
+- **節目專區**：FAQ「簡報可以下載嗎？」改為「講師同意公開的集數，直播最後會提供課後問卷連結，填寫送出後就能直接下載」；JSON-LD 同步並讀回確認；LINE 說明句改「獲得直播提醒與最新長照資訊」。
+- 已知限制：下載連結在 HTML 原始碼中（成功區塊預設隱藏），不填問卷也可能被取得。
+- 未發布。需重新發布 staging 才看得到。
+
+## 2026-11-10 第十二輪：節目專區連到單集頁、單集簡報區塊依「開放簡報」顯示
+
+- **節目專區「過去直播」四個分類清單**：每張集數卡下方新增 TextLink「填問卷下載簡報 →」（`.sansan-ep_deck-link`，teal 變數 `d240906f…`、0.875rem/500、hover 底線）。元素 `30b6ff5f-…9ca9`、`8002f9a5-…41bc`、`3b719cbc-…f463`、`3df96005-…fc80`。
+  - 連結：`collectionPage` → 單集 Template（`6aed903cb9132d6f3c237287`），預期為該集單集頁；待 staging 讀回確認。
+  - 顯示：visibility 綁 CMS「開放簡報」，只有打開的集數才出現。卡片本身仍連 YouTube 回放（`<a>` 不能巢狀，所以放在卡片外）。
+- **單集頁 `section_sansan-deck`**：visibility 綁「開放簡報」（Conditional visibility API 會被拒，改用 visibility 綁定成功）。目前 23 集「開放簡報」全關，staging 重新發布後單集頁的問卷區塊會隱藏；要測試時先打開 EP22 的「開放簡報」。
+- 未發布。
+
+## 2026-11-10 第十三輪：過去集數簡報改放 Webflow Assets（測試 EP18–EP21）
+
+- Microsoft 365 連線只有讀取權限（Files.Read／Sites.Read.All），無法複製或建分享連結；改由使用者把 PDF 傳進對話，Claude 用 Data API `create_asset`＋S3 POST 上傳。S3 policy 上限 31,457,280 bytes（30MB）。
+- 已上傳（CDN 皆 200、`application/pdf`、大小相符）：
+  - EP18 `6af2cff0cccbe0e5d3ae6a89`（8.5MB）
+  - EP19 `6af2d0078f2eeccf9ee12e63`（5.6MB，講師版）
+  - EP20 `6af2d00732f37deb8f65cabb`（29.5MB，圖片型 PDF）
+  - EP21 `6af2d00789eaf366097e2c8c`（10.7MB）
+  - 顯示名稱改為「三三分享會簡報_EPxx_主題.pdf」；放在 Assets 根目錄（API 建的資料夾無法刪除，故未建）。
+- CMS EP18–EP21：填「簡報下載連結」＝上述 CDN 網址、「開放簡報」打開（staged，未 Publish）。
+- 上傳前以 pdftotext 檢查無身分證、存摺、領款字樣（EP20 為圖片無法檢查，內容為講師投影片）。
+- [每月維護手冊](maintenance.md) 改為上傳 Webflow Assets；[簡報檔清單](reference/簡報檔清單.md) 加「Webflow 網址」欄。
+- 未發布。
+
+### 第十三輪補充：壓縮後重新上傳
+
+- 用 PyMuPDF（scratchpad venv）`doc.rewrite_images(dpi_threshold=160, dpi_target=150, quality=70)`＋`save(garbage=4, deflate=True, clean=True)`，只重壓圖片、文字保留。逐頁抽樣比對 EP20 p21、p46、EP21 p13，字與圖清楚。
+- 結果：EP18 8.5→5.4MB、EP20 30.9→10.5MB、EP21 10.7→8.4MB；EP19 5.6MB 無變化，沿用原檔。
+- 新 asset：EP18 `6af2d2050c0c7844bfd3b8e3`、EP20 `6af2d20590b081f8ba560745`、EP21 `6af2d205851b2285116e5576`（CDN 200、大小相符），CMS 連結已改指向新檔；先前未壓縮的三個 asset（`6af2cff0…`、`6af2d00732f3…`、`6af2d00789ea…`）已刪除（未被引用）。
+- CMS 變更為 staged，需重新發布 staging 才生效。
+
+### 第十二輪修正：過去直播入口連結格式
+
+- staging 讀回發現 4 個「填問卷下載簡報 →」的 `href` 是字面的 Template page ID（`collectionPage`＋`to` 不會解析）。比照新聞中心卡片（`news-card_wrap`）的寫法改為 `{"mode":"collectionPage"}`（不帶 `to`），即連到目前項目的單集頁。待重新發布 staging 驗證。
+- staging 讀回確認：單集頁問卷區塊只在 EP18–EP21（開放簡報）出現，EP22、EP05 不出現；visibility 綁定有效。
+
+## 2026-11-10 第十四輪：講師卡片
+
+- 移除卡片上的「講師介紹 ›」（`.sansan-sp_more`，彈窗互動早已關閉，點了沒反應）與未使用的講師彈窗 `.sansan-sp_panel`（`fe3643b8-…add5`）。CMS「簡介」欄位保留。
+- 放大：講師清單欄寬 `minmax(19rem, 1fr)`、間距 1.25rem；卡片 padding 1.25/1.5rem；照片 4.5rem；姓名 1.25rem；職稱 0.9375rem/500；單位 0.9375rem。
+- 長單位：head 新增 `<style id="sansan-speaker-card">` 讓 `.sansan-sp_org` 最多兩行（正本 [`speaker-card.css`](../../../custom-code/monthly-sharing/speaker-card.css)）；單位元素加 `title` 屬性綁 CMS「單位」。以本機 mock 測：吳孟姿的單位會被截斷，其他都在兩行內。
+- 未發布。
+- **CMS 講師資料簡寫**（使用者同意「可以簡寫，不用全部放」；「簡介」保留全名不動）：
+
+  | 講師 | 職稱 | 單位 |
+  |---|---|---|
+  | 吳孟姿 | 外聘督導、兼任講師 | 台灣愛之希望協會、嘉南藥理大學 |
+  | 成茵茵 | 執行長 | 典寶社會福利慈善事業基金會 |
+  | 智齡科技團隊 | 產品・資安・客戶成功 | 智齡科技 |
+  | 侯怡岑 | 職業衛生護理中心主任 | 中山醫學大學附設醫院 |
+  | 鍾清惠 | 安寧療護教育示範中心社工 | 淡水馬偕紀念醫院 |
+  | 林玉秀 | 感染管制中心組長 | 柳營奇美醫院 |
+
+  部門移到職稱、單位只留機構名，讓每張卡片的單位都在一到兩行內。鍾清惠項目仍為草稿（EP23 用），未改狀態。
+
+## 2026-11-10 第十五輪：staging 驗證與入口連結保底
+
+- staging 驗證（Playwright 1440px）：講師卡片 15 張、「講師介紹」與彈窗已移除、姓名 20px、照片 72px，單位無一被截斷；EP18–EP21 單集頁有問卷且下載連結為壓縮版 asset、「索取集數」正確；EP22 無問卷區塊；無 JS 錯誤。
+- **問題**：「填問卷下載簡報 →」發布後 `href="#"`，`{"mode":"collectionPage"}` 由 API 寫入時不會解析（新聞中心卡片同寫法可用，推測 Designer 寫入帶有 API 看不到的資料）。
+- **處理**：
+  - 四個連結加 `data-sansan-slug`（綁 CMS Slug）。
+  - 試兩種寫法：`30b6ff5f…`＝`{"mode":"page","to":{"pageId":Template}}`、`8002f9a5…`＝`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`；另兩個維持 `collectionPage`。
+  - 頁尾新增保底 `<script id="sansan-deck-links">`（正本 [`sansan-deck-links.js`](../../../custom-code/monthly-sharing/sansan-deck-links.js)）：連結不是站內路徑時改為「前綴＋slug」，前綴優先從已正確解析的連結推得，否則用 `/monthly-sharing/`。本機三種情境測試通過。
+- 講師卡片 head CSS 加 `text-wrap: balance`，避免單一字掉行。
+- 未發布。
+
+## 2026-11-10 第十六輪：Codex 接手、FAQ 與入口、Hero、下載頁左欄
+
+- 授權：使用者核准前輪兩題 FAQ；要求全頁文案審核、入口改「下載簡報」、Hero 紙飛機恢復／主卡加寬、下載頁 LINE 移到講師下方、檢查 404。未授權發布。
+- Webflow 連線：末碼 92905b01 可讀寫目標 Jubo 站；不必再試第二個同名連線。
+- 主頁 `6aed901905a96260ffcc4595`：兩題 FAQ 及四個清單 TextLink 已 set_text 並讀回；完整 footer 原有單一 script 已替換為維護源碼，head 原樣保留。
+- Hero：`.sansan-live_window.is-main` main width 74%→82%，tiny 78%→84%；`sansan-chat_send` 新增 flex 置中、禁止縮小與官方 white Variable；原本空容器內新增原生 SVG `ce9df77b-a2f4-c8ba-3ce2-6bcaad3ae98c`／path `014b0cfb-5963-1901-5722-1da9270d031e`，非 Embed。
+- 單集 Template `6aed903cb9132d6f3c237287`：LINE 卡 `41107dec-…2cb1` 移到左欄 `.sansan-deck_info`、講師膠囊後；新增 `.sansan-latest_card.is-deck-line`（寬 100%、padding 1.5rem），`.sansan-deck_line` 改單欄、row gap 1.5rem、寬 100%，QR justify-self:start。
+- 表單成功訊息原 `.sansan-deck_success` 的 display:flex 覆蓋 `.w-form-done` 隱藏狀態，使未送出就出現下載鈕。移除該 display，原三個子元素順序不變移到新內層 `.sansan-deck_success-content`（元素 `8d7bf273-0bcf-3d2b-c331-5d5f70af0912`），內層保留 flex column 與 1rem gap。原生送出機制與成功連結 CMS 綁定不變。
+- 單集完整 footer 保留 radio 分組、索取集數處理，加上只移除 Example Text 的 placeholder 清理；不改已撰寫提示。
+- 404 HTTP 證據：測試站主頁與 ep18/19/20/21＝200；測試站 `/monthly-sharing`、`/jubo-33-live-stream/ep18`＝404。正式站主頁、四個單集頁＝404，正式網域最後發布仍為 2026-11-05；不能用測試站存在推定正式站已上線。
+- 證據界線：Webflow 讀回證明 Designer 修改；四尺寸（1440/991/767/390）驗證為已發布 staging HTML 套用同值修改的本機瀏覽器模擬，兩頁皆無橫向溢出。三組 fallback 邊界案例通過、radio 可改選且同題互斥；未對外送出問卷，不宣稱 Forms 入庫成功。
+- SEO schema：Git `page-schema.jsonld` 已同步核准 FAQ；本輪工具只曝露 unknown action schemas，嘗試讀取 schema 的動作均被 connector schema 驗證拒絕，尚未成功同步 Webflow 的專用 schema 設定。發布前需完成。
+- 其餘文案僅審核，tasks.md 完整十項待核准；未變更課程正式名稱、講師資料、必填規則、共用 Navbar／Footer 定義。
+- 本輪未 Publish，含 staging。
+
+## 2026-11-10 第十七輪：十項核准文案、FAQ schema 同步
+
+- 使用者：「ok修改」，核准前輪完整十項文案。
+- 主頁五項：關於直播介紹、業界專業講者說明、主題說明、過去直播介紹、講師介紹（移除已不存在的點卡片功能敘述）。
+- 單集 Template 四項：問卷說明移除未驗證的兩分鐘承諾；實用程度與講師回饋改為本集；未來主題題改為自然完整的問句。只改可見文案，原 input name、必填與 CMS 綁定不變。
+- 第十項：SEO description 開頭改「善用午休時間，增強長照知識！」，其餘描述保持；JSON-LD 的 WebPage.description 同步。
+- 官網 MCP 文件入口：<https://developers.webflow.com/mcp/tools/data-tools.md>。schema 讀取使用 `query_pages_schema_markup`，寫入使用 `bulk_update_pages_schema_markup`，`pages` 為 `[{id: pageId, jsonLdSchema: object}]`；讀取時省略 jsonLdSchema。前輪同步阻礙已排除。
+- JSON-LD 原四個 graph 節點保留，僅同步兩題已核准 FAQ 與 WebPage 描述。寫入後另一次讀回，與 Git JSON-LD 正本完全一致；五題可見 FAQ 的題目／答案逐字核對通過，SEO description 與 WebPage.description 相同。
+- 驗證：九個文字節點逐一讀回確認，SEO 與 schema 獨立讀回；JSON 語法與 git diff --check。純文案修改沒有新增鏡像測試，未重新發布、未送出問卷。
+- 未 Publish（含 staging）。
+
+## 2026-11-10 第十八輪：PDF 批次、News 審核、staging 實測
+
+- 使用者條件式授權正式發布（全部頁面／動線正常後），另明確允許 EP23 提前公開。
+- 七份 PDF 共 366 頁，26.57→24.57 MB，壓縮與 CDN 驗證證據在 `custom-code/monthly-sharing/pdf-batch-2026-11-10.json`。以 S3 POST 上傳；工具 uploadDetails 需把 camelCase 欄位還原為 S3 的 X-Amz-*、Content-Type、Cache-Control 與 success_action_status；簽名只存在 scratch，不進 Git。
+- 已填 CMS「簡報下載連結」並開啟「開放簡報」：EP05／06／07／08／12／13／14。EP05 舊封面寫入讀回仍 null，改以使用者 PDF 首頁原樣渲染 1600×900 WebP（46 KB），上傳原 ID `6af2f0c9a69eb6564d04c20e`，CMS 自動鏡像至 `6af2f0e262af48799befc712`，已讀回確認並於 staging 看見入口。
+- News EP22 `6af2c8c0a69eb6564dfddd4c`、EP23 `6af2c91814b089835b99d460`：isDraft:false，EP23 publish-date 改 2026-11-10；保留文案，補節目專區連結；EP23 episode 與 lecturer 同時改為可發布。HTML 維護來源為 `news-ep22.html`／`news-ep23.html`。
+- 講師 Template `6aed903bb9132d6f3c237221` 的 draft 寫入回 400（Collection template pages can't be drafted）；改為 head noindex＋meta refresh，Body 加原生專區名稱連結 `b317af69-349f-0ce0-c808-fba34316c1f1` 作為無自動跳轉時的返回入口。
+- 單集 Template head 加 noindex，footer 在無 form／title 時導回專區；script id 原本與 form 重複，已改為 sansan-deck-form-helper。
+- 測試站發布 task：`621691bf-6a78-45f1-9fe6-65ec049d3e68`、`482d0eb8-4b3e-445b-b513-e51b736a09a0`、`a949089a-fed1-465e-9571-0d8ee3d7e0b9`。只發 Webflow subdomain，customDomains:[]；最新狀態 readback staging lastPublished=2026-11-10T10:24:50.880Z。正式域名最後發布仍 2026-11-05T08:12:18.912Z。
+- `2026-11-10-staging-qa.json`：真實 staging 的四斷點、主頁／兩篇 News／七個新增下載頁、11 個連結與 EP05入口、FAQ、篩選、圖示、提醒條關閉、問卷初始隱藏與 radio、返回專區皆驗證。無 JS pageerror。
+- 尚未通過的發布閘門：Cloudflare challenge 主機在執行環境 CONNECT 403；submit disabled，沒有真的按出／POST，也沒有測試入庫。未繞過驗證，已請使用者一般瀏覽器試填後回報。
+- YouTube 直接存取同樣被環境代理拒絕，連結依既有官方來源，未宣稱實播通過。
+- **未正式發布**。待使用者成功送出下載＋Forms 入庫證據後，依既有授權發布，不必再次詢問發布許可。
+
+## 2026-11-10 第十九輪：正式發布
+
+- 問卷閘門：使用者一般瀏覽器實測回覆「有成功送出並下載」。Forms submission `6af2f205bf580b58a27be867`、時間 `2026-11-10T10:29:24.880Z`、form `6af2c6b687691ffaaed10851`，EP12 與欄名核對通過；不保存個資與填答內容。
+- 使用者既有授權為全部確認後正式發布，EP23 已明確同意提前公開；未另增批准流程。
+- `publish_site` task `4e3ef6b6-d85f-4c6f-b47d-9be692311ca5`，customDomains 為 www `6a4390245cde825dcadb2ecc`／apex `6a4390225cde825dcadb2e64`，並發布 Webflow subdomain。
+- `get_site` 獨立讀回：兩網域與全站 lastPublished 均 `2026-11-10T10:30:53.018Z`。
+- 真實 production 驗證：主頁、EP22／23 News、七個新簡報頁及四個既有簡報頁 HTTP 200；十一個卡片入口正確，FAQ／分類／提醒條／圖示、四尺寸無溢出、七頁問卷初始狀態與 LINE 位置正確；未開放簡報與講師獨立頁返回專區。www JSON-LD 與 Git 正本一致，apex 導向 www。
+- 證據：`2026-11-10-production-qa.json`。自動化未重複送出表單；真實送出證據為上列人工測試及 Forms 讀回。YouTube 播放未驗證，EP23 直接網址活動前待補。
+- 回退：先讀回即時狀態，僅還原本輪元素／程式／CMS；PDF 原檔與較小版本公開索引在 `pdf-batch-2026-11-10.json`。若停用某集簡報，關閉「開放簡報」後再發布，單集會返回專區。不要直接改回第一版草稿快照或刪除可能已被使用的資產。
+
+## 2026-11-10 第二十輪：EP23 直播連結
+
+- 授權與來源：使用者要求換上 12 月直播網址並提供 https://www.youtube.com/watch?v=tuOSh2o2qi0；沿用活動頁更新後發布的授權。
+- News `6af2c91814b089835b99d460`：只改參加方式說明、直播入口 href 與文字；歷屆播放清單保留。集數 `6af2c86454a66655c555262b` 的 `zhi-bo-hui-fang-lian-jie` 同步設定。寫入後獨立讀回相符。
+- CMS 單獨發布動作被 connector schema 拒絕，未產生發布；改用已授權的 `publish_site`，task `0a8e0707-34e2-4421-812d-0effccea913e`，www／apex 與 Webflow subdomain。兩正式網域 lastPublished 均讀回 `2026-11-10T10:43:25.548Z`。
+- 真實正式站／staging 均 HTTP 200，正確直播入口一個、舊公布說明已移除、歷屆入口仍在；1440／390 無橫向溢出、無 JS pageerror。證據 `2026-11-10-ep23-link-qa.json`。不重送問卷，YouTube 播放未在雲端驗證。
+- 回退：直播欄位原為 null；News 對照前一版 `news-ep23.html`。若網址需換，兩處一起更新並發布。
+
+## 2026-11-10 第二十一輪：Footer 與資源頁入口
+
+- 使用者明確要求在 Footer「資源」新增三三分享會，並指定長照專業成長頁的 CTA 改為「了解更多三三分享會」、連到節目專區。
+- 共用 Footer definition `bf559d46-0de7-0e5d-3110-35684e2ba87f`：在「長照專業成長」後新增 `88d97a56-e3b4-4044-a064-a371269ceb55`，文字「三三分享會」、`footer-link`、`data-underline-link`，URL `/resources/jubo-33-live-stream`。前後完整樹比對，扣除此新增子樹後完全一致。
+- `/resources/education`（page `6a2e38cda77c1ee08c7f8ba1`）Glass Button instance `2179076d-4294-fc5f-f4b8-650f613dd46d`：只覆寫 CTA Text 與 CTA Links，不改 Glass Button definition、樣式與其他實例。
+- 已正式發布 task `9de59f8f-6ad3-447f-8f72-041d614e48ef`，www／apex lastPublished 均 `2026-11-10T11:03:04.349Z`，並發布 staging。驗證見 `custom-code/monthly-sharing/2026-11-10-entrances-qa.json`。
+
+- 共用元件修改依本次 Footer 明確要求進行；Navbar 未修改。
+- 工具維護：讀取／新增 definition 內元素需 `scope_component_id`；寫 instance props 使用 `set_component_instance_prop_values.values[]` 的 `prop_id`、`type` 與型別專屬欄位，link 為 `type:"link", link_mode:"url", link_to:"/..."`。一般 `set_link` 不接受 ComponentInstance。
+- 回退：刪除新增 Footer link；資源頁 CTA Text 改回「觀看分享會」、CTA Links 改回 `https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt&si=2ZuDFQ9xyAeJLM-9`，再發布。
+
+驗證完成：正式站首頁、資源頁、三三專區與 12 月 News，以及 staging 資源頁，每頁僅一個 Footer 新入口；點擊 Footer／資源頁 CTA 均到專區，四尺寸無橫向溢出、無 JS pageerror，Footer 新連結字色／字級／行高與相鄰連結一致。
+
+## 2026-11-10 第二十二輪：下載 FAQ 補上網站入口提示
+
+- 使用者指出網站已有簡報入口，要求 FAQ 多提供提示；「簡報可以下載嗎？」改為引導本頁「過去直播」→集數卡片「下載簡報」→填寫並送出課後問卷→下載按鈕，並說明沒有入口的集數目前未開放下載、簡報須經講師同意。
+- 只改該題答案與 FAQPage acceptedAnswer，其他四題及 schema graph 節點維持；Git 維護來源 `custom-code/monthly-sharing/page-schema.jsonld`。
+- 正式發布 task `7873257a-5964-4e31-b4e8-2d12ea3e0ee3`，www／apex lastPublished 均 `2026-11-10T11:54:28.478Z`，同步 staging。
+- 答案原 String element `beeb6a21-04e6-044e-60a5-e3ebd4606dd8`，以 set_text 更新；schema 用 bulk_update_pages_schema_markup，寫入後獨立讀回整份一致。
+- 回退：還原上一提交中該題答案與 JSON-LD acceptedAnswer，再發布。不要回退其他 FAQ 或整頁改動。
+- 發布後正式站／staging 都已核對新答案、FAQ 展開及完整 JSON-LD 與 Git 一致；1440／390 無橫向溢出、無 JS pageerror。證據 `custom-code/monthly-sharing/2026-11-10-download-faq-qa.json`。首次檢查發生於發布編譯完成前而讀到舊版；等待 lastPublished 更新後重新驗證通過。
+
+## 2026-11-10 第二十三輪：分類圖示動態與 LINE 綠色漸層
+
+- 使用者要求四個分類圖示有接近 After Effects 的細緻節奏，並提供 LINE 卡片黃綠／薄荷綠漸層參考，要求融入品牌色。
+- 分類圖示拆為獨立圖層，保留原圖示輪廓：三根長條依序生長、雙心跳＋心電線掃描、勾選描線＋確認回彈、大小星光依序出現並收尾。原生 IX3 `i-1616db2c` 改為 6 秒、37 個 cue，loop 不再整段 yoyo；進入視窗播放，離開暫停，prefers-reduced-motion 時保留完整靜態圖示。
+- 新增 7 個裝飾 DOM 節點與 7 個專案範圍樣式（含 LINE combo）；原三根長條／雙小星的遮罩拆層，其餘排版、分類切換、連結與共用元件維持。
+- 單集 Template 的 LINE 背景改為 `.gradient-bg.is-sansan-line`。漸層使用 Jubo `#00b2c0` 的透明色與既有 bento-ai 黃色方向；瀏覽器實際讀回 `rgba(0,178,192,0.48)`→`rgba(255,255,128,0.72)`。獨立 combo，未改共用 is-bento-color-1/2、Variable 或按鈕。
+- 測試站發布 task `a197817c-38c6-4ef3-bd37-b2353982be1b`；正式發布 task `4f93cd41-e5ae-4752-8f6e-e46fe3cc14ea`。www／apex lastPublished 均 `2026-11-10T12:12:07.592Z`。
+
+- 回退來源：`2026-11-10-motion-original.json`（舊 interaction、兩個原遮罩、LINE 舊樣式）。新定義／ID 在 `2026-11-10-motion-design.json`。先還原舊 timeline、兩個遮罩與 LINE 背景 class，再移除新增圖層；確定無使用後才移除本輪樣式並發布。
+- 動態為原生 IX3／遮罩圖層，沒有新增外部動畫程式、影片、Lottie 或改共用 Component。影片／GIF 僅作驗收錄影，不進 Git。
+- GitHub PR 說明更新遭自動核准檢查拒絕執行：工作區額度用盡，屬審查失敗，非動作安全性判定。未以替代工具繞過；待管理員補充額度後同步 `pr-description-pending.md`。先前下載 FAQ 的 PR 說明同步也一併待補。
+- 驗證：真實 staging／production 採樣一個完整循環，10 組圖層樣本均有變化；離屏暫停、減少動態靜態、品牌 teal 色值、主頁與單集頁四斷點無溢出通過，主頁無 JS pageerror。正式站四分類切換仍各顯示一個 pane。證據 `2026-11-10-motion-qa.json`。
+
+## 2026-11-11 第二十四輪：最新一集下載入口自動出現、手機版問卷上移
+
+使用者：最新消息卡與釘選條加「看完直播？填問卷下載簡報」，時間自動處理，並要能在不懂程式的情況下手動控制；手機版問卷移到 LINE 卡前。
+
+- **CMS**：集數新增 Option「下載入口」`xia-zai-ru-kou`（`1323083fb2f1c2afc63ebb97f72edb08`）：自動 `2944720a…`／立即顯示 `1c192d3c…`／先不顯示 `3283dc26…`；空白視同自動。
+- **節目專區元素**：
+  - 最新消息卡（「預告」清單 item `efa9ba81-…915b` 內，`sansan-hero_next` 之後）TextLink `26a4cb5f-83a1-6e42-af8d-6e39458553d4`「看完直播？填問卷下載簡報 →」，新樣式 `.sansan-hero_deck-cta`（teal 外框白底膠囊，變數 `d240906f`／`987d0d75`）。
+  - 釘選條 TextLink `f1370609-89f0-08cf-bdc4-26dfdff2598c`「下載簡報」（沿用 `.sansan-pin_cta`），放在「開啟提醒」之後。
+  - 兩者 visibility 綁「開放簡報」；屬性 `data-sansan-gate`（latest／pin）、`data-sansan-slug`（Slug）、`data-sansan-start`（直播時間）、`data-sansan-mode`（下載入口）；link 設 `collectionPage`，實際網址由 script 依 slug 補上。
+- **程式**：head `<style id="sansan-latest-deck-css">`（正本 [`latest-deck.css`](../../../custom-code/monthly-sharing/latest-deck.css)）在判斷前隱藏；footer 追加 `<script id="sansan-latest-deck">`（正本 [`sansan-latest-deck.js`](../../../custom-code/monthly-sharing/sansan-latest-deck.js)，既有 `sansan-deck-links` 保留）。規則：先不顯示→隱藏；立即顯示→顯示；自動／空白→直播時間到才顯示，每分鐘重查。時間格式支援 ISO（含時區）、只有日期（視為台北 12:00）、日期＋時間無時區（視為台北時間）；解析失敗維持隱藏。開放時釘選條隱藏「開啟提醒」、「下一集」改「本集」。`?sansan-gate=open` 可預覽。
+- **本機測試**：Playwright 固定時鐘 11 種情境（三種模式、三種日期格式、開播前後、壞資料、空值、紐約時區訪客計時器 11:59:30→12:00 翻轉）全數通過。**直播時間綁到屬性後的實際輸出格式待 staging 讀回確認。**
+- **單集頁手機版**（Template 樣式，medium 以下）：`.sansan-deck_info` `display: contents`；`.sansan-deck_component` row-gap 1.25rem、justify-items start；`.sansan-deck_stack` order 1、width 100%、margin-top .75rem；`.sansan-latest_card.is-deck-line` order 2、margin-top .75rem。以正式站 EP21 注入相同規則模擬：390px 問卷卡由 794px 上移到 537px（第一屏可見第一題），LINE 卡移到問卷後；820px 同樣；1440px 位置不變；三尺寸無橫向溢出。
+- [每月維護手冊](maintenance.md) 新增「四之一、最新一集」與「下載入口」欄位說明。
+- 未發布。
+
+### 第二十四輪 staging 驗證（2026-11-11）
+
+- 單集頁手機版：staging EP21 讀回 `.sansan-deck_info` 在 390／820px 為 `display: contents`、1440px 為 `flex`；問卷卡 390px 在 537px（講師 401px 之後），LINE 卡在問卷之後；三尺寸無橫向溢出。通過。
+- 最新消息卡／釘選條按鈕：staging HTML 無 `sansan-hero_deck-cta`，因 EP22「開放簡報」關閉，visibility 綁定使 Webflow 不輸出元素（預期行為）；head CSS 與 footer `sansan-latest-deck` 均在頁面上，無 JS 錯誤。因此 `?sansan-gate=open` 也無元素可顯示。
+- 為讀取「直播時間」綁到屬性後的實際格式（不動 EP22 設定），在「過去直播」兩個入口連結 `30b6ff5f…`、`8002f9a5…` 加上 `data-sansan-start`（綁直播時間，不影響畫面）。待下一次 staging 發布讀回。
+- 連結寫法實測（staging 原生 href）：`{"mode":"collectionPage"}`→`#`；`{"mode":"page","to":Template}`→`/monthly-sharing`；`{"mode":"collectionPage","to":{"pageSlug":"detail_monthly-sharing"}}`→`detail_monthly-sharing`。三種都不會解析到單集頁，入口網址實際由 `sansan-deck-links`／`sansan-latest-deck` 依 slug 補上（正式站 11 個入口已驗證正常）。
+- **直播時間格式（2026-11-11 staging 讀回）**：屬性綁定輸出只有日期，例 `data-sansan-start="September 16, 2026"`，不含時間與時區。`sansan-latest-deck.js` 的「只有日期 → 台北 12:00」分支即為實際路徑。以此格式在 Asia/Taipei、America/Los_Angeles、Europe/London、Pacific/Auckland、Asia/Tokyo 各測開播前 1 分鐘、開播當下、前一天深夜、隔天，20 組全數正確，href 皆補為 `/monthly-sharing/ep22`。限制：非 12:00 開播的集數需用「下載入口」手動控制（已寫入維護手冊）。
+- 過去直播兩個入口上的 `data-sansan-start` 保留（無畫面影響，日後可再讀格式）。
+
+### 第二十四輪修正：改用 Glass Button、文字統一「下載簡報」（2026-11-11）
+
+- 使用者：按鈕改玻璃，兩處文字都用「下載簡報」。
+- 依規範不仿製 Glass Button 內部 class，改放共用元件 **Glass Button**（`71b87018-1f96-f193-c4a1-6b778017a800`，Base variant，CTA Text「下載簡報」，CTA Links 維持 `#`）。元件不能加 CMS 屬性，所以外包容器承載屬性與顯示條件：
+  - 最新消息卡：容器 `8bcabc47-55ab-0139-f1c8-e8f11b93ae4b`（新樣式 `.sansan-hero_deck-gate`：flex、margin-top 1rem、靠左；Glass Button 本身是滿版 flex，不包會靠右），內含 instance `9275fd01-4417-f9d9-6bfd-7a033702c2f3`。
+  - 釘選條：容器 `e9395499-f3d2-f177-7131-84b0aabb0293`（新樣式 `.sansan-pin_gate`：flex、不伸縮、置中），內含 instance `6f4e3df7-70c9-3c63-9267-b1e630549ee8`。
+  - 兩個容器：visibility 綁「開放簡報」；屬性 `data-sansan-gate`／`data-sansan-slug`／`data-sansan-start`／`data-sansan-mode`。
+- 刪除前一版的兩個 TextLink（`26a4cb5f…`、`f1370609…`）與已不使用的 `.sansan-hero_deck-cta` 樣式。
+- `sansan-latest-deck.js` 改為選取 `[data-sansan-gate]` 容器，網址寫到容器內第一個 `<a>`（Glass Button）並移除 target；footer 已更新。Playwright 31 組（模式、日期格式、計時器、五時區）以「容器＋Glass Button」結構重測全數通過。
+- 預覽：staging 頁面複製站上既有 Glass Button 放入卡片與釘選條截圖確認（1440／390），按鈕靠左、尺寸 52／45px；釘選條「本集」＋「下載簡報」。
+- 未發布。
+
+## 2026-11-11 第二十五輪：EP22 簡報上傳、直播前開放
+
+- 使用者提供 EP22〈長照職場性騷擾與照護界線〉講師簡報 PDF（16 頁、824KB、16:9），未壓縮直接上傳。內容檢查：新聞案例僅「新北汐止日照中心」「20 多歲女性」未具名，引用公視／勞動部／衛福部公開來源，末頁有「非個案法律意見」聲明；無身分證、存摺、收據等個資。
+- Webflow asset `6af442706bbd073c9ec7d79f`（顯示名稱「三三分享會簡報_EP22_長照職場性騷擾與照護界線.pdf」），CDN `…/6af442706bbd073c9ec7d79f_jubo-33-ep22-slides.pdf` HTTP 200、application/pdf、843,857 bytes，MD5 與原檔一致。
+- CMS EP22：簡報下載連結＝上述 CDN、開放簡報＝開、下載入口＝自動（staged，未 Publish）。發布後 `/monthly-sharing/ep22` 問卷頁即可開啟（noindex）；專區最新消息卡與釘選條的「下載簡報」依自動模式在 2026-11-18 台北 12:00 出現。
+- 未發布。
+- **staging 驗證（2026-11-11，使用者發布後）**：
+  - 專區 HTML 輸出兩個容器（latest／pin），屬性讀回 `slug=ep22`、`start=November 18, 2026`、`mode=自動`，Glass Button 文字「下載簡報」、href 由 script 補為 `/monthly-sharing/ep22`。
+  - 不帶參數（現在 11/11）：兩顆按鈕隱藏、釘選條維持「下一集＋開啟提醒」。`?sansan-gate=open`：兩顆顯示、「開啟提醒」隱藏、標籤「本集」。
+  - 固定時鐘（Asia/Taipei）11/18 11:59:20 開頁：隱藏；計時器推進 70 秒過 12:00：兩顆自動顯示，不需重新整理。
+  - 點最新消息卡的「下載簡報」→ 導向 `/monthly-sharing/ep22`：H1 正確、問卷存在、索取集數＝「EP22 長照職場性騷擾與照護界線」、4 組 radio 分組、成功區初始隱藏、下載連結為 EP22 asset、`noindex,follow`。PDF CDN 200、843,857 bytes。無 JS 錯誤。
+  - 未實際送出問卷（Cloudflare Turnstile 在雲端環境無法通過）。

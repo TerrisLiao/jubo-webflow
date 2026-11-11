@@ -1,0 +1,7 @@
+/*
+ * 三三分享會節目專區講師卡片：單位最多兩行，超出以「…」收尾。
+ * 部署位置：/resources/jubo-33-live-stream 的 Page Settings → Custom Code → Head（<style id="sansan-speaker-card">）
+ * 完整單位放在同一元素的 title 屬性（綁 CMS「單位」），滑鼠停留可看全文。本檔是正本。
+ */
+.sansan-sp_org{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+.sansan-sp_title,.sansan-sp_org{text-wrap:balance}

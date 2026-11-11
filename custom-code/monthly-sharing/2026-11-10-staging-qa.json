@@ -1,0 +1,438 @@
+{
+  "202611": {
+    "h1": [
+      "智齡科技三三分享會 EP22｜長照職場性騷擾與照護界線"
+    ],
+    "correctDate": true,
+    "hubLinks": 1,
+    "images": [
+      {
+        "alt": "長照職場性騷擾與照護界線課程重點：辨識常見情境，掌握職場性騷擾樣態；建立專業界線，維護尊重與專業關係；通報與支持，清楚流程與可用資源。",
+        "loaded": true
+      }
+    ],
+    "videoLinks": [
+      {
+        "text": "點此觀看 11 月三三分享會直播",
+        "url": "https://www.youtube.com/watch?v=N1K2UCAa2fg"
+      },
+      {
+        "text": "觀看歷屆三三分享會",
+        "url": "https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt"
+      }
+    ]
+  },
+  "202612": {
+    "h1": [
+      "智齡科技三三分享會 EP23｜長照機構之安寧療護"
+    ],
+    "correctDate": true,
+    "hubLinks": 1,
+    "images": [
+      {
+        "alt": "長照機構之安寧療護課程重點：安寧療護理念，以尊嚴與舒適為核心的照護；末期照顧觀察，掌握身心變化與照護需求；家屬溝通，同理陪伴、建立共識與支持；團隊支持，跨專業合作、提升照護品質。",
+        "loaded": true
+      }
+    ],
+    "videoLinks": [
+      {
+        "text": "前往三三分享會播放清單",
+        "url": "https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt"
+      },
+      {
+        "text": "觀看歷屆三三分享會",
+        "url": "https://youtube.com/playlist?list=PL_KekbTYveaXxMCgVnlKAPf4lghOTc5Vt"
+      }
+    ]
+  },
+  "base": "https://jubo-health.webflow.io",
+  "checkedAt": "2026-11-10T10:21:53.522Z",
+  "routes": [
+    {
+      "path": "/resources/jubo-33-live-stream",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/resources/jubo-33-live-stream"
+    },
+    {
+      "path": "/news/monthly-third-wednesday-sharing-202611",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/news/monthly-third-wednesday-sharing-202611"
+    },
+    {
+      "path": "/news/monthly-third-wednesday-sharing-202612",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/news/monthly-third-wednesday-sharing-202612"
+    },
+    {
+      "path": "/monthly-sharing/ep05",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep05"
+    },
+    {
+      "path": "/monthly-sharing/ep06",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep06"
+    },
+    {
+      "path": "/monthly-sharing/ep07",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep07"
+    },
+    {
+      "path": "/monthly-sharing/ep08",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep08"
+    },
+    {
+      "path": "/monthly-sharing/ep12",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep12"
+    },
+    {
+      "path": "/monthly-sharing/ep13",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep13"
+    },
+    {
+      "path": "/monthly-sharing/ep14",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep14"
+    },
+    {
+      "path": "/monthly-sharing/ep22",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/resources/jubo-33-live-stream",
+      "returnsToHub": true
+    },
+    {
+      "path": "/monthly-sharing-speakers/lin",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/resources/jubo-33-live-stream",
+      "returnsToHub": true
+    },
+    {
+      "path": "/monthly-sharing/ep12",
+      "status": 200,
+      "finalUrl": "https://jubo-health.webflow.io/monthly-sharing/ep12"
+    }
+  ],
+  "widths": [
+    {
+      "page": "hub",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "page": "hub",
+      "width": 991,
+      "overflow": false
+    },
+    {
+      "page": "hub",
+      "width": 767,
+      "overflow": false
+    },
+    {
+      "page": "hub",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "202611",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "page": "202611",
+      "width": 991,
+      "overflow": false
+    },
+    {
+      "page": "202611",
+      "width": 767,
+      "overflow": false
+    },
+    {
+      "page": "202611",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "202612",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "page": "202612",
+      "width": 991,
+      "overflow": false
+    },
+    {
+      "page": "202612",
+      "width": 767,
+      "overflow": false
+    },
+    {
+      "page": "202612",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "page": "download",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "page": "download",
+      "width": 991,
+      "overflow": false
+    },
+    {
+      "page": "download",
+      "width": 767,
+      "overflow": false
+    },
+    {
+      "page": "download",
+      "width": 390,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "failedRequests": [
+    {
+      "host": "brunhild.challenges.cloudflare.com",
+      "error": "net::ERR_TUNNEL_CONNECTION_FAILED"
+    }
+  ],
+  "downloadLinks": [
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep21",
+      "slug": "ep21"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep19",
+      "slug": "ep19"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep06",
+      "slug": "ep06"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep20",
+      "slug": "ep20"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep18",
+      "slug": "ep18"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep14",
+      "slug": "ep14"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep05",
+      "slug": "ep05"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep13",
+      "slug": "ep13"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep08",
+      "slug": "ep08"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep07",
+      "slug": "ep07"
+    },
+    {
+      "text": "下載簡報",
+      "href": "/monthly-sharing/ep12",
+      "slug": "ep12"
+    }
+  ],
+  "linksCorrect": true,
+  "heroSendIcon": true,
+  "faq": [
+    {
+      "question": "需要報名或付費嗎？",
+      "expanded": true
+    },
+    {
+      "question": "怎麼收到開播提醒？",
+      "expanded": true
+    },
+    {
+      "question": "錯過直播怎麼辦？",
+      "expanded": true
+    },
+    {
+      "question": "簡報可以下載嗎？",
+      "expanded": true
+    },
+    {
+      "question": "想推薦主題或講師？",
+      "expanded": true
+    }
+  ],
+  "filters": [
+    {
+      "index": 0,
+      "visiblePanes": 1
+    },
+    {
+      "index": 1,
+      "visiblePanes": 1
+    },
+    {
+      "index": 2,
+      "visiblePanes": 1
+    },
+    {
+      "index": 3,
+      "visiblePanes": 1
+    }
+  ],
+  "pinnedBar": true,
+  "pinnedBarClosed": true,
+  "schemaParses": true,
+  "pdfPages": [
+    {
+      "ep": 5,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 6,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 7,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 8,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 12,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 13,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    },
+    {
+      "ep": 14,
+      "form": 1,
+      "successHidden": true,
+      "linkMatches": true,
+      "placeholderCount": 0,
+      "lineInLeftColumn": true
+    }
+  ],
+  "radioExclusive": true,
+  "testFormValid": true,
+  "submitDisabledBeforeClick": true,
+  "realSubmissionSucceeded": false,
+  "submitError": "Submit remains disabled while Cloudflare Turnstile has not completed; no bypass attempted.",
+  "formPostResponses": [],
+  "finalDownloadLinkCheck": {
+    "downloadCount": 11,
+    "linksCorrect": true,
+    "ep05Present": true,
+    "links": [
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep21",
+        "slug": "ep21"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep19",
+        "slug": "ep19"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep06",
+        "slug": "ep06"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep20",
+        "slug": "ep20"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep18",
+        "slug": "ep18"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep14",
+        "slug": "ep14"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep05",
+        "slug": "ep05"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep13",
+        "slug": "ep13"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep08",
+        "slug": "ep08"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep07",
+        "slug": "ep07"
+      },
+      {
+        "text": "下載簡報",
+        "href": "/monthly-sharing/ep12",
+        "slug": "ep12"
+      }
+    ]
+  },
+  "productionPublished": false,
+  "publicationGate": "Human browser must complete one questionnaire and show its download button; Cloudflare challenge network request fails in the cloud executor, so no real form POST was sent."
+}
