@@ -44,6 +44,11 @@
 25. 移除系統別：重建兩排，`home-notes_from` 只放功能名（深青、粗體）；刪除 `home-notes_from-sep`、`home-notes_from-feature`。逐則讀回 14 則引言、署名、功能，全部相符。
 26. 引號改用 SVG：Terris 的 Designer 截圖中「“」字型引號相對引言向右偏約 55px，原因未確認（推測與字型或文字裁切有關）。改成 `background-image` data URI 的漸層 SVG，固定 2rem × 1.5rem、靠左，不再依賴字型；元素內不留文字。
 
+第七輪（同日）：
+
+27. Terris：功能名移到卡片右上角、顏色淡一點；姓名與機構留在下方。重建兩排：新增 `home-notes_card-top`（引號＋功能名同列）；`home-notes_from` 改為 `primary/tag-text`、一般字重、靠右；`home-notes_org` 改為固定換行。逐則讀回 14 則，全部相符。
+28. 產出「首頁夥伴回饋_證言上架確認表.xlsx」給 CS 顧問向客戶確認授權：14 則依網站順序，附顧問原始紀錄、需特別確認事項、同意與否下拉選單。檔案含客戶姓名，不進 repo，交給 Terris 保存。
+
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
 - whtml 的 css 支援 `var(--…)` 並綁成 Variable；`border`、`padding`、`border-radius` 簡寫會被展開。
