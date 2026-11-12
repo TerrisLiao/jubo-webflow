@@ -7,4 +7,5 @@
 | P1 | 確認範例照片（LTC 設計檔長輩照片）可用於官網 | 不可用則換主題 2 圖 |
 | P2 | Hero 左側人物照是否換成安心寶相關照片 | Terris 指定素材 |
 | P2 | 是否加 FAQ 區（規格 §4-5 備用四題） | Terris 決定 |
-| P2 | 主題 3 Figma 圖層改名「家屬綁定簡單安心」 | Figma MCP 額度恢復後 |
+| P0 | Terris 確認動態預覽（https://claude.ai/artifact/SMcmognLjkMUTC8rsEVsWr） | 確認後以 IX3 實作，新增疊放 class、reduced-motion skip-to-end |
+| P1 | 取得 Jubo Design Team 內原始「Jubo_Website - To Client」連結，新增一頁放住宿型安心寶圖檔，之後統一在該檔更新 | 不改設計團隊既有頁面 |

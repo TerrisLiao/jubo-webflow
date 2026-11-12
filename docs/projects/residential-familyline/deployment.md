@@ -3,7 +3,7 @@
 | 層次 | 狀態 | 日期／版本 | 證據 |
 |---|---|---|---|
 | Git commit／PR | 規劃與部署文件在 `claude/optimistic-meitner-6s2xo4`；未開 PR | 2026-11-12 | 見分支 head |
-| Figma | 圖檔完成（新檔，非設計團隊檔） | 2026-11-12 | `gofe4JuGyJbLUTCE2ln7SJ` section `1:2` |
+| Figma | **現行檔** `C6MRciANWNRkAw0Vq03Foh`（Jubo Design Team Pro，帳號 Designer @Jubo），section `1:2`；舊檔 `gofe4JuGyJbLUTCE2ln7SJ`（Starter，已停用） | 2026-11-12 | 每張圖分 `bg`／`focal` 兩層，第 2、3 列為單層匯出 frame |
 | Webflow Designer | **已修改**（見下表），全部以 MCP 讀回確認 | 2026-11-12 | 下表 element／page ID |
 | staging | 未發布 | — | 未獲發布授權 |
 | production | 未發布 | — | 未獲發布授權 |
