@@ -91,6 +91,29 @@ IX3（範圍限 v2 頁，設定同 v1）：`i-537f3db3`／`i-0d2dc678`／`i-3bec
 
 回退：刪除 v2 頁與 4 個 `i-…` 互動即可，v1 與其他頁不受影響。
 
+## 2026-11-12 第二輪：切換器移除、主題圖改為操作流程 motion graphic（未發布）
+
+依 Terris 回饋（動畫要像資安頁一樣是真的 UI 操作流程；Hero 的類型切換不對且擋住 eyebrow）：
+
+**類型切換器 → 頁面下方文字連結**
+
+| 頁面 | 移除 | 新增（Section > `padding-global padding-section-small` > `text-align-center` > Link） |
+|---|---|---|
+| 日照型 `6a0d663539a726fa38494be9` | 切換器 `dda60deb-…` | section `3258f5ec-69d4-f1c6-b40a-c21459e3c748`，放在 `section_cta` 前；「住宿型機構請看：智齡安心寶（住宿型） →」連到 v1 新頁 |
+| v1 `6af52afbbf57c45cf03e4154` | 切換器 `3c43990f-…` | section `c50522aa-4b06-be5d-894a-ab6d7e788a71`，scroll card 後；「日照中心請看：智齡安心寶（日照型） →」 |
+| v2 `6af55d996d00f5158ae0ac24` | 切換器 `3c43990f-…` | section `f842cacc-4a3c-88f8-c3ca-241beda9fc54`，FAQ 後；同上 |
+
+連結以 `set_link` 設為 page link 並讀回。若最後採用 v2 並改回正式 slug，日照頁連結的目標要改成 v2 page ID。
+
+**v2 主題圖 → 三張操作流程 motion graphic**（原始碼與流程：[`custom-code/familyline-mg`](../../../custom-code/familyline-mg/README.md)）
+
+- 刪除 v2 三個 image-wrapper 內的 bg／focal 圖片與舊互動 `i-537f3db3`／`i-0d2dc678`／`i-3bec7923`。
+- whtml 插入三個 `familyline-mg_stage`：`8ec5ceeb-f179-ba2f-04a7-fc6e1321e4f1`、`fbdf902d-c09f-196a-a923-8155dbe659c5`、`ef7add7c-7bc5-75ba-ffbd-799767f26d11`；114 個 `familyline-mg*` class（只在本頁用）。
+- `image-wrapper.is-layered` combo 加 `container-type: inline-size`（只在本專案頁使用）。
+- 新 IX3：`i-6893ee2b`（健康狀況）、`i-dbbae4a0`（生活點滴）、`i-3fdf5897`（家屬綁定），範圍限 v2，捲動進入播放、離開暫停，reduced-motion `dont-animate`。
+- 本地驗證：跑版稽核 0 問題；GSAP 三輪比對誤差 0。**Designer 截圖仍失敗，Webflow 畫面未目視。**
+- v1 的主題圖與動畫未改。
+
 ## 發布注意（重要）
 
 - 住宿型照護系統頁的新 tab、日照頁的切換器都**連到仍是 Draft 的新頁**。發布前要先把新頁 `draft` 改成 false，或兩者同一次發布，否則線上會出現指向未發布頁的連結。

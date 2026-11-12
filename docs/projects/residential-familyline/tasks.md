@@ -11,3 +11,6 @@
 | P1 | 業務確認 v2 FAQ「收費」「需先使用住宿型照護系統」答案 | 確認或改寫 |
 | P2 | v2 FAQ 標題是否補漸層字、三步驟卡片是否加底色 | Designer 目視後決定 |
 | P1 | 取得 Jubo Design Team 內原始「Jubo_Website - To Client」連結，新增一頁放住宿型安心寶圖檔，之後統一在該檔更新 | 不改設計團隊既有頁面 |
+| P0 | Terris 在 Designer Preview 檢查 v2 三張 motion graphic（桌機、平板、手機寬度字是否太小） | 無跑版；手機字太小則比照資安頁加最小字級 |
+| P1 | 檢查 scroll card 左欄：`product-scroll-card_content-left` 是 space-between，編號 tag／H3／列點可能被拉開 | 目視後決定是否把 tag 與 H3 包成一組 |
+| P1 | UI 卡 3 張是否也改成操作流程動畫（目前仍是整張進場） | Terris 決定 |
