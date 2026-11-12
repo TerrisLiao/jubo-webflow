@@ -8,3 +8,4 @@
 - 在新 Figma 檔 `gofe4JuGyJbLUTCE2ln7SJ` 完成 3 張 UI 卡、3 張主題圖、1 張 tab 圖。曾誤放於設計團隊檔 02 頁的區塊已刪除。
 - 依 Terris 意見精修 7 張圖：每張只留一個視覺焦點，其餘 UI 淡化；主題 3 改為「家屬綁定簡單安心」（帳單只由 UI 卡 3 呈現）。
 - Terris 確認：Footer 只放「智齡安心寶」、兩頁加類型切換、不升級 Figma。Figma MCP 達 Starter 上限，改由手動匯出圖片。
+- Webflow：建立草稿新頁 `/products/familyline-residential`（複製智慧照護助理 APP 頁並替換內容）、日照頁改名與加類型切換、日照型系統頁 tab 改名、住宿型系統頁加第三個 tab、Footer 改字；上傳 7 張素材。未發布。詳見 [部署紀錄](deployment.md)。

@@ -1,8 +1,8 @@
 # 現況
 
 - 文件更新日期：2026-11-12
-- Webflow 驗證日期與方式：2026-11-12 以 curl 讀取線上 HTML（`www.jubo-health.com`）；**尚未用 Webflow MCP 讀回 Designer**
-- 頁面 slug／Page ID：尚未建立；建議 slug `/products/familyline-residential`（待確認）
+- Webflow 驗證日期與方式：2026-11-12 以 Webflow MCP 修改並逐項讀回 Designer；線上 HTML 尚未變更（未發布）
+- 頁面 slug／Page ID：`/products/familyline-residential`，`6af52afbbf57c45cf03e4154`，Draft
 - 採用版本與範圍：第二版規格（比照官網附加產品頁版型），見 [頁面規格與文案](reference/頁面規格與文案.md)
 - Figma 圖檔：`gofe4JuGyJbLUTCE2ln7SJ`（3 張 UI 卡、3 張主題圖、1 張 tab 圖），2026-11-12 完成
 - 來源分支、提交、文件：`claude/optimistic-meitner-6s2xo4`；來源為使用者上傳的操作手冊 PDF／PPTX 與 Figma `epTBL1gVwoHNpKczaaYV3z`
@@ -19,5 +19,10 @@
 
 ## 未驗證
 
-- 附加產品區是否為與日照頁共用的 Component（需 Designer 讀回）。
+- 四斷點視覺（見部署紀錄「未驗證」）。
 - 機構公告推播在住宿型是否開放。
+
+## 2026-11-12 Designer 讀回
+
+- 附加產品區兩頁都是頁面元素，不是共用 Component。
+- Footer 是共用 Component（41 個 instance），只改了一個文字節點。
