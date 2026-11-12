@@ -160,3 +160,9 @@ Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可�
 - `familyline-line_stage` 高度 30em → 35em（720×560），移除下緣淡出 mask。
 - `familyline-line_phone` 縮放 0.6 → 0.72（left 36、top 28、281×608 stage px）；右側 kicker／step／bar／zoom 往下移 44 px。
 - IX3 皆為自身百分比，不需重建。
+
+### 2026-11-12 Hero 四張照片不再跟著捲動
+
+- 原因：Hero 沿用 Relume `header#1`，`header#1_images-wrapper-left／right` 是 `position: fixed`，原頁靠頁面專屬互動把照片移走；複製到新頁後沒有該互動，四張照片整頁固定在畫面兩側，擋在後面各區塊上。
+- v2 兩個 wrapper（`04a36172-…0374`、`04a36172-…037d`）加 combo `is-in-hero`（`position: absolute`），照片留在 Hero（90vh）內，捲過就離開。global class 未動，其他頁不受影響。
+- v1 `/products/familyline-residential` 仍是原狀，未處理。

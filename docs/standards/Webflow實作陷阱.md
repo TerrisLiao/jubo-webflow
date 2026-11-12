@@ -151,3 +151,7 @@ include_breakpoints: ["main", "medium", "small", "tiny"]
 ## 8. background-image 不能帶純色
 
 `background-image: radial-gradient(...), #eef1fb` 的最後一層是純色，不是合法的 image，整條宣告會被瀏覽器丟掉，畫面完全沒有漸層。本機預覽若用 `background` 簡寫會正常，容易誤判。純色請放 `background-color`。
+
+## 9. 複製頁面後 fixed 元素失去配套互動
+
+Relume `header#1` 的照片 wrapper 是 `position: fixed`，原頁靠頁面專屬的捲動互動把它們移開。用 `duplicateOf` 複製頁面後互動沒跟過來，照片會整頁釘在畫面上。複製頁面後要檢查 fixed／sticky 元素；只改單頁時用 combo class 覆寫，不動 global class。
