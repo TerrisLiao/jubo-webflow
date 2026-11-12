@@ -202,3 +202,8 @@ IX3（範圍限 v3）：
 - Terris 同意刪除 v1、保留 v2。Webflow MCP 沒有刪除頁面的功能，v1 頁需在 Designer 手動刪除。
 - 已先處理指向 v1 的連結：日照型頁 `1ff3848e-…7a91` 與住宿型系統頁附加產品 tab `2ffd3e2a-…20b8` 改連 v3 `6af5c887d15f0b638d81d010`。
 - 已刪除只作用於 v1 元素的 IX3：`i-ae5f8375`、`i-3c78cf47`、`i-4046bbb2`、`i-73eebfd0`。
+
+### 2026-11-12 分頁玻璃風格、面板毛玻璃
+
+- `fl3-tab`：移除邊框，改半透明白＋`backdrop-filter: blur(18px) saturate(160%)`＋內側高光陰影；選中 `is-fl3-tab-on` 改不透明度較高的白與較深陰影。`fl3-tabs` 外層加 8px 內距與淡彩漸層底，讓玻璃效果看得出來。
+- `fl3-panel`、`fl3-bind` 移除邊框；`fl3-panel_bg-1～6` 改成較集中的三團色塊；每個面板在漸層層之後加 `fl3-frost`（`backdrop-filter: blur(30px)`、上方亮面、淡直紋、內側白邊），共 6 個元素。
