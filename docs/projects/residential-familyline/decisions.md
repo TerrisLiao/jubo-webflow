@@ -8,4 +8,7 @@
 | 2026-11-12 | 住宿型安心寶是加購；tab 標籤「加購」，不列入價格卡「包含以下服務」 | ✅ 加購已確認；標籤與價格卡做法待確認 | 對話 |
 | 2026-11-12 | 不提「預約探訪」 | ✅ | Figma 註記暫不開發 |
 | 2026-11-12 | 不借用日照客戶證言 | 提案 | 避免虛構信任證據 |
-| 2026-11-12 | Section Flow、Hero 模組、slug | 待確認 | [頁面規格](reference/頁面規格與文案.md) §7 |
+| 2026-11-12 | 版型比照官網附加產品頁（care-assistant-app）：header-1 Hero → 3 UI 卡 → 3 scroll card → CTA | ✅ Terris 指示 | 對話；取代第一版 7 段 Section Flow |
+| 2026-11-12 | 圖片依官網 Product UI Redesign 邏輯以向量重建，不直接貼產品截圖 | ✅ Terris 指示 | 對話 |
+| 2026-11-12 | 調配不得動設計團隊 Figma；另開檔 `gofe4JuGyJbLUTCE2ln7SJ`（原檔為 Starter 3 頁上限無法加頁） | ✅ Terris 指示 | 對話 |
+| 2026-11-12 | Slug、Hero 人物照、範例照片使用、FAQ 區 | 待確認 | [頁面規格](reference/頁面規格與文案.md) §7 |
