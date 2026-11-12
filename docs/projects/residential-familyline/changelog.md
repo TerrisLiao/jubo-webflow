@@ -16,3 +16,4 @@
 - Terris 回饋後：三頁移除 Hero 類型切換器（擋住 eyebrow，且兩頁應分開），改為頁面下方一行文字連結；v2 三張主題圖改為比照資安頁的操作流程 motion graphic（輸入、點擊、送出、數值與標籤彈出），原始碼在 `custom-code/familyline-mg`。未發布。
 - 依 Terris 回饋，v2 三張動畫改為照 Figma `LTC - 安心寶` 的 LINE 畫面重建（聊天室、圖文選單、模板訊息、LIFF 生理數值／照片花絮、QR 綁定流程），右側加四步驟與放大卡。未發布。
 - Terris 回報動畫文字跑版：原因是站上 body `line-height: 150%` 以固定 px 繼承進舞台。舞台改設 `line-height: 1.35`，用站上實際 CSS 重新截圖確認；陷阱寫入 `docs/standards/Webflow實作陷阱.md`。
+- Terris 回報步驟 pill 跑版、動畫背景與照片問題、QR 不好看：三步驟項加 `familyline-residential_step` 讓 pill 依內容寬度；動畫手機常駐不再淡出，循環結尾只把手機內畫面淡回 LINE 聊天室；卡 3 紙本改為真實 QR 卡（segno 產生、指向 jubo-health.com）；三個 IX3 依新時間軸重建（`i-34e11391`／`i-8cd635a5`／`i-241c174f`），GSAP 實跑 3 輪誤差 0。未發布。

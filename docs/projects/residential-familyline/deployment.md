@@ -121,7 +121,9 @@ Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可�
 - 刪除第二輪三個舞台與互動 `i-6893ee2b`／`i-dbbae4a0`／`i-3fdf5897`。
 - 新舞台（whtml）：`826a6f67-bfe5-6fd5-83b3-433c270f29ef`、`d2d713af-435a-3d90-d0f7-32c223b297e0`、`9b98a734-e9a0-d8e7-14ab-e45ed235ff4f`；186 個 `familyline-line*` class。
 - 新素材 6 張（圖文選單、機器人頭像、4 張活動照片，來自 Figma `LTC - 安心寶`），CDN 200。
-- 新 IX3：`i-917b50eb`（生理數值）、`i-8fdaf032`（照片花絮）、`i-11e62151`（家屬綁定）。
+- 新 IX3：`i-34e11391`（生理數值）、`i-8cd635a5`（照片花絮）、`i-241c174f`（家屬綁定）。（2026-11-12 第四輪重建，舊 `i-917b50eb`／`i-8fdaf032`／`i-11e62151` 已刪除）
+- 卡 3 紙本改為 QR 卡元素 `2ed4b1cb-e07a-eb16-6e78-26374047d50b`（class `familyline-line3_qcard*`，QR 為 segno 產生、指向 jubo-health.com）；舊紙本元素已刪除。
+- 三步驟區塊：新增 class `familyline-residential_step`（flex column、align-items flex-start），套用到 3 個步驟項，修正步驟 pill 撐滿整列。
 - 細節與對應 Figma 節點：[`custom-code/familyline-mg`](../../../custom-code/familyline-mg/README.md)。
 - 本地 GSAP 三輪比對誤差 0。Designer 截圖仍失敗，Webflow 畫面未目視。
 - 第一版 `familyline-mg*` class 已無元素使用，待清除。

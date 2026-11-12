@@ -301,7 +301,6 @@ CARDS[1]=(f'<div class="{P}_stage" data-mg="stage1" aria-hidden="true"><div clas
  f'<div class="{Q}_z-badge"><div class="{Q}_z-badge-text">偏高</div></div></div></div></div>')
 D=12000; DUR[1]=D+OFF; HERO[1]=9500
 E=11200
-tl(1,'h_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
 step_anim(1,'h',[300,2000,4200,7000],E)
 # finger: base position is on the 生理數值 tile; dx/dy to 查看更多 = (+78,-132) design px
 FX,FY=pctx(73.3),pctx(-152.7)
@@ -309,11 +308,11 @@ tl(1,'h_fin',[(700,{'o':0,'x':60,'y':80,'s':1}),(1000,{'o':1},'po'),(1500,{'x':0
               (3100,{'x':FX,'y':FY},'io'),(3160,{'s':.86},'io'),(3320,{'s':1},'eo'),(3700,{'o':0},'po')])
 tapring(1,'h_ring1',1560); tapring(1,'h_ring2',3160)
 tl(1,'h_hl1',[(1560,{'o':0}),(1650,{'o':1},'po'),(2000,{'o':0},'po')])
-tl(1,'h_greet',[(1800,{'o':1,'y':0}),(2150,{'o':0,'y':-40},'io')])
-tl(1,'h_tpl',[(2000,{'o':0,'y':10}),(2500,{'o':1,'y':0},'eo')])
+tl(1,'h_greet',[(1800,{'o':1,'y':0}),(2150,{'o':0,'y':-40},'io'),(E,{'o':0,'y':-40}),(E+400,{'o':1,'y':0},'eo')])
+tl(1,'h_tpl',[(2000,{'o':0,'y':10}),(2500,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':10},'io')])
 for i in range(5): tl(1,f'h_tr{i}',[(2250+i*90,{'o':0,'x':-3}),(2600+i*90,{'o':1,'x':0},'eo')])
 tl(1,'h_hl2',[(3160,{'o':0}),(3240,{'o':1},'po'),(3600,{'o':0},'po')])
-tl(1,'h_liff',[(3600,{'y':100}),(4200,{'y':0},'eo')])
+tl(1,'h_liff',[(3600,{'y':100,'o':1}),(4200,{'y':0},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 tl(1,'h_cov',[(4500,{'sx':1,'o':1}),(5900,{'sx':0},'io')])
 for i in range(4): tl(1,f'h_rc{i}',[(5900+i*140,{'o':0,'y':30}),(6300+i*140,{'o':1,'y':0},'eo')])
 for i in (0,2,3): tl(1,f'h_bd{i}',[(6500+i*120,{'o':0,'s':.4}),(6850+i*120,{'o':1,'s':1},'bk')])
@@ -381,7 +380,6 @@ CARDS[2]=(f'<div class="{P}_stage" data-mg="stage2" aria-hidden="true"><div clas
  f'<div class="{Q}_z-t2">115/06/12 燈籠手作活動</div></div><div class="{Q}_z-ok">{svg("check",Q+"_z-ok-svg",3)}</div></div></div></div>')
 D=12000; DUR[2]=D+OFF; HERO[2]=10000
 E=11200
-tl(2,'p_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
 step_anim(2,'p',[300,2300,4600,7600],E)
 # finger base: 照片花絮 tile. moves: to photo (lantern-1 at 114,511) dx=-208,dy=-188; swipe on dialog photo; to 下載 (40,700)
 tl(2,'p_fin',[(700,{'o':0,'x':40,'y':80,'s':1}),(1000,{'o':1},'po'),(1500,{'x':0,'y':0},'io'),(1560,{'s':.86},'io'),(1720,{'s':1},'eo'),
@@ -390,7 +388,7 @@ tl(2,'p_fin',[(700,{'o':0,'x':40,'y':80,'s':1}),(1000,{'o':1},'po'),(1500,{'x':0
               (7300,{'x':pctx(-261.7),'y':pctx(4.3)},'io'),(7360,{'s':.86},'io'),(7520,{'s':1},'eo'),(7900,{'o':0},'po')])
 tapring(2,'p_ring1',1560); tapring(2,'p_ring2',3960); tapring(2,'p_ring3',7360)
 tl(2,'p_hl1',[(1560,{'o':0}),(1650,{'o':1},'po'),(2000,{'o':0},'po')])
-tl(2,'p_liff',[(1800,{'y':100}),(2400,{'y':0},'eo')])
+tl(2,'p_liff',[(1800,{'y':100,'o':1}),(2400,{'y':0},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 for i in range(4): tl(2,f'p_i{i}',[(2600+i*160,{'o':0,'s':.92}),(3050+i*160,{'o':1,'s':1},'eo')])
 tl(2,'p_hl2',[(3960,{'o':0}),(4040,{'o':1},'po'),(4400,{'o':0},'po')])
 tl(2,'p_dim',[(4300,{'o':0}),(4600,{'o':1},'po')])
@@ -412,9 +410,12 @@ C(f'{Q}_ring1',position='absolute',left='160px',top='320px')
 # scanner
 C(f'{Q}_scan',position='absolute',left='0px',top='0px',width='390px',height='844px',background_image='linear-gradient(160deg,#5a5047 0%,#2b2622 45%,#1a1715 100%)')
 C(f'{Q}_cam-desk',position='absolute',left='-40px',top='560px',width='480px',height='320px',background_image='linear-gradient(170deg,#7a5536,#4d321f)',transform_origin='50% 50%')
-C(f'{Q}_paper',position='absolute',left='86px',top='330px',width='218px',height='270px',background_color='#f7f5f0',border_radius='4px',padding='26px 30px')
-C(f'{Q}_paper-t',font_size='12px',color='#55606a',text_align='center',white_space='nowrap',margin_bottom='10px')
-C(f'{Q}_paper-qr',width='158px',height='158px',color='#111111')
+C(f'{Q}_qcard',position='absolute',left='95px',top='327px',width='200px',padding='16px 20px 14px',background_color='#ffffff',border_radius='14px',box_shadow='0 18px 36px -12px rgba(0,0,0,0.55)',display='flex',flex_direction='column',align_items='center')
+C(f'{Q}_qcard-h',font_size='12px',font_weight='700',color=L['teal'],white_space='nowrap',margin_bottom='8px',letter_spacing='0.04em')
+C(f'{Q}_qcard-s',font_size='11px',color='#5f6a6f',white_space='nowrap',margin_top='8px')
+C(f'{Q}_qcard-s2',font_size='13px',font_weight='700',color=L['ink'],white_space='nowrap',margin_top='2px')
+C(f'{Q}_qcard-qr',width='150px',height='150px',color='#111111')
+C(f'{Q}_qcard-svg',width='100%',height='100%')
 C(f'{Q}_scan-t',position='absolute',left='0px',right='0px',top='236px',text_align='center',font_size='16px',font_weight='700',color='#ffffff',line_height='1.6')
 C(f'{Q}_frame',position='absolute',left='44px',top='312px',width='302px',height='302px')
 for n,k in (('tl','top:0px;left:0px'),('tr','top:0px;right:0px'),('bl','bottom:0px;left:0px'),('br','bottom:0px;right:0px')):
@@ -450,6 +451,9 @@ C(f'{Q}_z-ok',width='40px',height='40px',border_radius='50%',background_color='#
 C(f'{Q}_z-ok-svg',width='22px',height='22px')
 C(f'{Q}_z-t1',font_size='17px',font_weight='700',white_space='nowrap')
 C(f'{Q}_z-t2',font_size='13px',color=L['mute'],white_space='nowrap',margin_top='2px')
+def realqr(cls):
+    n,d=open('qr_path.txt').read().split('|',1)
+    return f'<svg class="{cls}" viewBox="-1 -1 {int(n)+2} {int(n)+2}" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="{d}"/></svg>'
 def qrsvg(cls):
     QR=[(0,0),(0,1),(1,0),(2,2),(3,1),(4,0),(3,3),(1,4),(4,4),(2,5),(5,3),(3,6),(5,5)]
     r=''
@@ -462,7 +466,7 @@ info=(f'<div class="{Q}_kv"><div class="{Q}_k">住民</div><div class="{Q}_v">�
       f'<div class="{Q}_kv-sep"><div class="{Q}_k">身分</div><div class="{Q}_v">子女 - 大女兒</div></div><div class="{Q}_kv"><div class="{Q}_k">姓名</div><div class="{Q}_v">陳美玲</div></div>'
       f'<div class="{Q}_kv"><div class="{Q}_k">聯絡電話</div><div class="{Q}_v2">0912-345-678</div></div>')
 scan=(f'<div class="{Q}_scan" data-mg="b_scan"><div class="{Q}_cam-desk"></div>'
-      f'<div class="{Q}_paper" data-mg="b_paper"><div class="{Q}_paper-t">智齡長照中心・家屬綁定</div><div class="{Q}_paper-qr">{qrsvg(P+"_finger-svg")}</div></div>'
+      f'<div class="{Q}_qcard" data-mg="b_paper"><div class="{Q}_qcard-h">智齡長照中心</div><div class="{Q}_qcard-qr">{realqr(Q+"_qcard-svg")}</div><div class="{Q}_qcard-s">LINE 家屬綁定 QR Code</div><div class="{Q}_qcard-s2">簡智齡・A3-302</div></div>'
       f'{sb()}<div class="{P}_top">{svg("chev",P+"_top-l",2.4)}<div class="{P}_top-title">QR Code 綁定對象</div><div class="{P}_top-url">https://liff.line.me</div>{svg("close",P+"_top-r",2.2)}</div>'
       f'<div class="{Q}_scan-t">請將機構提供的<br>LINE 綁定 QR Code 對準框內</div>'
       f'<div class="{Q}_frame"><div class="{Q}_cn-tl"></div><div class="{Q}_cn-tr"></div><div class="{Q}_cn-bl"></div><div class="{Q}_cn-br"></div>'
@@ -487,20 +491,18 @@ CARDS[3]=(f'<div class="{P}_stage" data-mg="stage3" aria-hidden="true"><div clas
  f'<div><div class="{Q}_z-t1">綁定完成</div><div class="{Q}_z-t2">簡智齡・A3-302・子女 - 大女兒</div></div></div></div></div>')
 D=12000; DUR[3]=D+OFF; HERO[3]=10000
 E=11200
-tl(3,'b_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
-for k,t in (('b_a1',500),('b_b1',500),('b_a2',1000),('b_b2',1000)): tl(3,k,[(t,{'o':0,'y':12}),(t+450,{'o':1,'y':0},'eo')])
 step_anim(3,'b',[1400,2900,5600,8200],E)
 # finger: base on QR button (186,455); to 確認綁定 (+96,+122)
 tl(3,'b_fin',[(1500,{'o':0,'x':40,'y':80,'s':1}),(1800,{'o':1},'po'),(2300,{'x':0,'y':0},'io'),(2360,{'s':.86},'io'),(2520,{'s':1},'eo'),(2750,{'o':0},'po'),
               (6600,{'o':0,'x':pctx(98),'y':pctx(194)}),(6800,{'o':1},'po'),(7200,{'y':pctx(154)},'io'),(7260,{'s':.86},'io'),(7420,{'s':1},'eo'),(7800,{'o':0},'po')])
 tapring(3,'b_ring1',2360); tapring(3,'b_ring2',7260)
 press(3,'b_qb',2360); press(3,'b_ok',7260)
-tl(3,'b_scan',[(2500,{'y':100}),(3050,{'y':0},'eo')])
+tl(3,'b_scan',[(2500,{'y':100,'o':1}),(3050,{'y':0},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 tl(3,'b_paper',[(3000,{'o':1,'x':0,'y':40,'r':-6}),(3900,{'y':0,'r':0},'eo')])
 tl(3,'b_line',[(3700,{'o':0,'y':0}),(3800,{'o':1},'lin'),(4700,{'y':6800},'io'),(4800,{'o':0},'lin')])
 tl(3,'b_sok',[(4750,{'o':0,'s':.4}),(5100,{'o':1,'s':1},'bk')])
-tl(3,'b_conf',[(5400,{'y':100}),(5950,{'y':0},'eo')])
-tl(3,'b_done',[(7600,{'o':0,'s':.98}),(8000,{'o':1,'s':1},'eo')])
+tl(3,'b_conf',[(5400,{'y':100,'o':1}),(5950,{'y':0},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
+tl(3,'b_done',[(7600,{'o':0,'s':.98}),(8000,{'o':1,'s':1},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 tl(3,'b_dc',[(7800,{'s':.3}),(8300,{'s':1},'bk')])
 tl(3,'b_zoom',[(8500,{'o':0,'y':12,'s':.94}),(9050,{'o':1,'y':0,'s':1},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 # ================= derived data =================

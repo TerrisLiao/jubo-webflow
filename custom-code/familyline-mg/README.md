@@ -39,5 +39,5 @@ GSAP_PATH=<path>/gsap.min.js node gsap_check.js
 - 舞台根元素設 `line-height: 1.35`：站上 body 的 `line-height: 150%` 會以固定 px 繼承，不設會讓縮小後的文字撐出按鈕與標籤（2026-11-12 Terris 回報跑版）。
 - 舞台放在原 scroll card 的 `image-wrapper.is-layered`（`container-type: inline-size`），`familyline-line_stage` 字級 `calc(100cqw / 45)`。
 - stage：`826a6f67-…29ef`、`d2d713af-…97e0`、`9b98a734-…ff4f`；186 個 `familyline-line*` class，每個元素只掛一個 class。
-- IX3：`i-917b50eb`（01）、`i-8fdaf032`（02）、`i-11e62151`（03）。觸發是各 image-wrapper 捲動 `top 85%` 播放、`bottom 15%` 暫停；reduced-motion `dont-animate`，停在 class 的代表畫面。
+- IX3：`i-34e11391`（01）、`i-8cd635a5`（02）、`i-241c174f`（03）。觸發是各 image-wrapper 捲動 `top 85%` 播放、`bottom 15%` 暫停；reduced-motion `dont-animate`，停在 class 的代表畫面。
 - 第一版（通用卡片）的 `familyline-mg*` 114 個 class 已無元素使用，可在 Designer 用 Clean Up 清除。
