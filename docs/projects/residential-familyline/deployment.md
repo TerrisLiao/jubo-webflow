@@ -34,6 +34,31 @@
 
 **沒有新增任何 class、Variable 或客製程式碼。** 類型切換與 tab 都沿用既有 class；切換器不掛 `data-platform-switcher`，Slater 不接管。
 
+## 動畫（IX3，2026-11-12，未發布）
+
+新增樣式（僅此頁使用）：
+- combo `image-wrapper.is-layered`（`d72af141-90dc-3364-1cb7-2eb9ea8d165d`）：`position: relative`。
+- class `familyline-residential_layer`（`0ff49619-50c6-2476-76f2-640fafada147`）：`absolute`、`top/left 0`、`100%`、`object-fit: cover`，對齊原本 3:2 容器的 cover 裁切。
+
+三個 scroll card 圖片改為兩層：原 Image 換成 bg 素材（alt 空白，裝飾用），其上新增 focal Image。
+
+| 圖 | bg asset | focal asset | focal element |
+|---|---|---|---|
+| 主題 1 | `6af557d040294b72a8e3334c` | `6af557d0837451deed81fd2e` | `a097d9cc-f444-324d-38d9-ca52e1711660` |
+| 主題 2 | `6af557d09a5a91142776be48` | `6af557d06a611ebb0cc854ec` | `65e9ca0e-2255-3179-9f3b-776edd2f9630` |
+| 主題 3 | `6af557d1837451deed81fdb5` | `6af557d2837451deed81fe70` | `7ce54dfd-88f2-d1a4-5a5e-f798b8d3f853` |
+
+IX3 互動，範圍限新頁，捲動 `top 80%` 播放一次，`prefers-reduced-motion` 時 skip-to-end：
+
+| ID | 內容 |
+|---|---|
+| `i-ae5f8375`／`i-3c78cf47`／`i-4046bbb2` | 主題 1–3：bg 先 Set opacity 0、scale 1.04，再 To 1.2s expo.out；focal 先 Set opacity 0、y 24，再於 0.25s 開始 To 0.7s power3.out |
+| `i-73eebfd0` | 3 張 UI 卡（共用元件不改結構，整張動）：Set opacity 0、y 12、scale .95，再依序 0／0.1／0.2s To 0.6s power3.out |
+
+依 IX3 準則 §14，全部用 Set＋To，靜止時沒有起始值，Webflow 不會在 webflow.js 載入前隱藏圖片。
+
+**未驗證**：Designer 截圖工具失敗，畫面與動態都沒有目視確認；需在 Designer Preview 或 staging 實際捲動檢查（含重複捲動、手機、reduced-motion），發布後檢查 `<head>` 有無 `w-mod-ix3` 隱藏規則。
+
 ## 發布注意（重要）
 
 - 住宿型照護系統頁的新 tab、日照頁的切換器都**連到仍是 Draft 的新頁**。發布前要先把新頁 `draft` 改成 false，或兩者同一次發布，否則線上會出現指向未發布頁的連結。
