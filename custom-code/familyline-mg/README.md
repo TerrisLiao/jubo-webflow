@@ -21,6 +21,7 @@
 | `spec.py` | 唯一來源：前段共用函式取自 security-mg（已修正 font-size 基準判斷），v3 區塊為本頁內容 |
 | `build_preview.py`／`merge.py`／`gen_ix3.py`／`audit.js`／`gsap_check.js` | 同 security-mg，改成本頁 class 前綴與 3 張卡 |
 | `ids.txt` | `data-mg` 鍵 → Webflow element id（2026-11-12 讀回，76 個） |
+| `sitecheck.js` | 把站上實際 CSS（`jubo-health.webflow.shared.*.css`）套進 preview 截圖，抓站上全域樣式造成的跑版：`DIR=$PWD CSS=<site.css> OUT=<dir> node sitecheck.js` |
 | `shots.js`／`gif.js` | 本地截圖與錄製 GIF（輸出到 scratchpad，不進 git） |
 
 ## 重新產生
@@ -35,6 +36,7 @@ GSAP_PATH=<path>/gsap.min.js node gsap_check.js
 
 ## Webflow
 
+- 舞台根元素設 `line-height: 1.35`：站上 body 的 `line-height: 150%` 會以固定 px 繼承，不設會讓縮小後的文字撐出按鈕與標籤（2026-11-12 Terris 回報跑版）。
 - 舞台放在原 scroll card 的 `image-wrapper.is-layered`（`container-type: inline-size`），`familyline-line_stage` 字級 `calc(100cqw / 45)`。
 - stage：`826a6f67-…29ef`、`d2d713af-…97e0`、`9b98a734-…ff4f`；186 個 `familyline-line*` class，每個元素只掛一個 class。
 - IX3：`i-917b50eb`（01）、`i-8fdaf032`（02）、`i-11e62151`（03）。觸發是各 image-wrapper 捲動 `top 85%` 播放、`bottom 15%` 暫停；reduced-motion `dont-animate`，停在 class 的代表畫面。

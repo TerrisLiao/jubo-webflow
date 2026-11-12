@@ -139,3 +139,11 @@ include_breakpoints: ["main", "medium", "small", "tiny"]
 1. 用 builder 建完後，一律用 `query_elements`（`element_filter: {type: "String"}`，加 `scope_element_id`）讀回每個文字節點。
 2. 預設字要改 **String 子節點**；對 TextBlock 本身 `set_text` 會回 `This element doesn't support text`。
 3. LinkBlock 建完後用 `set_link` 再設定一次，並讀回確認 `settings.link`。
+
+## 7. 站上 body 的 `line-height: 150%` 會以固定 px 往下繼承
+
+站上 `body` 設 `line-height: 150%`，百分比在 body 就算成固定值（約 27px），子元素繼承的是這個 px，不會跟著自己的字級縮放。用 whtml 插入、以 em 縮放的區塊（例如 motion graphic 舞台），字級變小時文字會撐出按鈕、標籤框而跑版。
+
+- 這類區塊的根元素要自己設無單位的 `line-height`（例如 `1.35`）。
+- 本地預覽要套站上實際 CSS 再檢查（`custom-code/familyline-mg/sitecheck.js`），只看自製預覽頁抓不到。
+
