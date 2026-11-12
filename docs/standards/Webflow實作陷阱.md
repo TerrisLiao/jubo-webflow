@@ -119,3 +119,23 @@ include_breakpoints: ["main", "medium", "small", "tiny"]
 `docs/audits/aeo/AEO稽核與優化計畫.md` 已記錄過：Webflow MCP 的 schema 查詢不一定會回傳 CMS Template 頁的內容，
 稽核時必須抓線上 HTML 驗證。同理，**寫入成功也要抓線上 HTML 再確認一次**，
 而且 CMS 欄位／Template 的變更都要等 Publish 後才會上線。
+
+---
+
+## 6. `data_element_builder` 建 TextBlock：`set_text` 不一定寫得進去
+
+日期：2026-11-12　｜　對象：住宿型安心寶頁的類型切換器、住宿型照護系統頁 tab 標籤
+
+### 症狀
+
+用 `data_element_builder` 一次建立巢狀元素時，`TextBlock` 帶的 `set_text` 回報成功，
+但讀回後 String 子節點仍是 Webflow 預設字 **「This is some text inside of a div block.」**。
+同一批建立的 `Paragraph` 文字是正確的。
+
+另外，同一批建立的 `LinkBlock` 帶的 `set_link` 也沒有寫入，讀回時 settings 裡沒有 `link`。
+
+### 做法
+
+1. 用 builder 建完後，一律用 `query_elements`（`element_filter: {type: "String"}`，加 `scope_element_id`）讀回每個文字節點。
+2. 預設字要改 **String 子節點**；對 TextBlock 本身 `set_text` 會回 `This element doesn't support text`。
+3. LinkBlock 建完後用 `set_link` 再設定一次，並讀回確認 `settings.link`。

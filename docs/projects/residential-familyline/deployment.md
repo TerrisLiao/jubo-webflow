@@ -39,6 +39,11 @@
 - 住宿型照護系統頁的新 tab、日照頁的切換器都**連到仍是 Draft 的新頁**。發布前要先把新頁 `draft` 改成 false，或兩者同一次發布，否則線上會出現指向未發布頁的連結。
 - Footer 改字會隨下一次全站發布帶到 41 頁。
 
+## 2026-11-12 修正
+
+- 用 `data_element_builder` 建立 TextBlock 時，`set_text` 沒有寫入，留下預設字。影響：新頁切換器 2 個、日照頁切換器 2 個、住宿頁 tab「加購」標籤 1 個。已直接改 String 子節點並讀回確認。
+- 這是工具陷阱：之後用 builder 建 TextBlock，要讀回 String 子節點確認文字。
+
 ## 未驗證
 
 - 四斷點視覺：agent 無法在 Designer 截圖，草稿頁也沒有公開網址。需在 Designer 或 staging 目視檢查切換器在 Hero 中的間距、tab 第 3 組輪播。
