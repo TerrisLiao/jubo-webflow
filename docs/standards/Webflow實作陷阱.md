@@ -147,3 +147,7 @@ include_breakpoints: ["main", "medium", "small", "tiny"]
 - 這類區塊的根元素要自己設無單位的 `line-height`（例如 `1.35`）。
 - 本地預覽要套站上實際 CSS 再檢查（`custom-code/familyline-mg/sitecheck.js`），只看自製預覽頁抓不到。
 
+
+## 8. background-image 不能帶純色
+
+`background-image: radial-gradient(...), #eef1fb` 的最後一層是純色，不是合法的 image，整條宣告會被瀏覽器丟掉，畫面完全沒有漸層。本機預覽若用 `background` 簡寫會正常，容易誤判。純色請放 `background-color`。

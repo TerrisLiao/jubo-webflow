@@ -147,3 +147,10 @@ Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可�
 
 - 新頁：保持 draft 即不影響線上；要撤銷可刪除頁面與 7 個素材。
 - 其他頁：把上表文字改回原值，刪除兩個切換器與住宿頁新 tab 的兩個元素（ID 見上表）。
+
+### 2026-11-12 卡片右半漸層
+
+- 舞台漸層原本寫在 `familyline-line_bg-N` 的 `background-image`，結尾帶一個純色值，整條規則失效，所以站上看不到漸層。已移除該屬性，舞台改透明。
+- 新增 combo `product-scroll-card_item.is-fl-1／2／3`（`2565c86b-…`、`d574153c-…`、`287f631e-…`）：右上與下方兩個 radial＋由左往右淡入的 linear，左側文字區保持原玻璃底，沒有 50/50 硬切。small 斷點改成由上往下淡入（圖在下方）。
+- 套用到三個 scroll card item：`7d6813d3-…f858`、`304d247c-…fe07`、`46306b54-…badf`。
+- `familyline-line_stage` 加 `mask-image` 下緣淡出，手機底部融入卡片漸層。

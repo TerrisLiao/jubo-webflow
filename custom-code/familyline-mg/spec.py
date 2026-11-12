@@ -120,9 +120,10 @@ GRAD={1:'radial-gradient(80% 110% at 0% 0%,#d9f6fb,transparent 60%),radial-gradi
 def bg(url): return f'url("{url}")'
 
 # ---------- stage + right panel (stage px) ----------
-C(f'{P}_stage',position='relative',width='720px',height='480px',overflow='hidden',color=L['ink'],flex='none',line_height='1.35',text_align='left')
+C(f'{P}_stage',position='relative',width='720px',height='480px',overflow='hidden',color=L['ink'],flex='none',line_height='1.35',text_align='left',mask_image='linear-gradient(180deg,#000 82%,transparent 100%)')
 C(f'{P}_abs',position='absolute')
-for c in (1,2,3): C(f'{P}_bg-{c}',position='absolute',left='0px',top='0px',width='100%',height='100%',background_image=GRAD[c])
+# 漸層改放在 Webflow 卡片 combo product-scroll-card_item.is-fl-N（色票同 build_preview.py grad），舞台透明
+for c in (1,2,3): C(f'{P}_bg-{c}',position='absolute',left='0px',top='0px',width='100%',height='100%')
 C(f'{P}_kicker',position='absolute',left='352px',top='30px',font_size='13px',font_weight='600',letter_spacing='0.08em',color=L['teal'],white_space='nowrap')
 C(f'{P}_bar',position='absolute',left='338px',top='268px',width='4px',height='30px',border_radius='2px',background_color=L['teal'])
 for i in range(4): C(f'{P}_step-{i}',position='absolute',left='352px',top=f'{64+i*68}px',width='330px',height='30px',display='flex',align_items='center',column_gap='12px')
