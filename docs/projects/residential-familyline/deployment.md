@@ -166,3 +166,27 @@ Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可�
 - 原因：Hero 沿用 Relume `header#1`，`header#1_images-wrapper-left／right` 是 `position: fixed`，原頁靠頁面專屬互動把照片移走；複製到新頁後沒有該互動，四張照片整頁固定在畫面兩側，擋在後面各區塊上。
 - v2 兩個 wrapper（`04a36172-…0374`、`04a36172-…037d`）加 combo `is-in-hero`（`position: absolute`），照片留在 Hero（90vh）內，捲過就離開。global class 未動，其他頁不受影響。
 - v1 `/products/familyline-residential` 仍是原狀，未處理。
+
+## v3 改版草稿（2026-11-12，未發布）
+
+依[改版提案](https://claude.ai/artifact/TL5WuTUmGhVnaXhQ2F45K7)實作。四個待決事項先用提案的建議做法：拿掉 Hero 人物照、外診／帳單／活動先用靜態畫面、不做示範影片、另開 v3。
+
+| 項目 | 內容 |
+|---|---|
+| 頁面 | `6af5c887d15f0b638d81d010` `/products/familyline-residential-v3`，`duplicateOf` v2，draft，放在 products 資料夾 |
+| 區塊順序 | Hero → 家屬看得到什麼（5 分頁）→ 機構端流程 → 三步驟（含綁定動畫）→ 隱私與把關 → FAQ → 日照型連結 → CTA |
+| Hero | 刪除 `header#1_images-wrapper-left／right`；`header#1_component` 加 combo `is-fl3`（height auto、padding-top 8rem）；CTA 改兩顆（`fl3-hero_ctas`，原 CTA Button 移入＋「看操作示範」連到 `#features`）；新增系統＋手機組合畫面 `fl3-hero_visual` `92501a29-…0917` 與事實條 `fl3-facts` `6f5d5acf-…2871` |
+| 功能分頁 | section `adc59f93-…a4a1`（id `features`）。分頁 `fl3-tab` ×5、面板 `fl3-panel` ×5（漸層在 `fl3-panel_bg-1～5`），選中狀態 combo `fl3-tab.is-fl3-tab-on`（`…a4a9`）、`fl3-panel.is-fl3-panel-on`（`…a4ae`）。面板 1、5 放原本的 LINE 動畫（image-wrapper `7d6813d3-…f873`、`304d247c-…fe18` 移入 `fl3-stage-box`）；面板 2–4 為靜態手機畫面 `fl3-static*` |
+| 機構端／隱私 | `fl3-how` section `b19e3b0e-…1692`、`4e6ab4e0-…0e8e`（`fl3-trust`） |
+| 三步驟 | 3col 後加 `fl3-bind` `898af960-…2f85`，綁定動畫 image-wrapper `46306b54-…baf3` 移入 |
+| 刪除 | 原 UI 卡 section `450c939f-…014d`、scroll card section `7d6813d3-…f847`（移出動畫後） |
+| 斷點 | medium／small／tiny 都有覆寫：分頁 3 欄→2 欄、tiny 隱藏分頁說明；Hero 手機版隱藏側欄、tiny 只留手機；面板 padding 與手機負 margin 同步 |
+
+IX3（範圍限 v3）：
+
+- LINE 動畫：`i-a04fa156`（生理數值）、`i-44c76e57`（照片花絮）、`i-d20944f0`（家屬綁定）。卡 1、2 改由面板容器 `adc59f93-…a49e` 捲動觸發，因為隱藏的面板尺寸為 0，ScrollTrigger 量不到。產生方式：`FL_PAGE=6af5c887d15f0b638d81d010 FL_VER=v3 python3 gen_ix3.py`。
+- 分頁切換：`i-b53b24d8`、`i-b03e4423`、`i-f9f0f2c4`、`i-f9c55561`、`i-f1aaeb5a`，各自 click `restart`，用 `wf:class` 移除其他分頁／面板的選中 combo、加到自己。多群組的 click 只能用 `play`，第二次點同一分頁會沒反應，所以拆成五個。
+
+未驗證：Webflow 元素截圖工具無法使用，分頁切換與動畫需在 Designer 預覽或發布到 staging 後確認。
+
+另注意：讀回 v2 頁的 `draft` 為 `false`，若整站發布會一起上線。

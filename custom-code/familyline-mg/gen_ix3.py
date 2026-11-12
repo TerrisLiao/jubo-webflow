@@ -1,8 +1,12 @@
 import json
-P="6af55d996d00f5158ae0ac24"
+import os
+P=os.environ.get("FL_PAGE","6af55d996d00f5158ae0ac24")  # v2；v3 = 6af5c887d15f0b638d81d010
+VER=os.environ.get("FL_VER","v2")
 d=json.load(open('spec.json')); OFF=d['off']
 ids=dict(l.split() for l in open('ids.txt'))
 STEP={1:"7d6813d3-b523-500c-4049-9abeb0e4f873",2:"304d247c-f64f-db28-f070-1579a2c9fe18",3:"46306b54-e327-5c8d-a505-6e134ac9baf3"}
+# v3：卡 1、2 在分頁面板內（隱藏時尺寸為 0），改由永遠可見的面板容器觸發
+if VER=="v3": STEP={1:"adc59f93-780d-a76b-3013-5d6fd077a49e",2:"adc59f93-780d-a76b-3013-5d6fd077a49e",3:STEP[3]}
 NAME={1:"生理數值",2:"照片花絮",3:"家屬綁定"}
 TF={'o':'opacity','x':'xPercent','y':'yPercent','s':'scale','sx':'scaleX','sy':'scaleY','r':'rotation'}
 ST={'bg':'backgroundColor','bc':'borderColor','c':'color'}
@@ -81,7 +85,7 @@ def build(card):
               "timing":{"duration":round(dur/1000,3),"position":round(t0/1000,3),"ease":ease,"repeat":-1,"repeatDelay":round((DUR-dur)/1000,3)},
               "properties":props(json.loads(pj))})
     assert len(acts)<=200
-    inter={"name":f"安心寶住宿型 v2 · LINE 0{card} {NAME[card]} (IX3)","scope":{"type":"pages","value":[P]},
+    inter={"name":f"安心寶住宿型 {VER} · LINE 0{card} {NAME[card]} (IX3)","scope":{"type":"pages","value":[P]},
       "triggers":[{"extensionKey":"wf:scroll","config":{"scrollTriggerConfig":{"start":"top 85%","end":"bottom 15%","enter":"play","leave":"pause","enterBack":"play","leaveBack":"pause"}},"target":tgt_step(card)}],
       "timelines":[{"name":f"MG loop 0{card}","actions":acts}],
       "conditionalPlayback":[{"type":"prefers-reduced-motion","behavior":"dont-animate"}]}
