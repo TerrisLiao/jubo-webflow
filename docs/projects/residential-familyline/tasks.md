@@ -1,5 +1,8 @@
 # 待辦
 
+- [ ] Terris 在 Designer 手動刪除 v1 頁 `6af52afbbf57c45cf03e4154`（MCP 無刪頁功能；連結與互動已先處理）。
+- [ ] 預覽 v3 Hero 流光背景（`i-ef308d5f`）效能與四斷點。
+
 - [ ] Terris 在 Designer 預覽 v3：分頁切換、三段 LINE 動畫、Hero 組合畫面、四斷點。
 - [ ] v3 外診／帳單／活動紀錄是否補做動畫（目前靜態）。
 - [ ] v2 讀回 draft=false，確認是否改回 draft，避免整站發布時一起上線。

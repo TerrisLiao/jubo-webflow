@@ -190,3 +190,15 @@ IX3（範圍限 v3）：
 未驗證：Webflow 元素截圖工具無法使用，分頁切換與動畫需在 Designer 預覽或發布到 staging 後確認。
 
 另注意：讀回 v2 頁的 `draft` 為 `false`，若整站發布會一起上線。
+
+### 2026-11-12 v3 Hero 改流光背景（參考 Lassie）
+
+- 刪除桌機系統畫面 `fl3-hero_visual`，改為 `fl3-aura` `23a589e6-…b394`：9 條直向模糊色帶 `fl3-aura_s1～s9`（`filter: blur(34px)`）＋兩層 repeating-linear-gradient 直紋 `fl3-aura_flute`＋上亮下暗 `fl3-aura_shade`；上面浮 LINE 手機 `fl3-aura_phone`（底部被卡片切掉）、同步狀態卡 `fl3-aura_status`（兩句訊息輪播）與「已送到家屬 LINE」標籤。本機原型：`custom-code/familyline-mg/aura/hero-aura-mock.html`（CSS keyframes 版，只供預覽）。
+- IX3 `i-ef308d5f`（wf:load）：每條色帶 11–16 秒左右來回（xPercent ±35、scaleX），狀態訊息 8 秒輪播；reduced-motion 不播。
+- medium／small／tiny 斷點：手機版狀態卡移到上方、手機置右或置中，tiny 隱藏標籤。
+
+### 2026-11-12 v1 刪除前置
+
+- Terris 同意刪除 v1、保留 v2。Webflow MCP 沒有刪除頁面的功能，v1 頁需在 Designer 手動刪除。
+- 已先處理指向 v1 的連結：日照型頁 `1ff3848e-…7a91` 與住宿型系統頁附加產品 tab `2ffd3e2a-…20b8` 改連 v3 `6af5c887d15f0b638d81d010`。
+- 已刪除只作用於 v1 元素的 IX3：`i-ae5f8375`、`i-3c78cf47`、`i-4046bbb2`、`i-73eebfd0`。
