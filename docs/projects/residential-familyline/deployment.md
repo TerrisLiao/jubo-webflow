@@ -114,6 +114,18 @@ IX3（範圍限 v2 頁，設定同 v1）：`i-537f3db3`／`i-0d2dc678`／`i-3bec
 - 本地驗證：跑版稽核 0 問題；GSAP 三輪比對誤差 0。**Designer 截圖仍失敗，Webflow 畫面未目視。**
 - v1 的主題圖與動畫未改。
 
+## 2026-11-12 第三輪：動畫改為照 LTC 安心寶 LINE 畫面重建（未發布）
+
+Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可稍作改編。
+
+- 刪除第二輪三個舞台與互動 `i-6893ee2b`／`i-dbbae4a0`／`i-3fdf5897`。
+- 新舞台（whtml）：`826a6f67-bfe5-6fd5-83b3-433c270f29ef`、`d2d713af-435a-3d90-d0f7-32c223b297e0`、`9b98a734-e9a0-d8e7-14ab-e45ed235ff4f`；186 個 `familyline-line*` class。
+- 新素材 6 張（圖文選單、機器人頭像、4 張活動照片，來自 Figma `LTC - 安心寶`），CDN 200。
+- 新 IX3：`i-917b50eb`（生理數值）、`i-8fdaf032`（照片花絮）、`i-11e62151`（家屬綁定）。
+- 細節與對應 Figma 節點：[`custom-code/familyline-mg`](../../../custom-code/familyline-mg/README.md)。
+- 本地 GSAP 三輪比對誤差 0。Designer 截圖仍失敗，Webflow 畫面未目視。
+- 第一版 `familyline-mg*` class 已無元素使用，待清除。
+
 ## 發布注意（重要）
 
 - 住宿型照護系統頁的新 tab、日照頁的切換器都**連到仍是 Draft 的新頁**。發布前要先把新頁 `draft` 改成 false，或兩者同一次發布，否則線上會出現指向未發布頁的連結。

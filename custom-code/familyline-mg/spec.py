@@ -41,7 +41,7 @@ def em(v,base=16):
 def css_text():
     out=[]
     for k,p in CSS.items():
-        base=float(p['font-size'][:-2]) if 'font-size' in p and p['font-size'].endswith('px') else 16
+        base=float(p['font_size'][:-2]) if 'font_size' in p and p['font_size'].endswith('px') else 16
         decl=[]
         for a,b in p.items():
             a=a.replace('_','-')
@@ -86,263 +86,423 @@ CARDS={}
 DUR={}
 
 
-# ---------- familyline residential: extra icons ----------
+
+# =====================================================================
+# v3 (2026-11-12): copy the real 安心寶 LINE UI (Figma LTC - 安心寶, page "Line")
+# The phone is built at the original 390-px design scale; the phone element
+# carries font-size 0.6em, so every child written in design px scales by 0.6.
+# =====================================================================
+P='familyline-line'
+CDN='https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/'
+IMG={'menu':CDN+'6af5733dd17e817cf8a23a6a_fl-line-richmenu.webp',
+     'bot':CDN+'6af5733d6f9624ce6c911480_fl-line-bot-avatar.webp',
+     'kara':CDN+'6af5733ee95c96cee8e34b26_fl-line-photo-karaoke.webp',
+     'lan1':CDN+'6af5733efd4887d22ad7bbb8_fl-line-photo-lantern-1.webp',
+     'lan2':CDN+'6af5733ed17e817cf8a23ae9_fl-line-photo-lantern-2.webp',
+     'group':CDN+'6af5733e34582d659c961dcd_fl-line-photo-group.webp'}
+L={'chat':'#8cabd8','liff':'#eaf3f5','teal':'#0097a7','tealbg':'#e0f4f6','ink':'#1f2326','mute':'#7b868b','line':'#e6ebed',
+   'orange':'#ee7c1e','orangebg':'#fde6d3','grey':'#f2f4f5','box':'#f5f7f7','yg':'#c9d84a'}
 ICON.update({
-'image':'<rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>',
-'download':'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
-'calendar':'<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
-'music':'<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>',
-'sprout':'<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
-'scissors':'<circle cx="6" cy="6" r="3"/><path d="M8.12 8.12 12 12"/><path d="M20 4 8.12 15.88"/><circle cx="6" cy="18" r="3"/><path d="M14.8 14.8 20 20"/>',
-'chat':'<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+'chev':'<path d="m15 18-6-6 6-6"/>',
+'close':'<path d="M18 6 6 18M6 6l12 12"/>',
+'search':'<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>',
+'note':'<rect width="16" height="18" x="4" y="3" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/>',
+'menu':'<path d="M4 6h16M4 12h16M4 18h16"/>',
+'info':'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+'dl':'<path d="M12 4v11"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/>',
+'check':'<path d="M20 6 9 17l-5-5"/>',
 })
-HEX.update({'warn':'#e8590c','warnbg':'rgba(232,89,12,0.12)'})
-GRAD={1:'radial-gradient(90% 120% at 0% 0%,#b4f6ff,transparent 55%),radial-gradient(80% 120% at 100% 100%,#d6b8ff,transparent 60%),#bccbff',
-      2:'radial-gradient(90% 120% at 100% 0%,#fdffb0,transparent 55%),radial-gradient(80% 120% at 0% 100%,#9ef3f5,transparent 60%),#cfffd9',
-      3:'radial-gradient(90% 120% at 100% 0%,#d9c4ff,transparent 55%),radial-gradient(80% 120% at 0% 100%,#aef1ff,transparent 60%),#c3d2ff'}
-MONO='ui-monospace, SFMono-Regular, Menlo, Consolas, monospace'
+FINGER=('<svg class="{cls}" viewBox="0 0 24 24" aria-hidden="true"><path fill="#ffd36b" stroke="#b86e0b" stroke-width="1.3" stroke-linejoin="round" '
+        'd="M9 3.2a1.6 1.6 0 0 1 3.2 0v7.1l.4-.1a1.6 1.6 0 0 1 3 .6l.5-.1a1.6 1.6 0 0 1 2.9.9v.4a1.6 1.6 0 0 1 2.9.9v4.6c0 3.6-2.6 6.3-6.2 6.3h-1.6c-2.2 0-3.6-.8-5-2.4l-3.6-4.3a1.7 1.7 0 0 1 2.4-2.4L9 15.2Z"/></svg>')
+GRAD={1:'radial-gradient(80% 110% at 0% 0%,#d9f6fb,transparent 60%),radial-gradient(70% 100% at 100% 100%,#e4dcff,transparent 60%),#eef2fb',
+      2:'radial-gradient(80% 110% at 100% 0%,#fff6cf,transparent 60%),radial-gradient(70% 100% at 0% 100%,#d2f4f2,transparent 60%),#f1f7f3',
+      3:'radial-gradient(80% 110% at 100% 0%,#e7ddff,transparent 60%),radial-gradient(70% 100% at 0% 100%,#d6f1fb,transparent 60%),#eef1fb'}
+def bg(url): return f'url("{url}")'
 
-# ---------- shared pieces: staff panel + family phone ----------
-C(f'{P}_stage',position='relative',width='720px',height='480px',overflow='hidden',color=V['ink'],flex='none')
-C(f'{P}_bg',position='absolute',left='0px',top='0px',width='100%',height='100%')
-for c in (1,2,3): C(f'{P}_bg-{c}',background_image=GRAD[c])
-C(f'{P}_desk',left='40px',top='56px',width='340px',padding='22px',display='flex',flex_direction='column',row_gap='12px')
-C(f'{P}_head',display='flex',align_items='center',column_gap='12px',margin_bottom='4px')
-C(f'{P}_chip',width='44px',height='44px',border_radius='13px',background_color=V['tint'],display='grid',place_items='center',color=V['deep'],flex='none')
-C(f'{P}_chip-svg',width='22px',height='22px')
-C(f'{P}_title',font_size='18px',font_weight='600',line_height='1.3')
-C(f'{P}_sub',font_size='13px',color=V['mute'],line_height='1.4')
-C(f'{P}_btn',height='44px',border_radius='11px',background_color=V['acc'],display='grid',place_items='center')
-C(f'{P}_btn-text',font_size='16px',font_weight='600',color=V['white'],white_space='nowrap')
-C(f'{P}_ok',height='34px',padding='0px 14px',border_radius='999px',background_color=V['acc'],color=V['white'],display='flex',align_items='center',column_gap='6px')
-C(f'{P}_ok-svg',width='16px',height='16px')
-C(f'{P}_ok-text',font_size='14px',font_weight='600',white_space='nowrap')
-C(f'{P}_beam',left='392px',top='226px',width='52px',height='2px',background_color=V['acc'],transform_origin='0% 50%')
-C(f'{P}_phone',left='452px',top='28px',width='232px',height='372px',border_radius='30px',overflow='hidden')
-C(f'{P}_ph-head',position='absolute',left='0px',top='0px',width='100%',height='54px',background_color=V['deep'],display='flex',align_items='center',column_gap='8px',padding='0px 16px')
-C(f'{P}_ph-svg',width='18px',height='18px',color=V['white'])
-C(f'{P}_ph-title',font_size='13px',font_weight='600',color=V['white'],white_space='nowrap')
-C(f'{P}_in',position='absolute',left='14px',width='204px')
-C(f'{P}_ch',display='inline-block')
-def head(icon,title,sub): return (f'<div class="{P}_head"><div class="{P}_chip">{svg(icon,P+"_chip-svg",1.9)}</div>'
-                                  f'<div><div class="{P}_title">{title}</div><div class="{P}_sub">{sub}</div></div></div>')
-def phone(key,inner): return (f'<div class="{P}_abs {P}_card {P}_phone" data-mg="{key}"><div class="{P}_ph-head">{svg("chat",P+"_ph-svg",2)}'
-                              f'<div class="{P}_ph-title">機構 LINE 官方帳號</div></div>{inner}</div>')
-def chars(cls,pre,text): return ''.join(f'<div class="{cls}" data-mg="{pre}{i}">{ch}</div>' for i,ch in enumerate(text))
-def typed(card,pre,n,t,step=110):
-    for i in range(n): tl(card,f'{pre}{i}',[(t+i*step,{'o':0,'y':40}),(t+i*step+220,{'o':1,'y':0},'bk')])
+# ---------- stage + right panel (stage px) ----------
+C(f'{P}_stage',position='relative',width='720px',height='480px',overflow='hidden',color=L['ink'],flex='none')
+C(f'{P}_abs',position='absolute')
+for c in (1,2,3): C(f'{P}_bg-{c}',position='absolute',left='0px',top='0px',width='100%',height='100%',background_image=GRAD[c])
+C(f'{P}_kicker',position='absolute',left='352px',top='30px',font_size='13px',font_weight='600',letter_spacing='0.08em',color=L['teal'],white_space='nowrap')
+C(f'{P}_bar',position='absolute',left='338px',top='268px',width='4px',height='30px',border_radius='2px',background_color=L['teal'])
+for i in range(4): C(f'{P}_step-{i}',position='absolute',left='352px',top=f'{64+i*68}px',width='330px',height='30px',display='flex',align_items='center',column_gap='12px')
+C(f'{P}_num',width='30px',height='30px',border_radius='50%',border='2px solid #c9d3d6',display='grid',place_items='center',flex='none')
+C(f'{P}_num-text',font_size='14px',font_weight='700',color='#9aa6aa')
+C(f'{P}_num-on',width='30px',height='30px',border_radius='50%',background_color=L['teal'],display='grid',place_items='center',flex='none')
+C(f'{P}_num-on-text',font_size='14px',font_weight='700',color='#ffffff')
+C(f'{P}_step-text',font_size='18px',font_weight='500',color='#9aa6aa',white_space='nowrap')
+C(f'{P}_step-on-text',font_size='18px',font_weight='700',color=L['ink'],white_space='nowrap')
+C(f'{P}_zoom',left='352px',top='348px',width='328px',padding='16px 18px',border_radius='16px',background_color='#ffffff',
+  box_shadow='0 1.25em 2.5em -1em rgba(11,53,88,0.28),0 0.125em 0.375em rgba(11,53,88,0.06)')
+def steps(pre,labels):
+    h=f'<div class="{P}_kicker">家屬在 LINE 的操作</div><div class="{P}_bar" data-mg="{pre}_bar"></div>'
+    for i,t in enumerate(labels):
+        h+=(f'<div class="{P}_step-{i}"><div class="{P}_num"><div class="{P}_num-text">{i+1}</div></div><div class="{P}_step-text">{t}</div></div>'
+            f'<div class="{P}_step-{i}" data-mg="{pre}_s{i}"><div class="{P}_num-on"><div class="{P}_num-on-text">{i+1}</div></div><div class="{P}_step-on-text">{t}</div></div>')
+    return h
+def step_anim(card,pre,times,end):
+    for i,t in enumerate(times): tl(card,f'{pre}_s{i}',[(t,{'o':0,'x':-3}),(t+350,{'o':1,'x':0},'eo'),(end,{'o':1}),(end+350,{'o':0},'io')])
+    fr=[(times[0],{'o':0,'y':-680}),(times[0]+300,{'o':1},'po')]
+    for i,t in enumerate(times[1:],1): fr+= [(t,{'y':round((i-1)*680/3-680,2)}),(t+400,{'y':round(i*680/3-680,2)},'eo')]
+    fr+=[(end,{'o':1}),(end+350,{'o':0},'io')]
+    tl(card,f'{pre}_bar',fr)
+
+# ---------- phone (own props in stage px; children in 390-px design px) ----------
+C(f'{P}_phone',position='absolute',left='64px',top='30px',width='234px',height='506px',font_size='9.6px',border_radius='34px',overflow='hidden',
+  background_color=L['chat'],box_shadow='0 0 0 5px #1d2125,0 26px 50px -18px rgba(11,53,88,0.45)')
+C(f'{P}_fill',position='absolute',left='0px',top='0px',width='390px',height='844px')
+C(f'{P}_sb',position='absolute',left='0px',top='0px',width='390px',height='47px')
+C(f'{P}_sb-time',position='absolute',left='34px',top='14px',font_size='16px',font_weight='600',color='#ffffff')
+C(f'{P}_sb-time-dark',position='absolute',left='34px',top='14px',font_size='16px',font_weight='600',color='#111111')
+C(f'{P}_bat',position='absolute',left='334px',top='18px',width='26px',height='12px',border_radius='3px',border='2px solid #ffffff')
+C(f'{P}_bat-dark',position='absolute',left='334px',top='18px',width='26px',height='12px',border_radius='3px',border='2px solid #111111')
+C(f'{P}_lh',position='absolute',left='0px',top='47px',width='390px',height='50px',display='flex',align_items='center',padding='0px 14px',column_gap='8px',color='#ffffff')
+C(f'{P}_ico',width='24px',height='24px',flex='none')
+C(f'{P}_shield',width='18px',height='18px',border_radius='50%',background_color='rgba(255,255,255,0.85)',flex='none')
+C(f'{P}_lh-title',font_size='17px',font_weight='700',color='#ffffff',white_space='nowrap',flex='1')
+C(f'{P}_menu',position='absolute',left='0px',top='497px',width='390px',height='263px',background_image=bg(IMG['menu']),background_size='cover')
+C(f'{P}_av',position='absolute',left='8px',width='30px',height='30px',border_radius='50%',background_image=bg(IMG['bot']),background_size='cover')
+C(f'{P}_bubble',position='absolute',left='42px',width='272px',padding='12px 16px',border_radius='18px',background_color='#ffffff')
+C(f'{P}_btext',font_size='15px',line_height='1.6',color=L['ink'])
+C(f'{P}_tap',width='40px',height='40px',border_radius='50%',border='3px solid #ffd36b')
+C(f'{P}_finger',width='38px',height='38px')
+C(f'{P}_finger-svg',width='100%',height='100%')
+# LIFF page chrome
+C(f'{P}_liff',position='absolute',left='0px',top='0px',width='390px',height='844px',background_color=L['liff'])
+C(f'{P}_top',position='absolute',left='0px',top='0px',width='390px',height='104px',background_color='#ffffff')
+C(f'{P}_top-l',position='absolute',left='14px',top='62px',width='26px',height='26px',color='#111111')
+C(f'{P}_top-r',position='absolute',left='350px',top='62px',width='26px',height='26px',color='#111111')
+C(f'{P}_top-title',position='absolute',left='0px',right='0px',top='60px',text_align='center',font_size='16px',font_weight='700',color='#111111',white_space='nowrap')
+C(f'{P}_top-url',position='absolute',left='0px',right='0px',top='82px',text_align='center',font_size='9px',color='#b9c0c3',white_space='nowrap')
+C(f'{P}_card',position='absolute',left='16px',width='358px',border_radius='14px',background_color='#ffffff')
+def sb(dark=False):
+    d='-dark' if dark else ''
+    return f'<div class="{P}_sb"><div class="{P}_sb-time{d}">9:41</div><div class="{P}_bat{d}"></div></div>'
+def line_head():
+    return (f'{sb()}<div class="{P}_lh">{svg("chev",P+"_ico",2.4)}<div class="{P}_shield"></div><div class="{P}_lh-title">智齡長照中心</div>'
+            f'{svg("search",P+"_ico",2.2)}{svg("note",P+"_ico",2)}{svg("menu",P+"_ico",2.2)}</div>')
+def liff_top(title):
+    return (f'{sb(True)}<div class="{P}_top">{svg("chev",P+"_top-l",2.4)}<div class="{P}_top-title">{title}</div>'
+            f'<div class="{P}_top-url">https://liff.line.me</div>{svg("close",P+"_top-r",2.2)}</div>')
+def finger(key,x,y):  # tip lands on (x,y) design px
+    return f'<div class="{P}_abs {P}_finger" style-pos="{x},{y}" data-mg="{key}">{FINGER.format(cls=P+"_finger-svg")}</div>'
+POS={}  # per-element absolute positions written as their own classes
+def at(name,x,y,**more):
+    C(name,position='absolute',left=f'{x}px',top=f'{y}px',**more); return name
 def press(card,key,t): tl(card,key,[(t,{'s':1}),(t+120,{'s':.94},'io'),(t+300,{'s':1},'eo')])
-def pop(card,key,t,end=None,s0=.6):
-    f=[(t,{'o':0,'s':s0}),(t+420,{'o':1,'s':1},'bk')]
-    if end: f+=[(end,{'o':1,'s':1}),(end+350,{'o':0,'s':.9},'io')]
-    tl(card,key,f)
-def enter(card,key,t,end,x=0,y=0):
-    tl(card,key,[(t,{'o':0,'x':x,'y':y}),(t+550,{'o':1,'x':0,'y':0},'eo'),(end,{'o':1,'x':0,'y':0}),(end+400,{'o':0,'x':0,'y':-4},'io')])
+def tapring(card,key,t):
+    tl(card,key,[(t,{'o':0,'s':.3}),(t+60,{'o':1},'lin'),(t+520,{'o':0,'s':1.7},'eo')])
+def move_finger(card,key,frames):
+    """frames: list of (t, x%, y%, extra) — x/y in % of finger box (38 px)"""
+    tl(card,key,frames)
+def pctx(dx): return round(dx/38*100,2)
 
-# ================= CARD 1 · 健康狀況 =================
-Q='familyline-mg1'
-C(f'{Q}_row',display='flex',align_items='center',column_gap='12px')
-C(f'{Q}_label',width='44px',font_size='15px',color=V['mute'],flex='none')
-C(f'{Q}_field',flex='1',height='42px',border_radius='11px',border='1.5px solid rgba(105,131,146,0.15)',border_color=HEX['line'],display='flex',align_items='center',padding='0px 12px')
-C(f'{Q}_char',font_size='18px',font_weight='700',font_family=MONO)
-C(f'{Q}_unit',margin_left='auto',font_size='13px',color=V['mute'],white_space='nowrap')
-C(f'{Q}_ok-pos',left='262px',top='38px')
-C(f'{Q}_chart-title',top='70px',font_size='13px',font_weight='600',white_space='nowrap')
-C(f'{Q}_chart',top='96px',height='84px',display='flex',align_items='flex-end',column_gap='9px',padding='0px 4px',border_bottom='1.5px solid rgba(105,131,146,0.15)')
-C(f'{Q}_bar',width='16px',border_radius='5px 5px 0px 0px',background_color=V['tint'],transform_origin='50% 100%')
-for i,h in enumerate([40,46,38,50,44,54,60,80]): C(f'{Q}_bar-{i}',height=f'{h}px')
-C(f'{Q}_bar-hi',background_color=HEX['warn'])
-C(f'{Q}_vrow',height='40px',border_radius='11px',background_color=V['grey'],display='flex',align_items='center',padding='0px 12px',column_gap='8px')
-for i,y in enumerate([194,242,290]): C(f'{Q}_vrow-{i}',top=f'{y}px')
-C(f'{Q}_vlabel',font_size='13px',color=V['mute'],white_space='nowrap')
-C(f'{Q}_vval',margin_left='auto',font_size='15px',font_weight='700',white_space='nowrap')
-C(f'{Q}_badge',padding='2px 8px',border_radius='999px',background_color=HEX['warnbg'],color=HEX['warn'],font_size='12px',font_weight='700',white_space='nowrap')
-C(f'{Q}_out',left='10px',top='182px',width='212px',padding='16px',display='flex',flex_direction='column',row_gap='6px')
-C(f'{Q}_out-head',display='flex',align_items='center',column_gap='8px',margin_bottom='4px')
-C(f'{Q}_out-ico',width='32px',height='32px',border_radius='10px',background_color=V['tint'],display='grid',place_items='center',color=V['deep'],flex='none')
-C(f'{Q}_out-svg',width='17px',height='17px')
-C(f'{Q}_out-title',font_size='15px',font_weight='700',white_space='nowrap')
-C(f'{Q}_out-line',font_size='14px',line_height='1.5',white_space='nowrap')
-C(f'{Q}_out-mute',font_size='13px',color=V['mute'],white_space='nowrap')
-def field(key,lab,pre,val,unit):
-    return (f'<div class="{Q}_row"><div class="{Q}_label">{lab}</div><div class="{Q}_field" data-mg="{key}">'
-            f'{chars(Q+"_char",pre,val)}<div class="{Q}_unit">{unit}</div></div></div>')
-bars=''.join(f'<div class="{Q}_bar {Q}_bar-{i}{" "+Q+"_bar-hi" if i==7 else ""}" data-mg="h_bar{i}"></div>' for i in range(8))
-vrows=[('體溫','36.8°C',''),('血壓','152/93',f'<div class="{Q}_badge" data-mg="h_hi">偏高</div>'),('脈搏','78 次/分','')]
-vr=''.join(f'<div class="{P}_in {Q}_vrow {Q}_vrow-{i}" data-mg="h_r{i}"><div class="{Q}_vlabel">{a}</div>{badge}<div class="{Q}_vval">{b}</div></div>' for i,(a,b,badge) in enumerate(vrows))
-CARDS[1]=(f'<div class="{P}_stage" data-mg="stage1" aria-hidden="true"><div class="{P}_bg {P}_bg-1"></div>'
- f'<div class="{P}_abs {P}_card {P}_desk" data-mg="h_desk">{head("pulse","王奶奶・生理量測","住宿型照護系統")}'
- +field('h_f0','體溫','h_a','36.8','°C')+field('h_f1','血壓','h_b','152/93','mmHg')+field('h_f2','脈搏','h_c','78','次/分')+
- f'<div class="{P}_btn" data-mg="h_btn"><div class="{P}_btn-text">儲存</div></div></div>'
- f'<div class="{P}_abs {P}_ok {Q}_ok-pos" data-mg="h_ok">{svg("check",P+"_ok-svg",3)}<div class="{P}_ok-text">已同步</div></div>'
- f'<div class="{P}_abs {P}_beam" data-mg="h_beam"></div>'
- +phone('h_ph',f'<div class="{P}_in {Q}_chart-title" data-mg="h_ct">血壓趨勢・近兩個月</div><div class="{P}_in {Q}_chart">{bars}</div>{vr}'
-   f'<div class="{P}_abs {P}_card {Q}_out" data-mg="h_out"><div class="{Q}_out-head"><div class="{Q}_out-ico">{svg("calendar",Q+"_out-svg",2)}</div>'
-   f'<div class="{Q}_out-title">外診紀錄</div></div><div class="{Q}_out-line">○○醫院・心臟內科</div><div class="{Q}_out-line">11/14（五）09:30</div>'
-   f'<div class="{Q}_out-mute">目的：定期回診</div></div>')
- +cap('h_cap1','護理師照常登錄生理數值')+cap('h_cap2','家屬在 LINE 看趨勢，偏高直接標示')+cap('h_cap3','外診院所、科別、時間同步更新')+'</div>')
-D=10000; DUR[1]=D+OFF; HERO[1]=6600
-tl(1,'h_desk',[(0,{'o':0,'s':.94}),(500,{'o':1,'s':1},'eo'),(9300,{'o':1,'s':1}),(9700,{'o':0,'y':-3},'io')])
-for k,t0,t1 in (('h_f0',600,1250),('h_f1',1350,2250),('h_f2',2350,2750)):
-    tl(1,k,[(t0,{'bc':HEX['line']}),(t0+150,{'bc':HEX['acc']},'po'),(t1,{'bc':HEX['acc']}),(t1+150,{'bc':HEX['line']},'po')])
-typed(1,'h_a',4,700); typed(1,'h_b',6,1450); typed(1,'h_c',2,2450)
-press(1,'h_btn',2950)
-pop(1,'h_ok',3250,9200)
-tl(1,'h_beam',[(3550,{'o':1,'sx':0}),(3900,{'sx':1},'io'),(9200,{'o':1}),(9500,{'o':0},'io')])
-tl(1,'h_ph',[(3750,{'o':0,'x':8}),(4300,{'o':1,'x':0},'eo'),(9300,{'o':1,'x':0}),(9700,{'o':0,'y':-3},'io')])
-tl(1,'h_ct',[(4200,{'o':0}),(4500,{'o':1},'po')])
-for i in range(8): tl(1,f'h_bar{i}',[(4300+i*80,{'sy':0}),(4750+i*80,{'sy':1},'eo')])
-for i in range(3): tl(1,f'h_r{i}',[(5000+i*150,{'o':0,'y':30}),(5450+i*150,{'o':1,'y':0},'eo')])
-tl(1,'h_hi',[(5700,{'o':0,'s':.4}),(6050,{'o':1,'s':1.15},'bk'),(6250,{'s':1},'eo')])
-tl(1,'h_out',[(7100,{'o':0,'y':40}),(7650,{'o':1,'y':0},'eo')])
-capt(1,'h_cap1',200,3350); capt(1,'h_cap2',3650,7000); capt(1,'h_cap3',7150,9700)
+# ================= CARD 1 · 生理數值 =================
+Q='familyline-line1'
+C(f'{Q}_tpl',position='absolute',left='42px',top='104px',width='272px',padding='18px 20px 14px',border_radius='18px',background_color='#ffffff')
+C(f'{Q}_tpl-title',font_size='19px',font_weight='700',margin_bottom='10px',white_space='nowrap')
+C(f'{Q}_row',display='flex',align_items='center',justify_content='space-between',padding='7px 0px',border_bottom='1px solid #e6ebed')
+C(f'{Q}_k',font_size='15px',line_height='1.25',white_space='nowrap')
+C(f'{Q}_ks',font_size='11px',color=L['mute'],white_space='nowrap')
+C(f'{Q}_v',font_size='15px',font_weight='500',white_space='nowrap')
+C(f'{Q}_u',font_size='12px',color=L['mute'],white_space='nowrap')
+C(f'{Q}_more',margin_top='12px',height='40px',border_radius='8px',background_color=L['grey'],display='grid',place_items='center')
+C(f'{Q}_more-text',font_size='15px',font_weight='500',white_space='nowrap')
+C(f'{Q}_hl1',position='absolute',left='8px',top='541px',width='182px',height='100px',border_radius='12px',background_color='rgba(0,151,167,0.28)')
+C(f'{Q}_hl2',position='absolute',left='62px',top='416px',width='232px',height='40px',border_radius='8px',background_color='rgba(0,151,167,0.22)')
+C(f'{Q}_c1',top='118px',height='372px')
+C(f'{Q}_tabs',position='absolute',left='0px',top='0px',width='358px',height='50px',display='flex',justify_content='space-around',align_items='center',border_bottom='1px solid #e6ebed')
+C(f'{Q}_tab',font_size='14px',color='#5f6a6f',white_space='nowrap')
+C(f'{Q}_tab-on',font_size='14px',font_weight='700',color=L['teal'],white_space='nowrap')
+C(f'{Q}_uline',position='absolute',left='90px',top='47px',width='54px',height='3px',background_color=L['teal'])
+C(f'{Q}_chip',position='absolute',top='64px',height='32px',padding='0px 12px',border_radius='16px',display='grid',place_items='center',border='1px solid #c9d3d6')
+C(f'{Q}_chip-a',left='72px'); C(f'{Q}_chip-b',left='184px',border_color=L['teal'],background_color=L['tealbg'])
+C(f'{Q}_chip-text',font_size='13px',white_space='nowrap',color='#4b5458')
+C(f'{Q}_chip-on-text',font_size='13px',white_space='nowrap',color=L['teal'],font_weight='600')
+C(f'{Q}_plot',position='absolute',left='40px',top='118px',width='300px',height='170px')
+C(f'{Q}_band',position='absolute',left='0px',top='120px',width='100%',height='40px',background_color='rgba(201,216,74,0.14)')
+C(f'{Q}_dot1',position='absolute',left='0px',top='10px',width='100%',height='0px',border_top='1px dashed rgba(0,151,167,0.55)')
+C(f'{Q}_dot2',position='absolute',left='0px',top='92px',width='100%',height='0px',border_top='1px dashed rgba(0,151,167,0.55)')
+C(f'{Q}_svg',position='absolute',left='0px',top='0px',width='100%',height='100%',overflow='visible')
+C(f'{Q}_cover',position='absolute',left='-2px',top='-6px',width='306px',height='180px',background_color='#ffffff',transform_origin='100% 50%')
+for i,(t,y) in enumerate([('165',122),('110',204),('63',272)]): C(f'{Q}_yl-{i}',position='absolute',left='12px',top=f'{y}px',font_size='11px',color='#8c979c')
+for i,(t,x) in enumerate([('3/1',38),('3/15',176),('3/28',314)]): C(f'{Q}_xl-{i}',position='absolute',left=f'{x}px',top='296px',font_size='11px',color='#8c979c')
+C(f'{Q}_legend',position='absolute',left='0px',right='0px',top='326px',display='flex',justify_content='center',column_gap='18px')
+C(f'{Q}_lg',display='flex',align_items='center',column_gap='6px')
+C(f'{Q}_lgd-a',width='8px',height='8px',border_radius='50%',background_color=L['teal'])
+C(f'{Q}_lgd-b',width='8px',height='8px',border_radius='50%',background_color=L['yg'])
+C(f'{Q}_lg-text',font_size='12px',color='#5f6a6f',white_space='nowrap')
+C(f'{Q}_c2',top='504px',height='330px',padding='0px 16px')
+C(f'{Q}_c2-head',display='flex',align_items='center',justify_content='space-between',height='54px')
+C(f'{Q}_c2-title',font_size='17px',font_weight='500',white_space='nowrap')
+C(f'{Q}_help',display='flex',align_items='center',column_gap='4px',color=L['teal'])
+C(f'{Q}_help-ico',width='16px',height='16px')
+C(f'{Q}_help-text',font_size='13px',color=L['teal'],white_space='nowrap')
+C(f'{Q}_rec',display='flex',align_items='center',height='46px',column_gap='6px',border_bottom='1px solid #e6ebed',border_radius='6px',padding='0px 4px')
+C(f'{Q}_rv',font_size='17px',white_space='nowrap')
+C(f'{Q}_rv-o',font_size='17px',white_space='nowrap',color=L['orange'])
+C(f'{Q}_rvw',display='flex',align_items='baseline',column_gap='4px')
+C(f'{Q}_rs',font_size='17px',color=L['ink'])
+C(f'{Q}_ru',font_size='12px',color=L['mute'],white_space='nowrap')
+C(f'{Q}_badge',padding='1px 7px',border_radius='9px',background_color=L['orangebg'])
+C(f'{Q}_badge-text',font_size='11px',color=L['orange'],white_space='nowrap',font_weight='600')
+C(f'{Q}_rt',margin_left='auto',font_size='13px',color='#5f6a6f',white_space='nowrap')
+# zoom card (stage px)
+C(f'{Q}_z-k',font_size='13px',color=L['mute'],white_space='nowrap',margin_bottom='6px')
+C(f'{Q}_z-row',display='flex',align_items='baseline',column_gap='8px')
+C(f'{Q}_z-v',font_size='30px',font_weight='700',color=L['orange'],white_space='nowrap',line_height='1.1')
+C(f'{Q}_z-v2',font_size='30px',font_weight='700',white_space='nowrap',line_height='1.1')
+C(f'{Q}_z-u',font_size='14px',color=L['mute'],white_space='nowrap')
+C(f'{Q}_z-badge',padding='2px 10px',border_radius='11px',background_color=L['orangebg'],align_self='center')
+C(f'{Q}_z-badge-text',font_size='14px',font_weight='700',color=L['orange'],white_space='nowrap')
+C(f'{Q}_z-t',margin_left='auto',font_size='14px',color='#5f6a6f',white_space='nowrap',align_self='center')
 
-# ================= CARD 2 · 生活點滴 =================
-Q='familyline-mg2'
-C(f'{Q}_grid',display='grid',grid_template_columns='1fr 1fr 1fr',column_gap='8px',row_gap='8px')
-C(f'{Q}_tile',position='relative',height='70px',border_radius='12px',display='grid',place_items='center',color='rgba(255,255,255,0.9)')
-TILE=['#8fd3dc','#f5c39b','#b9c8f5','#cfe8a9','#e8b9d6','#a9dcc8']
-for i,c in enumerate(TILE): C(f'{Q}_tile-{i}',background_color=c)
-C(f'{Q}_tile-svg',width='24px',height='24px')
-C(f'{Q}_glow',position='absolute',left='-3px',top='-3px',right='-3px',bottom='-3px',border='3px solid #00b2c0',border_color=V['acc'],border_radius='14px')
-C(f'{Q}_check',position='absolute',right='6px',top='6px',width='22px',height='22px',border_radius='50%',background_color=V['acc'],color=V['white'],display='grid',place_items='center')
-C(f'{Q}_check-svg',width='12px',height='12px')
-C(f'{Q}_tap',left='204px',top='145px',width='40px',height='40px',border_radius='50%',border='2px solid #ffffff',background_color='rgba(21,23,23,0.18)')
-C(f'{Q}_foot',display='flex',align_items='center',column_gap='12px')
-C(f'{Q}_count',font_size='14px',color=V['mute'],white_space='nowrap')
-C(f'{Q}_send',flex='1',height='44px',border_radius='11px',background_color=V['acc'],display='grid',place_items='center')
-C(f'{Q}_bub',top='68px',padding='12px',border_radius='16px',background_color=V['grey'])
-C(f'{Q}_thumbs',display='flex',column_gap='8px',margin_bottom='10px')
-C(f'{Q}_thumb',flex='1',height='84px',border_radius='10px',display='grid',place_items='center',color='rgba(255,255,255,0.9)')
-C(f'{Q}_thumb-1',background_color=TILE[1]); C(f'{Q}_thumb-2',background_color=TILE[4])
-C(f'{Q}_bub-foot',display='flex',align_items='center',justify_content='space-between')
-C(f'{Q}_bub-text',font_size='13px',font_weight='600',white_space='nowrap')
-C(f'{Q}_dl',width='30px',height='30px',border_radius='50%',background_color=V['acc'],color=V['white'],display='grid',place_items='center')
-C(f'{Q}_dl-svg',width='16px',height='16px')
-C(f'{Q}_act',left='10px',top='172px',width='212px',padding='14px',display='flex',flex_direction='column',row_gap='6px')
-C(f'{Q}_act-title',font_size='14px',font_weight='700',white_space='nowrap',margin_bottom='2px')
-C(f'{Q}_arow',display='flex',align_items='center',column_gap='10px',padding='3px 6px',border_radius='10px')
-C(f'{Q}_aico',width='30px',height='30px',border_radius='9px',background_color=V['tint'],display='grid',place_items='center',color=V['deep'],flex='none')
-C(f'{Q}_asvg',width='16px',height='16px')
-C(f'{Q}_aname',font_size='14px',font_weight='600',white_space='nowrap')
-C(f'{Q}_adate',margin_left='auto',font_size='12px',color=V['mute'],white_space='nowrap')
-tiles=''
-for i in range(6):
-    sel=i in (1,4)
-    tiles+=(f'<div class="{Q}_tile {Q}_tile-{i}" data-mg="p_t{i}">{svg("image",Q+"_tile-svg",1.8)}'
-            +(f'<div class="{Q}_glow" data-mg="p_g{i}"></div><div class="{Q}_check" data-mg="p_k{i}">{svg("check",Q+"_check-svg",3.5)}</div>' if sel else '')+'</div>')
-acts=[('scissors','手作課','11/08'),('music','音樂律動','10/30'),('sprout','園藝活動','10/21')]
-arows=''.join(f'<div class="{Q}_arow" data-mg="p_a{i}"><div class="{Q}_aico">{svg(ic,Q+"_asvg",2)}</div><div class="{Q}_aname">{n}</div><div class="{Q}_adate">{d}</div></div>' for i,(ic,n,d) in enumerate(acts))
-CARDS[2]=(f'<div class="{P}_stage" data-mg="stage2" aria-hidden="true"><div class="{P}_bg {P}_bg-2"></div>'
- f'<div class="{P}_abs {P}_card {P}_desk" data-mg="p_desk">{head("image","活動照片・手作課","挑選要分享給家屬的照片")}'
- f'<div class="{Q}_grid">{tiles}</div><div class="{Q}_foot"><div class="{Q}_count" data-mg="p_cnt">已選 2 張</div>'
- f'<div class="{Q}_send" data-mg="p_send"><div class="{P}_btn-text">分享給家屬</div></div></div></div>'
- f'<div class="{P}_abs {Q}_tap" data-mg="p_tap"></div>'
- f'<div class="{P}_abs {P}_beam" data-mg="p_beam"></div>'
- +phone('p_ph',f'<div class="{P}_in {Q}_bub" data-mg="p_bub"><div class="{Q}_thumbs"><div class="{Q}_thumb {Q}_thumb-1" data-mg="p_th1">{svg("image",Q+"_tile-svg",1.8)}</div>'
-   f'<div class="{Q}_thumb {Q}_thumb-2" data-mg="p_th2">{svg("image",Q+"_tile-svg",1.8)}</div></div>'
-   f'<div class="{Q}_bub-foot"><div class="{Q}_bub-text">手作課・11/08</div><div class="{Q}_dl" data-mg="p_dl">{svg("download",Q+"_dl-svg",2.4)}</div></div></div>'
-   f'<div class="{P}_abs {P}_card {Q}_act" data-mg="p_act"><div class="{Q}_act-title">近一年參與的活動</div>{arows}</div>')
- +cap('p_cap1','工作人員挑選後才分享')+cap('p_cap2','家屬在 LINE 看照片，也能下載')+cap('p_cap3','參與過的活動一次看')+'</div>')
-D=9900; DUR[2]=D+OFF; HERO[2]=6000
-tl(2,'p_desk',[(0,{'o':0,'s':.94}),(500,{'o':1,'s':1},'eo'),(9200,{'o':1,'s':1}),(9600,{'o':0,'y':-3},'io')])
-for i in range(6): tl(2,f'p_t{i}',[(300+i*70,{'o':0,'s':.85}),(700+i*70,{'o':1,'s':1},'eo')])
-# tap ring: appear on tile 1, press, glide to tile 4 (78px down = 195% of its 40px), press, leave
-tl(2,'p_tap',[(1300,{'o':0,'s':1.6,'y':0}),(1550,{'o':1,'s':1},'eo'),(1650,{'s':.8},'io'),(1800,{'s':1},'eo'),
-              (2050,{'y':195},'io'),(2250,{'s':.8},'io'),(2400,{'s':1},'eo'),(2600,{'o':0,'s':1.4},'po')])
-for i,t in ((1,1650),(4,2250)):
-    tl(2,f'p_g{i}',[(t,{'o':0}),(t+200,{'o':1},'po')])
-    tl(2,f'p_k{i}',[(t+80,{'o':0,'s':0}),(t+420,{'o':1,'s':1},'bk')])
-tl(2,'p_cnt',[(2500,{'o':0,'y':30}),(2800,{'o':1,'y':0},'eo')])
-press(2,'p_send',3000)
-tl(2,'p_beam',[(3300,{'o':1,'sx':0}),(3650,{'sx':1},'io'),(9100,{'o':1}),(9400,{'o':0},'io')])
-tl(2,'p_ph',[(3500,{'o':0,'x':8}),(4050,{'o':1,'x':0},'eo'),(9200,{'o':1,'x':0}),(9600,{'o':0,'y':-3},'io')])
-tl(2,'p_bub',[(3950,{'o':0,'y':20}),(4500,{'o':1,'y':0},'eo')])
-tl(2,'p_th1',[(4250,{'o':0,'s':.8}),(4650,{'o':1,'s':1},'bk')]); tl(2,'p_th2',[(4400,{'o':0,'s':.8}),(4800,{'o':1,'s':1},'bk')])
-tl(2,'p_dl',[(5000,{'s':1,'y':0}),(5180,{'s':1.18,'y':-10},'po'),(5400,{'s':1,'y':0},'bk'),(5600,{'y':-10},'po'),(5800,{'y':0},'bk')])
-tl(2,'p_act',[(6500,{'o':0,'y':40}),(7050,{'o':1,'y':0},'eo')])
-for i in range(3): tl(2,f'p_a{i}',[(6850+i*200,{'o':0,'x':-6}),(7300+i*200,{'o':1,'x':0},'eo')])
-tl(2,'p_a0',[(7700,{'bg':HEX['clear']}),(7900,{'bg':HEX['hl']},'po'),(8600,{'bg':HEX['clear']},'po')])
-capt(2,'p_cap1',200,3200); capt(2,'p_cap2',3450,6400); capt(2,'p_cap3',6600,9600)
+def poly(pts): return ' '.join(f'{x},{y}' for x,y in pts)
+SYS=[(0,92),(10,80),(18,88),(26,74),(34,86),(42,72),(52,84),(62,70),(72,78),(82,64),(94,72),(106,58),(118,66),(130,50),(142,38),(152,24),(162,40),(172,54),(180,30),(186,18),(193,50),(202,54),(214,40),(224,48),(236,52),(248,44),(258,50),(266,52),(272,8),(280,62),(290,72),(300,58)]
+DIA=[(0,140),(12,134),(24,142),(36,130),(48,138),(62,132),(76,140),(90,128),(104,136),(118,130),(132,138),(146,126),(160,134),(174,128),(188,136),(202,130),(216,124),(230,118),(244,130),(258,134),(272,128),(286,132),(300,130)]
+chart_svg=(f'<svg class="{Q}_svg" viewBox="0 0 300 170" preserveAspectRatio="none" aria-hidden="true">'
+           f'<polyline points="{poly(SYS)}" fill="none" stroke="#0097a7" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>'
+           f'<polyline points="{poly(DIA)}" fill="none" stroke="#c9d84a" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>')
+vit=[('體溫','6 小時前','38.4','°C'),('血壓','3 天前','123 / 89','mmHg'),('脈搏','6 小時前','72','次/分'),('血糖','22 天前','98','mg/dL'),('體重','22 天前','52.4','kg')]
+tpl_rows=''.join(f'<div class="{Q}_row" data-mg="h_tr{i}"><div><div class="{Q}_k">{a}</div><div class="{Q}_ks">{b}</div></div>'
+                 f'<div class="{Q}_v">{v} <span class="{Q}_u">{u}</span></div></div>' for i,(a,b,v,u) in enumerate(vit))
+def rec(i,a,b,lowA,lowB,badge,time):
+    va=f'<span class="{Q}_rv-o">{a}</span>' if lowA else f'<span class="{Q}_rv">{a}</span>'
+    vb=f'<span class="{Q}_rv-o">{b}</span>' if lowB else f'<span class="{Q}_rv">{b}</span>'
+    bd=f'<div class="{Q}_badge" data-mg="h_bd{i}"><div class="{Q}_badge-text">{badge}</div></div>' if badge else ''
+    return f'<div class="{Q}_rec" data-mg="h_rc{i}"><div class="{Q}_rvw">{va}<span class="{Q}_rs">/</span>{vb}</div><div class="{Q}_ru">mmHg</div>{bd}<div class="{Q}_rt">{time}</div></div>'
+recs=(rec(0,'123','52',False,True,'偏低','3/12 09:45')+rec(1,'123','89',False,False,'','3/12 09:45')+
+      rec(2,'224','85',True,False,'偏高','3/12 10:00')+rec(3,'235','45',True,True,'異常','3/12 10:15'))
+tabs=''.join(f'<div class="{Q}_tab{"-on" if t=="血壓" else ""}">{t}</div>' for t in ['體溫','血壓','脈搏','血糖','體重'])
+C(f'{Q}_greet',top='104px'); C(f'{Q}_av1',top='104px')
+C(f'{Q}_fin',position='absolute',left='88px',top='586px',width='38px',height='38px')
+C(f'{Q}_ring1',position='absolute',left='80px',top='569px'); C(f'{Q}_ring2',position='absolute',left='158px',top='416px')
+liff1=(f'<div class="{P}_liff" data-mg="h_liff">{liff_top("簡智齡 生理數值")}'
+  f'<div class="{P}_card {Q}_c1"><div class="{Q}_tabs">{tabs}</div><div class="{Q}_uline"></div>'
+  f'<div class="{Q}_chip {Q}_chip-a"><div class="{Q}_chip-text">2026 年 2 月</div></div><div class="{Q}_chip {Q}_chip-b"><div class="{Q}_chip-on-text">2026 年 3 月</div></div>'
+  +''.join(f'<div class="{Q}_yl-{i}">{t}</div>' for i,t in enumerate(['165','110','63']))+
+  f'<div class="{Q}_plot"><div class="{Q}_band"></div><div class="{Q}_dot1"></div><div class="{Q}_dot2"></div>{chart_svg}<div class="{Q}_cover" data-mg="h_cov"></div></div>'
+  +''.join(f'<div class="{Q}_xl-{i}">{t}</div>' for i,t in enumerate(['3/1','3/15','3/28']))+
+  f'<div class="{Q}_legend"><div class="{Q}_lg"><div class="{Q}_lgd-a"></div><div class="{Q}_lg-text">收縮壓</div></div>'
+  f'<div class="{Q}_lg"><div class="{Q}_lgd-b"></div><div class="{Q}_lg-text">舒張壓</div></div></div></div>'
+  f'<div class="{P}_card {Q}_c2"><div class="{Q}_c2-head"><div class="{Q}_c2-title">血壓紀錄</div><div class="{Q}_help">{svg("info",Q+"_help-ico",2)}<div class="{Q}_help-text">說明</div></div></div>{recs}</div></div>')
+CARDS[1]=(f'<div class="{P}_stage" data-mg="stage1" aria-hidden="true"><div class="{P}_bg-1"></div>'
+ f'<div class="{P}_phone" data-mg="h_ph">{line_head()}'
+ f'<div class="{P}_av {Q}_av1"></div><div class="{P}_bubble {Q}_greet" data-mg="h_greet"><div class="{P}_btext">感謝您加入！請由下方選單查詢長輩的照護資訊。</div></div>'
+ f'<div class="{Q}_tpl" data-mg="h_tpl"><div class="{Q}_tpl-title">簡智齡 生理數值</div>{tpl_rows}'
+ f'<div class="{Q}_more" data-mg="h_more"><div class="{Q}_more-text">查看更多</div></div></div>'
+ f'<div class="{P}_menu"></div><div class="{Q}_hl1" data-mg="h_hl1"></div><div class="{Q}_hl2" data-mg="h_hl2"></div>'
+ f'{liff1}'
+ f'<div class="{P}_tap {Q}_ring1" data-mg="h_ring1"></div><div class="{P}_tap {Q}_ring2" data-mg="h_ring2"></div>'
+ f'<div class="{Q}_fin" data-mg="h_fin">{FINGER.format(cls=P+"_finger-svg")}</div></div>'
+ +steps('h',['點選單「生理數值」','最新五項，一次看完','查看兩個月趨勢','偏高偏低，直接標示'])+
+ f'<div class="{P}_abs {P}_zoom" data-mg="h_zoom"><div class="{Q}_z-k">血壓紀錄・3/12 10:00</div><div class="{Q}_z-row">'
+ f'<div class="{Q}_z-v">224</div><div class="{Q}_z-v2">/ 85</div><div class="{Q}_z-u">mmHg</div>'
+ f'<div class="{Q}_z-badge"><div class="{Q}_z-badge-text">偏高</div></div></div></div></div>')
+D=12000; DUR[1]=D+OFF; HERO[1]=9500
+E=11200
+tl(1,'h_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
+step_anim(1,'h',[300,2000,4200,7000],E)
+# finger: base position is on the 生理數值 tile; dx/dy to 查看更多 = (+78,-132) design px
+FX,FY=pctx(73.3),pctx(-152.7)
+tl(1,'h_fin',[(700,{'o':0,'x':60,'y':80,'s':1}),(1000,{'o':1},'po'),(1500,{'x':0,'y':0},'io'),(1560,{'s':.86},'io'),(1720,{'s':1},'eo'),
+              (3100,{'x':FX,'y':FY},'io'),(3160,{'s':.86},'io'),(3320,{'s':1},'eo'),(3700,{'o':0},'po')])
+tapring(1,'h_ring1',1560); tapring(1,'h_ring2',3160)
+tl(1,'h_hl1',[(1560,{'o':0}),(1650,{'o':1},'po'),(2000,{'o':0},'po')])
+tl(1,'h_greet',[(1800,{'o':1,'y':0}),(2150,{'o':0,'y':-40},'io')])
+tl(1,'h_tpl',[(2000,{'o':0,'y':10}),(2500,{'o':1,'y':0},'eo')])
+for i in range(5): tl(1,f'h_tr{i}',[(2250+i*90,{'o':0,'x':-3}),(2600+i*90,{'o':1,'x':0},'eo')])
+tl(1,'h_hl2',[(3160,{'o':0}),(3240,{'o':1},'po'),(3600,{'o':0},'po')])
+tl(1,'h_liff',[(3600,{'y':100}),(4200,{'y':0},'eo')])
+tl(1,'h_cov',[(4500,{'sx':1,'o':1}),(5900,{'sx':0},'io')])
+for i in range(4): tl(1,f'h_rc{i}',[(5900+i*140,{'o':0,'y':30}),(6300+i*140,{'o':1,'y':0},'eo')])
+for i in (0,2,3): tl(1,f'h_bd{i}',[(6500+i*120,{'o':0,'s':.4}),(6850+i*120,{'o':1,'s':1},'bk')])
+tl(1,'h_rc2',[(7100,{'bg':'rgba(238,124,30,0)'}),(7300,{'bg':'rgba(238,124,30,0.1)'},'po'),(E,{'bg':'rgba(238,124,30,0.1)'})])
+tl(1,'h_zoom',[(7200,{'o':0,'y':12,'s':.94}),(7750,{'o':1,'y':0,'s':1},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
+
+# ================= CARD 2 · 照片花絮 =================
+Q='familyline-line2'
+C(f'{Q}_greet',top='104px'); C(f'{Q}_av1',top='104px')
+C(f'{Q}_hl1',position='absolute',left='262px',top='648px',width='120px',height='102px',border_radius='12px',background_color='rgba(0,151,167,0.28)')
+C(f'{Q}_fin',position='absolute',left='310px',top='694px',width='38px',height='38px')
+C(f'{Q}_ring1',position='absolute',left='302px',top='677px')
+C(f'{Q}_h1',position='absolute',left='22px',top='118px',font_size='21px',font_weight='500',color='#3f6f7b',white_space='nowrap')
+C(f'{Q}_list',top='162px',height='620px',padding='4px 20px')
+C(f'{Q}_date',font_size='19px',font_weight='500',white_space='nowrap',margin_top='14px')
+C(f'{Q}_ev',font_size='13px',color='#5f6a6f',white_space='nowrap',margin_top='2px',margin_bottom='10px')
+C(f'{Q}_ph',display='grid',grid_template_columns='1fr 1fr',column_gap='6px',padding_bottom='14px',border_bottom='1px solid #e6ebed')
+C(f'{Q}_ph2',display='grid',grid_template_columns='1fr 1fr',column_gap='6px')
+for k,u in (('kara',IMG['kara']),('lan1',IMG['lan1']),('lan2',IMG['lan2'])):
+    C(f'{Q}_img-{k}',height='118px',background_image=bg(u),background_size='cover',background_position='50% 40%')
+C(f'{Q}_img-kara2',height='118px',background_image=bg(IMG['kara']),background_size='cover',background_position='20% 40%')
+C(f'{Q}_hl2',position='absolute',left='36px',top='441px',width='156px',height='118px',background_color='rgba(255,255,255,0.35)')
+C(f'{Q}_ring2',position='absolute',left='94px',top='480px')
+C(f'{Q}_dim',position='absolute',left='0px',top='104px',width='390px',height='740px',background_color='rgba(20,24,28,0.5)')
+C(f'{Q}_dlg',left='16px',top='150px',height='590px',overflow='hidden')
+C(f'{Q}_dlg-title',position='absolute',left='22px',top='26px',font_size='19px',font_weight='600',white_space='nowrap')
+C(f'{Q}_cnt',position='absolute',left='306px',top='72px',width='40px',height='26px',border_radius='13px',background_color='#6f7578')
+C(f'{Q}_cnt-text',position='absolute',left='0px',right='0px',top='4px',text_align='center',font_size='12px',color='#ffffff')
+C(f'{Q}_strip',position='absolute',left='-358px',top='150px',width='716px',height='260px',display='flex')
+C(f'{Q}_big-a',width='358px',height='260px',background_image=bg(IMG['group']),background_size='cover',background_position='50% 50%',flex='none')
+C(f'{Q}_big-b',width='358px',height='260px',background_image=bg(IMG['lan1']),background_size='cover',background_position='50% 50%',flex='none')
+C(f'{Q}_foot',position='absolute',left='22px',right='22px',top='540px',display='flex',justify_content='space-between',align_items='center')
+C(f'{Q}_dl',display='flex',align_items='center',column_gap='6px',color=L['teal'])
+C(f'{Q}_dl-ico',width='18px',height='18px')
+C(f'{Q}_teal',font_size='15px',color=L['teal'],white_space='nowrap')
+C(f'{Q}_toast',position='absolute',left='95px',top='468px',padding='10px 18px',border_radius='22px',background_color='rgba(30,34,38,0.86)',display='flex',align_items='center',column_gap='6px',color='#ffffff')
+C(f'{Q}_toast-text',font_size='14px',color='#ffffff',white_space='nowrap')
+C(f'{Q}_fin2',position='absolute',left='262px',top='300px',width='38px',height='38px')
+C(f'{Q}_ring3',position='absolute',left='45px',top='681px')
+C(f'{Q}_z-head',display='flex',align_items='center',column_gap='12px')
+C(f'{Q}_z-img',width='76px',height='54px',border_radius='8px',background_image=bg(IMG['group']),background_size='cover',flex='none')
+C(f'{Q}_z-t1',font_size='16px',font_weight='700',white_space='nowrap')
+C(f'{Q}_z-t2',font_size='13px',color=L['mute'],white_space='nowrap',margin_top='2px')
+C(f'{Q}_z-ok',margin_left='auto',width='30px',height='30px',border_radius='50%',background_color=L['teal'],color='#ffffff',display='grid',place_items='center',flex='none')
+C(f'{Q}_z-ok-svg',width='16px',height='16px')
+liff2=(f'<div class="{P}_liff" data-mg="p_liff">{liff_top("簡智齡 照片花絮")}<div class="{Q}_h1">近半年照片花絮</div>'
+  f'<div class="{P}_card {Q}_list"><div class="{Q}_date">115/07/07</div><div class="{Q}_ev">重陽敬老活動</div>'
+  f'<div class="{Q}_ph"><div class="{Q}_img-kara" data-mg="p_i0"></div><div class="{Q}_img-kara2" data-mg="p_i1"></div></div>'
+  f'<div class="{Q}_date">115/06/12</div><div class="{Q}_ev">藝術治療・燈籠手作活動</div>'
+  f'<div class="{Q}_ph2"><div class="{Q}_img-lan1" data-mg="p_i2"></div><div class="{Q}_img-lan2" data-mg="p_i3"></div></div></div>'
+  f'<div class="{Q}_hl2" data-mg="p_hl2"></div><div class="{Q}_dim" data-mg="p_dim"></div>'
+  f'<div class="{P}_card {Q}_dlg" data-mg="p_dlg"><div class="{Q}_dlg-title">115/06/12 燈籠手作活動</div>'
+  f'<div class="{Q}_cnt"><div class="{Q}_cnt-text" data-mg="p_n1">1/2</div><div class="{Q}_cnt-text" data-mg="p_n2">2/2</div></div>'
+  f'<div class="{Q}_strip" data-mg="p_strip"><div class="{Q}_big-a"></div><div class="{Q}_big-b"></div></div>'
+  f'<div class="{Q}_foot"><div class="{Q}_dl">{svg("dl",Q+"_dl-ico",2.4)}<div class="{Q}_teal">下載</div></div><div class="{Q}_teal">關閉</div></div>'
+  f'<div class="{Q}_toast" data-mg="p_toast">{svg("check",Q+"_dl-ico",2.6)}<div class="{Q}_toast-text">已下載到手機</div></div></div></div>')
+CARDS[2]=(f'<div class="{P}_stage" data-mg="stage2" aria-hidden="true"><div class="{P}_bg-2"></div>'
+ f'<div class="{P}_phone" data-mg="p_ph">{line_head()}'
+ f'<div class="{P}_av {Q}_av1"></div><div class="{P}_bubble {Q}_greet"><div class="{P}_btext">感謝您加入！請由下方選單查詢長輩的照護資訊。</div></div>'
+ f'<div class="{P}_menu"></div><div class="{Q}_hl1" data-mg="p_hl1"></div>{liff2}'
+ f'<div class="{P}_tap {Q}_ring1" data-mg="p_ring1"></div><div class="{P}_tap {Q}_ring2" data-mg="p_ring2"></div><div class="{P}_tap {Q}_ring3" data-mg="p_ring3"></div>'
+ f'<div class="{Q}_fin" data-mg="p_fin">{FINGER.format(cls=P+"_finger-svg")}</div></div>'
+ +steps('p',['點選單「照片花絮」','近半年照片，依活動整理','點開照片，左右滑動','喜歡的照片，直接下載'])+
+ f'<div class="{P}_abs {P}_zoom" data-mg="p_zoom"><div class="{Q}_z-head"><div class="{Q}_z-img"></div><div><div class="{Q}_z-t1">照片已下載</div>'
+ f'<div class="{Q}_z-t2">115/06/12 燈籠手作活動</div></div><div class="{Q}_z-ok">{svg("check",Q+"_z-ok-svg",3)}</div></div></div></div>')
+D=12000; DUR[2]=D+OFF; HERO[2]=10000
+E=11200
+tl(2,'p_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
+step_anim(2,'p',[300,2300,4600,7600],E)
+# finger base: 照片花絮 tile. moves: to photo (lantern-1 at 114,511) dx=-208,dy=-188; swipe on dialog photo; to 下載 (40,700)
+tl(2,'p_fin',[(700,{'o':0,'x':40,'y':80,'s':1}),(1000,{'o':1},'po'),(1500,{'x':0,'y':0},'io'),(1560,{'s':.86},'io'),(1720,{'s':1},'eo'),
+              (3900,{'x':pctx(-212.7),'y':pctx(-196.7)},'io'),(3960,{'s':.86},'io'),(4120,{'s':1},'eo'),
+              (5000,{'x':pctx(-26.7),'y':pctx(-266.7)},'io'),(5100,{'s':.9},'io'),(5700,{'x':pctx(-206.7),'y':pctx(-266.7)},'io'),(5800,{'s':1},'eo'),
+              (7300,{'x':pctx(-261.7),'y':pctx(4.3)},'io'),(7360,{'s':.86},'io'),(7520,{'s':1},'eo'),(7900,{'o':0},'po')])
+tapring(2,'p_ring1',1560); tapring(2,'p_ring2',3960); tapring(2,'p_ring3',7360)
+tl(2,'p_hl1',[(1560,{'o':0}),(1650,{'o':1},'po'),(2000,{'o':0},'po')])
+tl(2,'p_liff',[(1800,{'y':100}),(2400,{'y':0},'eo')])
+for i in range(4): tl(2,f'p_i{i}',[(2600+i*160,{'o':0,'s':.92}),(3050+i*160,{'o':1,'s':1},'eo')])
+tl(2,'p_hl2',[(3960,{'o':0}),(4040,{'o':1},'po'),(4400,{'o':0},'po')])
+tl(2,'p_dim',[(4300,{'o':0}),(4600,{'o':1},'po')])
+tl(2,'p_dlg',[(4300,{'o':0,'s':.92}),(4800,{'o':1,'s':1},'eo')])
+tl(2,'p_strip',[(5100,{'x':50}),(5700,{'x':0},'io')])
+tl(2,'p_n1',[(5500,{'o':1}),(5650,{'o':0},'po')]); tl(2,'p_n2',[(5550,{'o':0}),(5750,{'o':1},'po')])
+tl(2,'p_toast',[(7500,{'o':0,'y':30}),(7850,{'o':1,'y':0},'eo'),(9300,{'o':1}),(9600,{'o':0},'io')])
+tl(2,'p_zoom',[(7800,{'o':0,'y':12,'s':.94}),(8350,{'o':1,'y':0,'s':1},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 
 # ================= CARD 3 · 家屬綁定 =================
-Q='familyline-mg3'
-C(f'{Q}_desk',left='40px',top='56px',width='320px',padding='22px',display='flex',flex_direction='column',row_gap='12px')
-C(f'{Q}_ln',height='10px',border_radius='5px',background_color='rgba(105,131,146,0.15)')
-C(f'{Q}_ln-a',width='78%'); C(f'{Q}_ln-b',width='56%')
-C(f'{Q}_qrwrap',display='flex',justify_content='center',margin_top='4px')
-C(f'{Q}_qr',width='112px',height='112px',padding='8px',border_radius='12px',border='1.5px solid rgba(105,131,146,0.15)',color=V['ink'])
-C(f'{Q}_qr-svg',width='100%',height='100%')
-C(f'{Q}_scan',left='36px',top='74px',width='160px',height='160px')
-C(f'{Q}_corner',position='absolute',width='34px',height='34px',border_color=V['acc'],border_style='solid',border_width='0px')
-C(f'{Q}_corner-tl',left='0px',top='0px',border_top_width='4px',border_left_width='4px',border_top_left_radius='12px')
-C(f'{Q}_corner-tr',right='0px',top='0px',border_top_width='4px',border_right_width='4px',border_top_right_radius='12px')
-C(f'{Q}_corner-bl',left='0px',bottom='0px',border_bottom_width='4px',border_left_width='4px',border_bottom_left_radius='12px')
-C(f'{Q}_corner-br',right='0px',bottom='0px',border_bottom_width='4px',border_right_width='4px',border_bottom_right_radius='12px')
-C(f'{Q}_sqr',position='absolute',left='24px',top='24px',width='112px',height='112px',color=V['ink'])
-C(f'{Q}_line',position='absolute',left='10px',top='12px',width='140px',height='4px',border_radius='2px',background_color=V['acc'])
-C(f'{Q}_scan-ok',position='absolute',left='56px',top='56px',width='48px',height='48px',border_radius='50%',background_color=V['acc'],color=V['white'],display='grid',place_items='center')
-C(f'{Q}_scan-ok-svg',width='26px',height='26px')
-C(f'{Q}_form',top='70px',display='flex',flex_direction='column',row_gap='10px')
-C(f'{Q}_form-title',font_size='15px',font_weight='700',white_space='nowrap')
-C(f'{Q}_who',display='flex',align_items='center',column_gap='10px',padding='10px',border_radius='12px',background_color=V['grey'])
-C(f'{Q}_av',width='34px',height='34px',border_radius='50%',background_color=V['tint'],color=V['deep'],display='grid',place_items='center',flex='none')
-C(f'{Q}_av-svg',width='18px',height='18px')
-C(f'{Q}_who-name',font_size='14px',font_weight='600',white_space='nowrap')
-C(f'{Q}_who-sub',font_size='12px',color=V['mute'],white_space='nowrap')
-C(f'{Q}_flabel',font_size='12px',color=V['mute'])
-C(f'{Q}_field',height='40px',border_radius='10px',border='1.5px solid rgba(105,131,146,0.15)',border_color=HEX['line'],display='flex',align_items='center',padding='0px 12px')
-C(f'{Q}_char',font_size='16px',font_weight='600')
-C(f'{Q}_done',top='82px',display='flex',flex_direction='column',align_items='center',row_gap='10px')
-C(f'{Q}_done-ok',width='64px',height='64px',border_radius='50%',background_color=V['acc'],color=V['white'],display='grid',place_items='center')
-C(f'{Q}_done-svg',width='34px',height='34px')
-C(f'{Q}_done-title',font_size='17px',font_weight='700',white_space='nowrap')
-C(f'{Q}_tags',display='grid',grid_template_columns='1fr 1fr',column_gap='8px',row_gap='8px',width='100%',margin_top='6px')
-C(f'{Q}_tag',height='36px',border_radius='10px',background_color=V['tint'],display='grid',place_items='center')
-C(f'{Q}_tag-text',font_size='13px',font_weight='600',color=V['deep'],white_space='nowrap')
-QR=[(0,0),(0,1),(1,0),(2,2),(3,1),(4,0),(3,3),(1,4),(4,4),(2,5),(5,3),(6,6),(3,6),(5,5)]
+Q='familyline-line3'
+C(f'{Q}_av1',top='104px'); C(f'{Q}_av2',top='196px')
+C(f'{Q}_b1',top='104px'); C(f'{Q}_b2',top='196px',padding='12px 12px 12px 16px')
+C(f'{Q}_qbtn',margin_top='14px',height='44px',border_radius='8px',background_color=L['teal'],display='grid',place_items='center')
+C(f'{Q}_qbtn-text',font_size='15px',color='#ffffff',white_space='nowrap')
+C(f'{Q}_bar',position='absolute',left='0px',top='760px',width='390px',height='84px',background_color='#ffffff')
+C(f'{Q}_fin',position='absolute',left='163.3px',top='337.3px',width='38px',height='38px')
+C(f'{Q}_ring1',position='absolute',left='160px',top='320px')
+# scanner
+C(f'{Q}_scan',position='absolute',left='0px',top='0px',width='390px',height='844px',background_image='linear-gradient(160deg,#5a5047 0%,#2b2622 45%,#1a1715 100%)')
+C(f'{Q}_cam-desk',position='absolute',left='-40px',top='560px',width='480px',height='320px',background_image='linear-gradient(170deg,#7a5536,#4d321f)',transform_origin='50% 50%')
+C(f'{Q}_paper',position='absolute',left='86px',top='330px',width='218px',height='270px',background_color='#f7f5f0',border_radius='4px',padding='26px 30px')
+C(f'{Q}_paper-t',font_size='12px',color='#55606a',text_align='center',white_space='nowrap',margin_bottom='10px')
+C(f'{Q}_paper-qr',width='158px',height='158px',color='#111111')
+C(f'{Q}_scan-t',position='absolute',left='0px',right='0px',top='236px',text_align='center',font_size='16px',font_weight='700',color='#ffffff',line_height='1.6')
+C(f'{Q}_frame',position='absolute',left='44px',top='312px',width='302px',height='302px')
+for n,k in (('tl','top:0px;left:0px'),('tr','top:0px;right:0px'),('bl','bottom:0px;left:0px'),('br','bottom:0px;right:0px')):
+    d=dict(x.split(':') for x in k.split(';'))
+    bw={'tl':('border_top_width','border_left_width'),'tr':('border_top_width','border_right_width'),'bl':('border_bottom_width','border_left_width'),'br':('border_bottom_width','border_right_width')}[n]
+    C(f'{Q}_cn-{n}',position='absolute',width='44px',height='44px',border_style='solid',border_color='#ffffff',border_width='0px',**{bw[0]:'4px',bw[1]:'4px'},**d)
+C(f'{Q}_sline',position='absolute',left='12px',top='14px',width='278px',height='4px',border_radius='2px',background_color='#4fe3f0',box_shadow='0 0 12px 2px rgba(79,227,240,0.7)')
+C(f'{Q}_sok',position='absolute',left='115px',top='115px',width='72px',height='72px',border_radius='50%',background_color=L['teal'],color='#ffffff',display='grid',place_items='center')
+C(f'{Q}_sok-svg',width='38px',height='38px')
+# confirm + done
+C(f'{Q}_cf',top='120px',height='560px',padding='26px 18px')
+C(f'{Q}_h',font_size='17px',font_weight='700',text_align='center',white_space='nowrap')
+C(f'{Q}_d',font_size='13px',color='#5f6a6f',text_align='center',line_height='1.6',margin_top='10px')
+C(f'{Q}_box',margin_top='16px',padding='8px 16px',border_radius='10px',background_color=L['box'])
+C(f'{Q}_kv',display='flex',justify_content='space-between',padding='8px 0px')
+C(f'{Q}_kv-sep',display='flex',justify_content='space-between',padding='8px 0px',border_top='1px solid #e3e8ea',margin_top='4px')
+C(f'{Q}_k',font_size='14px',color='#5f6a6f',white_space='nowrap')
+C(f'{Q}_v',font_size='14px',font_weight='600',white_space='nowrap')
+C(f'{Q}_v2',font_size='14px',white_space='nowrap')
+C(f'{Q}_note',font_size='12px',color='#5f6a6f',text_align='center',margin_top='14px',white_space='nowrap')
+C(f'{Q}_btns',display='grid',grid_template_columns='1fr 1fr',column_gap='10px',margin_top='12px')
+C(f'{Q}_no',height='42px',border_radius='6px',border='1px solid #0097a7',display='grid',place_items='center')
+C(f'{Q}_ok',height='42px',border_radius='6px',background_color=L['teal'],display='grid',place_items='center')
+C(f'{Q}_tt',font_size='14px',color=L['teal'],white_space='nowrap')
+C(f'{Q}_tw',font_size='14px',color='#ffffff',white_space='nowrap')
+C(f'{Q}_done-c',margin_left='auto',margin_right='auto',width='80px',height='80px',border_radius='50%',background_color='#c5f0f7',color=L['teal'],display='grid',place_items='center',margin_bottom='16px')
+C(f'{Q}_done-svg',width='40px',height='40px')
+C(f'{Q}_start',margin_top='18px',height='44px',border_radius='6px',background_color=L['teal'],display='grid',place_items='center')
+C(f'{Q}_fin2',position='absolute',left='0px',top='0px')
+C(f'{Q}_ring2',position='absolute',left='258px',top='474px')
+C(f'{Q}_z-head',display='flex',align_items='center',column_gap='12px')
+C(f'{Q}_z-ok',width='40px',height='40px',border_radius='50%',background_color='#c5f0f7',color=L['teal'],display='grid',place_items='center',flex='none')
+C(f'{Q}_z-ok-svg',width='22px',height='22px')
+C(f'{Q}_z-t1',font_size='17px',font_weight='700',white_space='nowrap')
+C(f'{Q}_z-t2',font_size='13px',color=L['mute'],white_space='nowrap',margin_top='2px')
 def qrsvg(cls):
+    QR=[(0,0),(0,1),(1,0),(2,2),(3,1),(4,0),(3,3),(1,4),(4,4),(2,5),(5,3),(3,6),(5,5)]
     r=''
     for x,y in ((0,0),(14,0),(0,14)):
         r+=f'<rect x="{x}" y="{y}" width="7" height="7" rx="1.2"/><rect x="{x+1.5}" y="{y+1.5}" width="4" height="4" rx=".6" fill="#ffffff"/><rect x="{x+2.5}" y="{y+2.5}" width="2" height="2"/>'
     for x,y in QR: r+=f'<rect x="{x*2+8}" y="{y*2+8}" width="2" height="2"/>'
-    for x,y in ((15,15),(17,16),(19,18),(16,19),(20,15),(9,1),(11,3),(1,9),(3,11),(10,10)): r+=f'<rect x="{x}" y="{y}" width="2" height="2"/>'
+    for x,y in ((15,15),(17,16),(19,18),(16,19),(9,1),(11,3),(1,9),(3,11),(10,10),(18,14),(14,18)): r+=f'<rect x="{x}" y="{y}" width="2" height="2"/>'
     return f'<svg class="{cls}" viewBox="0 0 21 21" fill="currentColor" aria-hidden="true">{r}</svg>'
-tags=''.join(f'<div class="{Q}_tag" data-mg="b_g{i}"><div class="{Q}_tag-text">{t}</div></div>' for i,t in enumerate(['生理數值','外診紀錄','帳單收據','生活照片']))
-CARDS[3]=(f'<div class="{P}_stage" data-mg="stage3" aria-hidden="true"><div class="{P}_bg {P}_bg-3"></div>'
- f'<div class="{P}_abs {P}_card {Q}_desk" data-mg="b_desk">{head("user","王○○ 奶奶","住民檔案・A-203")}'
- f'<div class="{Q}_ln {Q}_ln-a"></div><div class="{Q}_ln {Q}_ln-b"></div>'
- f'<div class="{P}_btn" data-mg="b_btn"><div class="{P}_btn-text">產生綁定 QR Code</div></div>'
- f'<div class="{Q}_qrwrap"><div class="{Q}_qr" data-mg="b_qr">{qrsvg(Q+"_qr-svg")}</div></div></div>'
- f'<div class="{P}_abs {P}_beam" data-mg="b_beam"></div>'
- +phone('b_ph',f'<div class="{P}_abs {Q}_scan" data-mg="b_scan"><div class="{Q}_corner {Q}_corner-tl"></div><div class="{Q}_corner {Q}_corner-tr"></div>'
-   f'<div class="{Q}_corner {Q}_corner-bl"></div><div class="{Q}_corner {Q}_corner-br"></div><div class="{Q}_sqr" data-mg="b_sqr">{qrsvg(Q+"_qr-svg")}</div>'
-   f'<div class="{Q}_line" data-mg="b_line"></div><div class="{Q}_scan-ok" data-mg="b_sok">{svg("check",Q+"_scan-ok-svg",3)}</div></div>'
-   f'<div class="{P}_in {Q}_form" data-mg="b_form"><div class="{Q}_form-title">確認身分</div>'
-   f'<div class="{Q}_who"><div class="{Q}_av">{svg("user",Q+"_av-svg",2)}</div><div><div class="{Q}_who-name">王○○ 奶奶</div><div class="{Q}_who-sub">要綁定的住民</div></div></div>'
-   f'<div class="{Q}_flabel">您的姓名</div><div class="{Q}_field" data-mg="b_fd">{chars(Q+"_char","b_n","王小美")}</div>'
-   f'<div class="{P}_btn" data-mg="b_send"><div class="{P}_btn-text">確認綁定</div></div></div>'
-   f'<div class="{P}_in {Q}_done" data-mg="b_done"><div class="{Q}_done-ok" data-mg="b_dok">{svg("check",Q+"_done-svg",3)}</div>'
-   f'<div class="{Q}_done-title">綁定完成</div><div class="{Q}_tags">{tags}</div></div>')
- +cap('b_cap1','機構從住民檔案產生 QR Code')+cap('b_cap2','家屬在 LINE 掃描、確認身分')+cap('b_cap3','綁定完成，資料自動同步')+'</div>')
-D=9900; DUR[3]=D+OFF; HERO[3]=8000
-tl(3,'b_desk',[(0,{'o':0,'s':.94}),(500,{'o':1,'s':1},'eo'),(9200,{'o':1,'s':1}),(9600,{'o':0,'y':-3},'io')])
-press(3,'b_btn',900)
-tl(3,'b_qr',[(1150,{'o':0,'s':.5,'r':-8}),(1650,{'o':1,'s':1,'r':0},'bk')])
-tl(3,'b_beam',[(2100,{'o':1,'sx':0}),(2450,{'sx':1},'io'),(9100,{'o':1}),(9400,{'o':0},'io')])
-tl(3,'b_ph',[(2300,{'o':0,'x':8}),(2850,{'o':1,'x':0},'eo'),(9200,{'o':1,'x':0}),(9600,{'o':0,'y':-3},'io')])
-tl(3,'b_scan',[(2700,{'o':0,'s':.9}),(3100,{'o':1,'s':1},'eo'),(4300,{'o':1,'s':1}),(4600,{'o':0,'s':.92},'io')])
-tl(3,'b_sqr',[(2900,{'o':0}),(3200,{'o':1},'po')])
-tl(3,'b_line',[(3200,{'o':0,'y':0}),(3300,{'o':1},'lin'),(3950,{'y':3400},'io'),(4050,{'o':0},'lin')])
-tl(3,'b_sok',[(3950,{'o':0,'s':.4}),(4300,{'o':1,'s':1},'bk')])
-tl(3,'b_form',[(4500,{'o':0,'y':12}),(4950,{'o':1,'y':0},'eo'),(6300,{'o':1,'y':0}),(6600,{'o':0,'y':-6},'io')])
-tl(3,'b_fd',[(5000,{'bc':HEX['line']}),(5150,{'bc':HEX['acc']},'po'),(5650,{'bc':HEX['acc']}),(5800,{'bc':HEX['line']},'po')])
-typed(3,'b_n',3,5100,150)
-press(3,'b_send',5900)
-tl(3,'b_done',[(6500,{'o':0}),(6700,{'o':1},'po')])
-tl(3,'b_dok',[(6550,{'o':0,'s':.3}),(7000,{'o':1,'s':1},'bk')])
-for i in range(4): tl(3,f'b_g{i}',[(7000+i*120,{'o':0,'y':30,'s':.9}),(7450+i*120,{'o':1,'y':0,'s':1},'eo')])
-capt(3,'b_cap1',200,2300); capt(3,'b_cap2',2550,6300); capt(3,'b_cap3',6450,9600)
+info=(f'<div class="{Q}_kv"><div class="{Q}_k">住民</div><div class="{Q}_v">簡智齡</div></div><div class="{Q}_kv"><div class="{Q}_k">床號</div><div class="{Q}_v2">A3-302</div></div>'
+      f'<div class="{Q}_kv-sep"><div class="{Q}_k">身分</div><div class="{Q}_v">子女 - 大女兒</div></div><div class="{Q}_kv"><div class="{Q}_k">姓名</div><div class="{Q}_v">陳美玲</div></div>'
+      f'<div class="{Q}_kv"><div class="{Q}_k">聯絡電話</div><div class="{Q}_v2">0912-345-678</div></div>')
+scan=(f'<div class="{Q}_scan" data-mg="b_scan"><div class="{Q}_cam-desk"></div>'
+      f'<div class="{Q}_paper" data-mg="b_paper"><div class="{Q}_paper-t">智齡長照中心・家屬綁定</div><div class="{Q}_paper-qr">{qrsvg(P+"_finger-svg")}</div></div>'
+      f'{sb()}<div class="{P}_top">{svg("chev",P+"_top-l",2.4)}<div class="{P}_top-title">QR Code 綁定對象</div><div class="{P}_top-url">https://liff.line.me</div>{svg("close",P+"_top-r",2.2)}</div>'
+      f'<div class="{Q}_scan-t">請將機構提供的<br>LINE 綁定 QR Code 對準框內</div>'
+      f'<div class="{Q}_frame"><div class="{Q}_cn-tl"></div><div class="{Q}_cn-tr"></div><div class="{Q}_cn-bl"></div><div class="{Q}_cn-br"></div>'
+      f'<div class="{Q}_sline" data-mg="b_line"></div><div class="{Q}_sok" data-mg="b_sok">{svg("check",Q+"_sok-svg",3)}</div></div></div>')
+conf=(f'<div class="{P}_liff" data-mg="b_conf">{liff_top("綁定對象")}<div class="{P}_card {Q}_cf"><div class="{Q}_h">請先確認以下身分，以完成綁定</div>'
+      f'<div class="{Q}_d">綁定後即可查看家人在機構的照護狀況、外診紀錄與相關資料</div><div class="{Q}_box">{info}</div>'
+      f'<div class="{Q}_note">若以上資料不是您本人，請勿綁定並聯絡機構確認</div>'
+      f'<div class="{Q}_btns"><div class="{Q}_no"><div class="{Q}_tt">不是我</div></div><div class="{Q}_ok" data-mg="b_ok"><div class="{Q}_tw">確認綁定</div></div></div></div></div>')
+done=(f'<div class="{P}_liff" data-mg="b_done">{liff_top("綁定對象")}<div class="{P}_card {Q}_cf"><div class="{Q}_done-c" data-mg="b_dc">{svg("check",Q+"_done-svg",3)}</div>'
+      f'<div class="{Q}_h">綁定完成</div><div class="{Q}_d">您已成功綁定對象，可開始使用家屬服務</div><div class="{Q}_box">{info}</div>'
+      f'<div class="{Q}_start"><div class="{Q}_tw">開始使用</div></div></div></div>')
+CARDS[3]=(f'<div class="{P}_stage" data-mg="stage3" aria-hidden="true"><div class="{P}_bg-3"></div>'
+ f'<div class="{P}_phone" data-mg="b_ph">{line_head()}'
+ f'<div class="{P}_av {Q}_av1" data-mg="b_a1"></div><div class="{P}_bubble {Q}_b1" data-mg="b_b1"><div class="{P}_btext">歡迎加入！請完成身分驗證以綁定您的家人資料。</div></div>'
+ f'<div class="{P}_av {Q}_av2" data-mg="b_a2"></div><div class="{P}_bubble {Q}_b2" data-mg="b_b2"><div class="{P}_btext">請掃描機構提供的 LINE 綁定 QR Code 以完成身分綁定。綁定後就可即時查看健康數據、活動行程、外診紀錄等資訊。</div>'
+ f'<div class="{Q}_qbtn" data-mg="b_qb"><div class="{Q}_qbtn-text">QR Code 綁定對象</div></div></div><div class="{Q}_bar"></div>'
+ f'{scan}{conf}{done}'
+ f'<div class="{P}_tap {Q}_ring1" data-mg="b_ring1"></div><div class="{P}_tap {Q}_ring2" data-mg="b_ring2"></div>'
+ f'<div class="{Q}_fin" data-mg="b_fin">{FINGER.format(cls=P+"_finger-svg")}</div></div>'
+ +steps('b',['點「QR Code 綁定對象」','掃描機構提供的 QR Code','確認住民與家屬身分','綁定完成，開始使用'])+
+ f'<div class="{P}_abs {P}_zoom" data-mg="b_zoom"><div class="{Q}_z-head"><div class="{Q}_z-ok">{svg("check",Q+"_z-ok-svg",3)}</div>'
+ f'<div><div class="{Q}_z-t1">綁定完成</div><div class="{Q}_z-t2">簡智齡・A3-302・子女 - 大女兒</div></div></div></div></div>')
+D=12000; DUR[3]=D+OFF; HERO[3]=10000
+E=11200
+tl(3,'b_ph',[(0,{'o':0,'y':3}),(600,{'o':1,'y':0},'eo'),(E,{'o':1,'y':0}),(E+400,{'o':0,'y':-2},'io')])
+for k,t in (('b_a1',500),('b_b1',500),('b_a2',1000),('b_b2',1000)): tl(3,k,[(t,{'o':0,'y':12}),(t+450,{'o':1,'y':0},'eo')])
+step_anim(3,'b',[1400,2900,5600,8200],E)
+# finger: base on QR button (186,455); to 確認綁定 (+96,+122)
+tl(3,'b_fin',[(1500,{'o':0,'x':40,'y':80,'s':1}),(1800,{'o':1},'po'),(2300,{'x':0,'y':0},'io'),(2360,{'s':.86},'io'),(2520,{'s':1},'eo'),(2750,{'o':0},'po'),
+              (6600,{'o':0,'x':pctx(98),'y':pctx(194)}),(6800,{'o':1},'po'),(7200,{'y':pctx(154)},'io'),(7260,{'s':.86},'io'),(7420,{'s':1},'eo'),(7800,{'o':0},'po')])
+tapring(3,'b_ring1',2360); tapring(3,'b_ring2',7260)
+press(3,'b_qb',2360); press(3,'b_ok',7260)
+tl(3,'b_scan',[(2500,{'y':100}),(3050,{'y':0},'eo')])
+tl(3,'b_paper',[(3000,{'o':1,'x':0,'y':40,'r':-6}),(3900,{'y':0,'r':0},'eo')])
+tl(3,'b_line',[(3700,{'o':0,'y':0}),(3800,{'o':1},'lin'),(4700,{'y':6800},'io'),(4800,{'o':0},'lin')])
+tl(3,'b_sok',[(4750,{'o':0,'s':.4}),(5100,{'o':1,'s':1},'bk')])
+tl(3,'b_conf',[(5400,{'y':100}),(5950,{'y':0},'eo')])
+tl(3,'b_done',[(7600,{'o':0,'s':.98}),(8000,{'o':1,'s':1},'eo')])
+tl(3,'b_dc',[(7800,{'s':.3}),(8300,{'s':1},'bk')])
+tl(3,'b_zoom',[(8500,{'o':0,'y':12,'s':.94}),(9050,{'o':1,'y':0,'s':1},'eo'),(E,{'o':1}),(E+400,{'o':0},'io')])
 # ================= derived data =================
 TRACKS={'x':'T','y':'T','s':'T','sx':'T','sy':'T','r':'T','o':'o','bg':'bg','bc':'bc','c':'c'}
 DEF={'x':0,'y':0,'s':1,'sx':1,'sy':1,'r':0,'o':1}

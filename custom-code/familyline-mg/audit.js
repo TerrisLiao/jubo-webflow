@@ -5,7 +5,7 @@ const INTENT=[/w_q1 x w_gate/,/t_dev x t_pk/,/k_key x k_login/,/w_gate x w_q/,/w
  await q.goto('file://'+process.cwd()+'/preview.html',{waitUntil:'networkidle'}); await q.addStyleTag({content:'.panel{width:'+(process.env.W||720)+'px!important}'}); await q.waitForTimeout(300);
  const dur=await q.evaluate(()=>S.dur); const found={};
  for(const c of [1,2,3]){ for(let t=0;t<dur[c];t+=100){ await q.evaluate(([c,t])=>seek(c,t),[c,t]);
-  const r=await q.evaluate(c=>{const st=document.querySelector('#p'+c+' .familyline-mg_stage'),sb=st.getBoundingClientRect(),out=[];
+  const r=await q.evaluate(c=>{const st=document.querySelector('#p'+c+' .familyline-line_stage'),sb=st.getBoundingClientRect(),out=[];
    const vis=el=>{let e=el;while(e&&e!==st){const cs=getComputedStyle(e);if(+cs.opacity<.35)return false;e=e.parentElement}return true};
    st.querySelectorAll('[class*="text"],[class*="label"],[class*="title"],[class*="sub"],[class*="typed"],[class*="code"],[class*="plain"],[class*="ciph"],[class*="role"],[class*="act"],[class*="time"]').forEach(x=>{
      if(!vis(x)||!x.textContent.trim())return; const xr=x.getBoundingClientRect(); let p=x.parentElement; while(p&&p!==st&&!p.className.baseVal&&!(getComputedStyle(p).boxShadow!=='none'||/_land|_pk|_mask|_row|_tile|_q|_pin|_cap/.test(p.className)))p=p.parentElement;

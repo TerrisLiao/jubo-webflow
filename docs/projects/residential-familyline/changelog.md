@@ -14,3 +14,4 @@
 - Webflow：主題圖改為 bg／focal 兩層並建立 4 個 IX3 進場互動（Set＋To，reduced-motion skip-to-end）。Mobbin 研究附加產品頁可讀性，建議見 decisions／tasks。
 - 依 Terris「新做一個」另開 v2 草稿頁 `/products/familyline-residential-v2`，套用可讀性優化：Hero tag／說明／CTA、UI 卡總標題、scroll card 編號與縮短列點、新增三步驟與 FAQ 5 題、重建 4 個 IX3。v1 保留供比較。未發布。
 - Terris 回饋後：三頁移除 Hero 類型切換器（擋住 eyebrow，且兩頁應分開），改為頁面下方一行文字連結；v2 三張主題圖改為比照資安頁的操作流程 motion graphic（輸入、點擊、送出、數值與標籤彈出），原始碼在 `custom-code/familyline-mg`。未發布。
+- 依 Terris 回饋，v2 三張動畫改為照 Figma `LTC - 安心寶` 的 LINE 畫面重建（聊天室、圖文選單、模板訊息、LIFF 生理數值／照片花絮、QR 綁定流程），右側加四步驟與放大卡。未發布。
