@@ -16,3 +16,4 @@
 | 2026-11-12 | 日照頁「智齡安心寶 APP」改名為「智齡安心寶（日照型）」；slug 不改 | ✅ Terris 確認 | [頁面規格](reference/頁面規格與文案.md) §7 |
 | 2026-11-12 | Footer 只放一個「智齡安心寶」；兩頁 Hero 加「住宿型｜日照型」切換（沿用 top-switcher 外觀，連結形式、不掛 Slater 屬性） | ✅ Terris 指示 | 對話；規格 §7 |
 | 2026-11-12 | 不升級 Figma；圖片由 Terris 手動匯出 | ✅ Terris（目前無 Pro 帳號） | 對話 |
+| 2026-11-12 | 產品頁整頁改版：一條故事線（機構建檔→自動同步→家屬 LINE），Hero 改系統＋手機組合畫面、5 項可切換功能展示取代 UI 卡與捲動卡、新增機構端流程與隱私段；做在 v3 草稿頁 | 提案，待 Terris 決定 4 個問題 | [改版提案頁](https://claude.ai/artifact/TL5WuTUmGhVnaXhQ2F45K7) |
