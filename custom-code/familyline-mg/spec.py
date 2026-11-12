@@ -90,7 +90,8 @@ DUR={}
 # =====================================================================
 # v3 (2026-11-12): copy the real 安心寶 LINE UI (Figma LTC - 安心寶, page "Line")
 # The phone is built at the original 390-px design scale; the phone element
-# carries font-size 0.6em, so every child written in design px scales by 0.6.
+# carries font-size 0.72em, so every child written in design px scales by 0.72.
+# Stage is 720x560; its bottom sits on the glass card's bottom edge (image-wrapper.is-layered negative margin).
 # =====================================================================
 P='familyline-line'
 CDN='https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/'
@@ -120,20 +121,20 @@ GRAD={1:'radial-gradient(80% 110% at 0% 0%,#d9f6fb,transparent 60%),radial-gradi
 def bg(url): return f'url("{url}")'
 
 # ---------- stage + right panel (stage px) ----------
-C(f'{P}_stage',position='relative',width='720px',height='480px',overflow='hidden',color=L['ink'],flex='none',line_height='1.35',text_align='left',mask_image='linear-gradient(180deg,#000 82%,transparent 100%)')
+C(f'{P}_stage',position='relative',width='720px',height='560px',overflow='hidden',color=L['ink'],flex='none',line_height='1.35',text_align='left')
 C(f'{P}_abs',position='absolute')
 # 漸層改放在 Webflow 卡片 combo product-scroll-card_item.is-fl-N（色票同 build_preview.py grad），舞台透明
 for c in (1,2,3): C(f'{P}_bg-{c}',position='absolute',left='0px',top='0px',width='100%',height='100%')
-C(f'{P}_kicker',position='absolute',left='352px',top='30px',font_size='13px',font_weight='600',letter_spacing='0.08em',color=L['teal'],white_space='nowrap')
-C(f'{P}_bar',position='absolute',left='338px',top='268px',width='4px',height='30px',border_radius='2px',background_color=L['teal'])
-for i in range(4): C(f'{P}_step-{i}',position='absolute',left='352px',top=f'{64+i*68}px',width='330px',height='30px',display='flex',align_items='center',column_gap='12px')
+C(f'{P}_kicker',position='absolute',left='352px',top='74px',font_size='13px',font_weight='600',letter_spacing='0.08em',color=L['teal'],white_space='nowrap')
+C(f'{P}_bar',position='absolute',left='338px',top='312px',width='4px',height='30px',border_radius='2px',background_color=L['teal'])
+for i in range(4): C(f'{P}_step-{i}',position='absolute',left='352px',top=f'{108+i*68}px',width='330px',height='30px',display='flex',align_items='center',column_gap='12px')
 C(f'{P}_num',width='30px',height='30px',border_radius='50%',border='2px solid #c9d3d6',display='grid',place_items='center',flex='none')
 C(f'{P}_num-text',font_size='14px',font_weight='700',color='#9aa6aa')
 C(f'{P}_num-on',width='30px',height='30px',border_radius='50%',background_color=L['teal'],display='grid',place_items='center',flex='none')
 C(f'{P}_num-on-text',font_size='14px',font_weight='700',color='#ffffff')
 C(f'{P}_step-text',font_size='18px',font_weight='500',color='#9aa6aa',white_space='nowrap')
 C(f'{P}_step-on-text',font_size='18px',font_weight='700',color=L['ink'],white_space='nowrap')
-C(f'{P}_zoom',left='352px',top='348px',width='328px',padding='16px 18px',border_radius='16px',background_color='#ffffff',
+C(f'{P}_zoom',left='352px',top='392px',width='328px',padding='16px 18px',border_radius='16px',background_color='#ffffff',
   box_shadow='0 1.25em 2.5em -1em rgba(11,53,88,0.28),0 0.125em 0.375em rgba(11,53,88,0.06)')
 def steps(pre,labels):
     h=f'<div class="{P}_kicker">家屬在 LINE 的操作</div><div class="{P}_bar" data-mg="{pre}_bar"></div>'
@@ -149,8 +150,8 @@ def step_anim(card,pre,times,end):
     tl(card,f'{pre}_bar',fr)
 
 # ---------- phone (own props in stage px; children in 390-px design px) ----------
-C(f'{P}_phone',position='absolute',left='64px',top='30px',width='234px',height='506px',font_size='9.6px',border_radius='34px',overflow='hidden',
-  background_color=L['chat'],box_shadow='0 0 0 5px #1d2125,0 26px 50px -18px rgba(11,53,88,0.45)')
+C(f'{P}_phone',position='absolute',left='36px',top='28px',width='281px',height='608px',font_size='11.52px',border_radius='41px',overflow='hidden',
+  background_color=L['chat'],box_shadow='0 0 0 6px #1d2125,0 26px 50px -18px rgba(11,53,88,0.45)')
 C(f'{P}_fill',position='absolute',left='0px',top='0px',width='390px',height='844px')
 C(f'{P}_sb',position='absolute',left='0px',top='0px',width='390px',height='47px')
 C(f'{P}_sb-time',position='absolute',left='34px',top='14px',font_size='16px',font_weight='600',color='#ffffff')

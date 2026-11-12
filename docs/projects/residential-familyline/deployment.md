@@ -153,4 +153,10 @@ Terris：動畫要照實際 UI 設計，主要是 LINE 裡的手機畫面，可�
 - 舞台漸層原本寫在 `familyline-line_bg-N` 的 `background-image`，結尾帶一個純色值，整條規則失效，所以站上看不到漸層。已移除該屬性，舞台改透明。
 - 新增 combo `product-scroll-card_item.is-fl-1／2／3`（`2565c86b-…`、`d574153c-…`、`287f631e-…`）：右上與下方兩個 radial＋由左往右淡入的 linear，左側文字區保持原玻璃底，沒有 50/50 硬切。small 斷點改成由上往下淡入（圖在下方）。
 - 套用到三個 scroll card item：`7d6813d3-…f858`、`304d247c-…fe07`、`46306b54-…badf`。
-- `familyline-line_stage` 加 `mask-image` 下緣淡出，手機底部融入卡片漸層。
+
+### 2026-11-12 手機放大、底部貼齊玻璃
+
+- `image-wrapper.is-layered`：`aspect-ratio: 9/7`、`align-self: end`、`margin-bottom: -4rem`（medium −2rem、small −1.5rem，等於卡片 padding），舞台底部貼齊玻璃卡下緣，手機被卡片圓角切掉。
+- `familyline-line_stage` 高度 30em → 35em（720×560），移除下緣淡出 mask。
+- `familyline-line_phone` 縮放 0.6 → 0.72（left 36、top 28、281×608 stage px）；右側 kicker／step／bar／zoom 往下移 44 px。
+- IX3 皆為自身百分比，不需重建。

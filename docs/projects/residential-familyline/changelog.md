@@ -18,3 +18,4 @@
 - Terris 回報動畫文字跑版：原因是站上 body `line-height: 150%` 以固定 px 繼承進舞台。舞台改設 `line-height: 1.35`，用站上實際 CSS 重新截圖確認；陷阱寫入 `docs/standards/Webflow實作陷阱.md`。
 - Terris 回報步驟 pill 跑版、動畫背景與照片問題、QR 不好看：三步驟項加 `familyline-residential_step` 讓 pill 依內容寬度；動畫手機常駐不再淡出，循環結尾只把手機內畫面淡回 LINE 聊天室；卡 3 紙本改為真實 QR 卡（segno 產生、指向 jubo-health.com）；三個 IX3 依新時間軸重建（`i-34e11391`／`i-8cd635a5`／`i-241c174f`），GSAP 實跑 3 輪誤差 0。未發布。
 - 依 Terris 要求，v2 三張 scroll card 右半改用動畫的漸層（由左淡入、非 50/50），舞台改透明並加下緣淡出；順便修正舞台漸層在站上失效的問題（background-image 結尾帶純色）。未發布。
+- 依 Terris 要求，手機放大到 0.72 倍，舞台改 720×560 並用負 margin 讓底部貼齊玻璃卡下緣（手機被卡片切掉）；右側步驟同步下移。未發布。
