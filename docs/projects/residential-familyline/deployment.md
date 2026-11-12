@@ -59,6 +59,38 @@ IX3 互動，範圍限新頁，捲動 `top 80%` 播放一次，`prefers-reduced-
 
 **未驗證**：Designer 截圖工具失敗，畫面與動態都沒有目視確認；需在 Designer Preview 或 staging 實際捲動檢查（含重複捲動、手機、reduced-motion），發布後檢查 `<head>` 有無 `w-mod-ix3` 隱藏規則。
 
+## v2 可讀性優化草稿（2026-11-12，未發布）
+
+依 Mobbin 研究另開草稿頁比較，**v1 保留不動**。
+
+| 項目 | 值 |
+|---|---|
+| 頁面 | `6af55d996d00f5158ae0ac24` `/products/familyline-residential-v2`「智齡安心寶（住宿型）v2 可讀性優化」，`duplicateOf` v1，draft |
+| 既有元素 | element ID 與 v1 相同（component 改為 v2 page ID） |
+
+修改（全部以 MCP 讀回確認，頁面無殘留 builder 預設字）：
+
+| 區塊 | 內容 | 元素 |
+|---|---|---|
+| Hero | tag「住宿型照護系統加購」；說明改為「家屬用機構的 LINE 官方帳號就能查看…機構不用另外整理。」；CTA「洽詢加購」 | tag `4d043323-…f476`、段落 `…4131`、按鈕 `…4133` |
+| UI 卡區 | 卡片上方加總標題 H2「家屬最常問的三件事」＋副標「打開 LINE 就有答案，不用再打電話問。」 | `section-header_wrapper` `330b6005-5bdd-87de-9b76-babfa098e2a6` |
+| Scroll card | H3 上方加編號 tag「01 健康狀況／02 生活點滴／03 家屬綁定」；主題 1 刪第 4 點，三張卡列點縮短到 20 字內 | tag `22fdf7c8-…86bb`、`713a45a0-…f3d2`、`699b325d-…6283` |
+| 三步驟（新） | H2「三步驟開始使用」：機構加購開通 → 家屬掃碼綁定 → 開始查看 | section `a0d00f85-52e0-90be-3474-f062faf89155` |
+| FAQ（新） | 沿用住宿型系統頁 FAQ class 結構與 + icon（`jubo-faq.js` 全站自動接管），5 題：收費、需先用住宿系統、免下載 App、綁定人數、照片不自動分享 | `section_faq` `d7064f46-b47b-9e24-5d52-86241c650dc9` |
+
+區塊順序：Hero → UI 卡（含總標題）→ 3 個 scroll card → 三步驟 → FAQ → CTA。
+
+IX3（範圍限 v2 頁，設定同 v1）：`i-537f3db3`／`i-0d2dc678`／`i-3bec7923`（主題 1–3）、`i-a70ea19d`（UI 卡）。
+
+**沒有新增 class。** 三步驟區沿用 `padding-global`、`padding-section-large`、`container-large`、`section-header_wrapper`、`3col-grid`、`section_tag`、`text-size-tiny`、`text-size-regular`（站上沒有 `padding-section-medium`）。
+
+做不到／未做：
+- CTA 主次按鈕：`CTA Section #2` 元件只有 base variant，要改需動共用元件，未做。
+- FAQ H2 未套 `gradient-headline` 漸層 span（builder 無法在 Heading 內建 span）；三步驟卡片無底色卡片樣式。需在 Designer 目視決定是否補。
+- FAQ 第 1 題「收費」與第 2 題答案依操作手冊與加購定位撰寫，**價格與是否必須搭配住宿系統需業務確認**。
+
+回退：刪除 v2 頁與 4 個 `i-…` 互動即可，v1 與其他頁不受影響。
+
 ## 發布注意（重要）
 
 - 住宿型照護系統頁的新 tab、日照頁的切換器都**連到仍是 Draft 的新頁**。發布前要先把新頁 `draft` 改成 false，或兩者同一次發布，否則線上會出現指向未發布頁的連結。
