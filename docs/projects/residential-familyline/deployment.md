@@ -207,3 +207,12 @@ IX3（範圍限 v3）：
 
 - `fl3-tab`：移除邊框，改半透明白＋`backdrop-filter: blur(18px) saturate(160%)`＋內側高光陰影；選中 `is-fl3-tab-on` 改不透明度較高的白與較深陰影。`fl3-tabs` 外層加 8px 內距與淡彩漸層底，讓玻璃效果看得出來。
 - `fl3-panel`、`fl3-bind` 移除邊框；`fl3-panel_bg-1～6` 改成較集中的三團色塊；每個面板在漸層層之後加 `fl3-frost`（`backdrop-filter: blur(30px)`、上方亮面、淡直紋、內側白邊），共 6 個元素。
+
+### 2026-11-12 分頁與面板改參考圖風格（白卡＋彩虹邊緣光）
+
+- 依 Terris 提供的參考圖（白色卡片、邊緣柔和彩虹光、無邊框灰色膠囊）：
+  - `fl3-tabs` 拿掉彩色底條；`fl3-tab` 改淺灰半透明、無陰影、圓角 20px；選中改白底＋柔和陰影。
+  - `fl3-panel`、`fl3-bind` 白底、圓角 2.5rem、外陰影；底部內距加 14px（各斷點 `calc(… + 14px)`），讓手機停在白邊內。
+  - `fl3-panel_bg-1～6` 統一為「中心白、四周粉橘／綠／粉紅／淡紫／淡青」的邊緣光。
+  - `fl3-frost` 改成 `inset 0 0 0 14px #fff`（白邊）＋大範圍內側白霧＋`backdrop-filter: blur(26px)`，移除直紋與亮面。
+  - `fl3-static_phone` 加 `clip-path: inset(-12px -12px 0 -12px)`，底部邊框不露出。
