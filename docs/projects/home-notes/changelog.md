@@ -57,6 +57,7 @@
 32. **正式首頁**（page `69ec2b03daa2e79f1da8772e`）資安卡片 logo 列：在 ISO 13485 之後新增 Image `51f5ef32-28b6-cace-289e-3bf4a7ef85d5`，class `home-security_logo` + `is-badge`，alt「ISO/IEC 29191」。草稿頁同位置也加了一張（`067819e5-17dc-c919-77fa-0b7a7c32de3d`）。
 33. 用 Playwright 在正式首頁注入同一張圖量測：1280／1440／1920 寬下 logo 列都沒有溢出（最後一個 logo 右緣等於容器右緣）；手機 390 寬會換成三列。未 Publish。
 34. Terris 授權先放 staging：只發布 webflow.io 子網域（`customDomains: []`），正式網域未動。發布前確認草稿頁 `draft: true` 會被排除；發布後 `/home-notes-draft` 在 staging 回 404，首頁 logo 列出現 ISO/IEC 29191。
+35. 2026-11-12：Terris 把確認表放到自己的 OneDrive（「官網客戶回饋卡片_資訊確認表.xlsx」，14 則）。依同格式擴充成 2026 全年版：首頁 14 則＋卡片牆預備 36 則（A 27、B 9），另一頁列 10 則暫不上架（C 級）及原因；新增放置位置、季度、分級、職務分類欄。Microsoft 365 連線只有讀取權限，無法直接寫入 OneDrive，改傳檔案由 Terris 覆蓋。檔案含客戶姓名，不進 repo。
 
 工具筆記：
 - whtml 會丟掉 `<script>`；Embed 要用 element builder 的 `HtmlEmbed` ＋ `settings: [{key: "code", static_text}]`。
