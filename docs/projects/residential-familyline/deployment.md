@@ -261,3 +261,22 @@ Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之�
 - 日照安心寶頁切換連結、住宿型系統頁 tab、Footer 都是 page link，自動跟著新 slug。
 - Hero H1／說明已由 Designer 改為「不論身在何處／隨時掌握機構近況」與「透過智齡安心寶串接 LINE帳號…」，本次沒動。
 - 發布前：Terris 在 Designer 刪除 v1、v3；刪除後 `fl3-*` class 可清理。
+
+## 2026-11-13 改為「聯絡我們」說法、清理 v1／v3
+
+Terris 指示：現在不要說免費開通，改成聯絡我們。
+
+| 位置 | 改後 | 讀回 |
+|---|---|---|
+| Hero 按鈕（CTA Button prop） | 聯絡我們 | ✅ |
+| 步驟 1 | 聯絡顧問開通／聯絡我們，由顧問協助開通，沿用住宿型照護系統的資料。 | ✅ |
+| 頁尾 CTA 說明 | 立即聯絡我們，了解如何為住宿型照護系統開通智齡安心寶家屬 LINE 服務。 | ✅ |
+| FAQ「需要另外收費嗎？」 | 費用與開通方式請聯絡我們，由顧問為您說明。 | ✅ |
+| SEO description | …不用下載 App。歡迎聯絡我們了解開通方式。 | ✅ |
+| JSON-LD | Offer 移除 price／priceCurrency；FAQ 答案同步 | ✅ |
+| `/products/residential-care` tab 標籤 | 選配（與推車 tab 一致） | ✅ |
+
+全頁「免費」「加購」0 筆。
+
+- v1、v3：Terris 已在 Designer 刪除，list_pages 確認只剩定案頁。
+- `fl3-*` 共 92 個 class 與 2 個 combo 已刪除；剩 `header-1_component.is-fl3`（padding-top 8rem，無引用）MCP 以 parent 名稱刪除回報 not found，未強制處理。

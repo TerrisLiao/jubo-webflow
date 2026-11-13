@@ -48,10 +48,7 @@
       },
       "offers": {
         "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "TWD",
         "availability": "https://schema.org/InStock",
-        "description": "使用住宿型照護系統的機構目前可免費開通，預計一年後改為收費方案。",
         "url": "https://www.jubo-health.com/products/familyline-residential"
       },
       "provider": {
@@ -74,7 +71,7 @@
           "name": "需要另外收費嗎？",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "目前免費。使用住宿型照護系統的機構可先免費開通，預計一年後改為收費方案，詳情歡迎洽詢顧問。"
+            "text": "費用與開通方式請聯絡我們，由顧問為您說明。"
           }
         },
         {
