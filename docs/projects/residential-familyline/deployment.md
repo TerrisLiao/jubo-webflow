@@ -310,3 +310,16 @@ Terris 指示：現在不要說免費開通，改成聯絡我們。
 - 一併上線的他案修改（Terris 同意）：首頁資安卡片 ISO/IEC 29191 徽章（home-notes 專案）、三三分享會最新一集下載入口與 EP22 簡報（monthly-sharing 專案）。草稿頁（含 `/home-notes-draft`）未上線。
 - curl 驗證（production）：`/products/familyline-residential` 200（www、apex、webflow.io），title「智齡安心寶（住宿型）| 家屬用 LINE 查看長輩在機構的日常」，含「如何導入」、FAQPage、BreadcrumbList，「免費」「加購」0 筆；`/products/familyline` 含 `is-in-hero`×2、`fl-hero_pill`；`/products/residential-care` 有 2 個連到新頁的連結；首頁、日照型系統頁、三三分享會頁 200；舊 `-v2` 網址 404（從未上線）。
 - 未做：瀏覽器目視截圖驗收。
+
+## 2026-11-13 導入步驟改為三步驟（發布後修改，未發布）
+
+Terris 提供文案，住宿型頁 `section_cta-process`（`e08398e8-…0e62`）：
+
+| 步驟 | 標題 | 說明 |
+|---|---|---|
+| 一 | 聯繫客戶成功團隊 | 由智齡客戶成功團隊協助開通，沿用住宿型照護系統的資料。 |
+| 二 | 家屬掃碼綁定 | 家屬加入機構 LINE 官方帳號並掃碼，再由機構確認身分。 |
+| 三 | 查看照護資訊 | 家屬可在 LINE 查看生理數值、外診紀錄、帳單與生活照片。 |
+
+- 刪除第四步 `cta-process_tab-link`（`e08398e8-…0e5c`）。各步 `flex: 1` 平均分配；進度線 `timeline15_progress-bar` 基礎寬度 0%，不依步數寫死。
+- MCP 讀回 ✅。**Designer 已改、staging／production 尚未發布**（正式站仍是四步驟版本）。
