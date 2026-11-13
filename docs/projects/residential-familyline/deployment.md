@@ -240,3 +240,9 @@ Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之�
 - 已刪除 v3 專屬 IX3 9 個：`i-a04fa156`、`i-44c76e57`、`i-d20944f0`、`i-b53b24d8`、`i-b03e4423`、`i-f9f0f2c4`、`i-f9c55561`、`i-f1aaeb5a`、`i-ef308d5f`。
 - 複製 v2 建 v3 時，v2 的 4 個互動範圍被自動加入 v3；已改回只限 v2：`i-a70ea19d`、`i-34e11391`、`i-8cd635a5`、`i-241c174f`。
 - 頁面刪除後，`fl3-*` class 會變成未使用，可用 Designer Style Manager 的 Clean Up 清掉，或交給 Claude 逐一移除。`fl-hero_*`（v2 Hero 標籤列）仍在使用，不能刪。
+
+## 2026-11-13 Footer 新增住宿型安心寶連結
+
+- Footer 元件 `bf559d46-0de7-0e5d-3110-35684e2ba87f`（共用，41 個 instance）：在「平台 › 住宿型照護系統」欄、「智慧照護助理 APP」之後新增連結「智齡安心寶」（Link `31992a2d-a330-5a14-ef7f-97a601f81e52`，class `footer-link is-opacity-50`，page link → v2 `6af55d996d00f5158ae0ac24`）。Terris 明確要求。MCP 讀回 ✅。未發布。
+- 日照型欄的「智齡安心寶」（`…2ba8bc`，連 `/products/familyline`）不變。
+- 發布前要處理：v2 的 slug 仍是 `familyline-residential-v2`、頁面 title 仍是「v2 可讀性優化」；正式上線前應改 slug／title（page link 會自動跟著改）。
