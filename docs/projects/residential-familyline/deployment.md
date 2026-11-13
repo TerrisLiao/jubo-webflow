@@ -216,3 +216,20 @@ IX3（範圍限 v3）：
   - `fl3-panel_bg-1～6` 統一為「中心白、四周粉橘／綠／粉紅／淡紫／淡青」的邊緣光。
   - `fl3-frost` 改成 `inset 0 0 0 14px #fff`（白邊）＋大範圍內側白霧＋`backdrop-filter: blur(26px)`，移除直紋與亮面。
   - `fl3-static_phone` 加 `clip-path: inset(-12px -12px 0 -12px)`，底部邊框不露出。
+
+## 2026-11-13 定案 v2 與修飾
+
+Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之後不再更新。
+
+| 項目 | 內容 |
+|---|---|
+| 動畫步驟文字 | `familyline-line_step-text`、`familyline-line_step-on-text` 改 `font-weight: 400`、`font-size: 1.375em`（22 stage px）；列高、編號圈、進度條不變，避免進度條位移對不齊。global class，v3 同步受影響 |
+| Hero 照片 | 左下 `04a36172-…0378` 原為照護助理 APP 的手機照，換成長輩燈籠手作照 `6af5733e34582d659c961dcd`（asset alt 已設）。照片使用權仍待確認 |
+| Hero 標籤 | Section Tag 文字改「智齡安心寶」；新增 `fl-hero_tagrow` `75c04145-…9d7f` 把標籤與漸層小標 `fl-hero_pill`「住宿型」並排 |
+| Hero 說明 | 改為「家屬加入機構的 LINE 官方帳號，就能看到…機構不必另外整理。」 |
+| Hero CTA | CTA Button 連結改 `/contact`，文字「預約產品說明」 |
+| 刪除 | 頁尾日照型連結 section `f842cacc-…fc54` |
+| 動畫觸發 | `i-34e11391`、`i-8cd635a5`、`i-241c174f` 的 scroll trigger 改 `start: top 55%`、`end: bottom 25%`，`enter`／`enterBack` 改 `restart`（捲到該功能才從頭播，離開暫停） |
+| 連結 | 日照型頁 `1ff3848e-…7a91`、住宿型系統頁 tab `2ffd3e2a-…20b8` 改回連 v2 |
+
+文案審稿：提示詞見 [文案審稿提示詞-codex.md](reference/文案審稿提示詞-codex.md)。

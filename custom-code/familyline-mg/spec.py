@@ -132,8 +132,8 @@ C(f'{P}_num',width='30px',height='30px',border_radius='50%',border='2px solid #c
 C(f'{P}_num-text',font_size='14px',font_weight='700',color='#9aa6aa')
 C(f'{P}_num-on',width='30px',height='30px',border_radius='50%',background_color=L['teal'],display='grid',place_items='center',flex='none')
 C(f'{P}_num-on-text',font_size='14px',font_weight='700',color='#ffffff')
-C(f'{P}_step-text',font_size='18px',font_weight='500',color='#9aa6aa',white_space='nowrap')
-C(f'{P}_step-on-text',font_size='18px',font_weight='700',color=L['ink'],white_space='nowrap')
+C(f'{P}_step-text',font_size='22px',font_weight='400',color='#9aa6aa',white_space='nowrap')
+C(f'{P}_step-on-text',font_size='22px',font_weight='400',color=L['ink'],white_space='nowrap')
 C(f'{P}_zoom',left='352px',top='392px',width='328px',padding='16px 18px',border_radius='16px',background_color='#ffffff',
   box_shadow='0 1.25em 2.5em -1em rgba(11,53,88,0.28),0 0.125em 0.375em rgba(11,53,88,0.06)')
 def steps(pre,labels):
