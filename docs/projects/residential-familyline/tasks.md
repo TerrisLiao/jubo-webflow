@@ -3,7 +3,7 @@
 - [ ] 把 [文案審稿提示詞](reference/文案審稿提示詞-codex.md) 交給 Codex，回覆後由 Claude 套用到 v2。
 - [ ] 確認 Hero 左下長輩活動照的使用權。
 - [ ] Terris 在 Designer 預覽 v2：步驟字級、Hero 標籤與小標、動畫觸發時機。
-- [ ] v3 是否刪除（目前保留）。
+- [ ] Terris 在 Designer 刪除 v3 頁 `6af5c887d15f0b638d81d010`；刪除後清掉未使用的 `fl3-*` class。
 
 - [ ] Terris 在 Designer 手動刪除 v1 頁 `6af52afbbf57c45cf03e4154`（MCP 無刪頁功能；連結與互動已先處理）。
 - [ ] 預覽 v3 Hero 流光背景（`i-ef308d5f`）效能與四斷點。

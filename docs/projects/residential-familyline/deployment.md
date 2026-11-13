@@ -233,3 +233,10 @@ Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之�
 | 連結 | 日照型頁 `1ff3848e-…7a91`、住宿型系統頁 tab `2ffd3e2a-…20b8` 改回連 v2 |
 
 文案審稿：提示詞見 [文案審稿提示詞-codex.md](reference/文案審稿提示詞-codex.md)。
+
+### 2026-11-13 v3 刪除前置
+
+- Terris 決定刪除 v3。Webflow MCP 沒有刪頁功能，v3 頁 `6af5c887d15f0b638d81d010` 需在 Designer 手動刪除（v1 `6af52afbbf57c45cf03e4154` 同）。
+- 已刪除 v3 專屬 IX3 9 個：`i-a04fa156`、`i-44c76e57`、`i-d20944f0`、`i-b53b24d8`、`i-b03e4423`、`i-f9f0f2c4`、`i-f9c55561`、`i-f1aaeb5a`、`i-ef308d5f`。
+- 複製 v2 建 v3 時，v2 的 4 個互動範圍被自動加入 v3；已改回只限 v2：`i-a70ea19d`、`i-34e11391`、`i-8cd635a5`、`i-241c174f`。
+- 頁面刪除後，`fl3-*` class 會變成未使用，可用 Designer Style Manager 的 Clean Up 清掉，或交給 Claude 逐一移除。`fl-hero_*`（v2 Hero 標籤列）仍在使用，不能刪。
