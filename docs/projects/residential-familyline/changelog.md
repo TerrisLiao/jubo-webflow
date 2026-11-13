@@ -35,3 +35,4 @@
 - 定案頁改用 `/products/familyline-residential`（v1 讓出 slug 並標待刪除，v3 標待刪除）；加 JSON-LD；全站安心寶住宿型「加購」字樣改為「免費開通」。未發布。
 - 依 Terris 指示，價格說法改為「聯絡我們」：Hero 按鈕、步驟 1、頁尾 CTA、FAQ、SEO、JSON-LD 不再寫免費；住宿型系統頁 tab 標籤改「選配」。v1、v3 已刪除，清除 `fl3-*` class。未發布。
 - 日照安心寶頁 Hero 圖片容器加 `is-in-hero`，圖片固定在 Hero、不再跟著捲動（同住宿型頁）。未發布。
+- 日照安心寶頁 Hero 加「日照型」漸層標籤（同住宿型頁樣式）。未發布。

@@ -286,3 +286,7 @@ Terris 指示：現在不要說免費開通，改成聯絡我們。
 - `/products/familyline`（`6a0d663539a726fa38494be9`）Hero 左右圖片容器（`3af69247-…3a52` left、`…3a59` right）加 combo `is-in-hero`，與住宿型定案頁相同。
 - 原因：`header#1_images-wrapper-left/right` 本身是 `position: fixed`，捲動時圖片會跟著畫面、擋住內容；`is-in-hero` combo 改為 `position: absolute`，圖片只留在 Hero 上方。
 - 沿用既有 combo，沒有新增或修改共用 class。MCP 讀回 ✅。未發布。
+
+## 2026-11-13 日照安心寶 Hero 加「日照型」漸層標籤
+
+- `/products/familyline` Hero：新增 `fl-hero_tagrow`（`b94daa95-aa39-7bf0-9cbd-41f359d1d159`），把 Section Tag「智齡安心寶」（`3af69247-…3a64`）移進去，後面加漸層 pill `fl-hero_pill`「日照型」（`…d158`）。結構與住宿型頁相同，沿用既有 class，未新增 style。MCP 讀回 ✅。未發布。
