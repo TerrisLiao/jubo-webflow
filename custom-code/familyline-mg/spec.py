@@ -137,7 +137,7 @@ C(f'{P}_step-on-text',font_size='22px',font_weight='400',color=L['ink'],white_sp
 C(f'{P}_zoom',left='352px',top='392px',width='328px',padding='16px 18px',border_radius='16px',background_color='#ffffff',
   box_shadow='0 1.25em 2.5em -1em rgba(11,53,88,0.28),0 0.125em 0.375em rgba(11,53,88,0.06)')
 def steps(pre,labels):
-    h=f'<div class="{P}_kicker">家屬在 LINE 的操作</div><div class="{P}_bar" data-mg="{pre}_bar"></div>'
+    h=f'<div class="{P}_kicker">家屬操作示範</div><div class="{P}_bar" data-mg="{pre}_bar"></div>'
     for i,t in enumerate(labels):
         h+=(f'<div class="{P}_step-{i}"><div class="{P}_num"><div class="{P}_num-text">{i+1}</div></div><div class="{P}_step-text">{t}</div></div>'
             f'<div class="{P}_step-{i}" data-mg="{pre}_s{i}"><div class="{P}_num-on"><div class="{P}_num-on-text">{i+1}</div></div><div class="{P}_step-on-text">{t}</div></div>')
@@ -488,7 +488,7 @@ CARDS[3]=(f'<div class="{P}_stage" data-mg="stage3" aria-hidden="true"><div clas
  f'{scan}{conf}{done}'
  f'<div class="{P}_tap {Q}_ring1" data-mg="b_ring1"></div><div class="{P}_tap {Q}_ring2" data-mg="b_ring2"></div>'
  f'<div class="{Q}_fin" data-mg="b_fin">{FINGER.format(cls=P+"_finger-svg")}</div></div>'
- +steps('b',['點「QR Code 綁定對象」','掃描機構提供的 QR Code','確認住民與家屬身分','綁定完成，開始使用'])+
+ +steps('b',['點選綁定選單','掃描機構提供的綁定碼','確認住民與家屬身分','綁定完成，開始使用'])+
  f'<div class="{P}_abs {P}_zoom" data-mg="b_zoom"><div class="{Q}_z-head"><div class="{Q}_z-ok">{svg("check",Q+"_z-ok-svg",3)}</div>'
  f'<div><div class="{Q}_z-t1">綁定完成</div><div class="{Q}_z-t2">簡智齡・A3-302・子女 - 大女兒</div></div></div></div></div>')
 D=12000; DUR[3]=D+OFF; HERO[3]=10000
