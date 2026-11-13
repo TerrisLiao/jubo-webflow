@@ -1,0 +1,249 @@
+{
+  "siteId": "69ec2b02daa2e79f1da8772a",
+  "pageId": "6af55d996d00f5158ae0ac24",
+  "slug": "/products/familyline-residential-v2",
+  "date": "2026-11-13",
+  "timezone": "Asia/Taipei",
+  "sourceBranch": "claude/optimistic-meitner-6s2xo4",
+  "sourceCommit": "4be3847a7a597989bd97d2847a347a33771bfdb5",
+  "branch": "codex/familyline-hero-mobile",
+  "headline": [
+    "不論身在何處",
+    "隨時掌握機構近況"
+  ],
+  "subtitle": "長輩的照護日常，出門在外也能關心。家屬完成綁定後，用手機打開 LINE，生理數值、外診紀錄與生活照片，隨手就能查看。",
+  "copyLengths": {
+    "headline": [
+      6,
+      8
+    ],
+    "subtitle": 58
+  },
+  "assets": [
+    {
+      "name": "nurse",
+      "element": "04a36172-37e5-0b32-5014-8765a9b30376",
+      "asset": "6af6737fd782be0edd56428d",
+      "alt": "護理師在明亮的長照機構走廊手持手機查看。",
+      "position": "left-upper",
+      "url": "https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6af6737fd782be0edd56428d_familyline-residential-hero-mobile-nurse-20261113.webp",
+      "dimensions": [
+        1086,
+        1448
+      ],
+      "source": "AI-generated editorial-style illustrative scene",
+      "visiblePhone": true,
+      "bytes": 88500,
+      "sha256": "f5aead7b7c7099fb5d9702d0cc0874858565c41741c4a1b98e04fb07b429d7e8",
+      "cdnStatus": 200,
+      "contentType": "image/webp"
+    },
+    {
+      "name": "nursing-care",
+      "element": "04a36172-37e5-0b32-5014-8765a9b30378",
+      "asset": "6af6753332fd11fdebea6bd0",
+      "alt": "護理師在長照機構協助長輩佩戴血壓壓脈帶。",
+      "position": "left-lower",
+      "url": "https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6af6753332fd11fdebea6bd0_familyline-residential-hero-nursing-care-20261113.webp",
+      "dimensions": [
+        1086,
+        1448
+      ],
+      "source": "AI-generated editorial-style illustrative scene",
+      "visiblePhone": false,
+      "bytes": 142836,
+      "sha256": "e0902c990be9a9629a107dccb907cd4f518e8f5c6558f0e12961454927959aaf",
+      "cdnStatus": 200,
+      "contentType": "image/webp"
+    },
+    {
+      "name": "family-visit",
+      "element": "04a36172-37e5-0b32-5014-8765a9b30381",
+      "asset": "6af6756ee905e22467b937e2",
+      "alt": "家屬在長照機構探訪長輩，坐在窗邊握手交談。",
+      "position": "right-lower",
+      "url": "https://cdn.prod.website-files.com/69ec2b02daa2e79f1da8772a/6af6756ee905e22467b937e2_familyline-residential-hero-family-visit-20261113.webp",
+      "dimensions": [
+        1086,
+        1448
+      ],
+      "source": "AI-generated editorial-style illustrative scene",
+      "visiblePhone": false,
+      "bytes": 218960,
+      "sha256": "e88cb32d2e2894d0d4462ff240e2182c99f402c037b8984404dcbb0770d0f614",
+      "cdnStatus": 200,
+      "contentType": "image/webp"
+    }
+  ],
+  "retainedProductAssetId": "6af52b0ffe8c8a400767648c",
+  "changedElements": [
+    {
+      "id": "04a36172-37e5-0b32-5014-8765a9b30376",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30376"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6a38e32bf092e143fbf0ebae",
+          "altText": "穿著藍色衣服的女性用平板電腦與另一位女性進行諮詢交流。"
+        }
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30376"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6af6737fd782be0edd56428d",
+          "altText": "護理師在明亮的長照機構走廊手持手機查看。"
+        }
+      }
+    },
+    {
+      "id": "04a36172-37e5-0b32-5014-8765a9b30378",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30378"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6af5733e34582d659c961dcd",
+          "altText": "長輩在機構參加燈籠手作活動。"
+        }
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30378"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6af6753332fd11fdebea6bd0",
+          "altText": "護理師在長照機構協助長輩佩戴血壓壓脈帶。"
+        }
+      }
+    },
+    {
+      "id": "04a36172-37e5-0b32-5014-8765a9b30381",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30381"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6a4364ef0bcbad6086e9e7df"
+        }
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "04a36172-37e5-0b32-5014-8765a9b30381"
+        },
+        "type": "Image",
+        "styleNames": [
+          "header#1_image"
+        ],
+        "settings": {
+          "visibility": true,
+          "assetId": "6af6756ee905e22467b937e2",
+          "altText": "家屬在長照機構探訪長輩，坐在窗邊握手交談。"
+        }
+      }
+    },
+    {
+      "id": "30edf8ff-60b4-8f7c-4d08-a9992700412e",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "30edf8ff-60b4-8f7c-4d08-a9992700412e"
+        },
+        "type": "String",
+        "textContent": "長輩在機構的日常"
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "30edf8ff-60b4-8f7c-4d08-a9992700412e"
+        },
+        "type": "String",
+        "textContent": "不論身在何處"
+      }
+    },
+    {
+      "id": "30edf8ff-60b4-8f7c-4d08-a99927004130",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "30edf8ff-60b4-8f7c-4d08-a99927004130"
+        },
+        "type": "String",
+        "textContent": "LINE 裡隨時看"
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "30edf8ff-60b4-8f7c-4d08-a99927004130"
+        },
+        "type": "String",
+        "textContent": "隨時掌握機構近況"
+      }
+    },
+    {
+      "id": "aa4c5d88-e09c-db65-7235-d0f8217750f1",
+      "before": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "aa4c5d88-e09c-db65-7235-d0f8217750f1"
+        },
+        "type": "String",
+        "textContent": "住宿型照護系統加購功能。家屬加入機構 LINE 官方帳號並完成綁定，就能查看生理數值、外診、帳單與照片。系統資料自動同步，機構不必另外整理。"
+      },
+      "after": {
+        "id": {
+          "component": "6af55d996d00f5158ae0ac24",
+          "element": "aa4c5d88-e09c-db65-7235-d0f8217750f1"
+        },
+        "type": "String",
+        "textContent": "長輩的照護日常，出門在外也能關心。家屬完成綁定後，用手機打開 LINE，生理數值、外診紀錄與生活照片，隨手就能查看。"
+      }
+    }
+  ],
+  "verification": {
+    "exactElementDiff": true,
+    "changedElementCount": 6,
+    "designerScreenshot": false,
+    "fourBreakpointVisual": false,
+    "stagingPublished": false,
+    "productionPublished": false,
+    "cdnBytesMatch": true
+  },
+  "supersededInterimAssets": [
+    "6af6738032fd11fdebe9c302",
+    "6af673811ba745a213ba03c7"
+  ]
+}

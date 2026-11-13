@@ -240,3 +240,16 @@ Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之�
 - 已刪除 v3 專屬 IX3 9 個：`i-a04fa156`、`i-44c76e57`、`i-d20944f0`、`i-b53b24d8`、`i-b03e4423`、`i-f9f0f2c4`、`i-f9c55561`、`i-f1aaeb5a`、`i-ef308d5f`。
 - 複製 v2 建 v3 時，v2 的 4 個互動範圍被自動加入 v3；已改回只限 v2：`i-a70ea19d`、`i-34e11391`、`i-8cd635a5`、`i-241c174f`。
 - 頁面刪除後，`fl3-*` class 會變成未使用，可用 Designer Style Manager 的 Clean Up 清掉，或交給 Claude 逐一移除。`fl-hero_*`（v2 Hero 標籤列）仍在使用，不能刪。
+
+
+## 2026-11-13 Hero 主標與三張情境圖（Codex）
+
+- 頁面 `6af55d996d00f5158ae0ac24`，`/products/familyline-residential-v2`。
+- 主標：「不論身在何處／隨時掌握機構近況」；副標改為出門在外透過手機 LINE 查看，主標 6／8 字、副標 58 字。
+- 三張情境圖：左上手持手機護理師、左下機構護理工作、右下家屬探訪；僅左上人物使用手機。右上 LINE 產品圖保留。
+- 本次生成素材的原圖已目視檢查；WebP CDN 均 HTTP 200 且 bytes／SHA-256 與本地檔案相符；整頁元素程式比對僅六個 Hero 元素變動，alt 也已更新。
+- 沒有新增／修改 class、互動、共用元件、CTA 或其他頁面。
+- Designer 截圖工具回傳失敗，四斷點實際裁切／排版尚未目視驗收。
+- metadata 讀回 `draft=false`、`shouldPublish=true`，本次不更動旗標；**staging／production 均未發布**。
+- 文件交接在 `codex/familyline-hero-mobile`，基於來源工作分支 `4be3847a7a597989bd97d2847a347a33771bfdb5`；提交／遠端狀態另見 Git 記錄，不能由 Designer 寫入推定 Git 已合併。
+- 精確 element ID、Asset ID、CDN、hash、舊值與回退方式見 [Hero 更新紀錄](reference/Hero文案與情境圖更新_2026-11-13.md) 與其 JSON。
