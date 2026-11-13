@@ -246,3 +246,18 @@ Terris 決定採用 v2（`6af55d996d00f5158ae0ac24`）。v3 保留未刪，之�
 - Footer 元件 `bf559d46-0de7-0e5d-3110-35684e2ba87f`（共用，41 個 instance）：在「平台 › 住宿型照護系統」欄、「智慧照護助理 APP」之後新增連結「智齡安心寶」（Link `31992a2d-a330-5a14-ef7f-97a601f81e52`，class `footer-link is-opacity-50`，page link → v2 `6af55d996d00f5158ae0ac24`）。Terris 明確要求。MCP 讀回 ✅。未發布。
 - 日照型欄的「智齡安心寶」（`…2ba8bc`，連 `/products/familyline`）不變。
 - 發布前要處理：v2 的 slug 仍是 `familyline-residential-v2`、頁面 title 仍是「v2 可讀性優化」；正式上線前應改 slug／title（page link 會自動跟著改）。
+
+## 2026-11-13 定案頁上線準備（未發布）
+
+| 項目 | 修改 | 讀回 |
+|---|---|---|
+| v1 `6af52afbbf57c45cf03e4154` | slug → `familyline-residential-v1-old`、title → 【待刪除】…v1、draft | ✅ |
+| v3 `6af5c887d15f0b638d81d010` | title → 【待刪除】…v3、draft | ✅ |
+| v2 `6af55d996d00f5158ae0ac24` | slug `familyline-residential-v2` → `familyline-residential`；title →「智齡安心寶（住宿型）」；SEO description 改為免費開通版 | ✅ |
+| v2 JSON-LD | `@graph`：BreadcrumbList（首頁 › 住宿型照護系統 › 本頁）、SoftwareApplication（offers price 0 TWD，註明預計一年後收費；isRelatedTo 住宿型系統頁 `#software`）、FAQPage（5 題，與頁面文字逐字一致）。原檔 `custom-code/familyline-mg/jsonld-residential.json` | ✅ |
+| v2 文案 | Hero 按鈕「洽詢加購方案」→「洽詢免費開通」（CTA Button prop）；步驟 1「機構加購開通／洽詢顧問加購…」→「機構免費開通／洽詢顧問即可開通，沿用住宿型照護系統的資料。」；頁尾 CTA「…加購家屬 LINE 服務」→「…免費開通家屬 LINE 服務」。全頁「加購」0 筆 | ✅ |
+| `/products/residential-care` | 安心寶 tab 標籤「加購」→「免費開通」（`18013525-…8a94`） | ✅ |
+
+- 日照安心寶頁切換連結、住宿型系統頁 tab、Footer 都是 page link，自動跟著新 slug。
+- Hero H1／說明已由 Designer 改為「不論身在何處／隨時掌握機構近況」與「透過智齡安心寶串接 LINE帳號…」，本次沒動。
+- 發布前：Terris 在 Designer 刪除 v1、v3；刪除後 `fl3-*` class 可清理。

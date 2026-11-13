@@ -1,0 +1,115 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.jubo-health.com/products/familyline-residential#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "首頁",
+          "item": "https://www.jubo-health.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "住宿型照護系統",
+          "item": "https://www.jubo-health.com/products/residential-care"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "智齡安心寶（住宿型）",
+          "item": "https://www.jubo-health.com/products/familyline-residential"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://www.jubo-health.com/products/familyline-residential#software",
+      "name": "智齡安心寶（住宿型）",
+      "alternateName": "智齡安心寶",
+      "applicationCategory": "HealthApplication",
+      "operatingSystem": "LINE",
+      "inLanguage": "zh-Hant-TW",
+      "url": "https://www.jubo-health.com/products/familyline-residential",
+      "description": "住宿型照護系統的家屬 LINE 服務。家屬加入機構的 LINE 官方帳號並完成綁定，就能查看長輩的生理數值、外診紀錄、帳單收據、活動紀錄與照片花絮，不需要下載 App；資料由住宿型照護系統自動同步。",
+      "featureList": [
+        "生理數值：體溫、血壓、脈搏、血糖、體重近兩個月紀錄，偏高偏低直接標示",
+        "外診紀錄：近半年就醫院所、科別、時間與目的",
+        "帳單收據：近一年收據與繳費狀態",
+        "活動紀錄：近一年參與的活動",
+        "照片花絮：近半年生活與活動照片，由工作人員挑選後分享，可下載",
+        "家屬綁定：一位家屬一組 QR Code，人數不限，經機構確認身分，可隨時解除"
+      ],
+      "isRelatedTo": {
+        "@id": "https://jubo-health.com/products/residential-care#software"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "TWD",
+        "availability": "https://schema.org/InStock",
+        "description": "使用住宿型照護系統的機構目前可免費開通，預計一年後改為收費方案。",
+        "url": "https://www.jubo-health.com/products/familyline-residential"
+      },
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://www.jubo-health.com/#organization",
+        "name": "Jubo 智齡科技",
+        "url": "https://www.jubo-health.com/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.jubo-health.com/products/familyline-residential#faq",
+      "inLanguage": "zh-Hant-TW",
+      "about": {
+        "@id": "https://www.jubo-health.com/products/familyline-residential#software"
+      },
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "需要另外收費嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "目前免費。使用住宿型照護系統的機構可先免費開通，預計一年後改為收費方案，詳情歡迎洽詢顧問。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "需要先使用住宿型照護系統嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "需要。家屬看到的生理數值、外診、帳單與照片，都來自機構在住宿型照護系統的建檔資料。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "家屬需要下載 App 嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不需要。家屬加入機構的 LINE 官方帳號並完成綁定，就能在 LINE 裡查看。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "一位住民可以綁定幾位家屬？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "人數不限，每位家屬各有一組 QR Code，經機構確認身分後即可綁定，也能隨時解除。"
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "活動照片會自動給家屬看嗎？",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "不會。照片由工作人員挑選後才分享，兼顧住民隱私與肖像權。"
+          }
+        }
+      ]
+    }
+  ]
+}

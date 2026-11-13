@@ -2,7 +2,7 @@
 
 - 文件更新日期：2026-11-12
 - Webflow 驗證日期與方式：2026-11-12 以 Webflow MCP 修改並逐項讀回 Designer；線上 HTML 尚未變更（未發布）
-- 頁面 slug／Page ID：`/products/familyline-residential`，`6af52afbbf57c45cf03e4154`，Draft（v1，待刪除）；可讀性優化 v2 草稿 `/products/familyline-residential-v2`，`6af55d996d00f5158ae0ac24`，**定案版本**，讀回 draft=false（未發布）；改版 v3 草稿 `/products/familyline-residential-v3`，`6af5c887d15f0b638d81d010`，Draft，已決定刪除（待 Designer 手動刪除）
+- 頁面 slug／Page ID：**定案頁** `/products/familyline-residential`，`6af55d996d00f5158ae0ac24`（原 v2），draft=false，未發布；已加 JSON-LD（BreadcrumbList＋SoftwareApplication＋FAQPage）。舊 v1 `6af52afbbf57c45cf03e4154` 改 slug `familyline-residential-v1-old`、title 標【待刪除】；v3 `6af5c887d15f0b638d81d010` title 標【待刪除】；兩頁皆 Draft，MCP 無法刪頁，需 Terris 在 Designer 手動刪除。
 - 採用版本與範圍：第二版規格（比照官網附加產品頁版型），見 [頁面規格與文案](reference/頁面規格與文案.md)
 - Figma 圖檔：現行 `C6MRciANWNRkAw0Vq03Foh`（Jubo Design Team Pro，bg／focal 分層）；舊檔 `gofe4JuGyJbLUTCE2ln7SJ` 停用
 - 來源分支、提交、文件：`claude/optimistic-meitner-6s2xo4`；來源為使用者上傳的操作手冊 PDF／PPTX 與 Figma `epTBL1gVwoHNpKczaaYV3z`
