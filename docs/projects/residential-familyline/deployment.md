@@ -280,3 +280,9 @@ Terris 指示：現在不要說免費開通，改成聯絡我們。
 
 - v1、v3：Terris 已在 Designer 刪除，list_pages 確認只剩定案頁。
 - `fl3-*` 共 92 個 class 與 2 個 combo 已刪除；剩 `header-1_component.is-fl3`（padding-top 8rem，無引用）MCP 以 parent 名稱刪除回報 not found，未強制處理。
+
+## 2026-11-13 日照安心寶 Hero 圖片固定在 Hero
+
+- `/products/familyline`（`6a0d663539a726fa38494be9`）Hero 左右圖片容器（`3af69247-…3a52` left、`…3a59` right）加 combo `is-in-hero`，與住宿型定案頁相同。
+- 原因：`header#1_images-wrapper-left/right` 本身是 `position: fixed`，捲動時圖片會跟著畫面、擋住內容；`is-in-hero` combo 改為 `position: absolute`，圖片只留在 Hero 上方。
+- 沿用既有 combo，沒有新增或修改共用 class。MCP 讀回 ✅。未發布。

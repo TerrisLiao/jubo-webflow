@@ -34,3 +34,4 @@
 - Footer「住宿型照護系統」欄新增「智齡安心寶」連到 v2（共用 Footer 元件，Terris 要求）。取代 2026-11-12「Footer 只放一個」的決定。未發布。
 - 定案頁改用 `/products/familyline-residential`（v1 讓出 slug 並標待刪除，v3 標待刪除）；加 JSON-LD；全站安心寶住宿型「加購」字樣改為「免費開通」。未發布。
 - 依 Terris 指示，價格說法改為「聯絡我們」：Hero 按鈕、步驟 1、頁尾 CTA、FAQ、SEO、JSON-LD 不再寫免費；住宿型系統頁 tab 標籤改「選配」。v1、v3 已刪除，清除 `fl3-*` class。未發布。
+- 日照安心寶頁 Hero 圖片容器加 `is-in-hero`，圖片固定在 Hero、不再跟著捲動（同住宿型頁）。未發布。
