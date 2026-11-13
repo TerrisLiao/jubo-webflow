@@ -1,7 +1,9 @@
 # 待辦
 
 - [x] Codex 文案審稿 14 項已套用到 v2（[紀錄](reference/文案審稿-codex回覆.md)）。
-- [ ] 確認 Hero 左下長輩活動照的使用權。
+- [x] Hero 左下舊長輩活動照已移除，三張情境照改為本次生成素材；舊照片若用於其他區塊，原使用權待辦仍須另外處理。
+- [x] 採用主標「不論身在何處／隨時掌握機構近況」及行動情境副標。
+- [ ] 預覽 Hero 四斷點：兩行標題、三張情境照裁切、臉與手的位置；截圖工具失敗，不能由元素讀回推定目視驗收完成。
 - [ ] Terris 在 Designer 預覽 v2：步驟字級、Hero 標籤與小標、動畫觸發時機。
 - [ ] Terris 在 Designer 刪除 v3 頁 `6af5c887d15f0b638d81d010`；刪除後清掉未使用的 `fl3-*` class。
 
@@ -17,7 +19,7 @@
 | P0 | Terris 在 Designer 目視檢查新頁、兩頁切換器、住宿頁第 3 個 tab（四斷點） | 確認後回報 |
 | P0 | Terris 授權發布：新頁 draft → false，與其他頁同次發布 | 分別記錄 staging、production；線上 HTML 讀回 |
 | P1 | 確認範例照片（LTC 設計檔長輩照片）可用於官網 | 不可用則換主題 2 圖 |
-| P2 | Hero 左側人物照是否換成安心寶相關照片 | Terris 指定素材 |
+| 完成 | Hero 三張情境照改為手機護理師、機構護理工作、家屬探訪；只有左上人物使用手機 | 依 Terris 本次指示；詳見 Hero 更新紀錄 |
 | P0 | Terris 在 Designer Preview 檢查 4 個 IX3 動畫 | 重複捲動、手機、reduced-motion 皆正常 |
 | P0 | Terris 在 Designer 並排比較 v1 `/products/familyline-residential` 與 v2 `/products/familyline-residential-v2`，選定上線版本 | 選 v2 則把 v2 slug 改回正式 slug、刪 v1；選 v1 則刪 v2 與其 4 個互動 |
 | P1 | 業務確認 v2 FAQ「收費」「需先使用住宿型照護系統」答案 | 確認或改寫 |
