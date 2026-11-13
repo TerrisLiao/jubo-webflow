@@ -5,8 +5,8 @@
 | Git commit／PR | 規劃與部署文件在 `claude/optimistic-meitner-6s2xo4`；未開 PR | 2026-11-12 | 見分支 head |
 | Figma | **現行檔** `C6MRciANWNRkAw0Vq03Foh`（Jubo Design Team Pro，帳號 Designer @Jubo），section `1:2`；舊檔 `gofe4JuGyJbLUTCE2ln7SJ`（Starter，已停用） | 2026-11-12 | 每張圖分 `bg`／`focal` 兩層，第 2、3 列為單層匯出 frame |
 | Webflow Designer | **已修改**（見下表），全部以 MCP 讀回確認 | 2026-11-12 | 下表 element／page ID |
-| staging | 未發布 | — | 未獲發布授權 |
-| production | 未發布 | — | 未獲發布授權 |
+| staging | **已發布**（整站，Terris 授權） | 2026-11-13T08:27:10Z，publish task `6a0c8c18-8739-41fa-b0f9-598836b75301` | webflow.io 新頁 HTTP 200 |
+| production | **已發布**（www＋apex，整站，Terris 授權） | 2026-11-13T08:27:10Z（兩網域 lastPublished 讀回） | 新頁 HTTP 200，內容 curl 驗證 |
 
 ## Webflow 修改明細（2026-11-12，Designer／Data API）
 
@@ -302,3 +302,11 @@ Terris 指示：現在不要說免費開通，改成聯絡我們。
   4. 開始家屬溝通／家屬在 LINE 查看生理數值、外診、帳單與照片，機構少些重複說明。
 - 第 4 步刻意不寫日照版的「訊息推播」（住宿型不提供推播）。步驟 1、2 的官方帳號流程沿用日照版說法，待業務確認住宿型是否相同。
 - `familyline-residential_step` class 目前無引用，可之後清除。MCP 讀回 ✅。未發布。
+
+## 2026-11-13 發布（staging＋production）
+
+- 授權：Terris「都可以一起上，發正式站跟 staging」，發布前已列出 11/10 之後所有待上線修改並經 Terris 確認。
+- 整站發布到 www.jubo-health.com、jubo-health.com、webflow.io；publish task `6a0c8c18-8739-41fa-b0f9-598836b75301`；三者 lastPublished 讀回 2026-11-13T08:27:10.681Z。
+- 一併上線的他案修改（Terris 同意）：首頁資安卡片 ISO/IEC 29191 徽章（home-notes 專案）、三三分享會最新一集下載入口與 EP22 簡報（monthly-sharing 專案）。草稿頁（含 `/home-notes-draft`）未上線。
+- curl 驗證（production）：`/products/familyline-residential` 200（www、apex、webflow.io），title「智齡安心寶（住宿型）| 家屬用 LINE 查看長輩在機構的日常」，含「如何導入」、FAQPage、BreadcrumbList，「免費」「加購」0 筆；`/products/familyline` 含 `is-in-hero`×2、`fl-hero_pill`；`/products/residential-care` 有 2 個連到新頁的連結；首頁、日照型系統頁、三三分享會頁 200；舊 `-v2` 網址 404（從未上線）。
+- 未做：瀏覽器目視截圖驗收。
